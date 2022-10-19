@@ -1,0 +1,119 @@
+<?php
+
+// uncomment the following to define a path alias
+// Yii::setPathOfAlias('local','path/to/local-folder');
+
+// This is the main Web application configuration. Any writable
+// CWebApplication properties can be configured here.
+
+return array(
+	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	'name'=>'PQSIS',
+
+	// preloading 'log' component
+	'preload'=>array('log'),
+
+	// autoloading model and component classes
+	'import'=>array(
+		'application.models.*',
+		'application.components.*',
+	),
+/*
+	'modules'=>array(
+		// uncomment the following to enable the Gii tool
+		
+		'gii'=>array(
+			'class'=>'system.gii.GiiModule',
+			'password'=>'password',
+			// If removed, Gii defaults to localhost only. Edit carefully to taste.
+			'ipFilters'=>array('127.0.0.1','::1'),
+		),
+		
+	),
+*/
+	// application components
+	'components'=>array(
+		'user'=>array(
+			// enable cookie-based authentication
+			'allowAutoLogin'=>true,
+		),
+		'commonUtil'=>array(
+			'class'=>'CommonUtil',
+		),
+	    'formDao'=>array(
+			'class'=>'FormDao',
+		),
+		'maintenanceDao'=>array(
+			'class'=>'MaintenanceDao',
+		),
+		'reportDao'=>array(
+			'class'=>'ReportDao',
+		),
+		'functionDao'=>array(
+			'class'=>'FunctionDao',
+		),
+		// uncomment the following to enable URLs in path-format
+		/*
+		'urlManager'=>array(
+			'urlFormat'=>'path',
+			'rules'=>array(
+				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
+				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+			),
+		),
+		*/
+		/*
+		'db'=>array(
+				'connectionString' => 'mysql:host=127.0.0.1;dbname=pqsis',
+				'emulatePrepare' => true,
+				'username' => 'root',
+				'password' => '',
+				'charset' => 'utf8',			
+		),
+		*/
+		'errorHandler'=>array(
+			// use 'site/error' action to display errors
+			'errorAction'=>'site/error',
+		),
+		'log'=>array(
+			'class'=>'CLogRouter',
+			'routes'=>array(
+				array(
+					'class'=>'CFileLogRoute',
+					'levels'=>'info, error, warning',
+					'categories'=>'cu_crc.*',
+					'logPath'=>$_SERVER['DOCUMENT_ROOT'] . '/pqsis/logs',
+				),
+				// uncomment the following to show log messages on web pages
+				/*
+				array(
+					'class'=>'CWebLogRoute',
+				),
+				*/
+			),
+		),
+	),
+
+	// application-level parameters that can be accessed
+	// using Yii::app()->params['paramName']
+	'params'=>array(
+
+	'db_username' =>'', //username
+    'db_password' => '', //password
+
+//path to database file
+	/*'database_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\PQSIS_DEV.mdb",
+	'database_path_backup' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\dbBackUp",
+	'report_save_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\Report",
+	'system_version_path' => dirname(__FILE__)."\\system_version.txt",
+	'latest_version_path'=> "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\latest_version.txt",*/
+	'database_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\PQSIS_DEV.mdb",
+	'database_path_backup' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\dbBackUp",
+	'report_save_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\Report",
+	'system_version_path' => dirname(__FILE__)."\\system_version.txt",
+	'latest_version_path'=> "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\latest_version.txt", 
+		// this is used in contact page
+		//'adminEmail'=>'sammylee@jktech-ltd.com',
+	),
+);

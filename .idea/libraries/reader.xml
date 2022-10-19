@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="reader">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/protected/vendor/phpoffice/common/tests/resources/files/reader.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
