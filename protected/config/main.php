@@ -52,6 +52,9 @@ return array(
 		'functionDao'=>array(
 			'class'=>'FunctionDao',
 		),
+        'planningAheadDao'=>array(
+            'class'=>'PlanningAheadDao',
+        ),
 		// uncomment the following to enable URLs in path-format
 		/*
 		'urlManager'=>array(

@@ -628,7 +628,7 @@
                 $("#saveProcessBtn").attr("disabled", true);
 
                 $.ajax({
-                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/AjaxPostPlanningAheadProjectDetailDraftUpdate",
+                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailDraftUpdate",
                     type: "POST",
                     cache: false,
                     processData: false,
@@ -663,7 +663,7 @@
                 $("#saveProcessBtn").attr("disabled", true);
 
                 $.ajax({
-                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/AjaxPostPlanningAheadProjectDetailProcessUpdate",
+                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailProcessUpdate",
                     type: "POST",
                     cache: false,
                     processData: false,
@@ -715,7 +715,7 @@
 
             $(this).attr("disabled", true);
             window.location.href =
-                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/GetPlanningAheadProjectDetailStandardLetterTemplate" +
+                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailStandardLetterTemplate" +
                 "&standLetterIssueDate=" + $("#standLetterIssueDate").val() + "&standLetterFaxRefNo=" + $("#standLetterFaxRefNo").val() +
                 "&schemeNo=" + $("#schemeNo").val();
             $(this).attr("disabled", false);
