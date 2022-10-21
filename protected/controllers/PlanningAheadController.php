@@ -179,6 +179,10 @@ class PlanningAheadController extends Controller {
         $schemeNo = $param['schemeNo'];
 
         $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+
+        // Update the issue date and fax ref no. to database first
+        Yii::app()->planningAheadDao->updateStandardLetter($recordList['planningAheadId'], $standLetterIssueDate, $standLetterFaxRefNo);
+
         $projectType = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeById($recordList['projectTypeId']);
         $standardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
 
