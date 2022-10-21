@@ -28,7 +28,7 @@
                        class="form-control" value="<?php echo $this->viewbag['projectTitle'] ?>"
                        oninvalid="this.setCustomValidity('Project Title is required!')"
                        oninput="this.setCustomValidity('')"
-                       required autocomplete="off">
+                       autocomplete="off">
             </div>
         </div>
 
@@ -39,7 +39,7 @@
                 </div>
                 <input id="schemeNo" name="schemeNo" type="text"
                        class="form-control" value="<?php echo $this->viewbag['schemeNo'] ?>"
-                       required autocomplete="off">
+                       autocomplete="off">
             </div>
             <div class="input-group col-6">
                 <div class="input-group-prepend">
@@ -546,7 +546,7 @@
                                         </div>
                                         <input id="standLetterIssueDate" name="standLetterIssueDate" type="text"
                                                class="form-control" value="<?php echo $this->viewbag['standLetterIssueDate'] ?>"
-                                               autocomplete="off">
+                                               onchange="updateGenStandLetterButton()" autocomplete="off">
                                     </div>
                                     <div class="input-group col-4">
                                         <div class="input-group-prepend">
@@ -554,11 +554,19 @@
                                         </div>
                                         <input id="standLetterFaxRefNo" name="standLetterFaxRefNo" type="text"
                                                class="form-control" value="<?php echo $this->viewbag['standLetterFaxRefNo'] ?>"
-                                               autocomplete="off">
+                                               onchange="updateGenStandLetterButton()" autocomplete="off">
                                     </div>
                                     <div class="input-group col-4">
+                                        <?php if (($this->viewbag['standLetterIssueDate'] == null) ||
+                                                    ($this->viewbag['standLetterFaxRefNo'] == null) ||
+                                                    ($this->viewbag['standLetterIssueDate'] == "") ||
+                                                    ($this->viewbag['standLetterFaxRefNo'] == "")) { ?>
                                         <input class="btn btn-primary form-control" type="button" name="genStandLetterBtn"
-                                               id="genStandLetterBtn" value="Generate PQ Standard Letter">
+                                               id="genStandLetterBtn" value="Generate PQ Standard Letter" disabled>
+                                        <?php } else { ?>
+                                            <input class="btn btn-primary form-control" type="button" name="genStandLetterBtn"
+                                                   id="genStandLetterBtn" value="Generate PQ Standard Letter">
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -574,10 +582,10 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Signed Letter: </span>
                                         </div>
-                                        <input id="standLetterLetter" name="file" type="file"
+                                        <input id="standLetterLetter" name="standLetterLetter" type="file"
                                                placeholder="Please upload the signed standard letter"
                                                class="form-control"
-                                               required autocomplete="false">
+                                               autocomplete="false">
                                     </div>
                                 </div>
                             </div>
@@ -589,8 +597,8 @@
 
         <div class="form-group row px-3 pt-2">
             <div>
-                <input class="btn btn-primary" type="button" name="saveDraftBtn" id="saveDraftBtn" value="Save as Draft">
-                <input class="btn btn-primary" type="button" name="saveProcessBtn" id="saveProcessBtn" value="Save & Process">
+                <input class="btn btn-primary" type="submit" name="saveDraftBtn" id="saveDraftBtn" value="Save as Draft">
+                <input class="btn btn-primary" type="submit" name="saveProcessBtn" id="saveProcessBtn" value="Save & Process">
             </div>
         </div>
 
@@ -606,78 +614,113 @@
 <script>
     $(document).ready(function(){
 
-        $("#saveDraftBtn").click(function() {
+        $("#detailForm").on("submit", function(e) {
 
-            if (!validateDraftInput()) {
+            e.preventDefault();
+
+            if ($(this).find("input[type=submit]:focus" ).val() == 'Save as Draft') {
+                if (!validateDraftInput()) {
+                    return;
+                }
+
+                $("#loading-modal").modal("show");
+                $("#saveDraftBtn").attr("disabled", true);
+                $("#saveProcessBtn").attr("disabled", true);
+
+                $.ajax({
+                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/AjaxPostPlanningAheadProjectDetailDraftUpdate",
+                    type: "POST",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: new FormData(this),
+                    success: function(data) {
+                        let retJson = JSON.parse(data);
+                        if (retJson.status == "OK") {
+                            // display message
+                            showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
+                        } else {
+                            // error message
+                            showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                        }
+                    }
+                }).fail(function(event, jqXHR, settings, thrownError) {
+                    if (event.status != 440) {
+                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
+                    }
+                }).always(function(data) {
+                    $("#loading-modal").modal("hide");
+                    $("#saveDraftBtn").attr("disabled", false);
+                    $("#saveProcessBtn").attr("disabled", false);
+                });
+            } else if ($(this).find("input[type=submit]:focus" ).val() == 'Save & Process') {
+                if (!validateProcessInput()) {
+                    return;
+                }
+
+                $("#loading-modal").modal("show");
+                $("#saveDraftBtn").attr("disabled", true);
+                $("#saveProcessBtn").attr("disabled", true);
+
+                $.ajax({
+                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/AjaxPostPlanningAheadProjectDetailProcessUpdate",
+                    type: "POST",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: new FormData(this),
+                    success: function(data) {
+                        let retJson = JSON.parse(data);
+                        if (retJson.status == "OK") {
+                            // display message
+                            showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
+                        } else {
+                            // error message
+                            showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                        }
+                    }
+                }).fail(function(event, jqXHR, settings, thrownError) {
+                    if (event.status != 440) {
+                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
+                    }
+                }).always(function(data) {
+                    $("#loading-modal").modal("hide");
+                    $("#saveDraftBtn").attr("disabled", false);
+                    $("#saveProcessBtn").attr("disabled", false);
+                });
+            }
+        });
+
+        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+        $("#genStandLetterBtn").on("click", function() {
+
+            let errorMessage = "";
+            let i = 1;
+
+            if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
+                let standLetterIssueDate = $("#standLetterIssueDate").val();
+                if (!validateDateFormat(standLetterIssueDate)) {
+                    if (errorMessage == "")
+                        $("#standLetterIssueDate").focus();
+                    errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
+                    i = i + 1;
+                    $("#standLetterIssueDate").addClass("invalid");
+                }
+            }
+
+            if (errorMessage != "") {
+                showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
                 return;
             }
 
-            $("#loading-modal").modal("show");
-            $("#saveDraftBtn").attr("disabled", true);
-            $("#saveProcessBtn").attr("disabled", true);
-
-            $.ajax({
-                url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/AjaxPostPlanningAheadProjectDetailDraftUpdate",
-                type: "POST",
-                cache: false,
-                data: $("#detailForm").serializeArray(),
-                success: function(data) {
-                    let retJson = JSON.parse(data);
-                    if (retJson.status == "OK") {
-                        // display message
-                        showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
-                    } else {
-                        // error message
-                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
-                    }
-                }
-            }).fail(function(event, jqXHR, settings, thrownError) {
-                if (event.status != 440) {
-                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
-                }
-            }).always(function(data) {
-                $("#loading-modal").modal("hide");
-                $("#saveDraftBtn").attr("disabled", false);
-                $("#saveProcessBtn").attr("disabled", false);
-            });
+            $(this).attr("disabled", true);
+            window.location.href =
+                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/GetPlanningAheadProjectDetailStandardLetterTemplate" +
+                "&standLetterIssueDate=" + $("#standLetterIssueDate").val() + "&standLetterFaxRefNo=" + $("#standLetterFaxRefNo").val() +
+                "&schemeNo=" + $("#schemeNo").val();
+            $(this).attr("disabled", false);
         });
-
-        $("#saveProcessBtn").click(function() {
-
-            if (!validateProcessInput()) {
-                return;
-            }
-
-            $("#loading-modal").modal("show");
-            $("#saveDraftBtn").attr("disabled", true);
-            $("#saveProcessBtn").attr("disabled", true);
-
-            $.ajax({
-                url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/AjaxPostPlanningAheadProjectDetailProcessUpdate",
-                type: "POST",
-                cache: false,
-                data: $("#detailForm").serializeArray(),
-                success: function(data) {
-                    let retJson = JSON.parse(data);
-                    if (retJson.status == "OK") {
-                        // display message
-                        showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
-                    } else {
-                        // error message
-                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
-                    }
-                }
-            }).fail(function(event, jqXHR, settings, thrownError) {
-                if (event.status != 440) {
-                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
-                }
-            }).always(function(data) {
-                $("#loading-modal").modal("hide");
-                $("#saveDraftBtn").attr("disabled", false);
-                $("#saveProcessBtn").attr("disabled", false);
-            });
-        });
-
+        <?php } ?>
     });
 
     function validateDraftInput() {
@@ -727,6 +770,21 @@
                 $("#commissionDate").addClass("invalid");
             }
         }
+
+        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+
+        if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
+            let standLetterIssueDate = $("#standLetterIssueDate").val();
+            if (!validateDateFormat(standLetterIssueDate)) {
+                if (errorMessage == "")
+                    $("#standLetterIssueDate").focus();
+                errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
+                i = i + 1;
+                $("#standLetterIssueDate").addClass("invalid");
+            }
+        }
+
+        <?php } ?>
 
         if (errorMessage == "") {
             return true;
@@ -945,9 +1003,22 @@
             showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
             return false;
         }
-
-
     }
+
+    <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+    function updateGenStandLetterButton() {
+        let standLetterIssueDate = document.querySelector("#standLetterIssueDate");
+        let standLetterFaxRefNo = document.querySelector("#standLetterFaxRefNo");
+        let genStandLetterBtn = document.querySelector("#genStandLetterBtn");
+
+        if ((standLetterIssueDate.value == null) || (standLetterFaxRefNo.value == null) ||
+            (standLetterIssueDate.value.trim() == "") || (standLetterFaxRefNo.value.trim() == "")) {
+            genStandLetterBtn.disabled = true;
+        } else {
+            genStandLetterBtn.disabled = false;
+        }
+    }
+    <?php } ?>
 
     function cardSelected(icon) {
         let imgIcon = document.querySelector("#"+icon);

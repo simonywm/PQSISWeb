@@ -3177,6 +3177,31 @@ class FormDao extends CApplicationComponent
         return $record;
     }
 
+    public function getPlanningAheadProjectTypeById($projectTypeId) {
+
+        $record = array();
+        $item = array();
+
+        try {
+            $sql = "SELECT * FROM \"tbl_project_type\" WHERE \"active\"='Y' AND \"project_type_id\"=:project_type_id";
+            $sth = Yii::app()->db->createCommand($sql);
+            $sth->bindParam(':project_type_id', $projectTypeId);
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+                $item['projectTypeId'] = $row['project_type_id'];
+                $item['projectTypeName'] = $row['project_type_name'];
+                $item['projectTypeTemplateFileName'] = $row['project_type_template_file_name'];
+                $record[] = $item;
+            }
+
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $record;
+    }
+
     public function getPlanningAheadConsultantCompanyAllActive()
     {
         $List = array();
