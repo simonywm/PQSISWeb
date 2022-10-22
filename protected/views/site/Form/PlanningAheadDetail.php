@@ -523,7 +523,9 @@
             </div>
         </div>
 
-        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+        <?php if (($this->viewbag['state']=="WAITING_STANDARD_LETTER") ||
+            ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
+            ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO")) { ?>
             <div id="accordionDetailofPQStandardLetter">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -693,7 +695,9 @@
             }
         });
 
-        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+        <?php if (($this->viewbag['state']=="WAITING_STANDARD_LETTER") ||
+                    ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO")) { ?>
         $("#genStandLetterBtn").on("click", function() {
 
             let errorMessage = "";
@@ -773,7 +777,9 @@
             }
         }
 
-        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+        <?php if (($this->viewbag['state']=="WAITING_STANDARD_LETTER") ||
+                    ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO")) { ?>
 
         if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
             let standLetterIssueDate = $("#standLetterIssueDate").val();
@@ -999,7 +1005,9 @@
         <?php
             }?>
 
-        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+        <?php if (($this->viewbag['state']=="WAITING_STANDARD_LETTER") ||
+                    ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO")) { ?>
         if (($("#standLetterIssueDate").val() == null) || ($("#standLetterIssueDate").val().trim() == "")) {
             if (errorMessage == "")
                 $("#standLetterIssueDate").focus();
@@ -1050,7 +1058,9 @@
         }
     }
 
-    <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+    <?php if (($this->viewbag['state']=="WAITING_STANDARD_LETTER") ||
+                ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
+                ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO")) { ?>
     function updateGenStandLetterButton() {
         let standLetterIssueDate = document.querySelector("#standLetterIssueDate");
         let standLetterFaxRefNo = document.querySelector("#standLetterFaxRefNo");
