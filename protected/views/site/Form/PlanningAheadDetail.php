@@ -527,11 +527,11 @@
             <div id="accordionDetailofPQStandardLetter">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
-                        <a class="card-link" data-toggle="collapse" href="#detailofPQStandardLetter" onclick="cardSelected('contactOfProjectOwnerIcon');">
+                        <a class="card-link" data-toggle="collapse" href="#detailofPQStandardLetter" onclick="cardSelected('standardLetterIcon');">
                             <div class="row">
                                 <div class="col-11"><h5 class="text-light">Details of PQ Standard Letter</h5></div>
                                 <div class="col-1">
-                                    <img id="contactOfProjectOwnerIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
+                                    <img id="standardLetterIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
                                 </div>
                             </div>
                         </a>
@@ -545,6 +545,7 @@
                                             <span class="input-group-text">Issue Date: </span>
                                         </div>
                                         <input id="standLetterIssueDate" name="standLetterIssueDate" type="text"
+                                               placeholder="YYYY-mm-dd"
                                                class="form-control" value="<?php echo $this->viewbag['standLetterIssueDate'] ?>"
                                                onchange="updateGenStandLetterButton()" autocomplete="off">
                                     </div>
@@ -582,7 +583,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Signed Letter: </span>
                                         </div>
-                                        <input id="standLetterLetter" name="standLetterLetter" type="file"
+                                        <input id="standSignedLetter" name="standSignedLetter" type="file"
                                                placeholder="Please upload the signed standard letter"
                                                class="form-control"
                                                autocomplete="false">
@@ -603,6 +604,7 @@
         </div>
 
         <input type="hidden" id="planningAheadId" name="planningAheadId" value="<?php echo $this->viewbag['planningAheadId']; ?>">
+        <input type="hidden" id="standLetterLetterLoc" name="standLetterLetterLoc" value="<?php echo $this->viewbag['standLetterLetterLoc']; ?>">
         <input type="hidden" id="state" name="state" value="<?php echo $this->viewbag['state']; ?>">
         <input type="hidden" id="roleId" name="roleId" value="<?php echo Yii::app()->session['tblUserDo']['roleId']; ?>">
 
@@ -996,6 +998,49 @@
 
         <?php
             }?>
+
+        <?php if ($this->viewbag['state']=="WAITING_STANDARD_LETTER") { ?>
+        if (($("#standLetterIssueDate").val() == null) || ($("#standLetterIssueDate").val().trim() == "")) {
+            if (errorMessage == "")
+                $("#standLetterIssueDate").focus();
+            errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date can not be blank <br/>";
+            i = i + 1;
+            $("#standLetterIssueDate").addClass("invalid");
+        }
+        if (($("#standLetterFaxRefNo").val() == null) || ($("#standLetterFaxRefNo").val().trim() == "")) {
+            if (errorMessage == "")
+                $("#standLetterFaxRefNo").focus();
+            errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Fax Ref No. can not be blank <br/>";
+            i = i + 1;
+            $("#standLetterFaxRefNo").addClass("invalid");
+        }
+        if (($("#standLetterEdmsLink").val() == null) || ($("#standLetterEdmsLink").val().trim() == "")) {
+            if (errorMessage == "")
+                $("#standLetterEdmsLink").focus();
+            errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter EDMS link can not be blank <br/>";
+            i = i + 1;
+            $("#standLetterEdmsLink").addClass("invalid");
+        }
+        if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
+            let standLetterIssueDate = $("#standLetterIssueDate").val();
+            if (!validateDateFormat(standLetterIssueDate)) {
+                if (errorMessage == "")
+                    $("#standLetterIssueDate").focus();
+                errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
+                i = i + 1;
+                $("#standLetterIssueDate").addClass("invalid");
+            }
+        }
+        if (($("#standLetterLetterLoc").val() == null) || ($("#standLetterLetterLoc").val().trim() == "")) {
+            if ($('#standSignedLetter').get(0).files.length == 0) {
+                if (errorMessage == "")
+                    $("#standLetterLetterLoc").focus();
+                errorMessage = errorMessage + "Error " + i + ": " + "Signed Standard Letter should be uploaded <br/>";
+                i = i + 1;
+                $("#standLetterLetterLoc").addClass("invalid");
+            }
+        }
+        <?php } ?>
 
         if (errorMessage == "") {
             return true;
