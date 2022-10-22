@@ -428,6 +428,29 @@ class PlanningAheadController extends Controller {
             $txnStandLetterFaxRefNo = null;
         }
 
+        if ($success && isset($_POST['standLetterEdmsLink']) && ($_POST['standLetterEdmsLink'] != "")) {
+            $txnStandLetterEdmsLink = trim($_POST['standLetterEdmsLink']);
+        } else {
+            $txnStandLetterEdmsLink = null;
+        }
+
+        $txnStandLetterLetterLoc = null;
+
+        if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
+            $fileName = basename($_FILES["standSignedLetter"]["name"]);
+            $planningAheadStandardSignedLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterPath');
+            $targetFilePath = $planningAheadStandardSignedLetterPath["configValue"] . $txnSchemeNo . '_' . $fileName;
+            $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+            $txnStandLetterLetterLoc = $targetFilePath;
+
+            //upload file to server
+            if (!move_uploaded_file($_FILES["standSignedLetter"]["tmp_name"], $targetFilePath)){
+                $retJson['status'] = 'NOTOK';
+                $retJson['retMessage'] = "Upload signed standard letter failed!";
+                $success = false;
+            }
+        }
+
         if ($success) {
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
@@ -441,9 +464,11 @@ class PlanningAheadController extends Controller {
                 $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                 $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
                 $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
-                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,
+                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                $txnStandLetterLetterLoc,
                 $lastUpdatedBy,$lastUpdatedTime,
                 $txnPlanningAheadId);
+
         } else {
             $retJson['status'] = 'NOTOK';
         }
@@ -647,6 +672,45 @@ class PlanningAheadController extends Controller {
             $txnProjectOwnerEmail = null;
         }
 
+        if ($success && isset($_POST['standLetterIssueDate']) && ($_POST['standLetterIssueDate'] != "")) {
+            $txnStandLetterIssueDate = trim($_POST['standLetterIssueDate']);
+        } else {
+            $txnStandLetterIssueDate = null;
+        }
+
+        if ($success && isset($_POST['standLetterFaxRefNo']) && ($_POST['standLetterFaxRefNo'] != "")) {
+            $txnStandLetterFaxRefNo = trim($_POST['standLetterFaxRefNo']);
+        } else {
+            $txnStandLetterFaxRefNo = null;
+        }
+
+        if ($success && isset($_POST['standLetterEdmsLink']) && ($_POST['standLetterEdmsLink'] != "")) {
+            $txnStandLetterEdmsLink = trim($_POST['standLetterEdmsLink']);
+        } else {
+            $txnStandLetterEdmsLink = null;
+        }
+
+        if ($success && isset($_POST['standLetterLetterLoc']) && ($_POST['standLetterLetterLoc'] != "")) {
+            $txnStandLetterLetterLoc = trim($_POST['standLetterLetterLoc']);
+        } else {
+            $txnStandLetterLetterLoc = null;
+        }
+
+        if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
+            $fileName = basename($_FILES["standSignedLetter"]["name"]);
+            $planningAheadStandardSignedLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterPath');
+            $targetFilePath = $planningAheadStandardSignedLetterPath["configValue"] . $txnSchemeNo . '_' . $fileName;
+            $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+            $txnStandLetterLetterLoc = $targetFilePath;
+
+            //upload file to server
+            if (!move_uploaded_file($_FILES["standSignedLetter"]["tmp_name"], $targetFilePath)){
+                $retJson['status'] = 'NOTOK';
+                $retJson['retMessage'] = "Upload signed standard letter failed!";
+                $success = false;
+            }
+        }
+
         if ($success) {
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
@@ -664,6 +728,8 @@ class PlanningAheadController extends Controller {
                     $txnNewState = "COMPLETED_INITIAL_INFO";
                 } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_PQ") && ($txnRoleId == "2")){
                     $txnNewState = "COMPLETED_INITIAL_INFO";
+                } else if ($currState['state']=="WAITING_STANDARD_LETTER"){
+                    $txnNewState = "COMPLETED_STANDARD_LETTER";
                 }
 
                 $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,$txnSchemeNo,$txnRegion,
@@ -674,8 +740,10 @@ class PlanningAheadController extends Controller {
                     $txnFirstConsultantTitle,$txnFirstConsultantSurname,$txnFirstConsultantOtherName,
                     $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                     $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                    $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,$txnNewState,
-                    $lastUpdatedBy,$lastUpdatedTime,
+                    $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
+                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                    $txnStandLetterLetterLoc,
+                    $txnNewState, $lastUpdatedBy,$lastUpdatedTime,
                     $txnPlanningAheadId);
 
             } catch (PDOException $e) {
