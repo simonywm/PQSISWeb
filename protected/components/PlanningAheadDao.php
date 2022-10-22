@@ -65,7 +65,14 @@ class PlanningAheadDao extends CApplicationComponent {
                 $record['projectOwnerCompany'] = Encoding::escapleAllCharacter($result[0]['project_owner_company']);
                 $record['projectOwnerPhone'] = Encoding::escapleAllCharacter($result[0]['project_owner_phone']);
                 $record['projectOwnerEmail'] = Encoding::escapleAllCharacter($result[0]['project_owner_email']);
-                $record['standLetterIssueDate'] = $result[0]['stand_letter_issue_date'];
+                if (isset($result[0]['stand_letter_issue_date'])) {
+                    $standLetterIssueDateYear = date("Y", strtotime($result[0]['stand_letter_issue_date']));
+                    $standLetterIssueDateMonth = date("m", strtotime($result[0]['stand_letter_issue_date']));
+                    $standLetterIssueDateDay = date("d", strtotime($result[0]['stand_letter_issue_date']));
+                    $record['standLetterIssueDate'] = $standLetterIssueDateYear . "-" . $standLetterIssueDateMonth . "-" . $standLetterIssueDateDay;
+                } else {
+                    $record['standLetterIssueDate'] = null;
+                }
                 $record['standLetterFaxRefNo'] = Encoding::escapleAllCharacter($result[0]['stand_letter_fax_ref_no']);
                 $record['standLetterEdmsLink'] = Encoding::escapleAllCharacter($result[0]['stand_letter_edms_link']);
                 $record['standLetterLetterLoc'] = Encoding::escapleAllCharacter($result[0]['stand_letter_letter_loc']);
@@ -206,7 +213,8 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                                                    $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
                                                    $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
-                                                   $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,
+                                                   $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                                                   $txnStandLetterLetterLoc,
                                                    $lastUpdatedBy,$lastUpdatedTime,
                                                    $txnPlanningAheadId) {
 
@@ -219,7 +227,10 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"first_consultant_company"=?, "first_consultant_phone"=?, "first_consultant_email"=?, ';
         $sql = $sql . '"project_owner_title"=?, "project_owner_surname"=?, "project_owner_other_name"=?, ';
         $sql = $sql . '"project_owner_company"=?, "project_owner_phone"=?, "project_owner_email"=?, ';
-        $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, "stand_letter_edms_link"=?, ';
+        if ($txnStandLetterLetterLoc != null) {
+            $sql = $sql . '"stand_letter_letter_loc"=?, ';
+        }
         $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
@@ -229,19 +240,36 @@ class PlanningAheadDao extends CApplicationComponent {
             $transaction = Yii::app()->db->beginTransaction();
             $stmt = Yii::app()->db->createCommand($sql);
 
-            $result = $stmt->execute(array(
-                $txnProjectTitle,$txnSchemeNo,$txnRegion,
-                $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
-                $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
-                $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
-                $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
-                $txnFirstConsultantTitle,$txnFirstConsultantSurname,$txnFirstConsultantOtherName,
-                $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
-                $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
-                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,
-                $lastUpdatedBy,$lastUpdatedTime,
-                $txnPlanningAheadId));
+            if ($txnStandLetterLetterLoc == null) {
+                $result = $stmt->execute(array(
+                    $txnProjectTitle, $txnSchemeNo, $txnRegion,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
+                    $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
+                    $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
+                    $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
+                    $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
+                    $txnProjectOwnerTitle, $txnProjectOwnerSurname, $txnProjectOwnerOtherName,
+                    $txnProjectOwnerCompany, $txnProjectOwnerPhone, $txnProjectOwnerEmail,
+                    $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
+                    $lastUpdatedBy, $lastUpdatedTime,
+                    $txnPlanningAheadId));
+            } else {
+                $result = $stmt->execute(array(
+                    $txnProjectTitle, $txnSchemeNo, $txnRegion,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
+                    $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
+                    $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
+                    $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
+                    $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
+                    $txnProjectOwnerTitle, $txnProjectOwnerSurname, $txnProjectOwnerOtherName,
+                    $txnProjectOwnerCompany, $txnProjectOwnerPhone, $txnProjectOwnerEmail,
+                    $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
+                    $txnStandLetterLetterLoc,
+                    $lastUpdatedBy, $lastUpdatedTime,
+                    $txnPlanningAheadId));
+            }
 
             $transaction->commit();
 
@@ -259,7 +287,6 @@ class PlanningAheadDao extends CApplicationComponent {
         }
 
         return $retJson;
-
     }
 
     public function updatePlanningAheadDetailProcess($txnProjectTitle,$txnSchemeNo,$txnRegion,
@@ -270,8 +297,10 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnFirstConsultantTitle,$txnFirstConsultantSurname,$txnFirstConsultantOtherName,
                                                      $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                                                      $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                                                     $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,$txnNewState,
-                                                     $lastUpdatedBy,$lastUpdatedTime,
+                                                     $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
+                                                     $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                                                     $txnStandLetterLetterLoc,
+                                                     $txnNewState, $lastUpdatedBy,$lastUpdatedTime,
                                                      $txnPlanningAheadId)
     {
 
@@ -283,8 +312,10 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"first_consultant_title"=?, "first_consultant_surname"=?, "first_consultant_other_name"=?, ';
         $sql = $sql . '"first_consultant_company"=?, "first_consultant_phone"=?, "first_consultant_email"=?, ';
         $sql = $sql . '"project_owner_title"=?, "project_owner_surname"=?, "project_owner_other_name"=?, ';
-        $sql = $sql . '"project_owner_company"=?, "project_owner_phone"=?, "project_owner_email"=?, "state"=?, ';
-        $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
+        $sql = $sql . '"project_owner_company"=?, "project_owner_phone"=?, "project_owner_email"=?, ';
+        $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, "stand_letter_edms_link"=?, ';
+        $sql = $sql . '"stand_letter_letter_loc"=?, ';
+        $sql = $sql . '"state"=?, "last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
         try {
@@ -302,8 +333,10 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
                 $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
                 $txnProjectOwnerTitle, $txnProjectOwnerSurname, $txnProjectOwnerOtherName,
-                $txnProjectOwnerCompany, $txnProjectOwnerPhone, $txnProjectOwnerEmail, $txnNewState,
-                $lastUpdatedBy, $lastUpdatedTime,
+                $txnProjectOwnerCompany, $txnProjectOwnerPhone, $txnProjectOwnerEmail,
+                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                $txnStandLetterLetterLoc,
+                $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
                 $txnPlanningAheadId));
 
             $transaction->commit();
@@ -323,6 +356,37 @@ class PlanningAheadDao extends CApplicationComponent {
         }
 
         return $retJson;
+    }
+
+    public function updateStandardLetter($txnPlanningAheadId, $standLetterIssueDate, $standLetterFaxRefNo) {
+
+        $sql = 'UPDATE "tbl_planning_ahead" SET "stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?';
+        $sql = $sql . 'WHERE "planning_ahead_id"=?';
+
+        try {
+            //We start our transaction.
+            //$pdo->beginTransaction();
+            $transaction = Yii::app()->db->beginTransaction();
+            $stmt = Yii::app()->db->createCommand($sql);
+
+            $result = $stmt->execute(array($standLetterIssueDate,$standLetterFaxRefNo,$txnPlanningAheadId));
+            $transaction->commit();
+
+            $retJson['status'] = 'OK';
+
+        } catch (PDOException $e) {
+
+            //An exception has occured, which means that one of our database queries failed.
+            //Print out the error message.
+            $retJson['status'] = 'NOTOK';
+            $retJson['retMessage'] = $e->getMessage();
+            //Rollback the transaction.
+            //$pdo->rollBack();
+            $transaction->rollBack();
+        }
+
+        return $retJson;
+
     }
 }
 
