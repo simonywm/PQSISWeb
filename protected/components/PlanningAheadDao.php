@@ -46,47 +46,13 @@ class PlanningAheadDao extends CApplicationComponent {
                 $record['firstConsultantTitle'] = Encoding::escapleAllCharacter($result[0]['first_consultant_title']);
                 $record['firstConsultantSurname'] = Encoding::escapleAllCharacter($result[0]['first_consultant_surname']);
                 $record['firstConsultantOtherName'] = Encoding::escapleAllCharacter($result[0]['first_consultant_other_name']);
-                $record['firstConsultantCompanyId'] = Encoding::escapleAllCharacter($result[0]['first_consultant_company']);
-
-                if (isset($record['firstConsultantCompanyId']) && ($record['firstConsultantCompanyId'] != 0)) {
-                    $sql = 'SELECT * FROM "TblConsultantCompany"   
-                        WHERE "consultantCompanyId" = :consultantCompanyId';
-                    $sth = Yii::app()->db->createCommand($sql);
-                    $sth->bindParam(':consultantCompanyId', $record['firstConsultantCompanyId']);
-                    $firstConsultantCompany = $sth->queryAll();
-
-                    if (isset($firstConsultantCompany)) {
-                        $record['firstConsultantCompanyName'] = Encoding::escapleAllCharacter($firstConsultantCompany[0]['consultantCompanyName']);
-                    } else {
-                        $record['firstConsultantCompanyName'] = "UNKNOWN";
-                    }
-                } else {
-                    $record['firstConsultantCompanyName'] = null;
-                }
-
+                $record['firstConsultantCompany'] = Encoding::escapleAllCharacter($result[0]['first_consultant_company']);
                 $record['firstConsultantPhone'] = Encoding::escapleAllCharacter($result[0]['first_consultant_phone']);
                 $record['firstConsultantEmail'] = Encoding::escapleAllCharacter($result[0]['first_consultant_email']);
                 $record['secondConsultantTitle'] = Encoding::escapleAllCharacter($result[0]['second_consultant_title']);
                 $record['secondConsultantSurname'] = Encoding::escapleAllCharacter($result[0]['second_consultant_surname']);
                 $record['secondConsultantOtherName'] = Encoding::escapleAllCharacter($result[0]['second_consultant_other_name']);
-                $record['secondConsultantCompanyId'] = Encoding::escapleAllCharacter($result[0]['second_consultant_company']);
-
-                if (isset($record['secondConsultantCompanyId']) && ($record['secondConsultantCompanyId'] != 0)) {
-                    $sql = 'SELECT * FROM "TblConsultantCompany"   
-                        WHERE "consultantCompanyId" = :consultantCompanyId';
-                    $sth = Yii::app()->db->createCommand($sql);
-                    $sth->bindParam(':consultantCompanyId', $record['secondConsultantCompanyId']);
-                    $secondConsultantCompany = $sth->queryAll();
-
-                    if (isset($secondConsultantCompany)) {
-                        $record['secondConsultantCompanyName'] = Encoding::escapleAllCharacter($secondConsultantCompany[0]['consultantCompanyName']);
-                    } else {
-                        $record['secondConsultantCompanyName'] = "UNKNOWN";
-                    }
-                } else {
-                    $record['secondConsultantCompanyName'] = null;
-                }
-
+                $record['secondConsultantCompany'] = Encoding::escapleAllCharacter($result[0]['second_consultant_company']);
                 $record['secondConsultantCompanyName'] = Encoding::escapleAllCharacter($result[0]['second_consultant_company']);
                 $record['secondConsultantPhone'] = Encoding::escapleAllCharacter($result[0]['second_consultant_phone']);
                 $record['secondConsultantEmail'] = Encoding::escapleAllCharacter($result[0]['second_consultant_email']);
@@ -96,12 +62,24 @@ class PlanningAheadDao extends CApplicationComponent {
                 $record['thirdConsultantCompany'] = Encoding::escapleAllCharacter($result[0]['third_consultant_company']);
                 $record['thirdConsultantPhone'] = Encoding::escapleAllCharacter($result[0]['third_consultant_phone']);
                 $record['thirdConsultantEmail'] = Encoding::escapleAllCharacter($result[0]['third_consultant_email']);
-                $record['projectOwnerTitle'] = Encoding::escapleAllCharacter($result[0]['project_owner_title']);
-                $record['projectOwnerSurname'] = Encoding::escapleAllCharacter($result[0]['project_owner_surname']);
-                $record['projectOwnerOtherName'] = Encoding::escapleAllCharacter($result[0]['project_owner_other_name']);
-                $record['projectOwnerCompany'] = Encoding::escapleAllCharacter($result[0]['project_owner_company']);
-                $record['projectOwnerPhone'] = Encoding::escapleAllCharacter($result[0]['project_owner_phone']);
-                $record['projectOwnerEmail'] = Encoding::escapleAllCharacter($result[0]['project_owner_email']);
+                $record['firstProjectOwnerTitle'] = Encoding::escapleAllCharacter($result[0]['first_project_owner_title']);
+                $record['firstProjectOwnerSurname'] = Encoding::escapleAllCharacter($result[0]['first_project_owner_surname']);
+                $record['firstProjectOwnerOtherName'] = Encoding::escapleAllCharacter($result[0]['first_project_owner_other_name']);
+                $record['firstProjectOwnerCompany'] = Encoding::escapleAllCharacter($result[0]['first_project_owner_company']);
+                $record['firstProjectOwnerPhone'] = Encoding::escapleAllCharacter($result[0]['first_project_owner_phone']);
+                $record['firstProjectOwnerEmail'] = Encoding::escapleAllCharacter($result[0]['first_project_owner_email']);
+                $record['secondProjectOwnerTitle'] = Encoding::escapleAllCharacter($result[0]['second_project_owner_title']);
+                $record['secondProjectOwnerSurname'] = Encoding::escapleAllCharacter($result[0]['second_project_owner_surname']);
+                $record['secondProjectOwnerOtherName'] = Encoding::escapleAllCharacter($result[0]['second_project_owner_other_name']);
+                $record['secondProjectOwnerCompany'] = Encoding::escapleAllCharacter($result[0]['second_project_owner_company']);
+                $record['secondProjectOwnerPhone'] = Encoding::escapleAllCharacter($result[0]['second_project_owner_phone']);
+                $record['secondProjectOwnerEmail'] = Encoding::escapleAllCharacter($result[0]['second_project_owner_email']);
+                $record['thirdProjectOwnerTitle'] = Encoding::escapleAllCharacter($result[0]['third_project_owner_title']);
+                $record['thirdProjectOwnerSurname'] = Encoding::escapleAllCharacter($result[0]['third_project_owner_surname']);
+                $record['thirdProjectOwnerOtherName'] = Encoding::escapleAllCharacter($result[0]['third_project_owner_other_name']);
+                $record['thirdProjectOwnerCompany'] = Encoding::escapleAllCharacter($result[0]['third_project_owner_company']);
+                $record['thirdProjectOwnerPhone'] = Encoding::escapleAllCharacter($result[0]['third_project_owner_phone']);
+                $record['thirdProjectOwnerEmail'] = Encoding::escapleAllCharacter($result[0]['third_project_owner_email']);
                 if (isset($result[0]['stand_letter_issue_date'])) {
                     $standLetterIssueDateYear = date("Y", strtotime($result[0]['stand_letter_issue_date']));
                     $standLetterIssueDateMonth = date("m", strtotime($result[0]['stand_letter_issue_date']));
@@ -468,8 +446,26 @@ class PlanningAheadDao extends CApplicationComponent {
             $result = $sth->queryAll();
             //while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             foreach($result as $row) {
-                $array['consultantCompanyId'] = $row['consultantCompanyId'];
                 $array['consultantCompanyName'] = Encoding::escapleAllCharacter($row['consultantCompanyName']);
+                array_push($List, $array);
+            }
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $List;
+    }
+
+    public function getPlanningAheadProjectOwnerCompanyAllActive()
+    {
+        $List = array();
+        try {
+            $sql = "SELECT * FROM \"tbl_project_owner_company\" WHERE active ='Y' AND \"project_owner_company_name\" IS NOT NULL ORDER BY \"project_owner_company_name\"";
+            $sth = Yii::app()->db->createCommand($sql);
+            $result = $sth->queryAll();
+            //while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            foreach($result as $row) {
+                $array['projectOwnerCompanyName'] = Encoding::escapleAllCharacter($row['project_owner_company_name']);
                 array_push($List, $array);
             }
         } catch (PDOException $e) {
@@ -498,8 +494,6 @@ class PlanningAheadDao extends CApplicationComponent {
         return $List;
     }
 
-
-
     public function updatePlanningAheadDetailDraft($txnProjectTitle,$txnSchemeNo,$txnRegion,
                                                    $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
                                                    $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
@@ -509,8 +503,14 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                                                    $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
                                                    $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                                                   $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                                                   $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
+                                                   $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                                                   $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                                                   $txnFirstProjectOwnerTitle,$txnFirstProjectOwnerSurname,$txnFirstProjectOwnerOtherName,
+                                                   $txnFirstProjectOwnerCompany,$txnFirstProjectOwnerPhone,$txnFirstProjectOwnerEmail,
+                                                   $txnSecondProjectOwnerTitle,$txnSecondProjectOwnerSurname,$txnSecondProjectOwnerOtherName,
+                                                   $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
+                                                   $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
+                                                   $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                                                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                                                    $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                                                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
@@ -529,9 +529,16 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
                                                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
                                                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                                                   $txnReplySlipEvChargerSystemHarmonicEmission,$txnFirstInvitationLetterIssueDate,
+                                                   $txnReplySlipEvChargerSystemHarmonicEmission,
+                                                   $txnFirstInvitationLetterIssueDate,
                                                    $txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                                                    $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                                                   $txnSecondInvitationLetterIssueDate,
+                                                   $txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
+                                                   $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                                                   $txnThirdInvitationLetterIssueDate,
+                                                   $txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
+                                                   $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
                                                    $lastUpdatedBy,$lastUpdatedTime,
                                                    $txnPlanningAheadId) {
 
@@ -544,8 +551,14 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"first_consultant_company"=?, "first_consultant_phone"=?, "first_consultant_email"=?, ';
         $sql = $sql . '"second_consultant_title"=?, "second_consultant_surname"=?, "second_consultant_other_name"=?, ';
         $sql = $sql . '"second_consultant_company"=?, "second_consultant_phone"=?, "second_consultant_email"=?, ';
-        $sql = $sql . '"project_owner_title"=?, "project_owner_surname"=?, "project_owner_other_name"=?, ';
-        $sql = $sql . '"project_owner_company"=?, "project_owner_phone"=?, "project_owner_email"=?, ';
+        $sql = $sql . '"third_consultant_title"=?, "third_consultant_surname"=?, "third_consultant_other_name"=?, ';
+        $sql = $sql . '"third_consultant_company"=?, "third_consultant_phone"=?, "third_consultant_email"=?, ';
+        $sql = $sql . '"first_project_owner_title"=?, "first_project_owner_surname"=?, "first_project_owner_other_name"=?, ';
+        $sql = $sql . '"first_project_owner_company"=?, "first_project_owner_phone"=?, "first_project_owner_email"=?, ';
+        $sql = $sql . '"second_project_owner_title"=?, "second_project_owner_surname"=?, "second_project_owner_other_name"=?, ';
+        $sql = $sql . '"second_project_owner_company"=?, "second_project_owner_phone"=?, "second_project_owner_email"=?, ';
+        $sql = $sql . '"third_project_owner_title"=?, "third_project_owner_surname"=?, "third_project_owner_other_name"=?, ';
+        $sql = $sql . '"third_project_owner_company"=?, "third_project_owner_phone"=?, "third_project_owner_email"=?, ';
         $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, "stand_letter_edms_link"=?, ';
         $sql = $sql . '"stand_letter_letter_loc"=?, ';
         $sql = $sql . '"meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?, ';
@@ -554,6 +567,12 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"first_invitation_letter_issue_date"=?, "first_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"first_invitation_letter_edms_link"=?, "first_invitation_letter_accept"=?, ';
         $sql = $sql . '"first_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"second_invitation_letter_issue_date"=?, "second_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"second_invitation_letter_edms_link"=?, "second_invitation_letter_accept"=?, ';
+        $sql = $sql . '"second_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"third_invitation_letter_edms_link"=?, "third_invitation_letter_accept"=?, ';
+        $sql = $sql . '"third_invitation_letter_walk_date"=?, ';
         $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
@@ -573,14 +592,38 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
                 $txnSecondConsultantTitle, $txnSecondConsultantSurname, $txnSecondConsultantOtherName,
                 $txnSecondConsultantCompany, $txnSecondConsultantPhone, $txnSecondConsultantEmail,
-                $txnProjectOwnerTitle, $txnProjectOwnerSurname, $txnProjectOwnerOtherName,
-                $txnProjectOwnerCompany, $txnProjectOwnerPhone, $txnProjectOwnerEmail,
+                $txnThirdConsultantTitle, $txnThirdConsultantSurname, $txnThirdConsultantOtherName,
+                $txnThirdConsultantCompany, $txnThirdConsultantPhone, $txnThirdConsultantEmail,
+                $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
+                $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
+                $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
+                $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
+                $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
+                $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
                 $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
-                $txnStandLetterLetterLoc, $txnMeetingFirstPreferMeetingDate, $txnMeetingSecondPreferMeetingDate,
+                $txnStandLetterLetterLoc,
+                $txnMeetingFirstPreferMeetingDate, $txnMeetingSecondPreferMeetingDate,
                 $txnMeetingActualMeetingDate, $txnMeetingRejReason, $txnMeetingConsentConsultant,
-                $txnMeetingConsentOwner,$txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
+                $txnMeetingConsentOwner,
+                $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
                 $txnFirstInvitationLetterEdmsLink,$txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
-                $lastUpdatedBy, $lastUpdatedTime, $txnPlanningAheadId));
+                $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
+                $txnSecondInvitationLetterEdmsLink,$txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
+                $txnThirdInvitationLetterEdmsLink,$txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                $lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+
+            if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
+                $this->updateProjectOwnerCompanyByName($txnFirstProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
+            }
+
+            if (isset($txnSecondProjectOwnerCompany) && (trim($txnSecondProjectOwnerCompany) != "")) {
+                $this->updateProjectOwnerCompanyByName($txnSecondProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
+            }
+
+            if (isset($txnThirdProjectOwnerCompany) && (trim($txnThirdProjectOwnerCompany) != "")) {
+                $this->updateProjectOwnerCompanyByName($txnThirdProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
+            }
 
             if ($txnMeetingReplySlipId>0) {
                 $sql = 'UPDATE "tbl_slip_reply" SET "bms_yes_no"=?, "bms_server_central_computer"=?,
@@ -648,8 +691,14 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                                                      $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
                                                      $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                                                     $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                                                     $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
+                                                     $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                                                     $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                                                     $txnFirstProjectOwnerTitle,$txnFirstProjectOwnerSurname,$txnFirstProjectOwnerOtherName,
+                                                     $txnFirstProjectOwnerCompany,$txnFirstProjectOwnerPhone,$txnFirstProjectOwnerEmail,
+                                                     $txnSecondProjectOwnerTitle,$txnSecondProjectOwnerSurname,$txnSecondProjectOwnerOtherName,
+                                                     $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
+                                                     $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
+                                                     $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                                                      $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                                                      $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                                                      $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
@@ -671,6 +720,10 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnReplySlipEvChargerSystemHarmonicEmission,
                                                      $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                                                      $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                                                     $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
+                                                     $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                                                     $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
+                                                     $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
                                                      $txnNewState, $lastUpdatedBy,$lastUpdatedTime,
                                                      $txnPlanningAheadId)
     {
@@ -684,8 +737,14 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"first_consultant_company"=?, "first_consultant_phone"=?, "first_consultant_email"=?, ';
         $sql = $sql . '"second_consultant_title"=?, "second_consultant_surname"=?, "second_consultant_other_name"=?, ';
         $sql = $sql . '"second_consultant_company"=?, "second_consultant_phone"=?, "second_consultant_email"=?, ';
-        $sql = $sql . '"project_owner_title"=?, "project_owner_surname"=?, "project_owner_other_name"=?, ';
-        $sql = $sql . '"project_owner_company"=?, "project_owner_phone"=?, "project_owner_email"=?, ';
+        $sql = $sql . '"third_consultant_title"=?, "third_consultant_surname"=?, "third_consultant_other_name"=?, ';
+        $sql = $sql . '"third_consultant_company"=?, "third_consultant_phone"=?, "third_consultant_email"=?, ';
+        $sql = $sql . '"first_project_owner_title"=?, "first_project_owner_surname"=?, "first_project_owner_other_name"=?, ';
+        $sql = $sql . '"first_project_owner_company"=?, "first_project_owner_phone"=?, "first_project_owner_email"=?, ';
+        $sql = $sql . '"second_project_owner_title"=?, "second_project_owner_surname"=?, "second_project_owner_other_name"=?, ';
+        $sql = $sql . '"second_project_owner_company"=?, "second_project_owner_phone"=?, "second_project_owner_email"=?, ';
+        $sql = $sql . '"third_project_owner_title"=?, "third_project_owner_surname"=?, "third_project_owner_other_name"=?, ';
+        $sql = $sql . '"third_project_owner_company"=?, "third_project_owner_phone"=?, "third_project_owner_email"=?, ';
         $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, "stand_letter_edms_link"=?, ';
         $sql = $sql . '"stand_letter_letter_loc"=?, ';
         $sql = $sql . '"meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?, ';
@@ -694,6 +753,12 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"first_invitation_letter_issue_date"=?, "first_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"first_invitation_letter_edms_link"=?, "first_invitation_letter_accept"=?, ';
         $sql = $sql . '"first_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"second_invitation_letter_issue_date"=?, "second_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"second_invitation_letter_edms_link"=?, "second_invitation_letter_accept"=?, ';
+        $sql = $sql . '"second_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"third_invitation_letter_edms_link"=?, "third_invitation_letter_accept"=?, ';
+        $sql = $sql . '"third_invitation_letter_walk_date"=?, ';
         $sql = $sql . '"state"=?, "last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
@@ -713,15 +778,37 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
                 $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
                 $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                $txnProjectOwnerTitle, $txnProjectOwnerSurname, $txnProjectOwnerOtherName,
-                $txnProjectOwnerCompany, $txnProjectOwnerPhone, $txnProjectOwnerEmail,
+                $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
+                $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
+                $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
+                $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
+                $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
+                $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
                 $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                 $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
-                $txnMeetingConsentOwner, $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
+                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
+                $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
                 $txnFirstInvitationLetterEdmsLink, $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
+                $txnSecondInvitationLetterEdmsLink, $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
+                $txnThirdInvitationLetterEdmsLink, $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
                 $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
                 $txnPlanningAheadId));
+
+            if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
+                $this->updateProjectOwnerCompanyByName($txnFirstProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
+            }
+
+            if (isset($txnSecondProjectOwnerCompany) && (trim($txnSecondProjectOwnerCompany) != "")) {
+                $this->updateProjectOwnerCompanyByName($txnSecondProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
+            }
+
+            if (isset($txnThirdProjectOwnerCompany) && (trim($txnThirdProjectOwnerCompany) != "")) {
+                $this->updateProjectOwnerCompanyByName($txnThirdProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
+            }
 
             if ($txnMeetingReplySlipId>0) {
                 $sql = 'UPDATE "tbl_slip_reply" SET "bms_yes_no"=?, "bms_server_central_computer"=?,
@@ -781,10 +868,27 @@ class PlanningAheadDao extends CApplicationComponent {
         return $retJson;
     }
 
+    public function updateProjectOwnerCompanyByName($name,$lastUpdatedBy,$lastUpdatedTime) {
+
+        $sql = "SELECT * FROM \"tbl_project_owner_company\" WHERE upper(\"project_owner_company_name\") = upper(trim(:project_owner_company_name))";
+        $sth = Yii::app()->db->createCommand($sql);
+        $sth->bindParam(':project_owner_company_name', $name);
+        $result = $sth->queryAll();
+
+        if (!(count($result) > 0)) {
+            $sql = 'INSERT INTO "tbl_project_owner_company"("project_owner_company_name", "active", "created_by", 
+                                    "created_time", "last_updated_by", "last_updated_time") VALUES (?,?,?,?,?,?)';
+            $stmt = Yii::app()->db->createCommand($sql);
+            $result = $stmt->execute(array($name,"Y",$lastUpdatedBy,$lastUpdatedTime,$lastUpdatedBy,$lastUpdatedTime));
+            $retJson['status'] = 'OK';
+        }
+
+    }
+
     public function updateStandardLetter($txnPlanningAheadId, $standLetterIssueDate, $standLetterFaxRefNo,
                                          $lastUpdatedBy,$lastUpdatedTime) {
 
-        $sql = 'UPDATE "tbl_planning_ahead" SET "stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?';
+        $sql = 'UPDATE "tbl_planning_ahead" SET "stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, ';
         $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
@@ -793,7 +897,6 @@ class PlanningAheadDao extends CApplicationComponent {
             //$pdo->beginTransaction();
             $transaction = Yii::app()->db->beginTransaction();
             $stmt = Yii::app()->db->createCommand($sql);
-
             $result = $stmt->execute(array($standLetterIssueDate,$standLetterFaxRefNo,$lastUpdatedBy,$lastUpdatedTime,
                 $txnPlanningAheadId));
             $transaction->commit();
@@ -886,6 +989,46 @@ class PlanningAheadDao extends CApplicationComponent {
 
     }
 
+    public function updateThirdInvitationLetter($txnPlanningAheadId,$firstInvitationLetterIssueDate,
+                                                $firstInvitationLetterFaxRefNo,$secondInvitationLetterIssueDate,
+                                                $secondInvitationLetterFaxRefNo,$thirdInvitationLetterIssueDate,
+                                                $thirdInvitationLetterFaxRefNo,$lastUpdatedBy,$lastUpdatedTime) {
+
+        $sql = 'UPDATE "tbl_planning_ahead" SET 
+                                "first_invitation_letter_issue_date"=?, "first_invitation_letter_fax_ref_no"=?, 
+                                "second_invitation_letter_issue_date"=?, "second_invitation_letter_fax_ref_no"=?, 
+                                "third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, 
+                                "last_updated_by"=?, "last_updated_time"=? 
+                                WHERE "planning_ahead_id"=?';
+
+        try {
+            //We start our transaction.
+            //$pdo->beginTransaction();
+            $transaction = Yii::app()->db->beginTransaction();
+            $stmt = Yii::app()->db->createCommand($sql);
+
+            $result = $stmt->execute(array($firstInvitationLetterIssueDate,$firstInvitationLetterFaxRefNo,
+                $secondInvitationLetterIssueDate,$secondInvitationLetterFaxRefNo,
+                $thirdInvitationLetterIssueDate,$thirdInvitationLetterFaxRefNo,
+                $lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+            $transaction->commit();
+
+            $retJson['status'] = 'OK';
+
+        } catch (PDOException $e) {
+
+            //An exception has occured, which means that one of our database queries failed.
+            //Print out the error message.
+            $retJson['status'] = 'NOTOK';
+            $retJson['retMessage'] = $e->getMessage();
+            //Rollback the transaction.
+            //$pdo->rollBack();
+            $transaction->rollBack();
+        }
+
+        return $retJson;
+
+    }
 
     public function updateConsultantMeetingInfo($schemeNo,$firstPreferredMeetingDate,$secondPreferredMeetingDate,
                                                 $rejectReason,$consentedByConsultant,$consentedByProjectOwner,

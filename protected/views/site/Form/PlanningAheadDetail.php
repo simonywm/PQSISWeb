@@ -11,7 +11,6 @@
     .invalid {
         background-color: #2774ad69;
     }
-
 </style>
 
 <div id="planningAheadDetailForm" class="pt-2">
@@ -375,26 +374,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Company: </span>
                                     </div>
-                                    <select id="firstConsultantCompany" name="firstConsultantCompany" class="form-control">
-                                        <option value="0" selected disabled>------</option>
-                                        <?php $matchFirstConsulantCompany=false ?>
-                                        <?php foreach ($this->viewbag['consultantCompanyList'] as $item) {
-                                            if ($this->viewbag['firstConsultantCompanyId'] == $item['consultantCompanyId']) {
-                                                $matchFirstConsulantCompany=true;?>
-                                                <option value="<?php echo $item['consultantCompanyId']; ?>" selected><?php echo $item['consultantCompanyName']; ?></option>
-                                            <?php } else { ?>
-                                                <option value="<?php echo $item['consultantCompanyId']; ?>"><?php echo $item['consultantCompanyName']; ?></option>
-                                        <?php
-                                            }
-                                        }
-
-                                        if (isset($this->viewbag['firstConsultantCompanyId']) && (!$matchFirstConsulantCompany)) {
-                                        ?>
-                                            <option value="<?php echo $this->viewbag['firstConsultantCompanyId'] ?>"><?php echo $this->viewbag['firstConsultantCompanyName'] ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input id="firstConsultantCompany" name="firstConsultantCompany" type="text"
+                                           class="form-control" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -476,26 +457,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Company: </span>
                                     </div>
-                                    <select id="secondConsultantCompany" name="secondConsultantCompany" class="form-control">
-                                        <option value="0" selected disabled>------</option>
-                                        <?php $matchSecondConsulantCompany=false ?>
-                                        <?php foreach ($this->viewbag['consultantCompanyList'] as $item) {
-                                            if ($this->viewbag['secondConsultantCompanyId'] == $item['consultantCompanyId']) {
-                                                $matchSecondConsulantCompany=true;?>
-                                                <option value="<?php echo $item['consultantCompanyId']; ?>" selected><?php echo $item['consultantCompanyName']; ?></option>
-                                            <?php } else { ?>
-                                                <option value="<?php echo $item['consultantCompanyId']; ?>"><?php echo $item['consultantCompanyName']; ?></option>
-                                                <?php
-                                            }
-                                        }
-
-                                        if (isset($this->viewbag['secondConsultantCompanyId']) && (!$matchSecondConsulantCompany)) {
-                                            ?>
-                                            <option value="<?php echo $this->viewbag['secondConsultantCompanyId'] ?>"><?php echo $this->viewbag['secondConsultantCompanyName'] ?></option>
-                                            <?php
-                                        }
-                                        ?>
-                                    </select>
+                                    <input id="secondConsultantCompany" name="secondConsultantCompany" type="text"
+                                           class="form-control" autocomplete="off">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -522,19 +485,19 @@
             </div>
         </div>
 
-        <div id="accordionContactOfProjectOwner">
+        <div id="accordionThirdContactOfConsultant">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
-                    <a class="card-link" data-toggle="collapse" href="#contactOfProjectOwner" onclick="cardSelected('contactOfProjectOwnerIcon');">
+                    <a class="card-link" data-toggle="collapse" href="#thirdContactOfConsultant" onclick="cardSelected('thirdContactOfConsultantIcon')">
                         <div class="row">
-                            <div class="col-11"><h5 class="text-light">Contact of Project Owner</h5></div>
+                            <div class="col-11"><h5 class="text-light">3<span style="vertical-align: super; font-size: 10px">rd</span> Contact of Consultant</h5></div>
                             <div class="col-1">
-                                <img id="contactOfProjectOwnerIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
+                                <img id="thirdContactOfConsultantIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
                             </div>
                         </div>
                     </a>
                 </div>
-                <div id="contactOfProjectOwner" class="collapse" data-parent="#accordionContactOfProjectOwner">
+                <div id="thirdContactOfConsultant" class="collapse" data-parent="#accordionThirdContactOfConsultant">
                     <div class="card-body">
                         <div>
                             <div class="form-group row">
@@ -542,33 +505,33 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Name: </span>
                                     </div>
-                                    <select id="projectOwnerTitle" name="projectOwnerTitle" class="form-control">
+                                    <select id="thirdConsultantTitle" name="thirdConsultantTitle" class="form-control">
                                         <option value="0" selected disabled>--- Title ---</option>
-                                        <?php if ($this->viewbag['projectOwnerTitle'] == "Mr.") { ?>
+                                        <?php if ($this->viewbag['thirdConsultantTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
                                             <option value="Mr.">Mr.</option>
                                         <?php } ?>
-                                        <?php if ($this->viewbag['projectOwnerTitle'] == "Mrs.") { ?>
+                                        <?php if ($this->viewbag['thirdConsultantTitle'] == "Mrs.") { ?>
                                             <option value="Mrs." selected>Mrs.</option>
                                         <?php } else { ?>
                                             <option value="Mrs.">Mrs.</option>
                                         <?php } ?>
-                                        <?php if ($this->viewbag['projectOwnerTitle'] == "Ms.") { ?>
+                                        <?php if ($this->viewbag['thirdConsultantTitle'] == "Ms.") { ?>
                                             <option value="Ms." selected>Ms.</option>
                                         <?php } else { ?>
                                             <option value="Ms.">Ms.</option>
                                         <?php } ?>
-                                        <?php if ($this->viewbag['projectOwnerTitle'] == "Miss") { ?>
+                                        <?php if ($this->viewbag['thirdConsultantTitle'] == "Miss") { ?>
                                             <option value="Miss" selected>Miss</option>
                                         <?php } else { ?>
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
 
-                                    <input id="projectOwnerSurname" name="projectOwnerSurname" type="text"
+                                    <input id="thirdConsultantSurname" name="thirdConsultantSurname" type="text"
                                            class="form-control" autocomplete="off" placeholder="Surname">
-                                    <input id="projectOwnerOtherName" name="projectOwnerOtherName" type="text"
+                                    <input id="thirdConsultantOtherName" name="thirdConsultantOtherName" type="text"
                                            class="form-control" autocomplete="off" placeholder="Other Name(s)">
                                 </div>
                             </div>
@@ -577,7 +540,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Company: </span>
                                     </div>
-                                    <input id="projectOwnerCompany" name="projectOwnerCompany" type="text"
+                                    <input id="thirdConsultantCompany" name="thirdConsultantCompany" type="text"
                                            class="form-control" autocomplete="off">
                                 </div>
                             </div>
@@ -586,7 +549,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Contact No.: </span>
                                     </div>
-                                    <input id="projectOwnerPhone" name="projectOwnerPhone" type="text"
+                                    <input id="thirdConsultantPhone" name="thirdConsultantPhone" type="text"
                                            class="form-control" autocomplete="off">
                                 </div>
                             </div>
@@ -595,7 +558,256 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Contact Email: </span>
                                     </div>
-                                    <input id="projectOwnerEmail" name="projectOwnerEmail" type="text"
+                                    <input id="thirdConsultantEmail" name="thirdConsultantEmail" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="accordionFirstContactOfProjectOwner">
+            <div class="card">
+                <div class="card-header" style="background-color: #6f42c1">
+                    <a class="card-link" data-toggle="collapse" href="#firstContactOfProjectOwner" onclick="cardSelected('firstContactOfProjectOwnerIcon');">
+                        <div class="row">
+                            <div class="col-11"><h5 class="text-light">1<span style="vertical-align: super; font-size: 10px">st</span> Contact of Project Owner</h5></div>
+                            <div class="col-1">
+                                <img id="firstContactOfProjectOwnerIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div id="firstContactOfProjectOwner" class="collapse" data-parent="#accordionFirstContactOfProjectOwner">
+                    <div class="card-body">
+                        <div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Name: </span>
+                                    </div>
+                                    <select id="firstProjectOwnerTitle" name="firstProjectOwnerTitle" class="form-control">
+                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <?php if ($this->viewbag['firstProjectOwnerTitle'] == "Mr.") { ?>
+                                            <option value="Mr." selected>Mr.</option>
+                                        <?php } else { ?>
+                                            <option value="Mr.">Mr.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['firstProjectOwnerTitle'] == "Mrs.") { ?>
+                                            <option value="Mrs." selected>Mrs.</option>
+                                        <?php } else { ?>
+                                            <option value="Mrs.">Mrs.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['firstProjectOwnerTitle'] == "Ms.") { ?>
+                                            <option value="Ms." selected>Ms.</option>
+                                        <?php } else { ?>
+                                            <option value="Ms.">Ms.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['firstProjectOwnerTitle'] == "Miss") { ?>
+                                            <option value="Miss" selected>Miss</option>
+                                        <?php } else { ?>
+                                            <option value="Miss">Miss</option>
+                                        <?php } ?>
+                                    </select>
+
+                                    <input id="firstProjectOwnerSurname" name="firstProjectOwnerSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname">
+                                    <input id="firstProjectOwnerOtherName" name="firstProjectOwnerOtherName" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Company: </span>
+                                    </div>
+                                    <input id="firstProjectOwnerCompany" name="firstProjectOwnerCompany" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Contact No.: </span>
+                                    </div>
+                                    <input id="firstProjectOwnerPhone" name="firstProjectOwnerPhone" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Contact Email: </span>
+                                    </div>
+                                    <input id="firstProjectOwnerEmail" name="firstProjectOwnerEmail" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="accordionSecondContactOfProjectOwner">
+            <div class="card">
+                <div class="card-header" style="background-color: #6f42c1">
+                    <a class="card-link" data-toggle="collapse" href="#secondContactOfProjectOwner" onclick="cardSelected('secondContactOfProjectOwnerIcon');">
+                        <div class="row">
+                            <div class="col-11"><h5 class="text-light">2<span style="vertical-align: super; font-size: 10px">nd</span> Contact of Project Owner</h5></div>
+                            <div class="col-1">
+                                <img id="secondContactOfProjectOwnerIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div id="secondContactOfProjectOwner" class="collapse" data-parent="#accordionSecondContactOfProjectOwner">
+                    <div class="card-body">
+                        <div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Name: </span>
+                                    </div>
+                                    <select id="secondProjectOwnerTitle" name="secondProjectOwnerTitle" class="form-control">
+                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <?php if ($this->viewbag['secondProjectOwnerTitle'] == "Mr.") { ?>
+                                            <option value="Mr." selected>Mr.</option>
+                                        <?php } else { ?>
+                                            <option value="Mr.">Mr.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['secondProjectOwnerTitle'] == "Mrs.") { ?>
+                                            <option value="Mrs." selected>Mrs.</option>
+                                        <?php } else { ?>
+                                            <option value="Mrs.">Mrs.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['secondProjectOwnerTitle'] == "Ms.") { ?>
+                                            <option value="Ms." selected>Ms.</option>
+                                        <?php } else { ?>
+                                            <option value="Ms.">Ms.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['secondProjectOwnerTitle'] == "Miss") { ?>
+                                            <option value="Miss" selected>Miss</option>
+                                        <?php } else { ?>
+                                            <option value="Miss">Miss</option>
+                                        <?php } ?>
+                                    </select>
+
+                                    <input id="secondProjectOwnerSurname" name="secondProjectOwnerSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname">
+                                    <input id="secondProjectOwnerOtherName" name="secondProjectOwnerOtherName" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Company: </span>
+                                    </div>
+                                    <input id="secondProjectOwnerCompany" name="secondProjectOwnerCompany" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Contact No.: </span>
+                                    </div>
+                                    <input id="secondProjectOwnerPhone" name="secondProjectOwnerPhone" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Contact Email: </span>
+                                    </div>
+                                    <input id="secondProjectOwnerEmail" name="secondProjectOwnerEmail" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="accordionThirdContactOfProjectOwner">
+            <div class="card">
+                <div class="card-header" style="background-color: #6f42c1">
+                    <a class="card-link" data-toggle="collapse" href="#thirdContactOfProjectOwner" onclick="cardSelected('thirdContactOfProjectOwnerIcon');">
+                        <div class="row">
+                            <div class="col-11"><h5 class="text-light">3<span style="vertical-align: super; font-size: 10px">rd</span> Contact of Project Owner</h5></div>
+                            <div class="col-1">
+                                <img id="thirdContactOfProjectOwnerIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div id="thirdContactOfProjectOwner" class="collapse" data-parent="#accordionThirdContactOfProjectOwner">
+                    <div class="card-body">
+                        <div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Name: </span>
+                                    </div>
+                                    <select id="thirdProjectOwnerTitle" name="thirdProjectOwnerTitle" class="form-control">
+                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <?php if ($this->viewbag['thirdProjectOwnerTitle'] == "Mr.") { ?>
+                                            <option value="Mr." selected>Mr.</option>
+                                        <?php } else { ?>
+                                            <option value="Mr.">Mr.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['thirdProjectOwnerTitle'] == "Mrs.") { ?>
+                                            <option value="Mrs." selected>Mrs.</option>
+                                        <?php } else { ?>
+                                            <option value="Mrs.">Mrs.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['thirdProjectOwnerTitle'] == "Ms.") { ?>
+                                            <option value="Ms." selected>Ms.</option>
+                                        <?php } else { ?>
+                                            <option value="Ms.">Ms.</option>
+                                        <?php } ?>
+                                        <?php if ($this->viewbag['thirdProjectOwnerTitle'] == "Miss") { ?>
+                                            <option value="Miss" selected>Miss</option>
+                                        <?php } else { ?>
+                                            <option value="Miss">Miss</option>
+                                        <?php } ?>
+                                    </select>
+
+                                    <input id="thirdProjectOwnerSurname" name="thirdProjectOwnerSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname">
+                                    <input id="thirdProjectOwnerOtherName" name="thirdProjectOwnerOtherName" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Company: </span>
+                                    </div>
+                                    <input id="thirdProjectOwnerCompany" name="thirdProjectOwnerCompany" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Contact No.: </span>
+                                    </div>
+                                    <input id="thirdProjectOwnerPhone" name="thirdProjectOwnerPhone" type="text"
+                                           class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Contact Email: </span>
+                                    </div>
+                                    <input id="thirdProjectOwnerEmail" name="thirdProjectOwnerEmail" type="text"
                                            class="form-control" autocomplete="off">
                                 </div>
                             </div>
@@ -611,7 +823,8 @@
             ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailofPQStandardLetter">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -683,9 +896,11 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+            ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailofMeeting">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -788,7 +1003,7 @@
                         <div class="row">
                             <div class="col-8"><h5 class="text-light pt-2">Reply Slip Detail</h5></div>
                             <div class="col-3">
-                                <input class="btn btn-primary form-control" type="button" name="genReplySlipDetail"
+                                <input class="btn btn-warning form-control" type="button" name="genReplySlipDetail"
                                        id="genReplySlipDetailBtn" value="Generate Reply Slip (PDF)">
                             </div>
                             <div class="col-1 pt-2">
@@ -1168,7 +1383,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofFirstInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1281,7 +1497,8 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+            ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+            (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['secondInvitationLetterIssueDate']!=""))) { ?>
             <div id="accordionDetailofSecondInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1393,7 +1610,8 @@
 
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+        <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['thirdInvitationLetterIssueDate']!=""))) { ?>
             <div id="accordionDetailofThirdInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1527,6 +1745,22 @@
     $(document).ready(function(){
 
         // Load information for the project detail
+        let availableTagsForConsultantCompanyName = [
+            <?php foreach ($this->viewbag['consultantCompanyList'] as $consultantCompany) {?> {
+                value: "<?php echo $consultantCompany['consultantCompanyName']; ?>",
+                name: "<?php echo $consultantCompany['consultantCompanyName']; ?>"
+            },
+            <?php }?>
+        ];
+
+        let availableTagsForProjectOwnerCompanyName = [
+            <?php foreach ($this->viewbag['projectOwnerCompanyList'] as $consultantCompany) {?> {
+                value: "<?php echo $consultantCompany['projectOwnerCompanyName']; ?>",
+                name: "<?php echo $consultantCompany['projectOwnerCompanyName']; ?>"
+            },
+            <?php }?>
+        ];
+
         $("#projectTitle").val("<?php echo $this->viewbag['projectTitle']; ?>");
         $("#schemeNo").val("<?php echo $this->viewbag['schemeNo']; ?>");
         $("#commissionDate").val("<?php echo $this->viewbag['commissionDate']; ?>");
@@ -1541,17 +1775,34 @@
         $("#thirdRegionStaffEmail").val("<?php echo $this->viewbag['thirdRegionStaffEmail']; ?>");
         $("#firstConsultantSurname").val("<?php echo $this->viewbag['firstConsultantSurname']; ?>");
         $("#firstConsultantOtherName").val("<?php echo $this->viewbag['firstConsultantOtherName']; ?>");
+        $("#firstConsultantCompany").val("<?php echo $this->viewbag['firstConsultantCompany']; ?>");
         $("#firstConsultantPhone").val("<?php echo $this->viewbag['firstConsultantPhone']; ?>");
         $("#firstConsultantEmail").val("<?php echo $this->viewbag['firstConsultantEmail']; ?>");
         $("#secondConsultantSurname").val("<?php echo $this->viewbag['secondConsultantSurname']; ?>");
         $("#secondConsultantOtherName").val("<?php echo $this->viewbag['secondConsultantOtherName']; ?>");
+        $("#secondConsultantCompany").val("<?php echo $this->viewbag['secondConsultantCompany']; ?>");
         $("#secondConsultantPhone").val("<?php echo $this->viewbag['secondConsultantPhone']; ?>");
         $("#secondConsultantEmail").val("<?php echo $this->viewbag['secondConsultantEmail']; ?>");
-        $("#projectOwnerSurname").val("<?php echo $this->viewbag['projectOwnerSurname']; ?>");
-        $("#projectOwnerOtherName").val("<?php echo $this->viewbag['projectOwnerOtherName']; ?>");
-        $("#projectOwnerCompany").val("<?php echo $this->viewbag['projectOwnerCompany']; ?>");
-        $("#projectOwnerPhone").val("<?php echo $this->viewbag['projectOwnerPhone']; ?>");
-        $("#projectOwnerEmail").val("<?php echo $this->viewbag['projectOwnerEmail']; ?>");
+        $("#thirdConsultantSurname").val("<?php echo $this->viewbag['thirdConsultantSurname']; ?>");
+        $("#thirdConsultantOtherName").val("<?php echo $this->viewbag['thirdConsultantOtherName']; ?>");
+        $("#thirdConsultantCompany").val("<?php echo $this->viewbag['thirdConsultantCompany']; ?>");
+        $("#thirdConsultantPhone").val("<?php echo $this->viewbag['thirdConsultantPhone']; ?>");
+        $("#thirdConsultantEmail").val("<?php echo $this->viewbag['thirdConsultantEmail']; ?>");
+        $("#firstProjectOwnerSurname").val("<?php echo $this->viewbag['firstProjectOwnerSurname']; ?>");
+        $("#firstProjectOwnerOtherName").val("<?php echo $this->viewbag['firstProjectOwnerOtherName']; ?>");
+        $("#firstProjectOwnerCompany").val("<?php echo $this->viewbag['firstProjectOwnerCompany']; ?>");
+        $("#firstProjectOwnerPhone").val("<?php echo $this->viewbag['firstProjectOwnerPhone']; ?>");
+        $("#firstProjectOwnerEmail").val("<?php echo $this->viewbag['firstProjectOwnerEmail']; ?>");
+        $("#secondProjectOwnerSurname").val("<?php echo $this->viewbag['secondProjectOwnerSurname']; ?>");
+        $("#secondProjectOwnerOtherName").val("<?php echo $this->viewbag['secondProjectOwnerOtherName']; ?>");
+        $("#secondProjectOwnerCompany").val("<?php echo $this->viewbag['secondProjectOwnerCompany']; ?>");
+        $("#secondProjectOwnerPhone").val("<?php echo $this->viewbag['secondProjectOwnerPhone']; ?>");
+        $("#secondProjectOwnerEmail").val("<?php echo $this->viewbag['secondProjectOwnerEmail']; ?>");
+        $("#thirdProjectOwnerSurname").val("<?php echo $this->viewbag['thirdProjectOwnerSurname']; ?>");
+        $("#thirdProjectOwnerOtherName").val("<?php echo $this->viewbag['thirdProjectOwnerOtherName']; ?>");
+        $("#thirdProjectOwnerCompany").val("<?php echo $this->viewbag['thirdProjectOwnerCompany']; ?>");
+        $("#thirdProjectOwnerPhone").val("<?php echo $this->viewbag['thirdProjectOwnerPhone']; ?>");
+        $("#thirdProjectOwnerEmail").val("<?php echo $this->viewbag['thirdProjectOwnerEmail']; ?>");
         $("#standLetterIssueDate").val("<?php echo $this->viewbag['standLetterIssueDate']; ?>");
         $("#standLetterFaxRefNo").val("<?php echo $this->viewbag['standLetterFaxRefNo']; ?>");
         $("#standLetterEdmsLink").val("<?php echo $this->viewbag['standLetterEdmsLink']; ?>");
@@ -1560,11 +1811,109 @@
         $("#meetingActualMeetingDate").val("<?php echo $this->viewbag['meetingActualMeetingDate']; ?>");
         $("#meetingRejReason").val("<?php echo $this->viewbag['meetingRejReason']; ?>");
 
+
+        // Set the autocomplete for 1st consultant company name
+        $('#firstConsultantCompany').autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(availableTagsForConsultantCompanyName, request.term);
+                response(results.slice(0, 10));
+            },
+            focus: function(event, ui) {
+                $("#firstConsultantCompany").val(ui.item.name);
+                return false;
+            },
+            select: function(event, ui) {
+                $("#firstConsultantCompany").val(ui.item.name);
+                return false;
+            }
+        });
+
+        // Set the autocomplete for 2nd consultant company name
+        $('#secondConsultantCompany').autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(availableTagsForConsultantCompanyName, request.term);
+                response(results.slice(0, 10));
+            },
+            focus: function(event, ui) {
+                $("#secondConsultantCompany").val(ui.item.name);
+                return false;
+            },
+            select: function(event, ui) {
+                $("#secondConsultantCompany").val(ui.item.name);
+                return false;
+            }
+        });
+
+        // Set the autocomplete for 3rd consultant company name
+        $('#thirdConsultantCompany').autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(availableTagsForConsultantCompanyName, request.term);
+                response(results.slice(0, 10));
+            },
+            focus: function(event, ui) {
+                $("#thirdConsultantCompany").val(ui.item.name);
+                return false;
+            },
+            select: function(event, ui) {
+                $("#thirdConsultantCompany").val(ui.item.name);
+                return false;
+            }
+        });
+
+        // Set the autocomplete for 1st project owner company name
+        $('#firstProjectOwnerCompany').autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(availableTagsForProjectOwnerCompanyName, request.term);
+                response(results.slice(0, 10));
+            },
+            focus: function(event, ui) {
+                $("#firstProjectOwnerCompany").val(ui.item.name);
+                return false;
+            },
+            select: function(event, ui) {
+                $("#firstProjectOwnerCompany").val(ui.item.name);
+                return false;
+            }
+        });
+
+        // Set the autocomplete for 2nd project owner company name
+        $('#secondProjectOwnerCompany').autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(availableTagsForProjectOwnerCompanyName, request.term);
+                response(results.slice(0, 10));
+            },
+            focus: function(event, ui) {
+                $("#secondProjectOwnerCompany").val(ui.item.name);
+                return false;
+            },
+            select: function(event, ui) {
+                $("#secondProjectOwnerCompany").val(ui.item.name);
+                return false;
+            }
+        });
+
+        // Set the autocomplete for 3rd project owner company name
+        $('#thirdProjectOwnerCompany').autocomplete({
+            source: function(request, response) {
+                let results = $.ui.autocomplete.filter(availableTagsForProjectOwnerCompanyName, request.term);
+                response(results.slice(0, 10));
+            },
+            focus: function(event, ui) {
+                $("#thirdProjectOwnerCompany").val(ui.item.name);
+                return false;
+            },
+            select: function(event, ui) {
+                $("#thirdProjectOwnerCompany").val(ui.item.name);
+                return false;
+            }
+        });
+
         $("#detailForm").on("submit", function(e) {
 
             e.preventDefault();
 
             if ($(this).find("input[type=submit]:focus" ).val() == 'Save as Draft') {
+
                 if (!validateDraftInput()) {
                     return;
                 }
@@ -1600,6 +1949,7 @@
                     $("#saveProcessBtn").attr("disabled", false);
                 });
             } else if ($(this).find("input[type=submit]:focus" ).val() == 'Save & Process') {
+
                 if (!validateProcessInput()) {
                     return;
                 }
@@ -1641,40 +1991,24 @@
                     ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
                     ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
         $("#genStandLetterBtn").on("click", function() {
 
             let errorMessage = "";
             let i = 1;
 
-            if (($("#standLetterIssueDate").val() == null) || ($("#standLetterIssueDate").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#standLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date can not be blank <br/>";
-                i = i + 1;
-                $("#standLetterIssueDate").addClass("invalid");
-            }
+            let result = validateEmpty("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#standLetterFaxRefNo").val() == null) || ($("#standLetterFaxRefNo").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#standLetterFaxRefNo").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Fax Ref No. can not be blank <br/>";
-                i = i + 1;
-                $("#standLetterFaxRefNo").addClass("invalid");
-            }
+            result = validateEmpty("#standLetterFaxRefNo", "Standard Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
-                let standLetterIssueDate = $("#standLetterIssueDate").val();
-                if (!validateDateFormat(standLetterIssueDate)) {
-                    if (errorMessage == "")
-                        $("#standLetterIssueDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#standLetterIssueDate").addClass("invalid");
-                }
-            }
+            result = validateDateOnlyFormat("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
             if (errorMessage != "") {
                 showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
@@ -1691,9 +2025,11 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
         $('#replySlipBmsServerCentralComputer').val("<?php echo $this->viewbag['replySlipBmsServerCentralComputer']; ?>");
         $('#replySlipBmsDdc').val("<?php echo $this->viewbag['replySlipBmsDdc']; ?>");
         $('#replySlipChangeoverSchemeControl').val("<?php echo $this->viewbag['replySlipChangeoverSchemeControl']; ?>");
@@ -1732,7 +2068,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
         $('#firstInvitationLetterIssueDate').val("<?php echo $this->viewbag['firstInvitationLetterIssueDate']; ?>");
         $('#firstInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['firstInvitationLetterFaxRefNo']; ?>");
         $('#firstInvitationLetterEdmsLink').val("<?php echo $this->viewbag['firstInvitationLetterEdmsLink']; ?>");
@@ -1742,32 +2079,14 @@
             let errorMessage = "";
             let i = 1;
 
-            if (($("#firstInvitationLetterIssueDate").val() == null) || ($("#firstInvitationLetterIssueDate").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitiation Letter Issue Date can not be blank <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterIssueDate").addClass("invalid");
-            }
+            let result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#firstInvitationLetterFaxRefNo").val() == null) || ($("#firstInvitationLetterFaxRefNo").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterFaxRefNo").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitiation Letter Fax Ref No. can not be blank <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterFaxRefNo").addClass("invalid");
-            }
+            result = validateEmpty("#firstInvitationLetterFaxRefNo", "1st Invitiation Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#firstInvitationLetterIssueDate").val() != null) && ($("#firstInvitationLetterIssueDate").val().trim() != "")) {
-                let firstInvitationLetterIssueDate = $("#firstInvitationLetterIssueDate").val();
-                if (!validateDateFormat(firstInvitationLetterIssueDate)) {
-                    if (errorMessage == "")
-                        $("#firstInvitationLetterIssueDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "First Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#firstInvitationLetterIssueDate").addClass("invalid");
-                }
-            }
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
             if (errorMessage != "") {
                 showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
@@ -1786,7 +2105,8 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['secondInvitationLetterIssueDate']!=""))) { ?>
         $('#secondInvitationLetterIssueDate').val("<?php echo $this->viewbag['secondInvitationLetterIssueDate']; ?>");
         $('#secondInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['secondInvitationLetterFaxRefNo']; ?>");
         $('#secondInvitationLetterEdmsLink').val("<?php echo $this->viewbag['secondInvitationLetterEdmsLink']; ?>");
@@ -1796,40 +2116,23 @@
             let errorMessage = "";
             let i = 1;
 
-            if (($("#firstInvitationLetterIssueDate").val() == null) || ($("#firstInvitationLetterIssueDate").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitiation Letter Issue Date can not be blank <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterIssueDate").addClass("invalid");
-            }
+            let result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterIssueDate").val() == null) || ($("#secondInvitationLetterIssueDate").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitiation Letter Issue Date can not be blank <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterIssueDate").addClass("invalid");
-            }
+            result = validateEmpty("#firstInvitationLetterFaxRefNo", "1st Invitiation Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterFaxRefNo").val() == null) || ($("#secondInvitationLetterFaxRefNo").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterFaxRefNo").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitiation Letter Fax Ref No. can not be blank <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterFaxRefNo").addClass("invalid");
-            }
+            result = validateEmpty("#secondInvitationLetterIssueDate", "2nd Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterIssueDate").val() != null) && ($("#secondInvitationLetterIssueDate").val().trim() != "")) {
-                let secondInvitationLetterIssueDate = $("#secondInvitationLetterIssueDate").val();
-                if (!validateDateFormat(secondInvitationLetterIssueDate)) {
-                    if (errorMessage == "")
-                        $("#secondInvitationLetterIssueDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#secondInvitationLetterIssueDate").addClass("invalid");
-                }
-            }
+            result = validateEmpty("#secondInvitationLetterFaxRefNo", "2nd Invitiation Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
 
             if (errorMessage != "") {
                 showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
@@ -1839,6 +2142,64 @@
             $(this).attr("disabled", true);
             window.location.href =
                 "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailSecondInvitationLetterTemplate" +
+                "&secondInvitationLetterIssueDate=" + $("#secondInvitationLetterIssueDate").val() +
+                "&secondInvitationLetterFaxRefNo=" + $("#secondInvitationLetterFaxRefNo").val() +
+                "&firstInvitationLetterIssueDate=" + $("#firstInvitationLetterIssueDate").val() +
+                "&firstInvitationLetterFaxRefNo=" + $("#firstInvitationLetterFaxRefNo").val() +
+                "&schemeNo=" + $("#schemeNo").val();
+            $(this).attr("disabled", false);
+        });
+
+        <?php } ?>
+
+        <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['thirdInvitationLetterIssueDate']!=""))) { ?>
+        $('#thirdInvitationLetterIssueDate').val("<?php echo $this->viewbag['thirdInvitationLetterIssueDate']; ?>");
+        $('#thirdInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['thirdInvitationLetterFaxRefNo']; ?>");
+        $('#thirdInvitationLetterEdmsLink').val("<?php echo $this->viewbag['thirdInvitationLetterEdmsLink']; ?>");
+        $('#thirdInvitationLetterWalkDate').val("<?php echo $this->viewbag['thirdInvitationLetterWalkDate']; ?>");
+
+        $("#genThirdInvitationLetterBtn").on("click", function() {
+            let errorMessage = "";
+            let i = 1;
+
+            let result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterFaxRefNo", "1st Invitiation Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#secondInvitationLetterIssueDate", "2nd Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#secondInvitationLetterFaxRefNo", "2nd Invitiation Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#thirdInvitationLetterIssueDate", "3rd Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#thirdInvitationLetterFaxRefNo", "3rd Invitiation Letter Fax Ref No.", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitiation Letter Issue Date", errorMessage, i);
+            errorMessage = result[0]; i = result[1];
+
+            if (errorMessage != "") {
+                showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
+                return;
+            }
+
+            $(this).attr("disabled", true);
+            window.location.href =
+                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailThirdInvitationLetterTemplate" +
+                "&thirdInvitationLetterIssueDate=" + $("#thirdInvitationLetterIssueDate").val() +
+                "&thirdInvitationLetterFaxRefNo=" + $("#thirdInvitationLetterFaxRefNo").val() +
                 "&secondInvitationLetterIssueDate=" + $("#secondInvitationLetterIssueDate").val() +
                 "&secondInvitationLetterFaxRefNo=" + $("#secondInvitationLetterFaxRefNo").val() +
                 "&firstInvitationLetterIssueDate=" + $("#firstInvitationLetterIssueDate").val() +
@@ -1865,147 +2226,85 @@
         let errorMessage = "";
         let i = 1;
 
-        if (($("#projectTitle").val() == null) || ($("#projectTitle").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectTitle").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Title can not be blank <br/>";
-            i = i + 1;
-            $("#projectTitle").addClass("invalid");
-        }
+        let result = validateEmpty("#projectTitle", "Project Title", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#region").val() == null) || ($("#region").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#region").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Region can not be blank <br/>";
-            i = i + 1;
-            $("#region").addClass("invalid");
-        }
+        result = validateEmpty("#region", "Region", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#schemeNo").val() == null) || ($("#schemeNo").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#schemeNo").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Scheme No. can not be blank <br/>";
-            i = i + 1;
-            $("#schemeNo").addClass("invalid");
-        }
+        result = validateEmpty("#schemeNo", "Scheme No.", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#commissionDate").val() != null) && ($("#commissionDate").val().trim() != "")) {
-            let commissionDate = $("#commissionDate").val();
-            if (!validateDateFormat(commissionDate)) {
-                if (errorMessage == "")
-                    $("#commissionDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Commission Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#commissionDate").addClass("invalid");
-            }
-        }
+        result = validateDateOnlyFormat("#commissionDate", "Commission Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
         <?php if (($this->viewbag['state']=="WAITING_STANDARD_LETTER") ||
                     ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
                     ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
 
-        if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
-            let standLetterIssueDate = $("#standLetterIssueDate").val();
-            if (!validateDateFormat(standLetterIssueDate)) {
-                if (errorMessage == "")
-                    $("#standLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#standLetterIssueDate").addClass("invalid");
-            }
-        }
+        result = validateDateOnlyFormat("#standLetterIssueDate", "Standard Letter", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
-        if (($("#meetingFirstPreferMeetingDate").val() != null) && ($("#meetingFirstPreferMeetingDate").val().trim() != "")) {
-            let meetingFirstPreferMeetingDate = $("#meetingFirstPreferMeetingDate").val();
-            if (!validateDateTimeFormat(meetingFirstPreferMeetingDate)) {
-                if (errorMessage == "")
-                    $("#meetingFirstPreferMeetingDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Preferred Meeting Date Time format is not match. It should be [YYYY-mm-dd hh:mi] <br/>";
-                i = i + 1;
-                $("#meetingFirstPreferMeetingDate").addClass("invalid");
-            }
-        }
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
 
-        if (($("#meetingSecondPreferMeetingDate").val() != null) && ($("#meetingSecondPreferMeetingDate").val().trim() != "")) {
-            let meetingSecondPreferMeetingDate = $("#meetingSecondPreferMeetingDate").val();
-            if (!validateDateTimeFormat(meetingSecondPreferMeetingDate)) {
-                if (errorMessage == "")
-                    $("#meetingSecondPreferMeetingDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Preferred Meeting Date Time format is not match. It should be [YYYY-mm-dd hh:mi] <br/>";
-                i = i + 1;
-                $("#meetingSecondPreferMeetingDate").addClass("invalid");
-            }
-        }
+        result = validateDateAndTimeFormat("#meetingFirstPreferMeetingDate", "1st Preferred Meeting Date & Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#meetingActualMeetingDate").val() != null) && ($("#meetingActualMeetingDate").val().trim() != "")) {
-            let meetingActualMeetingDate = $("#meetingActualMeetingDate").val();
-            if (!validateDateTimeFormat(meetingActualMeetingDate)) {
-                if (errorMessage == "")
-                    $("#meetingActualMeetingDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Actual Meeting Date Time format is not match. It should be [YYYY-mm-dd hh:mi] <br/>";
-                i = i + 1;
-                $("#meetingActualMeetingDate").addClass("invalid");
-            }
-        }
+        result = validateDateAndTimeFormat("#meetingSecondPreferMeetingDate", "2nd Preferred Meeting Date & Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateAndTimeFormat("#meetingActualMeetingDate", "Actual Meeting Date & Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
-        if (($("#firstInvitationLetterIssueDate").val() != null) && ($("#firstInvitationLetterIssueDate").val().trim() != "")) {
-            let firstInvitationLetterIssueDate = $("#firstInvitationLetterIssueDate").val();
-            if (!validateDateFormat(firstInvitationLetterIssueDate)) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterIssueDate").addClass("invalid");
-            }
-        }
-        if (($("#firstInvitationLetterWalkDate").val() != null) && ($("#firstInvitationLetterWalkDate").val().trim() != "")) {
-            let firstInvitationLetterWalkDate = $("#firstInvitationLetterWalkDate").val();
-            if (!validateDateFormat(firstInvitationLetterWalkDate)) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterWalkDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter PQ Walk Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterWalkDate").addClass("invalid");
-            }
-        }
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+
+        result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
-        if (($("#secondInvitationLetterIssueDate").val() != null) && ($("#secondInvitationLetterIssueDate").val().trim() != "")) {
-            let secondInvitationLetterIssueDate = $("#secondInvitationLetterIssueDate").val();
-            if (!validateDateFormat(secondInvitationLetterIssueDate)) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterIssueDate").addClass("invalid");
-            }
-        }
-        if (($("#secondInvitationLetterWalkDate").val() != null) && ($("#secondInvitationLetterWalkDate").val().trim() != "")) {
-            let secondInvitationLetterWalkDate = $("#secondInvitationLetterWalkDate").val();
-            if (!validateDateFormat(secondInvitationLetterWalkDate)) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterWalkDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter PQ Walk Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterWalkDate").addClass("invalid");
-            }
-        }
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['secondInvitationLetterIssueDate']!=""))) { ?>
+
+        result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        <?php } ?>
+
+        <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['thirdInvitationLetterIssueDate']!=""))) { ?>
+
+        result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateOnlyFormat("#thirdInvitationLetterWalkDate", "3rd Invitation Letter PQ Walk Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
         <?php } ?>
 
         if (errorMessage == "") {
@@ -2029,192 +2328,80 @@
         let errorMessage = "";
         let i = 1;
 
-        if (($("#projectTitle").val() == null) || ($("#projectTitle").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectTitle").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Title can not be blank <br/>";
-            i = i + 1;
-            $("#projectTitle").addClass("invalid");
-        }
+        let result = validateEmpty("#projectTitle", "Project Title", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#region").val() == null) || ($("#region").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#region").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Region can not be blank <br/>";
-            i = i + 1;
-            $("#region").addClass("invalid");
-        }
+        result = validateEmpty("#region", "Region", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#schemeNo").val() == null) || ($("#schemeNo").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#schemeNo").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Scheme No. can not be blank <br/>";
-            i = i + 1;
-            $("#schemeNo").addClass("invalid");
-        }
+        result = validateEmpty("#schemeNo", "Scheme No.", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#commissionDate").val() != null) && ($("#commissionDate").val().trim() != "")) {
-            let commissionDate = $("#commissionDate").val();
-            if (!validateDateFormat(commissionDate)) {
-                if (errorMessage == "")
-                    $("#commissionDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Commission Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#commissionDate").addClass("invalid");
-            }
-        }
+        result = validateDateOnlyFormat("#commissionDate", "Commission Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
         <?php
             if(Yii::app()->session['tblUserDo']['roleId'] == 2) { ?>
 
-        if (($("#typeOfProject").val() == null) || ($("#typeOfProject").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#typeOfProject").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Type of Project must be selected <br/>";
-            i = i + 1;
-            $("#typeOfProject").addClass("invalid");
-        }
+        result = validateSelected("#typeOfProject", "Type of Project", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($('input[name=infraOpt]:checked', '#detailForm').val() == null) || ($('input[name=infraOpt]:checked', '#detailForm').val() == "")) {
-            errorMessage = errorMessage + "Error " + i + ": " + "Key Infrastructure must be checked <br/>";
-            i = i + 1;
-        }
+        result = validateChecked("infraOpt", "Key Infrastructure", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($('input[name=tempProjOpt]:checked', '#detailForm').val() == null) || ($('input[name=tempProjOpt]:checked', '#detailForm').val() == "")) {
-            errorMessage = errorMessage + "Error " + i + ": " + "Temp Project must be checked <br/>";
-            i = i + 1;
-        }
+        result = validateChecked("tempProjOpt", "Temp Project", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
         <?php
             } else if(Yii::app()->session['tblUserDo']['roleId'] == 3) {?>
 
-        if (($("#commissionDate").val() == null) || ($("#commissionDate").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#commissionDate").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Commission Date can not be blank <br/>";
-            i = i + 1;
-            $("#commissionDate").addClass("invalid");
-        }
+        result = validateEmpty("#commissionDate", "Commission Date", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstRegionStaffName").val() == null) || ($("#firstRegionStaffName").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstRegionStaffName").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "First Region Staff Name can not be blank <br/>";
-            i = i + 1;
-            $("#firstRegionStaffName").addClass("invalid");
-        }
+        result = validateEmpty("#firstRegionStaffName", "First Region Staff Name", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstRegionStaffPhone").val() == null) || ($("#firstRegionStaffPhone").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstRegionStaffPhone").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "First Region Staff Contact No. can not be blank <br/>";
-            i = i + 1;
-            $("#firstRegionStaffPhone").addClass("invalid");
-        }
+        result = validateEmpty("#firstRegionStaffPhone", "First Region Staff Contact No.", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstRegionStaffEmail").val() == null) || ($("#firstRegionStaffEmail").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstRegionStaffEmail").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "First Region Staff Email can not be blank <br/>";
-            i = i + 1;
-            $("#firstRegionStaffEmail").addClass("invalid");
-        }
+        result = validateEmpty("#firstRegionStaffEmail", "First Region Staff Email", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstConsultantTitle").val() == null) || ($("#firstConsultantTitle").val().trim() == "0")) {
-            if (errorMessage == "")
-                $("#firstConsultantTitle").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Consultant Title can not be blank <br/>";
-            i = i + 1;
-            $("#firstConsultantTitle").addClass("invalid");
-        }
+        result = validateSelected("#firstConsultantTitle", "1st Consultant Title", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstConsultantSurname").val() == null) || ($("#firstConsultantSurname").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstConsultantSurname").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Consultant Surname can not be blank <br/>";
-            i = i + 1;
-            $("#firstConsultantSurname").addClass("invalid");
-        }
+        result = validateEmpty("#firstConsultantSurname", "1st Consultant Surname", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstConsultantOtherName").val() == null) || ($("#firstConsultantOtherName").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstConsultantOtherName").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Consultant Other Name(s) can not be blank <br/>";
-            i = i + 1;
-            $("#firstConsultantOtherName").addClass("invalid");
-        }
+        result = validateEmpty("#firstConsultantOtherName", "1st Consultant Other Name(s)", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstConsultantCompany").val() == null) || ($("#firstConsultantCompany").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstConsultantCompany").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Consultant Other Name(s) can not be blank <br/>";
-            i = i + 1;
-            $("#firstConsultantCompany").addClass("invalid");
-        }
+        result = validateEmpty("#firstConsultantCompany", "1st Consultant Company", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstConsultantPhone").val() == null) || ($("#firstConsultantPhone").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstConsultantPhone").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Consultant Contact No. can not be blank <br/>";
-            i = i + 1;
-            $("#firstConsultantPhone").addClass("invalid");
-        }
+        result = validateEmpty("#firstConsultantPhone", "1st Consultant Contact No.", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstConsultantEmail").val() == null) || ($("#firstConsultantEmail").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstConsultantEmail").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Consultant Email can not be blank <br/>";
-            i = i + 1;
-            $("#firstConsultantEmail").addClass("invalid");
-        }
+        result = validateEmpty("#firstConsultantEmail", "1st Consultant Email", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#projectOwnerTitle").val() == null) || ($("#projectOwnerTitle").val().trim() == "0")) {
-            if (errorMessage == "")
-                $("#projectOwnerTitle").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Owner Title can not be blank <br/>";
-            i = i + 1;
-            $("#projectOwnerTitle").addClass("invalid");
-        }
+        result = validateSelected("#firstProjectOwnerTitle", "1st Project Owner Title", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#projectOwnerSurname").val() == null) || ($("#projectOwnerSurname").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectOwnerSurname").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Owner Surname can not be blank <br/>";
-            i = i + 1;
-            $("#projectOwnerSurname").addClass("invalid");
-        }
+        result = validateEmpty("#firstProjectOwnerSurname", "1st Project Owner Surname", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#projectOwnerOtherName").val() == null) || ($("#projectOwnerOtherName").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectOwnerOtherName").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Owner Other Name can not be blank <br/>";
-            i = i + 1;
-            $("#projectOwnerOtherName").addClass("invalid");
-        }
+        result = validateEmpty("#firstProjectOwnerOtherName", "1st Project Owner Other Name", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#projectOwnerCompany").val() == null) || ($("#projectOwnerCompany").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectOwnerCompany").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Owner Company can not be blank <br/>";
-            i = i + 1;
-            $("#projectOwnerCompany").addClass("invalid");
-        }
+        result = validateEmpty("#firstProjectOwnerCompany", "1st Project Owner Company", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#projectOwnerPhone").val() == null) || ($("#projectOwnerPhone").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectOwnerPhone").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Owner Phone can not be blank <br/>";
-            i = i + 1;
-            $("#projectOwnerPhone").addClass("invalid");
-        }
+        result = validateEmpty("#firstProjectOwnerPhone", "1st Project Owner Phone", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#projectOwnerEmail").val() == null) || ($("#projectOwnerEmail").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#projectOwnerEmail").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Project Owner Email can not be blank <br/>";
-            i = i + 1;
-            $("#projectOwnerEmail").addClass("invalid");
-        }
+        result = validateEmpty("#firstProjectOwnerEmail", "1st Project Owner Email", errorMessage, i);
+        errorMessage = result[0]; i = result[1];
 
         <?php
             }?>
@@ -2223,252 +2410,256 @@
                     ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
                     ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
-        if (($("#standLetterIssueDate").val() == null) || ($("#standLetterIssueDate").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#standLetterIssueDate").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date can not be blank <br/>";
-            i = i + 1;
-            $("#standLetterIssueDate").addClass("invalid");
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+
+        result = validateEmpty("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateEmpty("#standLetterFaxRefNo", "Standard Letter Fax Ref No.", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateEmpty("#standLetterEdmsLink", "Standard Letter EDMS link", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateOnlyFormat("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+
+        if (($("#standLetterLetterLoc").val() == null) || ($("#standLetterLetterLoc").val() == "")) {
+            result = validateEmpty("#standSignedLetter", "Signed Standard Letter", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
         }
-        if (($("#standLetterFaxRefNo").val() == null) || ($("#standLetterFaxRefNo").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#standLetterFaxRefNo").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Fax Ref No. can not be blank <br/>";
-            i = i + 1;
-            $("#standLetterFaxRefNo").addClass("invalid");
-        }
-        if (($("#standLetterEdmsLink").val() == null) || ($("#standLetterEdmsLink").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#standLetterEdmsLink").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter EDMS link can not be blank <br/>";
-            i = i + 1;
-            $("#standLetterEdmsLink").addClass("invalid");
-        }
-        if (($("#standLetterIssueDate").val() != null) && ($("#standLetterIssueDate").val().trim() != "")) {
-            let standLetterIssueDate = $("#standLetterIssueDate").val();
-            if (!validateDateFormat(standLetterIssueDate)) {
-                if (errorMessage == "")
-                    $("#standLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Standard Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#standLetterIssueDate").addClass("invalid");
-            }
-        }
-        if (($("#standLetterLetterLoc").val() == null) || ($("#standLetterLetterLoc").val().trim() == "")) {
-            if ($('#standSignedLetter').get(0).files.length == 0) {
-                if (errorMessage == "")
-                    $("#standLetterLetterLoc").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Signed Standard Letter should be uploaded <br/>";
-                i = i + 1;
-                $("#standLetterLetterLoc").addClass("invalid");
-            }
-        }
+
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                    ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
 
-        if (($("#meetingActualMeetingDate").val() == null) || ($("#meetingActualMeetingDate").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#meetingActualMeetingDate").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "Actual Meeting Date & Time can not be blank <br/>";
-            i = i + 1;
-            $("#meetingActualMeetingDate").addClass("invalid");
-        }
+        result = validateEmpty("#meetingActualMeetingDate", "Actual Meeting Date & Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#meetingFirstPreferMeetingDate").val() != null) && ($("#meetingFirstPreferMeetingDate").val().trim() != "")) {
-            let meetingFirstPreferMeetingDate = $("#meetingFirstPreferMeetingDate").val();
-            if (!validateDateTimeFormat(meetingFirstPreferMeetingDate)) {
-                if (errorMessage == "")
-                    $("#meetingFirstPreferMeetingDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Preferred Meeting Date Time format is not match. It should be [YYYY-mm-dd hh:mi] <br/>";
-                i = i + 1;
-                $("#meetingFirstPreferMeetingDate").addClass("invalid");
-            }
-        }
+        result = validateDateAndTimeFormat("#meetingFirstPreferMeetingDate", "1st Preferred Meeting Date Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#meetingSecondPreferMeetingDate").val() != null) && ($("#meetingSecondPreferMeetingDate").val().trim() != "")) {
-            let meetingSecondPreferMeetingDate = $("#meetingSecondPreferMeetingDate").val();
-            if (!validateDateTimeFormat(meetingSecondPreferMeetingDate)) {
-                if (errorMessage == "")
-                    $("#meetingSecondPreferMeetingDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Preferred Meeting Date Time format is not match. It should be [YYYY-mm-dd hh:mi] <br/>";
-                i = i + 1;
-                $("#meetingSecondPreferMeetingDate").addClass("invalid");
-            }
-        }
+        result = validateDateAndTimeFormat("#meetingSecondPreferMeetingDate", "2nd Preferred Meeting Date Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#meetingActualMeetingDate").val() != null) && ($("#meetingActualMeetingDate").val().trim() != "")) {
-            let meetingActualMeetingDate = $("#meetingActualMeetingDate").val();
-            if (!validateDateTimeFormat(meetingActualMeetingDate)) {
-                if (errorMessage == "")
-                    $("#meetingActualMeetingDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "Actual Meeting Date Time format is not match. It should be [YYYY-mm-dd hh:mi] <br/>";
-                i = i + 1;
-                $("#meetingActualMeetingDate").addClass("invalid");
-            }
-        }
+        result = validateDateAndTimeFormat("#meetingActualMeetingDate", "Actual Meeting Date Time", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
         <?php } ?>
 
         <?php if ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") { ?>
-        if (($("#firstInvitationLetterIssueDate").val() == null) || ($("#firstInvitationLetterIssueDate").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstInvitationLetterIssueDate").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter Issue Date can not be blank <br/>";
-            i = i + 1;
-            $("#firstInvitationLetterIssueDate").addClass("invalid");
-        }
 
-        if (($("#firstInvitationLetterFaxRefNo").val() == null) || ($("#firstInvitationLetterFaxRefNo").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstInvitationLetterFaxRefNo").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter Fax Reference No. can not be blank <br/>";
-            i = i + 1;
-            $("#firstInvitationLetterFaxRefNo").addClass("invalid");
-        }
+        result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstInvitationLetterEdmsLink").val() == null) || ($("#firstInvitationLetterEdmsLink").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstInvitationLetterEdmsLink").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter EDMS Link can not be blank <br/>";
-            i = i + 1;
-            $("#firstInvitationLetterEdmsLink").addClass("invalid");
-        }
+        result = validateEmpty("#firstInvitationLetterFaxRefNo", "1st Invitation Letter Fax Reference No.", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
-            ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == "")) {
-            errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter Acceptance must be checked <br/>";
-            i = i + 1;
-        }
+        result = validateEmpty("#firstInvitationLetterEdmsLink", "1st Invitation Letter EDMS Link", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstInvitationLetterWalkDate").val() == null) || ($("#firstInvitationLetterWalkDate").val().trim() == "")) {
-            if (errorMessage == "")
-                $("#firstInvitationLetterWalkDate").focus();
-            errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter PQ Walk Date can not be blank <br/>";
-            i = i + 1;
-            $("#firstInvitationLetterWalkDate").addClass("invalid");
-        }
+        result = validateChecked("firstInvitationLetterAccept", "1st Invitation Letter Acceptance", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
-        if (($("#firstInvitationLetterIssueDate").val() != null) && ($("#firstInvitationLetterIssueDate").val().trim() != "")) {
-            let firstInvitationLetterIssueDate = $("#firstInvitationLetterIssueDate").val();
-            if (!validateDateFormat(firstInvitationLetterIssueDate)) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterIssueDate").addClass("invalid");
-            }
-        }
-        if (($("#firstInvitationLetterWalkDate").val() != null) && ($("#firstInvitationLetterWalkDate").val().trim() != "")) {
-            let firstInvitationLetterWalkDate = $("#firstInvitationLetterWalkDate").val();
-            if (!validateDateFormat(firstInvitationLetterWalkDate)) {
-                if (errorMessage == "")
-                    $("#firstInvitationLetterWalkDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter PQ Walk Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                i = i + 1;
-                $("#firstInvitationLetterWalkDate").addClass("invalid");
-            }
-        }
+        result = validateEmpty("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
         <?php } ?>
 
         <?php if ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") { ?>
-        if ((($("#firstInvitationLetterWalkDate").val() == null) || ($("#firstInvitationLetterWalkDate").val().trim() == "")) ||
-            (($("#firstInvitationLetterWalkDate").val() == null) || ($("#firstInvitationLetterWalkDate").val().trim() == "")) ||
-            (($("#firstInvitationLetterWalkDate").val() == null) || ($("#firstInvitationLetterWalkDate").val().trim() == "")) ||
-            (($("#firstInvitationLetterWalkDate").val() == null) || ($("#firstInvitationLetterWalkDate").val().trim() == "")) ||
-            (($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
+
+        if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
                 ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == ""))) {
 
-            if (($("#secondInvitationLetterIssueDate").val() == null) || ($("#secondInvitationLetterIssueDate").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterIssueDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter Issue Date can not be blank <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterIssueDate").addClass("invalid");
-            }
+            result = validateEmpty("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterFaxRefNo").val() == null) || ($("#secondInvitationLetterFaxRefNo").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterFaxRefNo").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter Fax Reference No. can not be blank <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterFaxRefNo").addClass("invalid");
-            }
+            result = validateEmpty("#secondInvitationLetterFaxRefNo", "2nd Invitation Letter Fax Reference No.", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterEdmsLink").val() == null) || ($("#secondInvitationLetterEdmsLink").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterEdmsLink").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter EDMS Link can not be blank <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterEdmsLink").addClass("invalid");
-            }
+            result = validateEmpty("#secondInvitationLetterEdmsLink", "2nd Invitation Letter EDMS Link", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
 
-            if (($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
-                ($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == "")) {
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter Acceptance must be checked <br/>";
-                i = i + 1;
-            }
+            result = validateChecked("secondInvitationLetterAccept", "2nd Invitation Letter Acceptance", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterWalkDate").val() == null) || ($("#secondInvitationLetterWalkDate").val().trim() == "")) {
-                if (errorMessage == "")
-                    $("#secondInvitationLetterWalkDate").focus();
-                errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter PQ Walk Date can not be blank <br/>";
-                i = i + 1;
-                $("#secondInvitationLetterWalkDate").addClass("invalid");
-            }
+            result = validateEmpty("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#secondInvitationLetterIssueDate").val() != null) && ($("#secondInvitationLetterIssueDate").val().trim() != "")) {
-                let secondInvitationLetterIssueDate = $("#secondInvitationLetterIssueDate").val();
-                if (!validateDateFormat(secondInvitationLetterIssueDate)) {
-                    if (errorMessage == "")
-                        $("#secondInvitationLetterIssueDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#secondInvitationLetterIssueDate").addClass("invalid");
-                }
-            }
-            if (($("#secondInvitationLetterWalkDate").val() != null) && ($("#secondInvitationLetterWalkDate").val().trim() != "")) {
-                let secondInvitationLetterWalkDate = $("#secondInvitationLetterWalkDate").val();
-                if (!validateDateFormat(secondInvitationLetterWalkDate)) {
-                    if (errorMessage == "")
-                        $("#secondInvitationLetterWalkDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "2nd Invitation Letter PQ Walk Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#secondInvitationLetterWalkDate").addClass("invalid");
-                }
-            }
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
 
-            if (($("#firstInvitationLetterIssueDate").val() != null) && ($("#firstInvitationLetterIssueDate").val().trim() != "")) {
-                let firstInvitationLetterIssueDate = $("#firstInvitationLetterIssueDate").val();
-                if (!validateDateFormat(firstInvitationLetterIssueDate)) {
-                    if (errorMessage == "")
-                        $("#firstInvitationLetterIssueDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter Issue Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#firstInvitationLetterIssueDate").addClass("invalid");
-                }
-            }
-            if (($("#firstInvitationLetterWalkDate").val() != null) && ($("#firstInvitationLetterWalkDate").val().trim() != "")) {
-                let firstInvitationLetterWalkDate = $("#firstInvitationLetterWalkDate").val();
-                if (!validateDateFormat(firstInvitationLetterWalkDate)) {
-                    if (errorMessage == "")
-                        $("#firstInvitationLetterWalkDate").focus();
-                    errorMessage = errorMessage + "Error " + i + ": " + "1st Invitation Letter PQ Walk Date format is not match. It should be [YYYY-mm-dd] <br/>";
-                    i = i + 1;
-                    $("#firstInvitationLetterWalkDate").addClass("invalid");
-                }
-            }
+            result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+        } else {
+            result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterFaxRefNo", "1st Invitation Letter Fax Reference No.", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterEdmsLink", "1st Invitation Letter EDMS Link", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateChecked("firstInvitationLetterAccept", "1st Invitation Letter Acceptance", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
         }
 
         <?php } ?>
 
+        <?php if ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") { ?>
+        if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
+                ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == "")) &&
+            (($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
+                ($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == ""))) {
 
-        if (errorMessage == "") {
+            result = validateEmpty("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#thirdInvitationLetterFaxRefNo", "3rd Invitation Letter Fax Reference No.", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#thirdInvitationLetterEdmsLink", "3rd Invitation Letter EDMS Link", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateChecked("thirdInvitationLetterAccept", "3rd Invitation Letter Acceptance", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#thirdInvitationLetterWalkDate", "3rd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterWalkDate", "3rd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+        } else if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() != null) ||
+                ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() != ""))) {
+
+            result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterFaxRefNo", "1st Invitation Letter Fax Reference No.", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterEdmsLink", "1st Invitation Letter EDMS Link", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateChecked("firstInvitationLetterAccept", "1st Invitation Letter Acceptance", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterWalkDate", "3rd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+        } else if ((($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() != null) ||
+            ($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() != ""))) {
+
+            result = validateEmpty("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#secondInvitationLetterFaxRefNo", "2nd Invitation Letter Fax Reference No.", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#secondInvitationLetterEdmsLink", "2nd Invitation Letter EDMS Link", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateChecked("secondInvitationLetterAccept", "2nd Invitation Letter Acceptance", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateEmpty("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#thirdInvitationLetterWalkDate", "3rd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+            result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
+            errorMessage = result[0]; i = result[1];
+
+        }
+        <?php } ?>
+
+        if (errorMessage === "") {
             return true;
         } else {
             showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
@@ -2480,6 +2671,7 @@
                 ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
                 ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                 ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+                ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                 ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
@@ -2512,8 +2704,84 @@
     }
 
     function validateDateTimeFormat(txtDate) {
+
         let regFormat = '[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}';
         return txtDate.match(regFormat);
+    }
+
+    function validateDateOnlyFormat(id, name, errorMsg, i) {
+        if (($(id).val() != null) && ($(id).val().trim() != "")) {
+            let inputDate = $(id).val();
+            if (!inputDate.match('[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2}')) {
+                if (errorMsg == "")
+                    $(id).focus();
+                errorMsg = errorMsg + "Error " + i + ": " +  name + " format is not match. It should be [YYYY-mm-dd] <br/>";
+                i = i + 1;
+                $(id).addClass("invalid");
+            }
+        }
+        return [errorMsg, i];
+    }
+
+    function validateDateAndTimeFormat(id, name, errorMsg, i) {
+        if (($(id).val() != null) && ($(id).val().trim() != "")) {
+            let inputDate = $(id).val();
+            if (!inputDate.match('[0-9]{4}[-][0-9]{1,2}[-][0-9]{1,2} [0-9]{1,2}:[0-9]{1,2}')) {
+                if (errorMsg == "")
+                    $(id).focus();
+                errorMsg = errorMsg + "Error " + i + ": " +  name + " format is not match. It should be [YYYY-mm-dd HH:mi] <br/>";
+                i = i + 1;
+                $(id).addClass("invalid");
+            }
+        }
+        return [errorMsg, i];
+    }
+
+    function validateEmpty(id, name, errorMsg, i) {
+        if (($(id).val() == null) || ($(id).val().trim() == "")) {
+            if (errorMsg == "")
+                $(id).focus();
+            errorMsg = errorMsg + "Error " + i + ": " + name + " can not be blank <br/>";
+            i = i + 1;
+            $(id).addClass("invalid");
+        }
+        return [errorMsg, i];
+    }
+
+    function validateSelected(id, name, errorMsg, i) {
+
+        if (($(id).val() == null) || ($(id).val().trim() == "")) {
+            if (errorMsg == "")
+                $(id).focus();
+            errorMsg = errorMsg + "Error " + i + ": " + name + " must be selected <br/>";
+            i = i + 1;
+            $(id).addClass("invalid");
+        }
+        return [errorMsg, i];
+    }
+
+    function validateChecked(id, name, errorMsg, i) {
+
+        if (($('input[name=' + id + ']:checked', '#detailForm').val() == null) ||
+            ($('input[name=' + id + ']:checked', '#detailForm').val() == "")) {
+            errorMsg = errorMsg + "Error " + i + ": " + name + " must be checked <br/>";
+            i = i + 1;
+        }
+        return [errorMsg, i];
+    }
+
+    function validateUploaded(id, name, errorMsg, i) {
+
+        if (($(id).val() == null) || ($(id).val().trim() == "")) {
+            if ($(id).get(0).files.length == 0) {
+                if (errorMsg == "")
+                    $(id).focus();
+                errorMsg = errorMsg + "Error " + i + ": " + name + " should be uploaded <br/>";
+                i = i + 1;
+                $(id).addClass("invalid");
+            }
+        }
+        return [errorMsg, i];
     }
 
 </script>
