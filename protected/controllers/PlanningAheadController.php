@@ -402,15 +402,13 @@ class PlanningAheadController extends Controller {
             $this->viewbag['firstConsultantTitle'] = $recordList['firstConsultantTitle'];
             $this->viewbag['firstConsultantSurname'] = $recordList['firstConsultantSurname'];
             $this->viewbag['firstConsultantOtherName'] = $recordList['firstConsultantOtherName'];
-            $this->viewbag['firstConsultantCompanyId'] = $recordList['firstConsultantCompanyId'];
-            $this->viewbag['firstConsultantCompanyName'] = $recordList['firstConsultantCompanyName'];
+            $this->viewbag['firstConsultantCompany'] = $recordList['firstConsultantCompany'];
             $this->viewbag['firstConsultantPhone'] = $recordList['firstConsultantPhone'];
             $this->viewbag['firstConsultantEmail'] = $recordList['firstConsultantEmail'];
             $this->viewbag['secondConsultantTitle'] = $recordList['secondConsultantTitle'];
             $this->viewbag['secondConsultantSurname'] = $recordList['secondConsultantSurname'];
             $this->viewbag['secondConsultantOtherName'] = $recordList['secondConsultantOtherName'];
-            $this->viewbag['secondConsultantCompanyId'] = $recordList['secondConsultantCompanyId'];
-            $this->viewbag['secondConsultantCompanyName'] = $recordList['secondConsultantCompanyName'];
+            $this->viewbag['secondConsultantCompany'] = $recordList['secondConsultantCompany'];
             $this->viewbag['secondConsultantPhone'] = $recordList['secondConsultantPhone'];
             $this->viewbag['secondConsultantEmail'] = $recordList['secondConsultantEmail'];
             $this->viewbag['thirdConsultantTitle'] = $recordList['thirdConsultantTitle'];
@@ -419,12 +417,24 @@ class PlanningAheadController extends Controller {
             $this->viewbag['thirdConsultantCompany'] = $recordList['thirdConsultantCompany'];
             $this->viewbag['thirdConsultantPhone'] = $recordList['thirdConsultantPhone'];
             $this->viewbag['thirdConsultantEmail'] = $recordList['thirdConsultantEmail'];
-            $this->viewbag['projectOwnerTitle'] = $recordList['projectOwnerTitle'];
-            $this->viewbag['projectOwnerSurname'] = $recordList['projectOwnerSurname'];
-            $this->viewbag['projectOwnerOtherName'] = $recordList['projectOwnerOtherName'];
-            $this->viewbag['projectOwnerCompany'] = $recordList['projectOwnerCompany'];
-            $this->viewbag['projectOwnerPhone'] = $recordList['projectOwnerPhone'];
-            $this->viewbag['projectOwnerEmail'] = $recordList['projectOwnerEmail'];
+            $this->viewbag['firstProjectOwnerTitle'] = $recordList['firstProjectOwnerTitle'];
+            $this->viewbag['firstProjectOwnerSurname'] = $recordList['firstProjectOwnerSurname'];
+            $this->viewbag['firstProjectOwnerOtherName'] = $recordList['firstProjectOwnerOtherName'];
+            $this->viewbag['firstProjectOwnerCompany'] = $recordList['firstProjectOwnerCompany'];
+            $this->viewbag['firstProjectOwnerPhone'] = $recordList['firstProjectOwnerPhone'];
+            $this->viewbag['firstProjectOwnerEmail'] = $recordList['firstProjectOwnerEmail'];
+            $this->viewbag['secondProjectOwnerTitle'] = $recordList['secondProjectOwnerTitle'];
+            $this->viewbag['secondProjectOwnerSurname'] = $recordList['secondProjectOwnerSurname'];
+            $this->viewbag['secondProjectOwnerOtherName'] = $recordList['secondProjectOwnerOtherName'];
+            $this->viewbag['secondProjectOwnerCompany'] = $recordList['secondProjectOwnerCompany'];
+            $this->viewbag['secondProjectOwnerPhone'] = $recordList['secondProjectOwnerPhone'];
+            $this->viewbag['secondProjectOwnerEmail'] = $recordList['secondProjectOwnerEmail'];
+            $this->viewbag['thirdProjectOwnerTitle'] = $recordList['thirdProjectOwnerTitle'];
+            $this->viewbag['thirdProjectOwnerSurname'] = $recordList['thirdProjectOwnerSurname'];
+            $this->viewbag['thirdProjectOwnerOtherName'] = $recordList['thirdProjectOwnerOtherName'];
+            $this->viewbag['thirdProjectOwnerCompany'] = $recordList['thirdProjectOwnerCompany'];
+            $this->viewbag['thirdProjectOwnerPhone'] = $recordList['thirdProjectOwnerPhone'];
+            $this->viewbag['thirdProjectOwnerEmail'] = $recordList['thirdProjectOwnerEmail'];
             $this->viewbag['standLetterIssueDate'] = $recordList['standLetterIssueDate'];
             $this->viewbag['standLetterFaxRefNo'] = $recordList['standLetterFaxRefNo'];
             $this->viewbag['standLetterEdmsLink'] = $recordList['standLetterEdmsLink'];
@@ -435,6 +445,7 @@ class PlanningAheadController extends Controller {
             $this->viewbag['meetingRejReason'] = $recordList['meetingRejReason'];
             $this->viewbag['meetingConsentConsultant'] = $recordList['meetingConsentConsultant'];
             $this->viewbag['meetingConsentOwner'] = $recordList['meetingConsentOwner'];
+            $this->viewbag['meetingRemark'] = $recordList['meetingRemark'];
             $this->viewbag['meetingReplySlipId'] = $recordList['meetingReplySlipId'];
             $this->viewbag['replySlipBmsYesNo'] = $recordList['replySlipBmsYesNo'];
             $this->viewbag['replySlipBmsServerCentralComputer'] = $recordList['replySlipBmsServerCentralComputer'];
@@ -502,6 +513,8 @@ class PlanningAheadController extends Controller {
             $this->viewbag['projectTypeList'] = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeList();
             $this->viewbag['consultantCompanyList'] = Yii::app()->planningAheadDao->getPlanningAheadConsultantCompanyAllActive();
             $this->viewbag['regionList'] = Yii::app()->planningAheadDao->getPlanningAheadRegionAllActive();
+            $this->viewbag['projectOwnerCompanyList'] = Yii::app()->planningAheadDao->getPlanningAheadProjectOwnerCompanyAllActive();
+
             $this->viewbag['isError'] = false;
         } else {
             $this->viewbag['isError'] = true;
@@ -531,13 +544,20 @@ class PlanningAheadController extends Controller {
         $projectType = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeById($recordList['projectTypeId']);
         $standardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
 
+        $standLetterFaxYear = date("y", strtotime($standLetterIssueDate));
+        $standLetterFaxMonth = date("m", strtotime($standLetterIssueDate));
+        $standLetterIssueDay = date("j", strtotime($standLetterIssueDate));
+        $standLetterIssueMonth = date("M", strtotime($standLetterIssueDate));
+        $standLetterIssueYear = date("Y", strtotime($standLetterIssueDate));
+
         $templateProcessor = new TemplateProcessor($standardLetterTemplatePath['configValue'] . $projectType[0]['projectTypeTemplateFileName']);
         $templateProcessor->setValue('consultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('consultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('consultantCompanyName', $recordList['firstConsultantCompanyName']);
+        $templateProcessor->setValue('consultantCompanyName', $recordList['firstConsultantCompany']);
         $templateProcessor->setValue('consultantEmail', $recordList['firstConsultantEmail']);
         $templateProcessor->setValue('faxRefNo', $standLetterFaxRefNo);
-        $templateProcessor->setValue('issueDate', $standLetterIssueDate);
+        $templateProcessor->setValue('faxDate', $standLetterFaxYear . "-" . $standLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $standLetterIssueDay . " " . $standLetterIssueMonth . " " . $standLetterIssueYear);
         $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
 
         $pathToSave = $standardLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' . $projectType[0]['projectTypeTemplateFileName'];
@@ -583,18 +603,27 @@ class PlanningAheadController extends Controller {
         $firstInvitationLetterTemplateFileName = Yii::app()->commonUtil->
             getConfigValueByConfigName('planningAheadFirstInvitationLetterTemplateFileName');
 
+        $firstInvitationLetterFaxYear = date("y", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterFaxMonth = date("m", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterIssueDateDay = date("j", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterIssueDateMonth = date("M", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterIssueDateYear = date("Y", strtotime($firstInvitationLetterIssueDate));
+
         $templateProcessor = new TemplateProcessor($firstInvitationLetterTemplatePath['configValue'] .
             $firstInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('firstConsultantCompanyName', $recordList['firstConsultantCompanyName']);
+        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
         $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
         $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
-        $templateProcessor->setValue('secondConsultantCompanyName', $recordList['secondConsultantCompanyName']);
+        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
         $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
         $templateProcessor->setValue('faxRefNo', $firstInvitationLetterFaxRefNo);
-        $templateProcessor->setValue('issueDate', $firstInvitationLetterIssueDate);
+        $templateProcessor->setValue('faxDate', $firstInvitationLetterFaxYear . "-" . $firstInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $firstInvitationLetterIssueDateDay . " " .
+                                                    $firstInvitationLetterIssueDateMonth . " " .
+                                                    $firstInvitationLetterIssueDateYear);
         $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
         $templateProcessor->setValue('replySlipReturnDate', $replySlip['replySlipLastUpdateTime']);
 
@@ -647,20 +676,114 @@ class PlanningAheadController extends Controller {
         $secondInvitationLetterTemplateFileName = Yii::app()->commonUtil->
         getConfigValueByConfigName('planningAheadSecondInvitationLetterTemplateFileName');
 
+        $secondInvitationLetterFaxYear = date("y", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterFaxMonth = date("m", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterIssueDateDay = date("j", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterIssueDateMonth = date("M", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterIssueDateYear = date("Y", strtotime($secondInvitationLetterIssueDate));
+
         $templateProcessor = new TemplateProcessor($secondInvitationLetterTemplatePath['configValue'] .
             $secondInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('firstConsultantCompanyName', $recordList['firstConsultantCompanyName']);
+        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
         $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
         $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
-        $templateProcessor->setValue('secondConsultantCompanyName', $recordList['secondConsultantCompanyName']);
+        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
         $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
         $templateProcessor->setValue('faxRefNo', $secondInvitationLetterFaxRefNo);
-        $templateProcessor->setValue('issueDate', $secondInvitationLetterIssueDate);
+        $templateProcessor->setValue('faxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $secondInvitationLetterIssueDateDay . " " .
+                                                    $secondInvitationLetterIssueDateMonth . " " .
+                                                    $secondInvitationLetterIssueDateYear);
         $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
         $templateProcessor->setValue('firstLetterSendDate', $firstInvitationLetterIssueDate);
+
+        $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
+            $secondInvitationLetterTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header('Content-Disposition: attachment; filename='. basename($pathToSave));
+        header('Content-Length: ' . filesize($pathToSave));
+        header('Pragma: public');
+
+        //Clear system output buffer
+        flush();
+
+        //Read the size of the file
+        readfile($pathToSave,true);
+
+        die();
+
+    }
+
+    public function actionGetPlanningAheadProjectDetailThirdInvitationLetterTemplate() {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        $firstInvitationLetterIssueDate = $param['firstInvitationLetterIssueDate'];
+        $firstInvitationLetterFaxRefNo = $param['firstInvitationLetterFaxRefNo'];
+        $secondInvitationLetterIssueDate = $param['secondInvitationLetterIssueDate'];
+        $secondInvitationLetterFaxRefNo = $param['secondInvitationLetterFaxRefNo'];
+        $thirdInvitationLetterIssueDate = $param['thirdInvitationLetterIssueDate'];
+        $thirdInvitationLetterFaxRefNo = $param['thirdInvitationLetterFaxRefNo'];
+
+        $schemeNo = $param['schemeNo'];
+        $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+        $lastUpdatedTime = date("Y-m-d H:i");
+
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+        $replySlip = Yii::app()->planningAheadDao->getReplySlip($recordList['meetingReplySlipId']);
+
+        // Update the issue date and fax ref no. to database first
+        Yii::app()->planningAheadDao->updateThirdInvitationLetter($recordList['planningAheadId'],
+            $firstInvitationLetterIssueDate,$firstInvitationLetterFaxRefNo,
+            $secondInvitationLetterIssueDate,$secondInvitationLetterFaxRefNo,
+            $thirdInvitationLetterIssueDate,$thirdInvitationLetterFaxRefNo,
+            $lastUpdatedBy,$lastUpdatedTime);
+
+        $secondInvitationLetterTemplatePath = Yii::app()->commonUtil->
+        getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+
+        $secondInvitationLetterTemplateFileName = Yii::app()->commonUtil->
+        getConfigValueByConfigName('planningAheadThirdInvitationLetterTemplateFileName');
+
+        $firstInvitationLetterFaxYear = date("y", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterFaxMonth = date("m", strtotime($firstInvitationLetterIssueDate));
+        $secondInvitationLetterFaxYear = date("y", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterFaxMonth = date("m", strtotime($secondInvitationLetterIssueDate));
+        $thirdInvitationLetterFaxYear = date("y", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterFaxMonth = date("m", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterIssueDateDay = date("j", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterIssueDateMonth = date("M", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterIssueDateYear = date("Y", strtotime($thirdInvitationLetterIssueDate));
+
+        $templateProcessor = new TemplateProcessor($secondInvitationLetterTemplatePath['configValue'] .
+            $secondInvitationLetterTemplateFileName['configValue']);
+        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
+        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
+        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
+        $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
+        $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
+        $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
+        $templateProcessor->setValue('faxRefNo', $thirdInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('faxDate', $thirdInvitationLetterFaxYear . "-" . $thirdInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $thirdInvitationLetterIssueDateDay . " " .
+                                                    $thirdInvitationLetterIssueDateMonth . " " .
+                                                    $thirdInvitationLetterIssueDateYear);
+        $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
+        $templateProcessor->setValue('firstLetterIssueDate', $firstInvitationLetterIssueDate);
+        $templateProcessor->setValue('firstLetterFaxRefNo', $firstInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('firstFaxDate', $firstInvitationLetterFaxYear . "-" . $firstInvitationLetterFaxMonth);
+        $templateProcessor->setValue('secondLetterIssueDate', $secondInvitationLetterIssueDate);
+        $templateProcessor->setValue('secondLetterFaxRefNo', $secondInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('secondFaxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
 
         $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $secondInvitationLetterTemplateFileName['configValue'];
@@ -734,524 +857,141 @@ class PlanningAheadController extends Controller {
             $txnRegion = trim($_POST['region']);
         }
 
-        if ($success && isset($_POST['typeOfProject']) && ($_POST['typeOfProject'] != "")) {
-            $txnTypeOfProject = trim($_POST['typeOfProject']);
-        } else {
-            $txnTypeOfProject = null;
-        }
-
-        if ($success && isset($_POST['commissionDate']) && ($_POST['commissionDate'] != "")) {
-            $txnCommissionDate = trim($_POST['commissionDate']);
-        } else {
-            $txnCommissionDate = null;
-        }
-
-        if ($success && isset($_POST['infraOpt']) && ($_POST['infraOpt'] != "")) {
-            $txnKeyInfra = trim($_POST['infraOpt']);
-        } else {
-            $txnKeyInfra = null;
-        }
-
-        if ($success && isset($_POST['tempProjOpt']) && ($_POST['tempProjOpt'] != "")) {
-            $txnTempProj = trim($_POST['tempProjOpt']);
-        } else {
-            $txnTempProj = null;
-        }
-
-        if ($success && isset($_POST['firstRegionStaffName']) && ($_POST['firstRegionStaffName'] != "")) {
-            $txnFirstRegionStaffName = trim($_POST['firstRegionStaffName']);
-        } else {
-            $txnFirstRegionStaffName = null;
-        }
-
-        if ($success && isset($_POST['firstRegionStaffPhone']) && ($_POST['firstRegionStaffPhone'] != "")) {
-            $txnFirstRegionStaffPhone = trim($_POST['firstRegionStaffPhone']);
-        } else {
-            $txnFirstRegionStaffPhone = null;
-        }
-
-        if ($success && isset($_POST['firstRegionStaffEmail']) && ($_POST['firstRegionStaffEmail'] != "")) {
-            $txnFirstRegionStaffEmail = trim($_POST['firstRegionStaffEmail']);
-        } else {
-            $txnFirstRegionStaffEmail = null;
-        }
-
-        if ($success && isset($_POST['secondRegionStaffName']) && ($_POST['secondRegionStaffName'] != "")) {
-            $txnSecondRegionStaffName = trim($_POST['secondRegionStaffName']);
-        } else {
-            $txnSecondRegionStaffName = null;
-        }
-
-        if ($success && isset($_POST['secondRegionStaffPhone']) && ($_POST['secondRegionStaffPhone'] != "")) {
-            $txnSecondRegionStaffPhone = trim($_POST['secondRegionStaffPhone']);
-        } else {
-            $txnSecondRegionStaffPhone = null;
-        }
-
-        if ($success && isset($_POST['secondRegionStaffEmail']) && ($_POST['secondRegionStaffEmail'] != "")) {
-            $txnSecondRegionStaffEmail = trim($_POST['secondRegionStaffEmail']);
-        } else {
-            $txnSecondRegionStaffEmail = null;
-        }
-
-        if ($success && isset($_POST['thirdRegionStaffName']) && ($_POST['thirdRegionStaffName'] != "")) {
-            $txnThirdRegionStaffName = trim($_POST['thirdRegionStaffName']);
-        } else {
-            $txnThirdRegionStaffName = null;
-        }
-
-        if ($success && isset($_POST['thirdRegionStaffPhone']) && ($_POST['thirdRegionStaffPhone'] != "")) {
-            $txnThirdRegionStaffPhone = trim($_POST['thirdRegionStaffPhone']);
-        } else {
-            $txnThirdRegionStaffPhone = null;
-        }
-
-        if ($success && isset($_POST['thirdRegionStaffEmail']) && ($_POST['thirdRegionStaffEmail'] != "")) {
-            $txnThirdRegionStaffEmail = trim($_POST['thirdRegionStaffEmail']);
-        } else {
-            $txnThirdRegionStaffEmail = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantTitle']) && ($_POST['firstConsultantTitle'] != "")) {
-            $txnFirstConsultantTitle = trim($_POST['firstConsultantTitle']);
-        } else {
-            $txnFirstConsultantTitle = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantSurname']) && ($_POST['firstConsultantSurname'] != "")) {
-            $txnFirstConsultantSurname = trim($_POST['firstConsultantSurname']);
-        } else {
-            $txnFirstConsultantSurname = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantOtherName']) && ($_POST['firstConsultantOtherName'] != "")) {
-            $txnFirstConsultantOtherName = trim($_POST['firstConsultantOtherName']);
-        } else {
-            $txnFirstConsultantOtherName = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantCompany']) && ($_POST['firstConsultantCompany'] != "")) {
-            $txnFirstConsultantCompany = trim($_POST['firstConsultantCompany']);
-        } else {
-            $txnFirstConsultantCompany = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantPhone']) && ($_POST['firstConsultantPhone'] != "")) {
-            $txnFirstConsultantPhone = trim($_POST['firstConsultantPhone']);
-        } else {
-            $txnFirstConsultantPhone = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantEmail']) && ($_POST['firstConsultantEmail'] != "")) {
-            $txnFirstConsultantEmail = trim($_POST['firstConsultantEmail']);
-        } else {
-            $txnFirstConsultantEmail = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantTitle']) && ($_POST['secondConsultantTitle'] != "")) {
-            $txnSecondConsultantTitle = trim($_POST['secondConsultantTitle']);
-        } else {
-            $txnSecondConsultantTitle = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantSurname']) && ($_POST['secondConsultantSurname'] != "")) {
-            $txnSecondConsultantSurname = trim($_POST['secondConsultantSurname']);
-        } else {
-            $txnSecondConsultantSurname = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantOtherName']) && ($_POST['secondConsultantOtherName'] != "")) {
-            $txnSecondConsultantOtherName = trim($_POST['secondConsultantOtherName']);
-        } else {
-            $txnSecondConsultantOtherName = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantCompany']) && ($_POST['secondConsultantCompany'] != "")) {
-            $txnSecondConsultantCompany = trim($_POST['secondConsultantCompany']);
-        } else {
-            $txnSecondConsultantCompany = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantPhone']) && ($_POST['secondConsultantPhone'] != "")) {
-            $txnSecondConsultantPhone = trim($_POST['secondConsultantPhone']);
-        } else {
-            $txnSecondConsultantPhone = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantEmail']) && ($_POST['secondConsultantEmail'] != "")) {
-            $txnSecondConsultantEmail = trim($_POST['secondConsultantEmail']);
-        } else {
-            $txnSecondConsultantEmail = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerTitle']) && ($_POST['projectOwnerTitle'] != "")) {
-            $txnProjectOwnerTitle = trim($_POST['projectOwnerTitle']);
-        } else {
-            $txnProjectOwnerTitle = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerSurname']) && ($_POST['projectOwnerSurname'] != "")) {
-            $txnProjectOwnerSurname = trim($_POST['projectOwnerSurname']);
-        } else {
-            $txnProjectOwnerSurname = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerOtherName']) && ($_POST['projectOwnerOtherName'] != "")) {
-            $txnProjectOwnerOtherName = trim($_POST['projectOwnerOtherName']);
-        } else {
-            $txnProjectOwnerOtherName = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerCompany']) && ($_POST['projectOwnerCompany'] != "")) {
-            $txnProjectOwnerCompany = trim($_POST['projectOwnerCompany']);
-        } else {
-            $txnProjectOwnerCompany = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerPhone']) && ($_POST['projectOwnerPhone'] != "")) {
-            $txnProjectOwnerPhone = trim($_POST['projectOwnerPhone']);
-        } else {
-            $txnProjectOwnerPhone = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerEmail']) && ($_POST['projectOwnerEmail'] != "")) {
-            $txnProjectOwnerEmail = trim($_POST['projectOwnerEmail']);
-        } else {
-            $txnProjectOwnerEmail = null;
-        }
-
-        if ($success && isset($_POST['standLetterIssueDate']) && ($_POST['standLetterIssueDate'] != "")) {
-            $txnStandLetterIssueDate = trim($_POST['standLetterIssueDate']);
-        } else {
-            $txnStandLetterIssueDate = null;
-        }
-
-        if ($success && isset($_POST['standLetterFaxRefNo']) && ($_POST['standLetterFaxRefNo'] != "")) {
-            $txnStandLetterFaxRefNo = trim($_POST['standLetterFaxRefNo']);
-        } else {
-            $txnStandLetterFaxRefNo = null;
-        }
-
-        if ($success && isset($_POST['standLetterEdmsLink']) && ($_POST['standLetterEdmsLink'] != "")) {
-            $txnStandLetterEdmsLink = trim($_POST['standLetterEdmsLink']);
-        } else {
-            $txnStandLetterEdmsLink = null;
-        }
-
-        if ($success && isset($_POST['standLetterLetterLoc']) && ($_POST['standLetterLetterLoc'] != "")) {
-            $txnStandLetterLetterLoc = trim($_POST['standLetterLetterLoc']);
-        } else {
-            $txnStandLetterLetterLoc = null;
-        }
-
-        if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
-            $fileName = basename($_FILES["standSignedLetter"]["name"]);
-            $planningAheadStandardSignedLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterPath');
-            $targetFilePath = $planningAheadStandardSignedLetterPath["configValue"] . $txnSchemeNo . '_' . $fileName;
-            $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
-            $txnStandLetterLetterLoc = $targetFilePath;
-
-            //upload file to server
-            if (!move_uploaded_file($_FILES["standSignedLetter"]["tmp_name"], $targetFilePath)){
-                $retJson['status'] = 'NOTOK';
-                $retJson['retMessage'] = "Upload signed standard letter failed!";
-                $success = false;
-            }
-        }
-
-        if ($success && isset($_POST['meetingFirstPreferMeetingDate']) && ($_POST['meetingFirstPreferMeetingDate'] != "")) {
-            $txnMeetingFirstPreferMeetingDate = trim($_POST['meetingFirstPreferMeetingDate']);
-        } else {
-            $txnMeetingFirstPreferMeetingDate = null;
-        }
-
-        if ($success && isset($_POST['meetingSecondPreferMeetingDate']) && ($_POST['meetingSecondPreferMeetingDate'] != "")) {
-            $txnMeetingSecondPreferMeetingDate = trim($_POST['meetingSecondPreferMeetingDate']);
-        } else {
-            $txnMeetingSecondPreferMeetingDate = null;
-        }
-
-        if ($success && isset($_POST['meetingActualMeetingDate']) && ($_POST['meetingActualMeetingDate'] != "")) {
-            $txnMeetingActualMeetingDate = trim($_POST['meetingActualMeetingDate']);
-        } else {
-            $txnMeetingActualMeetingDate = null;
-        }
-
-        if ($success && isset($_POST['meetingRejReason']) && ($_POST['meetingRejReason'] != "")) {
-            $txnMeetingRejReason = trim($_POST['meetingRejReason']);
-        } else {
-            $txnMeetingRejReason = null;
-        }
-
-        if ($success && isset($_POST['meetingConsentConsultant']) && ($_POST['meetingConsentConsultant'] != "")) {
-            $txnMeetingConsentConsultant = trim($_POST['meetingConsentConsultant']);
-        } else {
-            $txnMeetingConsentConsultant = 'N';
-        }
-
-        if ($success && isset($_POST['meetingConsentOwner']) && ($_POST['meetingConsentOwner'] != "")) {
-            $txnMeetingConsentOwner = trim($_POST['meetingConsentOwner']);
-        } else {
-            $txnMeetingConsentOwner = 'N';
-        }
-
-        if ($success && isset($_POST['meetingReplySlipId']) && ($_POST['meetingReplySlipId'] != "")) {
-            $txnMeetingReplySlipId = trim($_POST['meetingReplySlipId']);
-        } else {
-            $txnMeetingReplySlipId = null;
-        }
-
-        if ($success && isset($_POST['replySlipBmsYesNo']) && ($_POST['replySlipBmsYesNo'] != "")) {
-            $txnReplySlipBmsYesNo = trim($_POST['replySlipBmsYesNo']);
-        } else {
-            $txnReplySlipBmsYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipBmsServerCentralComputer']) && ($_POST['replySlipBmsServerCentralComputer'] != "")) {
-            $txnReplySlipBmsServerCentralComputer = trim($_POST['replySlipBmsServerCentralComputer']);
-        } else {
-            $txnReplySlipBmsServerCentralComputer = null;
-        }
-
-        if ($success && isset($_POST['replySlipBmsDdc']) && ($_POST['replySlipBmsDdc'] != "")) {
-            $txnReplySlipBmsDdc = trim($_POST['replySlipBmsDdc']);
-        } else {
-            $txnReplySlipBmsDdc = null;
-        }
-
-        if ($success && isset($_POST['replySlipChangeoverSchemeYesNo']) && ($_POST['replySlipChangeoverSchemeYesNo'] != "")) {
-            $txnReplySlipChangeoverSchemeYesNo = trim($_POST['replySlipChangeoverSchemeYesNo']);
-        } else {
-            $txnReplySlipChangeoverSchemeYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipChangeoverSchemeControl']) && ($_POST['replySlipChangeoverSchemeControl'] != "")) {
-            $txnReplySlipChangeoverSchemeControl = trim($_POST['replySlipChangeoverSchemeControl']);
-        } else {
-            $txnReplySlipChangeoverSchemeControl = null;
-        }
-
-        if ($success && isset($_POST['replySlipChangeoverSchemeUv']) && ($_POST['replySlipChangeoverSchemeUv'] != "")) {
-            $txnReplySlipChangeoverSchemeUv = trim($_POST['replySlipChangeoverSchemeUv']);
-        } else {
-            $txnReplySlipChangeoverSchemeUv = null;
-        }
-
-        if ($success && isset($_POST['replySlipChillerPlantYesNo']) && ($_POST['replySlipChillerPlantYesNo'] != "")) {
-            $txnReplySlipChillerPlantYesNo = trim($_POST['replySlipChillerPlantYesNo']);
-        } else {
-            $txnReplySlipChillerPlantYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipChillerPlantAhu']) && ($_POST['replySlipChillerPlantAhu'] != "")) {
-            $txnReplySlipChillerPlantAhu = trim($_POST['replySlipChillerPlantAhu']);
-        } else {
-            $txnReplySlipChillerPlantAhu = null;
-        }
-
-        if ($success && isset($_POST['replySlipChillerPlantChiller']) && ($_POST['replySlipChillerPlantChiller'] != "")) {
-            $txnReplySlipChillerPlantChiller = trim($_POST['replySlipChillerPlantChiller']);
-        } else {
-            $txnReplySlipChillerPlantChiller = null;
-        }
-
-        if ($success && isset($_POST['replySlipEscalatorYesNo']) && ($_POST['replySlipEscalatorYesNo'] != "")) {
-            $txnReplySlipEscalatorYesNo = trim($_POST['replySlipEscalatorYesNo']);
-        } else {
-            $txnReplySlipEscalatorYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipEscalatorBrakingSystem']) && ($_POST['replySlipEscalatorBrakingSystem'] != "")) {
-            $txnReplySlipEscalatorBrakingSystem = trim($_POST['replySlipEscalatorBrakingSystem']);
-        } else {
-            $txnReplySlipEscalatorBrakingSystem = null;
-        }
-
-        if ($success && isset($_POST['replySlipEscalatorControl']) && ($_POST['replySlipEscalatorControl'] != "")) {
-            $txnReplySlipEscalatorControl = trim($_POST['replySlipEscalatorControl']);
-        } else {
-            $txnReplySlipEscalatorControl = null;
-        }
-
-        if ($success && isset($_POST['replyHidLampYesNo']) && ($_POST['replyHidLampYesNo'] != "")) {
-            $txnReplySlipHidLampYesNo = trim($_POST['replyHidLampYesNo']);
-        } else {
-            $txnReplySlipHidLampYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipHidLampBallast']) && ($_POST['replySlipHidLampBallast'] != "")) {
-            $txnReplySlipHidLampBallast = trim($_POST['replySlipHidLampBallast']);
-        } else {
-            $txnReplySlipHidLampBallast = null;
-        }
-
-        if ($success && isset($_POST['replySlipHidLampAddOnProtection']) && ($_POST['replySlipHidLampAddOnProtection'] != "")) {
-            $txnReplySlipHidLampAddOnProtection = trim($_POST['replySlipHidLampAddOnProtection']);
-        } else {
-            $txnReplySlipHidLampAddOnProtection = null;
-        }
-
-        if ($success && isset($_POST['replyLiftYesNo']) && ($_POST['replyLiftYesNo'] != "")) {
-            $txnReplySlipLiftYesNo = trim($_POST['replyLiftYesNo']);
-        } else {
-            $txnReplySlipLiftYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipLiftOperation']) && ($_POST['replySlipLiftOperation'] != "")) {
-            $txnReplySlipLiftOperation = trim($_POST['replySlipLiftOperation']);
-        } else {
-            $txnReplySlipLiftOperation = null;
-        }
-
-        if ($success && isset($_POST['replySlipSensitiveMachineYesNo']) && ($_POST['replySlipSensitiveMachineYesNo'] != "")) {
-            $txnReplySlipSensitiveMachineYesNo = trim($_POST['replySlipSensitiveMachineYesNo']);
-        } else {
-            $txnReplySlipSensitiveMachineYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipSensitiveMachineMitigation']) && ($_POST['replySlipSensitiveMachineMitigation'] != "")) {
-            $txnReplySlipSensitiveMachineMitigation = trim($_POST['replySlipSensitiveMachineMitigation']);
-        } else {
-            $txnReplySlipSensitiveMachineMitigation = null;
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachineYesNo']) && ($_POST['replySlipTelecomMachineYesNo'] != "")) {
-            $txnReplySlipTelecomMachineYesNo = trim($_POST['replySlipTelecomMachineYesNo']);
-        } else {
-            $txnReplySlipTelecomMachineYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachineServerOrComputer']) && ($_POST['replySlipTelecomMachineServerOrComputer'] != "")) {
-            $txnReplySlipTelecomMachineServerOrComputer = trim($_POST['replySlipTelecomMachineServerOrComputer']);
-        } else {
-            $txnReplySlipTelecomMachineServerOrComputer = null;
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachinePeripherals']) && ($_POST['replySlipTelecomMachinePeripherals'] != "")) {
-            $txnReplySlipTelecomMachinePeripherals = trim($_POST['replySlipTelecomMachinePeripherals']);
-        } else {
-            $txnReplySlipTelecomMachinePeripherals = null;
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachineHarmonicEmission']) && ($_POST['replySlipTelecomMachineHarmonicEmission'] != "")) {
-            $txnReplySlipTelecomMachineHarmonicEmission = trim($_POST['replySlipTelecomMachineHarmonicEmission']);
-        } else {
-            $txnReplySlipTelecomMachineHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersYesNo']) && ($_POST['replySlipAirConditionersYesNo'] != "")) {
-            $txnReplySlipAirConditionersYesNo = trim($_POST['replySlipAirConditionersYesNo']);
-        } else {
-            $txnReplySlipAirConditionersYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersMicb']) && ($_POST['replySlipAirConditionersMicb'] != "")) {
-            $txnReplySlipAirConditionersMicb = trim($_POST['replySlipAirConditionersMicb']);
-        } else {
-            $txnReplySlipAirConditionersMicb = null;
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersLoadForecasting']) && ($_POST['replySlipAirConditionersLoadForecasting'] != "")) {
-            $txnReplySlipAirConditionersLoadForecasting = trim($_POST['replySlipAirConditionersLoadForecasting']);
-        } else {
-            $txnReplySlipAirConditionersLoadForecasting = null;
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersType']) && ($_POST['replySlipAirConditionersType'] != "")) {
-            $txnReplySlipAirConditionersType = trim($_POST['replySlipAirConditionersType']);
-        } else {
-            $txnReplySlipAirConditionersType = null;
-        }
-
-        if ($success && isset($_POST['replySlipNonLinearLoadYesNo']) && ($_POST['replySlipNonLinearLoadYesNo'] != "")) {
-            $txnReplySlipNonLinearLoadYesNo = trim($_POST['replySlipNonLinearLoadYesNo']);
-        } else {
-            $txnReplySlipNonLinearLoadYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipNonLinearLoadHarmonicEmission']) && ($_POST['replySlipNonLinearLoadHarmonicEmission'] != "")) {
-            $txnReplySlipNonLinearLoadHarmonicEmission = trim($_POST['replySlipNonLinearLoadHarmonicEmission']);
-        } else {
-            $txnReplySlipNonLinearLoadHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['replySlipRenewableEnergyYesNo']) && ($_POST['replySlipRenewableEnergyYesNo'] != "")) {
-            $txnReplySlipRenewableEnergyYesNo = trim($_POST['replySlipRenewableEnergyYesNo']);
-        } else {
-            $txnReplySlipRenewableEnergyYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipRenewableEnergyInverterAndControls']) && ($_POST['replySlipRenewableEnergyInverterAndControls'] != "")) {
-            $txnReplySlipRenewableEnergyInverterAndControls = trim($_POST['replySlipRenewableEnergyInverterAndControls']);
-        } else {
-            $txnReplySlipRenewableEnergyInverterAndControls = null;
-        }
-
-        if ($success && isset($_POST['replySlipRenewableEnergyHarmonicEmission']) && ($_POST['replySlipRenewableEnergyHarmonicEmission'] != "")) {
-            $txnReplySlipRenewableEnergyHarmonicEmission = trim($_POST['replySlipRenewableEnergyHarmonicEmission']);
-        } else {
-            $txnReplySlipRenewableEnergyHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemYesNo']) && ($_POST['replySlipEvChargerSystemYesNo'] != "")) {
-            $txnReplySlipEvChargerSystemYesNo = trim($_POST['replySlipEvChargerSystemYesNo']);
-        } else {
-            $txnReplySlipEvChargerSystemYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemEvCharger']) && ($_POST['replySlipEvChargerSystemEvCharger'] != "")) {
-            $txnReplySlipEvChargerSystemEvCharger = trim($_POST['replySlipEvChargerSystemEvCharger']);
-        } else {
-            $txnReplySlipEvChargerSystemEvCharger = null;
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemSmartChargingSystem']) && ($_POST['replySlipEvChargerSystemSmartChargingSystem'] != "")) {
-            $txnReplySlipEvChargerSystemSmartChargingSystem = trim($_POST['replySlipEvChargerSystemSmartChargingSystem']);
-        } else {
-            $txnReplySlipEvChargerSystemSmartChargingSystem = null;
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemHarmonicEmission']) && ($_POST['replySlipEvChargerSystemHarmonicEmission'] != "")) {
-            $txnReplySlipEvChargerSystemHarmonicEmission = trim($_POST['replySlipEvChargerSystemHarmonicEmission']);
-        } else {
-            $txnReplySlipEvChargerSystemHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterIssueDate']) && ($_POST['firstInvitationLetterIssueDate'] != "")) {
-            $txnFirstInvitationLetterIssueDate = trim($_POST['firstInvitationLetterIssueDate']);
-        } else {
-            $txnFirstInvitationLetterIssueDate = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterFaxRefNo']) && ($_POST['firstInvitationLetterFaxRefNo'] != "")) {
-            $txnFirstInvitationLetterFaxRefNo = trim($_POST['firstInvitationLetterFaxRefNo']);
-        } else {
-            $txnFirstInvitationLetterFaxRefNo = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterEdmsLink']) && ($_POST['firstInvitationLetterEdmsLink'] != "")) {
-            $txnFirstInvitationLetterEdmsLink = trim($_POST['firstInvitationLetterEdmsLink']);
-        } else {
-            $txnFirstInvitationLetterEdmsLink = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterAccept']) && ($_POST['firstInvitationLetterAccept'] != "")) {
-            $txnFirstInvitationLetterAccept = trim($_POST['firstInvitationLetterAccept']);
-        } else {
-            $txnFirstInvitationLetterAccept = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterWalkDate']) && ($_POST['firstInvitationLetterWalkDate'] != "")) {
-            $txnFirstInvitationLetterWalkDate = trim($_POST['firstInvitationLetterWalkDate']);
-        } else {
-            $txnFirstInvitationLetterWalkDate = null;
-        }
-
         if ($success) {
+            $txnTypeOfProject = $this->getPostParamInteger('typeOfProject');
+            $txnCommissionDate = $this->getPostParamString('commissionDate');
+            $txnKeyInfra = $this->getPostParamString('infraOpt');
+            $txnTempProj = $this->getPostParamString('tempProjOpt');
+            $txnFirstRegionStaffName = $this->getPostParamString('firstRegionStaffName');
+            $txnFirstRegionStaffPhone = $this->getPostParamString('firstRegionStaffPhone');
+            $txnFirstRegionStaffEmail = $this->getPostParamString('firstRegionStaffEmail');
+            $txnSecondRegionStaffName = $this->getPostParamString('secondRegionStaffName');
+            $txnSecondRegionStaffPhone = $this->getPostParamString('secondRegionStaffPhone');
+            $txnSecondRegionStaffEmail = $this->getPostParamString('secondRegionStaffEmail');
+            $txnThirdRegionStaffName = $this->getPostParamString('thirdRegionStaffName');
+            $txnThirdRegionStaffPhone = $this->getPostParamString('thirdRegionStaffPhone');
+            $txnThirdRegionStaffEmail = $this->getPostParamString('thirdRegionStaffEmail');
+            $txnFirstConsultantTitle = $this->getPostParamString('firstConsultantTitle');
+            $txnFirstConsultantSurname = $this->getPostParamString('firstConsultantSurname');
+            $txnFirstConsultantOtherName = $this->getPostParamString('firstConsultantOtherName');
+            $txnFirstConsultantCompany = $this->getPostParamString('firstConsultantCompany');
+            $txnFirstConsultantPhone = $this->getPostParamString('firstConsultantPhone');
+            $txnFirstConsultantEmail = $this->getPostParamString('firstConsultantEmail');
+            $txnSecondConsultantTitle = $this->getPostParamString('secondConsultantTitle');
+            $txnSecondConsultantSurname = $this->getPostParamString('secondConsultantSurname');
+            $txnSecondConsultantOtherName = $this->getPostParamString('secondConsultantOtherName');
+            $txnSecondConsultantCompany = $this->getPostParamString('secondConsultantCompany');
+            $txnSecondConsultantPhone = $this->getPostParamString('secondConsultantPhone');
+            $txnSecondConsultantEmail = $this->getPostParamString('secondConsultantEmail');
+            $txnThirdConsultantTitle = $this->getPostParamString('thirdConsultantTitle');
+            $txnThirdConsultantSurname = $this->getPostParamString('thirdConsultantSurname');
+            $txnThirdConsultantOtherName = $this->getPostParamString('thirdConsultantOtherName');
+            $txnThirdConsultantCompany = $this->getPostParamString('thirdConsultantCompany');
+            $txnThirdConsultantPhone = $this->getPostParamString('thirdConsultantPhone');
+            $txnThirdConsultantEmail = $this->getPostParamString('thirdConsultantEmail');
+            $txnFirstProjectOwnerTitle = $this->getPostParamString('firstProjectOwnerTitle');
+            $txnFirstProjectOwnerSurname = $this->getPostParamString('firstProjectOwnerSurname');
+            $txnFirstProjectOwnerOtherName = $this->getPostParamString('firstProjectOwnerOtherName');
+            $txnFirstProjectOwnerCompany = $this->getPostParamString('firstProjectOwnerCompany');
+            $txnFirstProjectOwnerPhone = $this->getPostParamString('firstProjectOwnerPhone');
+            $txnFirstProjectOwnerEmail = $this->getPostParamString('firstProjectOwnerEmail');
+            $txnSecondProjectOwnerTitle = $this->getPostParamString('secondProjectOwnerTitle');
+            $txnSecondProjectOwnerSurname = $this->getPostParamString('secondProjectOwnerSurname');
+            $txnSecondProjectOwnerOtherName = $this->getPostParamString('secondProjectOwnerOtherName');
+            $txnSecondProjectOwnerCompany = $this->getPostParamString('secondProjectOwnerCompany');
+            $txnSecondProjectOwnerPhone = $this->getPostParamString('secondProjectOwnerPhone');
+            $txnSecondProjectOwnerEmail = $this->getPostParamString('secondProjectOwnerEmail');
+            $txnThirdProjectOwnerTitle = $this->getPostParamString('thirdProjectOwnerTitle');
+            $txnThirdProjectOwnerSurname = $this->getPostParamString('thirdProjectOwnerSurname');
+            $txnThirdProjectOwnerOtherName = $this->getPostParamString('thirdProjectOwnerOtherName');
+            $txnThirdProjectOwnerCompany = $this->getPostParamString('thirdProjectOwnerCompany');
+            $txnThirdProjectOwnerPhone = $this->getPostParamString('thirdProjectOwnerPhone');
+            $txnThirdProjectOwnerEmail = $this->getPostParamString('thirdProjectOwnerEmail');
+            $txnStandLetterIssueDate = $this->getPostParamString('standLetterIssueDate');
+            $txnStandLetterFaxRefNo = $this->getPostParamString('standLetterFaxRefNo');
+            $txnStandLetterEdmsLink = $this->getPostParamString('standLetterEdmsLink');
+            $txnStandLetterLetterLoc = $this->getPostParamString('standLetterLetterLoc');
+
+            if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
+                $fileName = basename($_FILES["standSignedLetter"]["name"]);
+                $planningAheadStandardSignedLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterPath');
+                $targetFilePath = $planningAheadStandardSignedLetterPath["configValue"] . $txnSchemeNo . '_' . $fileName;
+                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+                $txnStandLetterLetterLoc = $targetFilePath;
+
+                //upload file to server
+                if (!move_uploaded_file($_FILES["standSignedLetter"]["tmp_name"], $targetFilePath)){
+                    $retJson['status'] = 'NOTOK';
+                    $retJson['retMessage'] = "Upload signed standard letter failed!";
+                    $success = false;
+                }
+            }
+
+            $txnMeetingFirstPreferMeetingDate = $this->getPostParamString('meetingFirstPreferMeetingDate');
+            $txnMeetingSecondPreferMeetingDate = $this->getPostParamString('meetingSecondPreferMeetingDate');
+            $txnMeetingActualMeetingDate = $this->getPostParamString('meetingActualMeetingDate');
+            $txnMeetingRejReason = $this->getPostParamString('meetingRejReason');
+            $txnMeetingConsentConsultant = $this->getPostParamBoolean('meetingConsentConsultant');
+            $txnMeetingConsentOwner = $this->getPostParamBoolean('meetingConsentOwner');
+            $txnMeetingRemark = $this->getPostParamString('meetingRemark');
+            $txnMeetingReplySlipId = $this->getPostParamInteger('meetingReplySlipId');
+            $txnReplySlipBmsYesNo = $this->getPostParamBoolean('replySlipBmsYesNo');
+            $txnReplySlipBmsServerCentralComputer = $this->getPostParamString('replySlipBmsServerCentralComputer');
+            $txnReplySlipBmsDdc = $this->getPostParamString('replySlipBmsDdc');
+            $txnReplySlipChangeoverSchemeYesNo = $this->getPostParamBoolean('replySlipChangeoverSchemeYesNo');
+            $txnReplySlipChangeoverSchemeControl = $this->getPostParamString('replySlipChangeoverSchemeControl');
+            $txnReplySlipChangeoverSchemeUv = $this->getPostParamString('replySlipChangeoverSchemeUv');
+            $txnReplySlipChillerPlantYesNo = $this->getPostParamBoolean('replySlipChillerPlantYesNo');
+            $txnReplySlipChillerPlantAhu = $this->getPostParamString('replySlipChillerPlantAhu');
+            $txnReplySlipChillerPlantChiller = $this->getPostParamString('replySlipChillerPlantChiller');
+            $txnReplySlipEscalatorYesNo = $this->getPostParamBoolean('replySlipEscalatorYesNo');
+            $txnReplySlipEscalatorBrakingSystem = $this->getPostParamString('replySlipEscalatorBrakingSystem');
+            $txnReplySlipEscalatorControl = $this->getPostParamString('replySlipEscalatorControl');
+            $txnReplySlipHidLampYesNo = $this->getPostParamBoolean('replyHidLampYesNo');
+            $txnReplySlipHidLampBallast = $this->getPostParamString('replySlipHidLampBallast');
+            $txnReplySlipHidLampAddOnProtection = $this->getPostParamString('replySlipHidLampAddOnProtection');
+            $txnReplySlipLiftYesNo = $this->getPostParamBoolean('replyLiftYesNo');
+            $txnReplySlipLiftOperation = $this->getPostParamString('replySlipLiftOperation');
+            $txnReplySlipSensitiveMachineYesNo = $this->getPostParamBoolean('replySlipSensitiveMachineYesNo');
+            $txnReplySlipSensitiveMachineMitigation = $this->getPostParamString('replySlipSensitiveMachineMitigation');
+            $txnReplySlipTelecomMachineYesNo = $this->getPostParamBoolean('replySlipTelecomMachineYesNo');
+            $txnReplySlipTelecomMachineServerOrComputer = $this->getPostParamString('replySlipTelecomMachineServerOrComputer');
+            $txnReplySlipTelecomMachinePeripherals = $this->getPostParamString('replySlipTelecomMachinePeripherals');
+            $txnReplySlipTelecomMachineHarmonicEmission = $this->getPostParamString('replySlipTelecomMachineHarmonicEmission');
+            $txnReplySlipAirConditionersYesNo = $this->getPostParamBoolean('replySlipAirConditionersYesNo');
+            $txnReplySlipAirConditionersMicb = $this->getPostParamString('replySlipAirConditionersMicb');
+            $txnReplySlipAirConditionersLoadForecasting = $this->getPostParamString('replySlipAirConditionersLoadForecasting');
+            $txnReplySlipAirConditionersType = $this->getPostParamString('replySlipAirConditionersType');
+            $txnReplySlipNonLinearLoadYesNo = $this->getPostParamBoolean('replySlipNonLinearLoadYesNo');
+            $txnReplySlipNonLinearLoadHarmonicEmission = $this->getPostParamString('replySlipNonLinearLoadHarmonicEmission');
+            $txnReplySlipRenewableEnergyYesNo = $this->getPostParamBoolean('replySlipRenewableEnergyYesNo');
+            $txnReplySlipRenewableEnergyInverterAndControls = $this->getPostParamString('replySlipRenewableEnergyInverterAndControls');
+            $txnReplySlipRenewableEnergyHarmonicEmission = $this->getPostParamString('replySlipRenewableEnergyHarmonicEmission');
+            $txnReplySlipEvChargerSystemYesNo = $this->getPostParamBoolean('replySlipEvChargerSystemYesNo');
+            $txnReplySlipEvChargerSystemEvCharger = $this->getPostParamString('replySlipEvChargerSystemEvCharger');
+            $txnReplySlipEvChargerSystemSmartChargingSystem = $this->getPostParamString('replySlipEvChargerSystemSmartChargingSystem');
+            $txnReplySlipEvChargerSystemHarmonicEmission = $this->getPostParamString('replySlipEvChargerSystemHarmonicEmission');
+            $txnFirstInvitationLetterIssueDate = $this->getPostParamString('firstInvitationLetterIssueDate');
+            $txnFirstInvitationLetterFaxRefNo = $this->getPostParamString('firstInvitationLetterFaxRefNo');
+            $txnFirstInvitationLetterEdmsLink = $this->getPostParamString('firstInvitationLetterEdmsLink');
+            $txnFirstInvitationLetterAccept = $this->getPostParamString('firstInvitationLetterAccept');
+            $txnFirstInvitationLetterWalkDate = $this->getPostParamString('firstInvitationLetterWalkDate');
+            $txnSecondInvitationLetterIssueDate = $this->getPostParamString('secondInvitationLetterIssueDate');
+            $txnSecondInvitationLetterFaxRefNo = $this->getPostParamString('secondInvitationLetterFaxRefNo');
+            $txnSecondInvitationLetterEdmsLink = $this->getPostParamString('secondInvitationLetterEdmsLink');
+            $txnSecondInvitationLetterAccept = $this->getPostParamString('secondInvitationLetterAccept');
+            $txnSecondInvitationLetterWalkDate = $this->getPostParamString('secondInvitationLetterWalkDate');
+            $txnThirdInvitationLetterIssueDate = $this->getPostParamString('thirdInvitationLetterIssueDate');
+            $txnThirdInvitationLetterFaxRefNo = $this->getPostParamString('thirdInvitationLetterFaxRefNo');
+            $txnThirdInvitationLetterEdmsLink = $this->getPostParamString('thirdInvitationLetterEdmsLink');
+            $txnThirdInvitationLetterAccept = $this->getPostParamString('thirdInvitationLetterAccept');
+            $txnThirdInvitationLetterWalkDate = $this->getPostParamString('thirdInvitationLetterWalkDate');
+
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
 
-            $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailDraft($txnProjectTitle,$txnSchemeNo,$txnRegion,
+            $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailDraft(
+                $txnProjectTitle,$txnSchemeNo,$txnRegion,
                 $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
                 $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
                 $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
@@ -1260,12 +1000,18 @@ class PlanningAheadController extends Controller {
                 $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                 $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
                 $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
+                $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                $txnFirstProjectOwnerTitle,$txnFirstProjectOwnerSurname,$txnFirstProjectOwnerOtherName,
+                $txnFirstProjectOwnerCompany,$txnFirstProjectOwnerPhone,$txnFirstProjectOwnerEmail,
+                $txnSecondProjectOwnerTitle,$txnSecondProjectOwnerSurname,$txnSecondProjectOwnerOtherName,
+                $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
+                $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
+                $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                 $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                 $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
-                $txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
+                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
+                $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                 $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
                 $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
                 $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
@@ -1281,8 +1027,15 @@ class PlanningAheadController extends Controller {
                 $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
                 $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
                 $txnReplySlipEvChargerSystemHarmonicEmission,
-                $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
+                $txnFirstInvitationLetterIssueDate,
+                $txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                 $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                $txnSecondInvitationLetterIssueDate,
+                $txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
+                $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                $txnThirdInvitationLetterIssueDate,
+                $txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
+                $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
                 $lastUpdatedBy,$lastUpdatedTime,
                 $txnPlanningAheadId);
 
@@ -1339,520 +1092,136 @@ class PlanningAheadController extends Controller {
             $txnRegion = trim($_POST['region']);
         }
 
-        if ($success && isset($_POST['typeOfProject']) && ($_POST['typeOfProject'] != "")) {
-            $txnTypeOfProject = trim($_POST['typeOfProject']);
-        } else {
-            $txnTypeOfProject = null;
-        }
-
-        if ($success && isset($_POST['commissionDate']) && ($_POST['commissionDate'] != "")) {
-            $txnCommissionDate = trim($_POST['commissionDate']);
-        } else {
-            $txnCommissionDate = null;
-        }
-
-        if ($success && isset($_POST['infraOpt']) && ($_POST['infraOpt'] != "")) {
-            $txnKeyInfra = trim($_POST['infraOpt']);
-        } else {
-            $txnKeyInfra = null;
-        }
-
-        if ($success && isset($_POST['tempProjOpt']) && ($_POST['tempProjOpt'] != "")) {
-            $txnTempProj = trim($_POST['tempProjOpt']);
-        } else {
-            $txnTempProj = null;
-        }
-
-        if ($success && isset($_POST['firstRegionStaffName']) && ($_POST['firstRegionStaffName'] != "")) {
-            $txnFirstRegionStaffName = trim($_POST['firstRegionStaffName']);
-        } else {
-            $txnFirstRegionStaffName = null;
-        }
-
-        if ($success && isset($_POST['firstRegionStaffPhone']) && ($_POST['firstRegionStaffPhone'] != "")) {
-            $txnFirstRegionStaffPhone = trim($_POST['firstRegionStaffPhone']);
-        } else {
-            $txnFirstRegionStaffPhone = null;
-        }
-
-        if ($success && isset($_POST['firstRegionStaffEmail']) && ($_POST['firstRegionStaffEmail'] != "")) {
-            $txnFirstRegionStaffEmail = trim($_POST['firstRegionStaffEmail']);
-        } else {
-            $txnFirstRegionStaffEmail = null;
-        }
-
-        if ($success && isset($_POST['secondRegionStaffName']) && ($_POST['secondRegionStaffName'] != "")) {
-            $txnSecondRegionStaffName = trim($_POST['secondRegionStaffName']);
-        } else {
-            $txnSecondRegionStaffName = null;
-        }
-
-        if ($success && isset($_POST['secondRegionStaffPhone']) && ($_POST['secondRegionStaffPhone'] != "")) {
-            $txnSecondRegionStaffPhone = trim($_POST['secondRegionStaffPhone']);
-        } else {
-            $txnSecondRegionStaffPhone = null;
-        }
-
-        if ($success && isset($_POST['secondRegionStaffEmail']) && ($_POST['secondRegionStaffEmail'] != "")) {
-            $txnSecondRegionStaffEmail = trim($_POST['secondRegionStaffEmail']);
-        } else {
-            $txnSecondRegionStaffEmail = null;
-        }
-
-        if ($success && isset($_POST['thirdRegionStaffName']) && ($_POST['thirdRegionStaffName'] != "")) {
-            $txnThirdRegionStaffName = trim($_POST['thirdRegionStaffName']);
-        } else {
-            $txnThirdRegionStaffName = null;
-        }
-
-        if ($success && isset($_POST['thirdRegionStaffPhone']) && ($_POST['thirdRegionStaffPhone'] != "")) {
-            $txnThirdRegionStaffPhone = trim($_POST['thirdRegionStaffPhone']);
-        } else {
-            $txnThirdRegionStaffPhone = null;
-        }
-
-        if ($success && isset($_POST['thirdRegionStaffEmail']) && ($_POST['thirdRegionStaffEmail'] != "")) {
-            $txnThirdRegionStaffEmail = trim($_POST['thirdRegionStaffEmail']);
-        } else {
-            $txnThirdRegionStaffEmail = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantTitle']) && ($_POST['firstConsultantTitle'] != "")) {
-            $txnFirstConsultantTitle = trim($_POST['firstConsultantTitle']);
-        } else {
-            $txnFirstConsultantTitle = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantSurname']) && ($_POST['firstConsultantSurname'] != "")) {
-            $txnFirstConsultantSurname = trim($_POST['firstConsultantSurname']);
-        } else {
-            $txnFirstConsultantSurname = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantOtherName']) && ($_POST['firstConsultantOtherName'] != "")) {
-            $txnFirstConsultantOtherName = trim($_POST['firstConsultantOtherName']);
-        } else {
-            $txnFirstConsultantOtherName = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantCompany']) && ($_POST['firstConsultantCompany'] != "")) {
-            $txnFirstConsultantCompany = trim($_POST['firstConsultantCompany']);
-        } else {
-            $txnFirstConsultantCompany = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantPhone']) && ($_POST['firstConsultantPhone'] != "")) {
-            $txnFirstConsultantPhone = trim($_POST['firstConsultantPhone']);
-        } else {
-            $txnFirstConsultantPhone = null;
-        }
-
-        if ($success && isset($_POST['firstConsultantEmail']) && ($_POST['firstConsultantEmail'] != "")) {
-            $txnFirstConsultantEmail = trim($_POST['firstConsultantEmail']);
-        } else {
-            $txnFirstConsultantEmail = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantTitle']) && ($_POST['secondConsultantTitle'] != "")) {
-            $txnSecondConsultantTitle = trim($_POST['secondConsultantTitle']);
-        } else {
-            $txnSecondConsultantTitle = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantSurname']) && ($_POST['secondConsultantSurname'] != "")) {
-            $txnSecondConsultantSurname = trim($_POST['secondConsultantSurname']);
-        } else {
-            $txnSecondConsultantSurname = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantOtherName']) && ($_POST['secondConsultantOtherName'] != "")) {
-            $txnSecondConsultantOtherName = trim($_POST['secondConsultantOtherName']);
-        } else {
-            $txnSecondConsultantOtherName = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantCompany']) && ($_POST['secondConsultantCompany'] != "")) {
-            $txnSecondConsultantCompany = trim($_POST['secondConsultantCompany']);
-        } else {
-            $txnSecondConsultantCompany = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantPhone']) && ($_POST['secondConsultantPhone'] != "")) {
-            $txnSecondConsultantPhone = trim($_POST['secondConsultantPhone']);
-        } else {
-            $txnSecondConsultantPhone = null;
-        }
-
-        if ($success && isset($_POST['secondConsultantEmail']) && ($_POST['secondConsultantEmail'] != "")) {
-            $txnSecondConsultantEmail = trim($_POST['secondConsultantEmail']);
-        } else {
-            $txnSecondConsultantEmail = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerTitle']) && ($_POST['projectOwnerTitle'] != "")) {
-            $txnProjectOwnerTitle = trim($_POST['projectOwnerTitle']);
-        } else {
-            $txnProjectOwnerTitle = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerSurname']) && ($_POST['projectOwnerSurname'] != "")) {
-            $txnProjectOwnerSurname = trim($_POST['projectOwnerSurname']);
-        } else {
-            $txnProjectOwnerSurname = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerOtherName']) && ($_POST['projectOwnerOtherName'] != "")) {
-            $txnProjectOwnerOtherName = trim($_POST['projectOwnerOtherName']);
-        } else {
-            $txnProjectOwnerOtherName = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerCompany']) && ($_POST['projectOwnerCompany'] != "")) {
-            $txnProjectOwnerCompany = trim($_POST['projectOwnerCompany']);
-        } else {
-            $txnProjectOwnerCompany = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerPhone']) && ($_POST['projectOwnerPhone'] != "")) {
-            $txnProjectOwnerPhone = trim($_POST['projectOwnerPhone']);
-        } else {
-            $txnProjectOwnerPhone = null;
-        }
-
-        if ($success && isset($_POST['projectOwnerEmail']) && ($_POST['projectOwnerEmail'] != "")) {
-            $txnProjectOwnerEmail = trim($_POST['projectOwnerEmail']);
-        } else {
-            $txnProjectOwnerEmail = null;
-        }
-
-        if ($success && isset($_POST['standLetterIssueDate']) && ($_POST['standLetterIssueDate'] != "")) {
-            $txnStandLetterIssueDate = trim($_POST['standLetterIssueDate']);
-        } else {
-            $txnStandLetterIssueDate = null;
-        }
-
-        if ($success && isset($_POST['standLetterFaxRefNo']) && ($_POST['standLetterFaxRefNo'] != "")) {
-            $txnStandLetterFaxRefNo = trim($_POST['standLetterFaxRefNo']);
-        } else {
-            $txnStandLetterFaxRefNo = null;
-        }
-
-        if ($success && isset($_POST['standLetterEdmsLink']) && ($_POST['standLetterEdmsLink'] != "")) {
-            $txnStandLetterEdmsLink = trim($_POST['standLetterEdmsLink']);
-        } else {
-            $txnStandLetterEdmsLink = null;
-        }
-
-        if ($success && isset($_POST['standLetterLetterLoc']) && ($_POST['standLetterLetterLoc'] != "")) {
-            $txnStandLetterLetterLoc = trim($_POST['standLetterLetterLoc']);
-        } else {
-            $txnStandLetterLetterLoc = null;
-        }
-
-        if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
-            $fileName = basename($_FILES["standSignedLetter"]["name"]);
-            $planningAheadStandardSignedLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterPath');
-            $targetFilePath = $planningAheadStandardSignedLetterPath["configValue"] . $txnSchemeNo . '_' . $fileName;
-            $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
-            $txnStandLetterLetterLoc = $targetFilePath;
-
-            //upload file to server
-            if (!move_uploaded_file($_FILES["standSignedLetter"]["tmp_name"], $targetFilePath)){
-                $retJson['status'] = 'NOTOK';
-                $retJson['retMessage'] = "Upload signed standard letter failed!";
-                $success = false;
-            }
-        }
-
-        if ($success && isset($_POST['meetingFirstPreferMeetingDate']) && ($_POST['meetingFirstPreferMeetingDate'] != "")) {
-            $txnMeetingFirstPreferMeetingDate = trim($_POST['meetingFirstPreferMeetingDate']);
-        } else {
-            $txnMeetingFirstPreferMeetingDate = null;
-        }
-
-        if ($success && isset($_POST['meetingSecondPreferMeetingDate']) && ($_POST['meetingSecondPreferMeetingDate'] != "")) {
-            $txnMeetingSecondPreferMeetingDate = trim($_POST['meetingSecondPreferMeetingDate']);
-        } else {
-            $txnMeetingSecondPreferMeetingDate = null;
-        }
-
-        if ($success && isset($_POST['meetingActualMeetingDate']) && ($_POST['meetingActualMeetingDate'] != "")) {
-            $txnMeetingActualMeetingDate = trim($_POST['meetingActualMeetingDate']);
-        } else {
-            $txnMeetingActualMeetingDate = null;
-        }
-
-        if ($success && isset($_POST['meetingRejReason']) && ($_POST['meetingRejReason'] != "")) {
-            $txnMeetingRejReason = trim($_POST['meetingRejReason']);
-        } else {
-            $txnMeetingRejReason = null;
-        }
-
-        if ($success && isset($_POST['meetingConsentConsultant']) && ($_POST['meetingConsentConsultant'] != "")) {
-            $txnMeetingConsentConsultant = trim($_POST['meetingConsentConsultant']);
-        } else {
-            $txnMeetingConsentConsultant = 'N';
-        }
-
-        if ($success && isset($_POST['meetingConsentOwner']) && ($_POST['meetingConsentOwner'] != "")) {
-            $txnMeetingConsentOwner = trim($_POST['meetingConsentOwner']);
-        } else {
-            $txnMeetingConsentOwner = 'N';
-        }
-
-        if ($success && isset($_POST['meetingReplySlipId']) && ($_POST['meetingReplySlipId'] != "")) {
-            $txnMeetingReplySlipId = trim($_POST['meetingReplySlipId']);
-        } else {
-            $txnMeetingReplySlipId = null;
-        }
-
-        if ($success && isset($_POST['replySlipBmsYesNo']) && ($_POST['replySlipBmsYesNo'] != "")) {
-            $txnReplySlipBmsYesNo = trim($_POST['replySlipBmsYesNo']);
-        } else {
-            $txnReplySlipBmsYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipBmsServerCentralComputer']) && ($_POST['replySlipBmsServerCentralComputer'] != "")) {
-            $txnReplySlipBmsServerCentralComputer = trim($_POST['replySlipBmsServerCentralComputer']);
-        } else {
-            $txnReplySlipBmsServerCentralComputer = null;
-        }
-
-        if ($success && isset($_POST['replySlipBmsDdc']) && ($_POST['replySlipBmsDdc'] != "")) {
-            $txnReplySlipBmsDdc = trim($_POST['replySlipBmsDdc']);
-        } else {
-            $txnReplySlipBmsDdc = null;
-        }
-
-        if ($success && isset($_POST['replySlipChangeoverSchemeYesNo']) && ($_POST['replySlipChangeoverSchemeYesNo'] != "")) {
-            $txnReplySlipChangeoverSchemeYesNo = trim($_POST['replySlipChangeoverSchemeYesNo']);
-        } else {
-            $txnReplySlipChangeoverSchemeYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipChangeoverSchemeControl']) && ($_POST['replySlipChangeoverSchemeControl'] != "")) {
-            $txnReplySlipChangeoverSchemeControl = trim($_POST['replySlipChangeoverSchemeControl']);
-        } else {
-            $txnReplySlipChangeoverSchemeControl = null;
-        }
-
-        if ($success && isset($_POST['replySlipChangeoverSchemeUv']) && ($_POST['replySlipChangeoverSchemeUv'] != "")) {
-            $txnReplySlipChangeoverSchemeUv = trim($_POST['replySlipChangeoverSchemeUv']);
-        } else {
-            $txnReplySlipChangeoverSchemeUv = null;
-        }
-
-        if ($success && isset($_POST['replySlipChillerPlantYesNo']) && ($_POST['replySlipChillerPlantYesNo'] != "")) {
-            $txnReplySlipChillerPlantYesNo = trim($_POST['replySlipChillerPlantYesNo']);
-        } else {
-            $txnReplySlipChillerPlantYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipChillerPlantAhu']) && ($_POST['replySlipChillerPlantAhu'] != "")) {
-            $txnReplySlipChillerPlantAhu = trim($_POST['replySlipChillerPlantAhu']);
-        } else {
-            $txnReplySlipChillerPlantAhu = null;
-        }
-
-        if ($success && isset($_POST['replySlipChillerPlantChiller']) && ($_POST['replySlipChillerPlantChiller'] != "")) {
-            $txnReplySlipChillerPlantChiller = trim($_POST['replySlipChillerPlantChiller']);
-        } else {
-            $txnReplySlipChillerPlantChiller = null;
-        }
-
-        if ($success && isset($_POST['replySlipEscalatorYesNo']) && ($_POST['replySlipEscalatorYesNo'] != "")) {
-            $txnReplySlipEscalatorYesNo = trim($_POST['replySlipEscalatorYesNo']);
-        } else {
-            $txnReplySlipEscalatorYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipEscalatorBrakingSystem']) && ($_POST['replySlipEscalatorBrakingSystem'] != "")) {
-            $txnReplySlipEscalatorBrakingSystem = trim($_POST['replySlipEscalatorBrakingSystem']);
-        } else {
-            $txnReplySlipEscalatorBrakingSystem = null;
-        }
-
-        if ($success && isset($_POST['replySlipEscalatorControl']) && ($_POST['replySlipEscalatorControl'] != "")) {
-            $txnReplySlipEscalatorControl = trim($_POST['replySlipEscalatorControl']);
-        } else {
-            $txnReplySlipEscalatorControl = null;
-        }
-
-        if ($success && isset($_POST['replyHidLampYesNo']) && ($_POST['replyHidLampYesNo'] != "")) {
-            $txnReplySlipHidLampYesNo = trim($_POST['replyHidLampYesNo']);
-        } else {
-            $txnReplySlipHidLampYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipHidLampBallast']) && ($_POST['replySlipHidLampBallast'] != "")) {
-            $txnReplySlipHidLampBallast = trim($_POST['replySlipHidLampBallast']);
-        } else {
-            $txnReplySlipHidLampBallast = null;
-        }
-
-        if ($success && isset($_POST['replySlipHidLampAddOnProtection']) && ($_POST['replySlipHidLampAddOnProtection'] != "")) {
-            $txnReplySlipHidLampAddOnProtection = trim($_POST['replySlipHidLampAddOnProtection']);
-        } else {
-            $txnReplySlipHidLampAddOnProtection = null;
-        }
-
-        if ($success && isset($_POST['replyLiftYesNo']) && ($_POST['replyLiftYesNo'] != "")) {
-            $txnReplySlipLiftYesNo = trim($_POST['replyLiftYesNo']);
-        } else {
-            $txnReplySlipLiftYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipLiftOperation']) && ($_POST['replySlipLiftOperation'] != "")) {
-            $txnReplySlipLiftOperation = trim($_POST['replySlipLiftOperation']);
-        } else {
-            $txnReplySlipLiftOperation = null;
-        }
-
-        if ($success && isset($_POST['replySlipSensitiveMachineYesNo']) && ($_POST['replySlipSensitiveMachineYesNo'] != "")) {
-            $txnReplySlipSensitiveMachineYesNo = trim($_POST['replySlipSensitiveMachineYesNo']);
-        } else {
-            $txnReplySlipSensitiveMachineYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipSensitiveMachineMitigation']) && ($_POST['replySlipSensitiveMachineMitigation'] != "")) {
-            $txnReplySlipSensitiveMachineMitigation = trim($_POST['replySlipSensitiveMachineMitigation']);
-        } else {
-            $txnReplySlipSensitiveMachineMitigation = null;
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachineYesNo']) && ($_POST['replySlipTelecomMachineYesNo'] != "")) {
-            $txnReplySlipTelecomMachineYesNo = trim($_POST['replySlipTelecomMachineYesNo']);
-        } else {
-            $txnReplySlipTelecomMachineYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachineServerOrComputer']) && ($_POST['replySlipTelecomMachineServerOrComputer'] != "")) {
-            $txnReplySlipTelecomMachineServerOrComputer = trim($_POST['replySlipTelecomMachineServerOrComputer']);
-        } else {
-            $txnReplySlipTelecomMachineServerOrComputer = null;
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachinePeripherals']) && ($_POST['replySlipTelecomMachinePeripherals'] != "")) {
-            $txnReplySlipTelecomMachinePeripherals = trim($_POST['replySlipTelecomMachinePeripherals']);
-        } else {
-            $txnReplySlipTelecomMachinePeripherals = null;
-        }
-
-        if ($success && isset($_POST['replySlipTelecomMachineHarmonicEmission']) && ($_POST['replySlipTelecomMachineHarmonicEmission'] != "")) {
-            $txnReplySlipTelecomMachineHarmonicEmission = trim($_POST['replySlipTelecomMachineHarmonicEmission']);
-        } else {
-            $txnReplySlipTelecomMachineHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersYesNo']) && ($_POST['replySlipAirConditionersYesNo'] != "")) {
-            $txnReplySlipAirConditionersYesNo = trim($_POST['replySlipAirConditionersYesNo']);
-        } else {
-            $txnReplySlipAirConditionersYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersMicb']) && ($_POST['replySlipAirConditionersMicb'] != "")) {
-            $txnReplySlipAirConditionersMicb = trim($_POST['replySlipAirConditionersMicb']);
-        } else {
-            $txnReplySlipAirConditionersMicb = null;
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersLoadForecasting']) && ($_POST['replySlipAirConditionersLoadForecasting'] != "")) {
-            $txnReplySlipAirConditionersLoadForecasting = trim($_POST['replySlipAirConditionersLoadForecasting']);
-        } else {
-            $txnReplySlipAirConditionersLoadForecasting = null;
-        }
-
-        if ($success && isset($_POST['replySlipAirConditionersType']) && ($_POST['replySlipAirConditionersType'] != "")) {
-            $txnReplySlipAirConditionersType = trim($_POST['replySlipAirConditionersType']);
-        } else {
-            $txnReplySlipAirConditionersType = null;
-        }
-
-        if ($success && isset($_POST['replySlipNonLinearLoadYesNo']) && ($_POST['replySlipNonLinearLoadYesNo'] != "")) {
-            $txnReplySlipNonLinearLoadYesNo = trim($_POST['replySlipNonLinearLoadYesNo']);
-        } else {
-            $txnReplySlipNonLinearLoadYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipNonLinearLoadHarmonicEmission']) && ($_POST['replySlipNonLinearLoadHarmonicEmission'] != "")) {
-            $txnReplySlipNonLinearLoadHarmonicEmission = trim($_POST['replySlipNonLinearLoadHarmonicEmission']);
-        } else {
-            $txnReplySlipNonLinearLoadHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['replySlipRenewableEnergyYesNo']) && ($_POST['replySlipRenewableEnergyYesNo'] != "")) {
-            $txnReplySlipRenewableEnergyYesNo = trim($_POST['replySlipRenewableEnergyYesNo']);
-        } else {
-            $txnReplySlipRenewableEnergyYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipRenewableEnergyInverterAndControls']) && ($_POST['replySlipRenewableEnergyInverterAndControls'] != "")) {
-            $txnReplySlipRenewableEnergyInverterAndControls = trim($_POST['replySlipRenewableEnergyInverterAndControls']);
-        } else {
-            $txnReplySlipRenewableEnergyInverterAndControls = null;
-        }
-
-        if ($success && isset($_POST['replySlipRenewableEnergyHarmonicEmission']) && ($_POST['replySlipRenewableEnergyHarmonicEmission'] != "")) {
-            $txnReplySlipRenewableEnergyHarmonicEmission = trim($_POST['replySlipRenewableEnergyHarmonicEmission']);
-        } else {
-            $txnReplySlipRenewableEnergyHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemYesNo']) && ($_POST['replySlipEvChargerSystemYesNo'] != "")) {
-            $txnReplySlipEvChargerSystemYesNo = trim($_POST['replySlipEvChargerSystemYesNo']);
-        } else {
-            $txnReplySlipEvChargerSystemYesNo = 'N';
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemEvCharger']) && ($_POST['replySlipEvChargerSystemEvCharger'] != "")) {
-            $txnReplySlipEvChargerSystemEvCharger = trim($_POST['replySlipEvChargerSystemEvCharger']);
-        } else {
-            $txnReplySlipEvChargerSystemEvCharger = null;
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemSmartChargingSystem']) && ($_POST['replySlipEvChargerSystemSmartChargingSystem'] != "")) {
-            $txnReplySlipEvChargerSystemSmartChargingSystem = trim($_POST['replySlipEvChargerSystemSmartChargingSystem']);
-        } else {
-            $txnReplySlipEvChargerSystemSmartChargingSystem = null;
-        }
-
-        if ($success && isset($_POST['replySlipEvChargerSystemHarmonicEmission']) && ($_POST['replySlipEvChargerSystemHarmonicEmission'] != "")) {
-            $txnReplySlipEvChargerSystemHarmonicEmission = trim($_POST['replySlipEvChargerSystemHarmonicEmission']);
-        } else {
-            $txnReplySlipEvChargerSystemHarmonicEmission = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterIssueDate']) && ($_POST['firstInvitationLetterIssueDate'] != "")) {
-            $txnFirstInvitationLetterIssueDate = trim($_POST['firstInvitationLetterIssueDate']);
-        } else {
-            $txnFirstInvitationLetterIssueDate = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterFaxRefNo']) && ($_POST['firstInvitationLetterFaxRefNo'] != "")) {
-            $txnFirstInvitationLetterFaxRefNo = trim($_POST['firstInvitationLetterFaxRefNo']);
-        } else {
-            $txnFirstInvitationLetterFaxRefNo = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterEdmsLink']) && ($_POST['firstInvitationLetterEdmsLink'] != "")) {
-            $txnFirstInvitationLetterEdmsLink = trim($_POST['firstInvitationLetterEdmsLink']);
-        } else {
-            $txnFirstInvitationLetterEdmsLink = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterAccept']) && ($_POST['firstInvitationLetterAccept'] != "")) {
-            $txnFirstInvitationLetterAccept = trim($_POST['firstInvitationLetterAccept']);
-        } else {
-            $txnFirstInvitationLetterAccept = null;
-        }
-
-        if ($success && isset($_POST['firstInvitationLetterWalkDate']) && ($_POST['firstInvitationLetterWalkDate'] != "")) {
-            $txnFirstInvitationLetterWalkDate = trim($_POST['firstInvitationLetterWalkDate']);
-        } else {
-            $txnFirstInvitationLetterWalkDate = null;
-        }
-
         if ($success) {
+            $txnTypeOfProject = $this->getPostParamInteger('typeOfProject');
+            $txnCommissionDate = $this->getPostParamString('commissionDate');
+            $txnKeyInfra = $this->getPostParamString('infraOpt');
+            $txnTempProj = $this->getPostParamString('tempProjOpt');
+            $txnFirstRegionStaffName = $this->getPostParamString('firstRegionStaffName');
+            $txnFirstRegionStaffPhone = $this->getPostParamString('firstRegionStaffPhone');
+            $txnFirstRegionStaffEmail = $this->getPostParamString('firstRegionStaffEmail');
+            $txnSecondRegionStaffName = $this->getPostParamString('secondRegionStaffName');
+            $txnSecondRegionStaffPhone = $this->getPostParamString('secondRegionStaffPhone');
+            $txnSecondRegionStaffEmail = $this->getPostParamString('secondRegionStaffEmail');
+            $txnThirdRegionStaffName = $this->getPostParamString('thirdRegionStaffName');
+            $txnThirdRegionStaffPhone = $this->getPostParamString('thirdRegionStaffPhone');
+            $txnThirdRegionStaffEmail = $this->getPostParamString('thirdRegionStaffEmail');
+            $txnFirstConsultantTitle = $this->getPostParamString('firstConsultantTitle');
+            $txnFirstConsultantSurname = $this->getPostParamString('firstConsultantSurname');
+            $txnFirstConsultantOtherName = $this->getPostParamString('firstConsultantOtherName');
+            $txnFirstConsultantCompany = $this->getPostParamString('firstConsultantCompany');
+            $txnFirstConsultantPhone = $this->getPostParamString('firstConsultantPhone');
+            $txnFirstConsultantEmail = $this->getPostParamString('firstConsultantEmail');
+            $txnSecondConsultantTitle = $this->getPostParamString('secondConsultantTitle');
+            $txnSecondConsultantSurname = $this->getPostParamString('secondConsultantSurname');
+            $txnSecondConsultantOtherName = $this->getPostParamString('secondConsultantOtherName');
+            $txnSecondConsultantCompany = $this->getPostParamString('secondConsultantCompany');
+            $txnSecondConsultantPhone = $this->getPostParamString('secondConsultantPhone');
+            $txnSecondConsultantEmail = $this->getPostParamString('secondConsultantEmail');
+            $txnThirdConsultantTitle = $this->getPostParamString('thirdConsultantTitle');
+            $txnThirdConsultantSurname = $this->getPostParamString('thirdConsultantSurname');
+            $txnThirdConsultantOtherName = $this->getPostParamString('thirdConsultantOtherName');
+            $txnThirdConsultantCompany = $this->getPostParamString('thirdConsultantCompany');
+            $txnThirdConsultantPhone = $this->getPostParamString('thirdConsultantPhone');
+            $txnThirdConsultantEmail = $this->getPostParamString('thirdConsultantEmail');
+            $txnFirstProjectOwnerTitle = $this->getPostParamString('firstProjectOwnerTitle');
+            $txnFirstProjectOwnerSurname = $this->getPostParamString('firstProjectOwnerSurname');
+            $txnFirstProjectOwnerOtherName = $this->getPostParamString('firstProjectOwnerOtherName');
+            $txnFirstProjectOwnerCompany = $this->getPostParamString('firstProjectOwnerCompany');
+            $txnFirstProjectOwnerPhone = $this->getPostParamString('firstProjectOwnerPhone');
+            $txnFirstProjectOwnerEmail = $this->getPostParamString('firstProjectOwnerEmail');
+            $txnSecondProjectOwnerTitle = $this->getPostParamString('secondProjectOwnerTitle');
+            $txnSecondProjectOwnerSurname = $this->getPostParamString('secondProjectOwnerSurname');
+            $txnSecondProjectOwnerOtherName = $this->getPostParamString('secondProjectOwnerOtherName');
+            $txnSecondProjectOwnerCompany = $this->getPostParamString('secondProjectOwnerCompany');
+            $txnSecondProjectOwnerPhone = $this->getPostParamString('secondProjectOwnerPhone');
+            $txnSecondProjectOwnerEmail = $this->getPostParamString('secondProjectOwnerEmail');
+            $txnThirdProjectOwnerTitle = $this->getPostParamString('thirdProjectOwnerTitle');
+            $txnThirdProjectOwnerSurname = $this->getPostParamString('thirdProjectOwnerSurname');
+            $txnThirdProjectOwnerOtherName = $this->getPostParamString('thirdProjectOwnerOtherName');
+            $txnThirdProjectOwnerCompany = $this->getPostParamString('thirdProjectOwnerCompany');
+            $txnThirdProjectOwnerPhone = $this->getPostParamString('thirdProjectOwnerPhone');
+            $txnThirdProjectOwnerEmail = $this->getPostParamString('thirdProjectOwnerEmail');
+            $txnStandLetterIssueDate = $this->getPostParamString('standLetterIssueDate');
+            $txnStandLetterFaxRefNo = $this->getPostParamString('standLetterFaxRefNo');
+            $txnStandLetterEdmsLink = $this->getPostParamString('standLetterEdmsLink');
+            $txnStandLetterLetterLoc = $this->getPostParamString('standLetterLetterLoc');
+
+            if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
+                $fileName = basename($_FILES["standSignedLetter"]["name"]);
+                $planningAheadStandardSignedLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterPath');
+                $targetFilePath = $planningAheadStandardSignedLetterPath["configValue"] . $txnSchemeNo . '_' . $fileName;
+                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+                $txnStandLetterLetterLoc = $targetFilePath;
+
+                //upload file to server
+                if (!move_uploaded_file($_FILES["standSignedLetter"]["tmp_name"], $targetFilePath)){
+                    $retJson['status'] = 'NOTOK';
+                    $retJson['retMessage'] = "Upload signed standard letter failed!";
+                    $success = false;
+                }
+            }
+
+            $txnMeetingFirstPreferMeetingDate = $this->getPostParamString('meetingFirstPreferMeetingDate');
+            $txnMeetingSecondPreferMeetingDate = $this->getPostParamString('meetingSecondPreferMeetingDate');
+            $txnMeetingActualMeetingDate = $this->getPostParamString('meetingActualMeetingDate');
+            $txnMeetingRejReason = $this->getPostParamString('meetingRejReason');
+            $txnMeetingConsentConsultant = $this->getPostParamBoolean('meetingConsentConsultant');
+            $txnMeetingConsentOwner = $this->getPostParamBoolean('meetingConsentOwner');
+            $txnMeetingRemark = $this->getPostParamString('meetingRemark');
+            $txnMeetingReplySlipId = $this->getPostParamInteger('meetingReplySlipId');
+            $txnReplySlipBmsYesNo = $this->getPostParamBoolean('replySlipBmsYesNo');
+            $txnReplySlipBmsServerCentralComputer = $this->getPostParamString('replySlipBmsServerCentralComputer');
+            $txnReplySlipBmsDdc = $this->getPostParamString('replySlipBmsDdc');
+            $txnReplySlipChangeoverSchemeYesNo = $this->getPostParamBoolean('replySlipChangeoverSchemeYesNo');
+            $txnReplySlipChangeoverSchemeControl = $this->getPostParamString('replySlipChangeoverSchemeControl');
+            $txnReplySlipChangeoverSchemeUv = $this->getPostParamString('replySlipChangeoverSchemeUv');
+            $txnReplySlipChillerPlantYesNo = $this->getPostParamBoolean('replySlipChillerPlantYesNo');
+            $txnReplySlipChillerPlantAhu = $this->getPostParamString('replySlipChillerPlantAhu');
+            $txnReplySlipChillerPlantChiller = $this->getPostParamString('replySlipChillerPlantChiller');
+            $txnReplySlipEscalatorYesNo = $this->getPostParamBoolean('replySlipEscalatorYesNo');
+            $txnReplySlipEscalatorBrakingSystem = $this->getPostParamString('replySlipEscalatorBrakingSystem');
+            $txnReplySlipEscalatorControl = $this->getPostParamString('replySlipEscalatorControl');
+            $txnReplySlipHidLampYesNo = $this->getPostParamBoolean('replyHidLampYesNo');
+            $txnReplySlipHidLampBallast = $this->getPostParamString('replySlipHidLampBallast');
+            $txnReplySlipHidLampAddOnProtection = $this->getPostParamString('replySlipHidLampAddOnProtection');
+            $txnReplySlipLiftYesNo = $this->getPostParamBoolean('replyLiftYesNo');
+            $txnReplySlipLiftOperation = $this->getPostParamString('replySlipLiftOperation');
+            $txnReplySlipSensitiveMachineYesNo = $this->getPostParamBoolean('replySlipSensitiveMachineYesNo');
+            $txnReplySlipSensitiveMachineMitigation = $this->getPostParamString('replySlipSensitiveMachineMitigation');
+            $txnReplySlipTelecomMachineYesNo = $this->getPostParamBoolean('replySlipTelecomMachineYesNo');
+            $txnReplySlipTelecomMachineServerOrComputer = $this->getPostParamString('replySlipTelecomMachineServerOrComputer');
+            $txnReplySlipTelecomMachinePeripherals = $this->getPostParamString('replySlipTelecomMachinePeripherals');
+            $txnReplySlipTelecomMachineHarmonicEmission = $this->getPostParamString('replySlipTelecomMachineHarmonicEmission');
+            $txnReplySlipAirConditionersYesNo = $this->getPostParamBoolean('replySlipAirConditionersYesNo');
+            $txnReplySlipAirConditionersMicb = $this->getPostParamString('replySlipAirConditionersMicb');
+            $txnReplySlipAirConditionersLoadForecasting = $this->getPostParamString('replySlipAirConditionersLoadForecasting');
+            $txnReplySlipAirConditionersType = $this->getPostParamString('replySlipAirConditionersType');
+            $txnReplySlipNonLinearLoadYesNo = $this->getPostParamBoolean('replySlipNonLinearLoadYesNo');
+            $txnReplySlipNonLinearLoadHarmonicEmission = $this->getPostParamString('replySlipNonLinearLoadHarmonicEmission');
+            $txnReplySlipRenewableEnergyYesNo = $this->getPostParamBoolean('replySlipRenewableEnergyYesNo');
+            $txnReplySlipRenewableEnergyInverterAndControls = $this->getPostParamString('replySlipRenewableEnergyInverterAndControls');
+            $txnReplySlipRenewableEnergyHarmonicEmission = $this->getPostParamString('replySlipRenewableEnergyHarmonicEmission');
+            $txnReplySlipEvChargerSystemYesNo = $this->getPostParamBoolean('replySlipEvChargerSystemYesNo');
+            $txnReplySlipEvChargerSystemEvCharger = $this->getPostParamString('replySlipEvChargerSystemEvCharger');
+            $txnReplySlipEvChargerSystemSmartChargingSystem = $this->getPostParamString('replySlipEvChargerSystemSmartChargingSystem');
+            $txnReplySlipEvChargerSystemHarmonicEmission = $this->getPostParamString('replySlipEvChargerSystemHarmonicEmission');
+            $txnFirstInvitationLetterIssueDate = $this->getPostParamString('firstInvitationLetterIssueDate');
+            $txnFirstInvitationLetterFaxRefNo = $this->getPostParamString('firstInvitationLetterFaxRefNo');
+            $txnFirstInvitationLetterEdmsLink = $this->getPostParamString('firstInvitationLetterEdmsLink');
+            $txnFirstInvitationLetterAccept = $this->getPostParamString('firstInvitationLetterAccept');
+            $txnFirstInvitationLetterWalkDate = $this->getPostParamString('firstInvitationLetterWalkDate');
+            $txnSecondInvitationLetterIssueDate = $this->getPostParamString('secondInvitationLetterIssueDate');
+            $txnSecondInvitationLetterFaxRefNo = $this->getPostParamString('secondInvitationLetterFaxRefNo');
+            $txnSecondInvitationLetterEdmsLink = $this->getPostParamString('secondInvitationLetterEdmsLink');
+            $txnSecondInvitationLetterAccept = $this->getPostParamString('secondInvitationLetterAccept');
+            $txnSecondInvitationLetterWalkDate = $this->getPostParamString('secondInvitationLetterWalkDate');
+            $txnThirdInvitationLetterIssueDate = $this->getPostParamString('thirdInvitationLetterIssueDate');
+            $txnThirdInvitationLetterFaxRefNo = $this->getPostParamString('thirdInvitationLetterFaxRefNo');
+            $txnThirdInvitationLetterEdmsLink = $this->getPostParamString('thirdInvitationLetterEdmsLink');
+            $txnThirdInvitationLetterAccept = $this->getPostParamString('thirdInvitationLetterAccept');
+            $txnThirdInvitationLetterWalkDate = $this->getPostParamString('thirdInvitationLetterWalkDate');
+
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
 
@@ -1875,9 +1244,14 @@ class PlanningAheadController extends Controller {
                     $txnNewState = "COMPLETED_ACTUAL_MEETING_DATE";
                 } else if ($currState['state']=="SENT_FIRST_INVITATION_LETTER") {
                     $txnNewState = "WAITING_PQ_SITE_WALK";
+                } else if ($currState['state']=="SENT_SECOND_INVITATION_LETTER") {
+                    $txnNewState = "WAITING_PQ_SITE_WALK";
+                } else if ($currState['state']=="SENT_THIRD_INVITATION_LETTER") {
+                    $txnNewState = "WAITING_PQ_SITE_WALK";
                 }
 
-                $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,$txnSchemeNo,$txnRegion,
+                $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,
+                    $txnSchemeNo,$txnRegion,
                     $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
                     $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
                     $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
@@ -1886,12 +1260,18 @@ class PlanningAheadController extends Controller {
                     $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
                     $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
                     $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                    $txnProjectOwnerTitle,$txnProjectOwnerSurname,$txnProjectOwnerOtherName,
-                    $txnProjectOwnerCompany,$txnProjectOwnerPhone,$txnProjectOwnerEmail,
+                    $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                    $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                    $txnFirstProjectOwnerTitle,$txnFirstProjectOwnerSurname,$txnFirstProjectOwnerOtherName,
+                    $txnFirstProjectOwnerCompany,$txnFirstProjectOwnerPhone,$txnFirstProjectOwnerEmail,
+                    $txnSecondProjectOwnerTitle,$txnSecondProjectOwnerSurname,$txnSecondProjectOwnerOtherName,
+                    $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
+                    $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
+                    $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                     $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                     $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
-                    $txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
+                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
+                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                     $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
                     $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
                     $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
@@ -1909,6 +1289,10 @@ class PlanningAheadController extends Controller {
                     $txnReplySlipEvChargerSystemHarmonicEmission,
                     $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                     $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                    $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
+                    $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                    $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
+                    $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
                     $txnNewState, $lastUpdatedBy,$lastUpdatedTime,
                     $txnPlanningAheadId);
 
@@ -1928,6 +1312,32 @@ class PlanningAheadController extends Controller {
 
         echo json_encode($retJson);
     }
+
+    private function getPostParamString($param) {
+        if (isset($_POST[$param]) && ($_POST[$param] != "")) {
+            return trim($_POST[$param]);
+        } else {
+            return null;
+        }
+    }
+
+    private function getPostParamBoolean($param) {
+        if (isset($_POST[$param]) && ($_POST[$param] != "")) {
+            return trim($_POST[$param]);
+        } else {
+            return 'N';
+        }
+    }
+
+    private function getPostParamInteger($param) {
+        if (isset($_POST[$param]) && ($_POST[$param] != "")) {
+            return trim($_POST[$param]);
+        } else {
+            return 0;
+        }
+    }
+
+
 
 }
 ?>

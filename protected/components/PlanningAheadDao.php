@@ -134,6 +134,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $record['meetingRejReason'] = Encoding::escapleAllCharacter($result[0]['meeting_rej_reason']);
                 $record['meetingConsentConsultant'] = $result[0]['meeting_consent_consultant'];
                 $record['meetingConsentOwner'] = $result[0]['meeting_consent_owner'];
+                $record['meetingRemark'] = $result[0]['meeting_remark'];
                 $record['meetingReplySlipId'] = $result[0]['meeting_reply_slip_id'];
 
                 if ($record['meetingReplySlipId'] > 0) {
@@ -513,7 +514,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                                                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                                                    $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                                                   $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
+                                                   $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                                                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                                                    $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
                                                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
@@ -563,7 +564,7 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"stand_letter_letter_loc"=?, ';
         $sql = $sql . '"meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?, ';
         $sql = $sql . '"meeting_actual_meeting_date"=?, "meeting_rej_reason"=?, ';
-        $sql = $sql . '"meeting_consent_consultant"=?, "meeting_consent_owner"=?, ';
+        $sql = $sql . '"meeting_consent_consultant"=?, "meeting_consent_owner"=?, "meeting_remark"=?, ';
         $sql = $sql . '"first_invitation_letter_issue_date"=?, "first_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"first_invitation_letter_edms_link"=?, "first_invitation_letter_accept"=?, ';
         $sql = $sql . '"first_invitation_letter_walk_date"=?, ';
@@ -604,7 +605,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnStandLetterLetterLoc,
                 $txnMeetingFirstPreferMeetingDate, $txnMeetingSecondPreferMeetingDate,
                 $txnMeetingActualMeetingDate, $txnMeetingRejReason, $txnMeetingConsentConsultant,
-                $txnMeetingConsentOwner,
+                $txnMeetingConsentOwner, $txnMeetingRemark,
                 $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
                 $txnFirstInvitationLetterEdmsLink,$txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
                 $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
@@ -701,7 +702,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                                                      $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                                                      $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                                                     $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
+                                                     $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                                                      $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                                                      $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
                                                      $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
@@ -749,7 +750,7 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"stand_letter_letter_loc"=?, ';
         $sql = $sql . '"meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?, ';
         $sql = $sql . '"meeting_actual_meeting_date"=?, "meeting_rej_reason"=?, ';
-        $sql = $sql . '"meeting_consent_consultant"=?, "meeting_consent_owner"=?, ';
+        $sql = $sql . '"meeting_consent_consultant"=?, "meeting_consent_owner"=?, "meeting_remark"=?, ';
         $sql = $sql . '"first_invitation_letter_issue_date"=?, "first_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"first_invitation_letter_edms_link"=?, "first_invitation_letter_accept"=?, ';
         $sql = $sql . '"first_invitation_letter_walk_date"=?, ';
@@ -789,6 +790,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                 $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                 $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
+                $txnMeetingRemark,
                 $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
                 $txnFirstInvitationLetterEdmsLink, $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
                 $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
@@ -989,10 +991,10 @@ class PlanningAheadDao extends CApplicationComponent {
 
     }
 
-    public function updateThirdInvitationLetter($txnPlanningAheadId,$firstInvitationLetterIssueDate,
-                                                $firstInvitationLetterFaxRefNo,$secondInvitationLetterIssueDate,
-                                                $secondInvitationLetterFaxRefNo,$thirdInvitationLetterIssueDate,
-                                                $thirdInvitationLetterFaxRefNo,$lastUpdatedBy,$lastUpdatedTime) {
+    public function updateThirdInvitationLetter($txnPlanningAheadId,$firstInvitationLetterIssueDate,$firstInvitationLetterFaxRefNo,
+                                                $secondInvitationLetterIssueDate,$secondInvitationLetterFaxRefNo,
+                                                $thirdInvitationLetterIssueDate,$thirdInvitationLetterFaxRefNo,
+                                                $lastUpdatedBy,$lastUpdatedTime) {
 
         $sql = 'UPDATE "tbl_planning_ahead" SET 
                                 "first_invitation_letter_issue_date"=?, "first_invitation_letter_fax_ref_no"=?, 
