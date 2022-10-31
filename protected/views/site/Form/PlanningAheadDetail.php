@@ -821,6 +821,7 @@
             ($this->viewbag['state']=="COMPLETED_STANDARD_LETTER") ||
             ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
             ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+            ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
@@ -979,6 +980,15 @@
                                                    class="form-control" value="Y" style="width:25px; height: 25px">
                                         <?php } ?>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Remarks (Sensitive equipment of infrastructure):</span>
+                                    </div>
+                                    <input id="meetingRemark" name="meetingRemark" type="text"
+                                           class="form-control" autocomplete="off">
                                 </div>
                             </div>
                             <?php if (($this->viewbag['meetingReplySlipId']) != '0') { ?>
@@ -1810,7 +1820,7 @@
         $("#meetingSecondPreferMeetingDate").val("<?php echo $this->viewbag['meetingSecondPreferMeetingDate']; ?>");
         $("#meetingActualMeetingDate").val("<?php echo $this->viewbag['meetingActualMeetingDate']; ?>");
         $("#meetingRejReason").val("<?php echo $this->viewbag['meetingRejReason']; ?>");
-
+        $("#meetingRemark").val("<?php echo $this->viewbag['meetingRemark']; ?>");
 
         // Set the autocomplete for 1st consultant company name
         $('#firstConsultantCompany').autocomplete({
