@@ -445,6 +445,7 @@ class PlanningAheadController extends Controller {
             $this->viewbag['meetingRejReason'] = $recordList['meetingRejReason'];
             $this->viewbag['meetingConsentConsultant'] = $recordList['meetingConsentConsultant'];
             $this->viewbag['meetingConsentOwner'] = $recordList['meetingConsentOwner'];
+            $this->viewbag['meetingRemark'] = $recordList['meetingRemark'];
             $this->viewbag['meetingReplySlipId'] = $recordList['meetingReplySlipId'];
             $this->viewbag['replySlipBmsYesNo'] = $recordList['replySlipBmsYesNo'];
             $this->viewbag['replySlipBmsServerCentralComputer'] = $recordList['replySlipBmsServerCentralComputer'];
@@ -602,6 +603,12 @@ class PlanningAheadController extends Controller {
         $firstInvitationLetterTemplateFileName = Yii::app()->commonUtil->
             getConfigValueByConfigName('planningAheadFirstInvitationLetterTemplateFileName');
 
+        $firstInvitationLetterFaxYear = date("y", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterFaxMonth = date("m", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterIssueDateDay = date("j", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterIssueDateMonth = date("M", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterIssueDateYear = date("Y", strtotime($firstInvitationLetterIssueDate));
+
         $templateProcessor = new TemplateProcessor($firstInvitationLetterTemplatePath['configValue'] .
             $firstInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
@@ -613,7 +620,10 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
         $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
         $templateProcessor->setValue('faxRefNo', $firstInvitationLetterFaxRefNo);
-        $templateProcessor->setValue('issueDate', $firstInvitationLetterIssueDate);
+        $templateProcessor->setValue('faxDate', $firstInvitationLetterFaxYear . "-" . $firstInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $firstInvitationLetterIssueDateDay . " " .
+                                                    $firstInvitationLetterIssueDateMonth . " " .
+                                                    $firstInvitationLetterIssueDateYear);
         $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
         $templateProcessor->setValue('replySlipReturnDate', $replySlip['replySlipLastUpdateTime']);
 
@@ -666,6 +676,12 @@ class PlanningAheadController extends Controller {
         $secondInvitationLetterTemplateFileName = Yii::app()->commonUtil->
         getConfigValueByConfigName('planningAheadSecondInvitationLetterTemplateFileName');
 
+        $secondInvitationLetterFaxYear = date("y", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterFaxMonth = date("m", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterIssueDateDay = date("j", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterIssueDateMonth = date("M", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterIssueDateYear = date("Y", strtotime($secondInvitationLetterIssueDate));
+
         $templateProcessor = new TemplateProcessor($secondInvitationLetterTemplatePath['configValue'] .
             $secondInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
@@ -677,9 +693,97 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
         $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
         $templateProcessor->setValue('faxRefNo', $secondInvitationLetterFaxRefNo);
-        $templateProcessor->setValue('issueDate', $secondInvitationLetterIssueDate);
+        $templateProcessor->setValue('faxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $secondInvitationLetterIssueDateDay . " " .
+                                                    $secondInvitationLetterIssueDateMonth . " " .
+                                                    $secondInvitationLetterIssueDateYear);
         $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
         $templateProcessor->setValue('firstLetterSendDate', $firstInvitationLetterIssueDate);
+
+        $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
+            $secondInvitationLetterTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header('Content-Disposition: attachment; filename='. basename($pathToSave));
+        header('Content-Length: ' . filesize($pathToSave));
+        header('Pragma: public');
+
+        //Clear system output buffer
+        flush();
+
+        //Read the size of the file
+        readfile($pathToSave,true);
+
+        die();
+
+    }
+
+    public function actionGetPlanningAheadProjectDetailThirdInvitationLetterTemplate() {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        $firstInvitationLetterIssueDate = $param['firstInvitationLetterIssueDate'];
+        $firstInvitationLetterFaxRefNo = $param['firstInvitationLetterFaxRefNo'];
+        $secondInvitationLetterIssueDate = $param['secondInvitationLetterIssueDate'];
+        $secondInvitationLetterFaxRefNo = $param['secondInvitationLetterFaxRefNo'];
+        $thirdInvitationLetterIssueDate = $param['thirdInvitationLetterIssueDate'];
+        $thirdInvitationLetterFaxRefNo = $param['thirdInvitationLetterFaxRefNo'];
+
+        $schemeNo = $param['schemeNo'];
+        $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+        $lastUpdatedTime = date("Y-m-d H:i");
+
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+        $replySlip = Yii::app()->planningAheadDao->getReplySlip($recordList['meetingReplySlipId']);
+
+        // Update the issue date and fax ref no. to database first
+        Yii::app()->planningAheadDao->updateThirdInvitationLetter($recordList['planningAheadId'],
+            $firstInvitationLetterIssueDate,$firstInvitationLetterFaxRefNo,
+            $secondInvitationLetterIssueDate,$secondInvitationLetterFaxRefNo,
+            $thirdInvitationLetterIssueDate,$thirdInvitationLetterFaxRefNo,
+            $lastUpdatedBy,$lastUpdatedTime);
+
+        $secondInvitationLetterTemplatePath = Yii::app()->commonUtil->
+        getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+
+        $secondInvitationLetterTemplateFileName = Yii::app()->commonUtil->
+        getConfigValueByConfigName('planningAheadThirdInvitationLetterTemplateFileName');
+
+        $firstInvitationLetterFaxYear = date("y", strtotime($firstInvitationLetterIssueDate));
+        $firstInvitationLetterFaxMonth = date("m", strtotime($firstInvitationLetterIssueDate));
+        $secondInvitationLetterFaxYear = date("y", strtotime($secondInvitationLetterIssueDate));
+        $secondInvitationLetterFaxMonth = date("m", strtotime($secondInvitationLetterIssueDate));
+        $thirdInvitationLetterFaxYear = date("y", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterFaxMonth = date("m", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterIssueDateDay = date("j", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterIssueDateMonth = date("M", strtotime($thirdInvitationLetterIssueDate));
+        $thirdInvitationLetterIssueDateYear = date("Y", strtotime($thirdInvitationLetterIssueDate));
+
+        $templateProcessor = new TemplateProcessor($secondInvitationLetterTemplatePath['configValue'] .
+            $secondInvitationLetterTemplateFileName['configValue']);
+        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
+        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
+        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
+        $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
+        $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
+        $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
+        $templateProcessor->setValue('faxRefNo', $thirdInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('faxDate', $thirdInvitationLetterFaxYear . "-" . $thirdInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $thirdInvitationLetterIssueDateDay . " " .
+                                                    $thirdInvitationLetterIssueDateMonth . " " .
+                                                    $thirdInvitationLetterIssueDateYear);
+        $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
+        $templateProcessor->setValue('firstLetterIssueDate', $firstInvitationLetterIssueDate);
+        $templateProcessor->setValue('firstLetterFaxRefNo', $firstInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('firstFaxDate', $firstInvitationLetterFaxYear . "-" . $firstInvitationLetterFaxMonth);
+        $templateProcessor->setValue('secondLetterIssueDate', $secondInvitationLetterIssueDate);
+        $templateProcessor->setValue('secondLetterFaxRefNo', $secondInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('secondFaxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
 
         $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $secondInvitationLetterTemplateFileName['configValue'];
@@ -829,6 +933,7 @@ class PlanningAheadController extends Controller {
             $txnMeetingRejReason = $this->getPostParamString('meetingRejReason');
             $txnMeetingConsentConsultant = $this->getPostParamBoolean('meetingConsentConsultant');
             $txnMeetingConsentOwner = $this->getPostParamBoolean('meetingConsentOwner');
+            $txnMeetingRemark = $this->getPostParamString('meetingRemark');
             $txnMeetingReplySlipId = $this->getPostParamInteger('meetingReplySlipId');
             $txnReplySlipBmsYesNo = $this->getPostParamBoolean('replySlipBmsYesNo');
             $txnReplySlipBmsServerCentralComputer = $this->getPostParamString('replySlipBmsServerCentralComputer');
@@ -905,7 +1010,7 @@ class PlanningAheadController extends Controller {
                 $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                 $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                 $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
+                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                 $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                 $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
                 $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
@@ -1063,6 +1168,7 @@ class PlanningAheadController extends Controller {
             $txnMeetingRejReason = $this->getPostParamString('meetingRejReason');
             $txnMeetingConsentConsultant = $this->getPostParamBoolean('meetingConsentConsultant');
             $txnMeetingConsentOwner = $this->getPostParamBoolean('meetingConsentOwner');
+            $txnMeetingRemark = $this->getPostParamString('meetingRemark');
             $txnMeetingReplySlipId = $this->getPostParamInteger('meetingReplySlipId');
             $txnReplySlipBmsYesNo = $this->getPostParamBoolean('replySlipBmsYesNo');
             $txnReplySlipBmsServerCentralComputer = $this->getPostParamString('replySlipBmsServerCentralComputer');
@@ -1138,6 +1244,10 @@ class PlanningAheadController extends Controller {
                     $txnNewState = "COMPLETED_ACTUAL_MEETING_DATE";
                 } else if ($currState['state']=="SENT_FIRST_INVITATION_LETTER") {
                     $txnNewState = "WAITING_PQ_SITE_WALK";
+                } else if ($currState['state']=="SENT_SECOND_INVITATION_LETTER") {
+                    $txnNewState = "WAITING_PQ_SITE_WALK";
+                } else if ($currState['state']=="SENT_THIRD_INVITATION_LETTER") {
+                    $txnNewState = "WAITING_PQ_SITE_WALK";
                 }
 
                 $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,
@@ -1160,7 +1270,7 @@ class PlanningAheadController extends Controller {
                     $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
                     $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                     $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,
+                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                     $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                     $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
                     $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
