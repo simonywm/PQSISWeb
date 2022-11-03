@@ -825,7 +825,8 @@
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailofPQStandardLetter">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -901,7 +902,8 @@
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailofMeeting">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -1011,11 +1013,7 @@
                 <div class="card-header" style="background-color: #e88d34">
                     <a class="card-link" data-toggle="collapse" href="#detailofReplySlip" onclick="cardSelected('detailofReplySlipIcon');">
                         <div class="row">
-                            <div class="col-8"><h5 class="text-light pt-2">Reply Slip Detail</h5></div>
-                            <div class="col-3">
-                                <input class="btn btn-warning form-control" type="button" name="genReplySlipDetail"
-                                       id="genReplySlipDetailBtn" value="Generate Reply Slip (PDF)">
-                            </div>
+                            <div class="col-11"><h5 class="text-light pt-2">Reply Slip Detail</h5></div>
                             <div class="col-1 pt-2">
                                 <img id="detailofReplySlipIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png"
                                      width="20px" style="transform: rotate(180deg);"/>
@@ -1025,18 +1023,25 @@
                 </div>
                 <div id="detailofReplySlip" class="collapse show" data-parent="#accordionDetailofReplySlip">
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">&nbsp;</div>
+                            <div class="col-3 pb-2">
+                                <input class="btn btn-warning form-control" type="button" name="genReplySlipDetail"
+                                       id="genReplySlipDetailBtn" value="Generate Reply Slip File">
+                            </div>
+                        </div>
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
-                                    <th style="width: 10%">&nbsp;</th>
+                                    <th style="width: 5%">&nbsp;</th>
                                     <th style="width: 30%">Equipment</th>
-                                    <th style="width: 20%">Component</th>
+                                    <th style="width: 25%">Component</th>
                                     <th style="width: 40%">Actual Design Approach</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="2">
                                         <?php if ($this->viewbag['replySlipBmsYesNo'] == 'Y') { ?>
                                         <input id="replySlipBmsYesNo" name="replySlipBmsYesNo" type="checkbox"
                                                class="form-control" value="Y" style="width:25px; height: 25px" checked>
@@ -1045,24 +1050,22 @@
                                                    class="form-control" value="Y" style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">BMS</td>
+                                    <td class="pt-3" rowspan="2">BMS</td>
                                     <td class="pt-3">Server or Central Computer</td>
                                     <td>
-                                        <input id="replySlipBmsServerCentralComputer" name="replySlipBmsServerCentralComputer"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipBmsServerCentralComputer" name="replySlipBmsServerCentralComputer"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Distributed digitial control (DDC)</td>
                                     <td>
-                                        <input id="replySlipBmsDdc" name="replySlipBmsDdc"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipBmsDdc" name="replySlipBmsDdc"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="2">
                                         <?php if ($this->viewbag['replySlipChangeoverSchemeYesNo'] == 'Y') { ?>
                                         <input id="replySlipChangeoverSchemeYesNo" name="replySlipChangeoverSchemeYesNo" type="checkbox"
                                                class="form-control" value="Y" style="width:25px; height: 25px" checked>
@@ -1071,24 +1074,22 @@
                                                class="form-control" value="Y" style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">Changeover Scheme</td>
+                                    <td class="pt-3" rowspan="2">Changeover Scheme</td>
                                     <td class="pt-3">Controls, relays, main contractor</td>
                                     <td>
-                                        <input id="replySlipChangeoverSchemeControl" name="replySlipChangeoverSchemeControl"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipChangeoverSchemeControl" name="replySlipChangeoverSchemeControl"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Under-voltage (UV) relay</td>
                                     <td>
-                                        <input id="replySlipChangeoverSchemeUv" name="replySlipChangeoverSchemeUv"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipChangeoverSchemeUv" name="replySlipChangeoverSchemeUv"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="3">
                                         <?php if ($this->viewbag['replySlipChillerPlantYesNo'] == 'Y') { ?>
                                         <input id="replySlipChillerPlantYesNo" name="replySlipChillerPlantYesNo"
                                                type="checkbox" class="form-control" value="Y"
@@ -1099,24 +1100,45 @@
                                                style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">Chiller Plant</td>
-                                    <td class="pt-3">AHU, chiller water pump</td>
+                                    <td class="pt-3" rowspan="3">
+                                        <div>Chiller Plant</div>
+                                        <div class="py-2">
+                                            <textarea id="replySlipChillerPlantAhuControl" name="replySlipChillerPlantAhuControl"
+                                                  type="text" class="form-control"></textarea>
+                                        </div>
+                                        <div>
+                                            <textarea id="replySlipChillerPlantAhuStartup" name="replySlipChillerPlantAhuStartup"
+                                                      type="text" class="form-control"></textarea>
+                                        </div>
+                                    </td>
+                                    <td class="pt-3">VSD Mitigation</td>
                                     <td>
-                                        <input id="replySlipChillerPlantAhu" name="replySlipChillerPlantAhu"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipChillerPlantVsd" name="replySlipChillerPlantVsd"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
+                                    <td class="pt-3">AHU, chilled water pump</td>
+                                    <td>
+                                        <div class="py-2">
+                                            <textarea id="replySlipChillerPlantAhuChilledWater" name="replySlipChillerPlantAhuChilledWater"
+                                                       type="text" class="form-control"></textarea>
+                                        </div>
+                                        <div>
+                                            <textarea id="replySlipChillerPlantStandbyAhu" name="replySlipChillerPlantStandbyAhu"
+                                                      type="text" class="form-control"></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="pt-3">Chiller</td>
                                     <td>
-                                        <input id="replySlipChillerPlantChiller" name="replySlipChillerPlantChiller"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipChillerPlantChiller" name="replySlipChillerPlantChiller"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="3">
                                         <?php if ($this->viewbag['replySlipEscalatorYesNo'] == 'Y') { ?>
                                         <input id="replySlipEscalatorYesNo" name="replySlipEscalatorYesNo"
                                                type="checkbox" class="form-control" value="Y"
@@ -1127,20 +1149,31 @@
                                                style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">Escalator</td>
-                                    <td class="pt-3">Baking System</td>
+                                    <td class="pt-3" rowspan="3">
+                                        <div>Escalator</div>
+                                        <div class="py-2">
+                                            <textarea id="replySlipEscalatorMotorStartup" name="replySlipEscalatorMotorStartup"
+                                                      type="text" class="form-control"></textarea>
+                                        </div>
+                                    </td>
+                                    <td class="pt-3">VSD Mitigation</td>
                                     <td>
-                                        <input id="replySlipEscalatorBrakingSystem" name="replySlipEscalatorBrakingSystem"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipEscalatorVsdMitigation" name="replySlipEscalatorVsdMitigation"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
+                                    <td class="pt-3">Braking system</td>
+                                    <td>
+                                        <textarea id="replySlipEscalatorBrakingSystem" name="replySlipEscalatorBrakingSystem"
+                                                  type="text" class="form-control"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="pt-3">Controls</td>
                                     <td>
-                                        <input id="replySlipEscalatorControl" name="replySlipEscalatorControl"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipEscalatorControl" name="replySlipEscalatorControl"
+                                               type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1156,19 +1189,10 @@
                                         <?php } ?>
                                     </td>
                                     <td class="pt-3">High Intensity Discharge Lamp</td>
-                                    <td class="pt-3">Ballast</td>
+                                    <td class="pt-3">Ballast & Add-on protection</td>
                                     <td>
-                                        <input id="replySlipHidLampBallast" name="replySlipHidLampBallast"
-                                               type="text" class="form-control">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">Add-on protection</td>
-                                    <td>
-                                        <input id="replySlipHidLampAddOnProtection" name="replySlipHidLampAddOnProtection"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipHidLampMitigation" name="replySlipHidLampMitigation"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1184,10 +1208,10 @@
                                         <?php } ?>
                                     </td>
                                     <td class="pt-3">Lift</td>
-                                    <td class="pt-3">Control (Operation)</td>
+                                    <td class="pt-3">Controls</td>
                                     <td>
-                                        <input id="replySlipLiftOperation" name="replySlipLiftOperation"
-                                               type="text" class="form-control">
+                                        <textarea id="replySlipLiftOperation" name="replySlipLiftOperation"
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1205,13 +1229,13 @@
                                     <td class="pt-3">Sensitive Machine</td>
                                     <td class="pt-3">Medical equipment, Controls, PLC</td>
                                     <td>
-                                        <input id="replySlipSensitiveMachineMitigation"
+                                        <textarea id="replySlipSensitiveMachineMitigation"
                                                name="replySlipSensitiveMachineMitigation"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="3">
                                         <?php if ($this->viewbag['replySlipTelecomMachineYesNo'] == 'Y') { ?>
                                         <input id="replySlipTelecomMachineYesNo" name="replySlipTelecomMachineYesNo"
                                                type="checkbox" class="form-control" value="Y"
@@ -1222,36 +1246,32 @@
                                                style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">Telecom, IT Equipment, Data Centre & Harmonic</td>
+                                    <td class="pt-3" rowspan="3">Telecom, IT Equipment, Data Centre & Harmonic</td>
                                     <td class="pt-3">Server or computer</td>
                                     <td>
-                                        <input id="replySlipTelecomMachineServerOrComputer"
+                                        <textarea id="replySlipTelecomMachineServerOrComputer"
                                                name="replySlipTelecomMachineServerOrComputer"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Peripherals such as modem, router</td>
                                     <td>
-                                        <input id="replySlipTelecomMachinePeripherals"
+                                        <textarea id="replySlipTelecomMachinePeripherals"
                                                name="replySlipTelecomMachinePeripherals"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Harmonic emission</td>
                                     <td>
-                                        <input id="replySlipTelecomMachineHarmonicEmission"
+                                        <textarea id="replySlipTelecomMachineHarmonicEmission"
                                                name="replySlipTelecomMachineHarmonicEmission"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="3">
                                         <?php if ($this->viewbag['replySlipAirConditionersYesNo'] == 'Y') { ?>
                                         <input id="replySlipAirConditionersYesNo" name="replySlipAirConditionersYesNo"
                                                type="checkbox" class="form-control" value="Y"
@@ -1262,32 +1282,28 @@
                                                style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">Air-conditioners & ACB at Residential Building</td>
+                                    <td class="pt-3" rowspan="3">Air-conditioners & ACB at Residential Building</td>
                                     <td class="pt-3">Protection facilities of Main Incoming Circuit Breaker</td>
                                     <td>
-                                        <input id="replySlipAirConditionersMicb"
+                                        <textarea id="replySlipAirConditionersMicb"
                                                name="replySlipAirConditionersMicb"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Load forecasting for air-conditioning load</td>
                                     <td>
-                                        <input id="replySlipAirConditionersLoadForecasting"
+                                        <textarea id="replySlipAirConditionersLoadForecasting"
                                                name="replySlipAirConditionersLoadForecasting"
-                                               type="text" class="form-control">
+                                            type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Type of Air-conditioner</td>
                                     <td>
-                                        <input id="replySlipAirConditionersType"
+                                        <textarea id="replySlipAirConditionersType"
                                                name="replySlipAirConditionersType"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1308,13 +1324,13 @@
                                     </td>
                                     <td class="pt-3">Harmonic emission</td>
                                     <td>
-                                        <input id="replySlipNonLinearLoadHarmonicEmission"
+                                        <textarea id="replySlipNonLinearLoadHarmonicEmission"
                                                name="replySlipNonLinearLoadHarmonicEmission"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="2">
                                         <?php if ($this->viewbag['replySlipRenewableEnergyYesNo'] == 'Y') { ?>
                                         <input id="replySlipRenewableEnergyYesNo" name="replySlipRenewableEnergyYesNo"
                                                type="checkbox" class="form-control" value="Y"
@@ -1325,26 +1341,24 @@
                                                style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">Renewable Energy, e.g. photovoltaic or wind energy system etc.</td>
+                                    <td class="pt-3" rowspan="2">Renewable Energy, e.g. photovoltaic or wind energy system etc.</td>
                                     <td class="pt-3">Inventer, controls</td>
                                     <td>
-                                        <input id="replySlipRenewableEnergyInverterAndControls"
+                                        <textarea id="replySlipRenewableEnergyInverterAndControls"
                                                name="replySlipRenewableEnergyInverterAndControls"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Harmonic emission</td>
                                     <td>
-                                        <input id="replySlipRenewableEnergyHarmonicEmission"
+                                        <textarea id="replySlipRenewableEnergyHarmonicEmission"
                                                name="replySlipRenewableEnergyHarmonicEmission"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">
+                                    <td class="pt-3" rowspan="3">
                                         <?php if ($this->viewbag['replySlipEvChargerSystemYesNo'] == 'Y') { ?>
                                         <input id="replySlipEvChargerSystemYesNo" name="replySlipEvChargerSystemYesNo"
                                                type="checkbox" class="form-control" value="Y"
@@ -1355,31 +1369,97 @@
                                                style="width:25px; height: 25px">
                                         <?php } ?>
                                     </td>
-                                    <td class="pt-3">EV charger system</td>
-                                    <td class="pt-3">EV charger</td>
+                                    <td class="pt-3" rowspan="3">EV charger system</td>
+                                    <td class="pt-3">
+                                        <table class="table-borderless">
+                                            <tr>
+                                                <td>
+                                                    <?php if ($this->viewbag['replySlipEvControlYesNo'] == 'Y') { ?>
+                                                        <input id="replySlipEvControlYesNo" name="replySlipEvControlYesNo"
+                                                               type="checkbox" class="form-control" value="Y"
+                                                               style="width:25px; height: 25px" checked>
+                                                    <?php } else { ?>
+                                                        <input id="replySlipEvControlYesNo" name="replySlipEvControlYesNo"
+                                                               type="checkbox" class="form-control" value="Y"
+                                                               style="width:25px; height: 25px">
+                                                    <?php } ?>
+                                                </td>
+                                                <td>
+                                                    EV charger
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
                                     <td>
-                                        <input id="replySlipEvChargerSystemEvCharger"
+                                        <textarea id="replySlipEvChargerSystemEvCharger"
                                                name="replySlipEvChargerSystemEvCharger"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">Smart charging system (e.g. load management system)</td>
+                                    <td class="pt-3">
+                                        <table class="table-borderless">
+                                            <tr>
+                                                <td>
+                                                    <?php if ($this->viewbag['replySlipEvChargerSystemSmartYesNo'] == 'Y') { ?>
+                                                        <input id="replySlipEvChargerSystemSmartYesNo" name="replySlipEvChargerSystemSmartYesNo"
+                                                               type="checkbox" class="form-control" value="Y"
+                                                               style="width:25px; height: 25px" checked>
+                                                    <?php } else { ?>
+                                                        <input id="replySlipEvChargerSystemSmartYesNo" name="replySlipEvChargerSystemSmartYesNo"
+                                                               type="checkbox" class="form-control" value="Y"
+                                                               style="width:25px; height: 25px">
+                                                    <?php } ?>
+                                                </td>
+                                                <td>
+                                                    Load management system
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
                                     <td>
-                                        <input id="replySlipEvChargerSystemSmartChargingSystem"
+                                        <textarea id="replySlipEvChargerSystemSmartChargingSystem"
                                                name="replySlipEvChargerSystemSmartChargingSystem"
-                                               type="text" class="form-control">
+                                                  type="text" class="form-control"></textarea>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="pt-3">&nbsp;</td>
-                                    <td class="pt-3">&nbsp;</td>
                                     <td class="pt-3">Harmonic emission</td>
                                     <td>
-                                        <input id="replySlipEvChargerSystemHarmonicEmission"
+                                        <textarea id="replySlipEvChargerSystemHarmonicEmission"
                                                name="replySlipEvChargerSystemHarmonicEmission"
+                                                  type="text" class="form-control"></textarea>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="font-weight-bold">Submitted by</td>
+                                    <td>
+                                        <input id="replySlipConsultantNameConfirmation"
+                                                  name="replySlipConsultantNameConfirmation"
+                                                  type="text" class="form-control">
+                                    </td>
+                                    <td class="font-weight-bold">Company</td>
+                                    <td>
+                                        <input id="replySlipConsultantCompany"
+                                               name="replySlipConsultantCompany"
+                                               type="text" class="form-control">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-weight-bold">Project Owner Name</td>
+                                    <td>
+                                        <input id="replySlipProjectOwnerNameConfirmation"
+                                               name="replySlipProjectOwnerNameConfirmation"
+                                               type="text" class="form-control">
+                                    </td>
+                                    <td class="font-weight-bold">Project Owner Company</td>
+                                    <td>
+                                        <input id="replySlipProjectOwnerCompany"
+                                               name="replySlipProjectOwnerCompany"
                                                type="text" class="form-control">
                                     </td>
                                 </tr>
@@ -1394,7 +1474,8 @@
         <?php if (($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofFirstInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1508,7 +1589,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-            (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['secondInvitationLetterIssueDate']!=""))) { ?>
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofSecondInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1621,7 +1703,8 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['thirdInvitationLetterIssueDate']!=""))) { ?>
+            ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofThirdInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1733,6 +1816,127 @@
 
         <?php } ?>
 
+        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+        <div id="accordionDetailOfEvaluationReport">
+            <div class="card">
+                <div class="card-header" style="background-color: #6f42c1">
+                    <a class="card-link" data-toggle="collapse" href="#detailOfEvaluationReport"
+                       onclick="cardSelected('detailOfEvaluationReportIcon');">
+                        <div class="row">
+                            <div class="col-11"><h5 class="text-light">Details of Evaluation Report</h5></div>
+                            <div class="col-1">
+                                <img id="detailOfEvaluationReportIcon" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png" width="20px"/>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div id="detailOfEvaluationReport" class="collapse" data-parent="#accordionDetailOfEvaluationReport">
+                    <div class="card-body">
+                        <div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Evaluation Score:</span>
+                                    </div>
+                                    <input id="evaReportScore" name="evaReportScore"
+                                           type="text" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Remark (Project Comment on Circuit Drawings / Technical Specifications):</span>
+                                    </div>
+                                    <input id="evaReportRemark" name="evaReportRemark"
+                                           type="text" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-12">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">EDMS Link of Report:</span>
+                                    </div>
+                                    <input id="evaReportEdmsLink" name="evaReportEdmsLink"
+                                           type="text" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-3">
+                                    <input class="btn btn-primary form-control" type="button" name="showEvaReport"
+                                           id="showEvaReportBtn" value="Show Evaluation Report Detail">
+                                </div>
+                                <div class="input-group col-9">&nbsp;</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="accordionDetailOfEvaluationReportDetail" style="display: none">
+            <div class="card">
+                <div class="card-header" style="background-color: #e88d34">
+                    <a class="card-link" data-toggle="collapse" href="#detailOfEvaluationReportDetail" onclick="cardSelected('detailOfEvaluationReportDetailIcon');">
+                        <div class="row">
+                            <div class="col-11"><h5 class="text-light pt-2">Evaluation Report Detail</h5></div>
+                            <div class="col-1 pt-2">
+                                <img id="detailOfEvaluationReportDetail" src="<?php echo Yii::app()->request->baseUrl; ?>/images/expend.png"
+                                     width="20px" style="transform: rotate(180deg);"/>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div id="detailOfEvaluationReportDetail" class="collapse show" data-parent="#accordionDetailOfEvaluationReportDetail">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-9">&nbsp;</div>
+                            <div class="col-3 pb-2">
+                                <input class="btn btn-warning form-control" type="button" name="genEvaluationReportDetail"
+                                       id="genEvaluationReportDetail" value="Generate Evaluation Report">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group col-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Issue Date:</span>
+                                </div>
+                                <input id="evaReportIssueDate" name="evaReportIssueDate"
+                                       type="text" placeholder="YYYY-mm-dd" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group col-12">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Fax Reference No.:</span>
+                                </div>
+                                <input id="evaReportFaxRefNo" name="evaReportFaxRefNo"
+                                       type="text" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%">&nbsp;</th>
+                                    <th style="width: 15%">Equipment</th>
+                                    <th style="width: 5%">&nbsp;</th>
+                                    <th style="width: 20%">Component</th>
+                                    <th style="width: 25%">Findings during PQ Site Walk</th>
+                                    <th style="width: 25%">Any further PQ recommendations</th>
+                                    <th style="width: 5%">Pass?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+
         <div class="form-group row px-3 pt-2">
             <div>
                 <input class="btn btn-primary" type="submit" name="saveDraftBtn" id="saveDraftBtn" value="Save as Draft">
@@ -1743,6 +1947,7 @@
         <input type="hidden" id="planningAheadId" name="planningAheadId" value="<?php echo $this->viewbag['planningAheadId']; ?>">
         <input type="hidden" id="standLetterLetterLoc" name="standLetterLetterLoc" value="<?php echo $this->viewbag['standLetterLetterLoc']; ?>">
         <input type="hidden" id="meetingReplySlipId" name="meetingReplySlipId" value="<?php echo $this->viewbag['meetingReplySlipId']; ?>">
+        <input type="hidden" id="evaReportId" name="evaReportId" value="<?php echo $this->viewbag['evaReportId']; ?>">
         <input type="hidden" id="state" name="state" value="<?php echo $this->viewbag['state']; ?>">
         <input type="hidden" id="roleId" name="roleId" value="<?php echo Yii::app()->session['tblUserDo']['roleId']; ?>">
 
@@ -2005,7 +2210,8 @@
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         $("#genStandLetterBtn").on("click", function() {
 
             let errorMessage = "";
@@ -2039,17 +2245,23 @@
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         $('#replySlipBmsServerCentralComputer').val("<?php echo $this->viewbag['replySlipBmsServerCentralComputer']; ?>");
         $('#replySlipBmsDdc').val("<?php echo $this->viewbag['replySlipBmsDdc']; ?>");
         $('#replySlipChangeoverSchemeControl').val("<?php echo $this->viewbag['replySlipChangeoverSchemeControl']; ?>");
         $('#replySlipChangeoverSchemeUv').val("<?php echo $this->viewbag['replySlipChangeoverSchemeUv']; ?>");
-        $('#replySlipChillerPlantAhu').val("<?php echo $this->viewbag['replySlipChillerPlantAhu']; ?>");
+        $('#replySlipChillerPlantAhuControl').val("<?php echo $this->viewbag['replySlipChillerPlantAhuControl']; ?>");
+        $('#replySlipChillerPlantAhuStartup').val("<?php echo $this->viewbag['replySlipChillerPlantAhuStartup']; ?>");
+        $('#replySlipChillerPlantVsd').val("<?php echo $this->viewbag['replySlipChillerPlantVsd']; ?>");
+        $('#replySlipChillerPlantAhuChilledWater').val("<?php echo $this->viewbag['replySlipChillerPlantAhuChilledWater']; ?>");
+        $('#replySlipChillerPlantStandbyAhu').val("<?php echo $this->viewbag['replySlipChillerPlantStandbyAhu']; ?>");
         $('#replySlipChillerPlantChiller').val("<?php echo $this->viewbag['replySlipChillerPlantChiller']; ?>");
+        $('#replySlipEscalatorMotorStartup').val("<?php echo $this->viewbag['replySlipEscalatorMotorStartup']; ?>");
+        $('#replySlipEscalatorVsdMitigation').val("<?php echo $this->viewbag['replySlipEscalatorVsdMitigation']; ?>");
         $('#replySlipEscalatorBrakingSystem').val("<?php echo $this->viewbag['replySlipEscalatorBrakingSystem']; ?>");
         $('#replySlipEscalatorControl').val("<?php echo $this->viewbag['replySlipEscalatorControl']; ?>");
-        $('#replySlipHidLampBallast').val("<?php echo $this->viewbag['replySlipHidLampBallast']; ?>");
-        $('#replySlipHidLampAddOnProtection').val("<?php echo $this->viewbag['replySlipHidLampAddOnProtection']; ?>");
+        $('#replySlipHidLampMitigation').val("<?php echo $this->viewbag['replySlipHidLampMitigation']; ?>");
         $('#replySlipLiftOperation').val("<?php echo $this->viewbag['replySlipLiftOperation']; ?>");
         $('#replySlipSensitiveMachineMitigation').val("<?php echo $this->viewbag['replySlipSensitiveMachineMitigation']; ?>");
         $('#replySlipTelecomMachineServerOrComputer').val("<?php echo $this->viewbag['replySlipTelecomMachineServerOrComputer']; ?>");
@@ -2064,6 +2276,10 @@
         $('#replySlipEvChargerSystemEvCharger').val("<?php echo $this->viewbag['replySlipEvChargerSystemEvCharger']; ?>");
         $('#replySlipEvChargerSystemSmartChargingSystem').val("<?php echo $this->viewbag['replySlipEvChargerSystemSmartChargingSystem']; ?>");
         $('#replySlipEvChargerSystemHarmonicEmission').val("<?php echo $this->viewbag['replySlipEvChargerSystemHarmonicEmission']; ?>");
+        $('#replySlipConsultantNameConfirmation').val("<?php echo $this->viewbag['replySlipConsultantNameConfirmation']; ?>");
+        $('#replySlipConsultantCompany').val("<?php echo $this->viewbag['replySlipConsultantCompany']; ?>");
+        $('#replySlipProjectOwnerNameConfirmation').val("<?php echo $this->viewbag['replySlipProjectOwnerNameConfirmation']; ?>");
+        $('#replySlipProjectOwnerCompany').val("<?php echo $this->viewbag['replySlipProjectOwnerCompany']; ?>");
 
         $("#showReplySlipDetailBtn").on("click", function() {
             if ($('#showReplySlipDetailBtn').val() == 'Show Reply Slip Detail') {
@@ -2074,12 +2290,21 @@
                 $('#showReplySlipDetailBtn').val('Show Reply Slip Detail');
             }
         });
+
+        $("#genReplySlipDetailBtn").on("click", function() {
+            $(this).attr("disabled", true);
+            window.location.href =
+                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailReplySlipTemplate" +
+                "&schemeNo=" + $("#schemeNo").val();
+            $(this).attr("disabled", false);
+        });
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         $('#firstInvitationLetterIssueDate').val("<?php echo $this->viewbag['firstInvitationLetterIssueDate']; ?>");
         $('#firstInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['firstInvitationLetterFaxRefNo']; ?>");
         $('#firstInvitationLetterEdmsLink').val("<?php echo $this->viewbag['firstInvitationLetterEdmsLink']; ?>");
@@ -2116,7 +2341,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['secondInvitationLetterIssueDate']!=""))) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         $('#secondInvitationLetterIssueDate').val("<?php echo $this->viewbag['secondInvitationLetterIssueDate']; ?>");
         $('#secondInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['secondInvitationLetterFaxRefNo']; ?>");
         $('#secondInvitationLetterEdmsLink').val("<?php echo $this->viewbag['secondInvitationLetterEdmsLink']; ?>");
@@ -2163,7 +2389,8 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['thirdInvitationLetterIssueDate']!=""))) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         $('#thirdInvitationLetterIssueDate').val("<?php echo $this->viewbag['thirdInvitationLetterIssueDate']; ?>");
         $('#thirdInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['thirdInvitationLetterFaxRefNo']; ?>");
         $('#thirdInvitationLetterEdmsLink').val("<?php echo $this->viewbag['thirdInvitationLetterEdmsLink']; ?>");
@@ -2220,6 +2447,31 @@
 
         <?php } ?>
 
+        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+
+        $('#evaReportRemark').val("<?php echo $this->viewbag['evaReportRemark']; ?>");
+        $('#evaReportEdmsLink').val("<?php echo $this->viewbag['evaReportEdmsLink']; ?>");
+
+        $("#showEvaReportBtn").on("click", function() {
+            if ($('#showEvaReportBtn').val() == 'Show Evaluation Report Detail') {
+                $('#accordionDetailOfEvaluationReportDetail').css ("display", "block");
+                $('#showEvaReportBtn').val('Hide Evaluation Report Detail');
+            } else {
+                $('#accordionDetailOfEvaluationReportDetail').css ("display", "none");
+                $('#showEvaReportBtn').val('Show Evaluation Report Detail');
+            }
+        });
+
+        $("#genEvaReportDetail").on("click", function() {
+            $(this).attr("disabled", true);
+            window.location.href =
+                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailReplySlipTemplate" +
+                "&schemeNo=" + $("#schemeNo").val();
+            $(this).attr("disabled", false);
+        });
+
+        <?php } ?>
+
 
     });
 
@@ -2256,7 +2508,8 @@
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#standLetterIssueDate", "Standard Letter", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2268,7 +2521,8 @@
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateDateAndTimeFormat("#meetingFirstPreferMeetingDate", "1st Preferred Meeting Date & Time", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2284,7 +2538,8 @@
         <?php if (($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2296,7 +2551,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['secondInvitationLetterIssueDate']!=""))) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2307,7 +2563,8 @@
         <?php } ?>
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") && ($this->viewbag['thirdInvitationLetterIssueDate']!=""))) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2424,7 +2681,8 @@
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateEmpty("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2451,7 +2709,8 @@
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
-                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
 
         result = validateEmpty("#meetingActualMeetingDate", "Actual Meeting Date & Time", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -2555,7 +2814,9 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") { ?>
+        <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                    ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
         if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
                 ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == "")) &&
             (($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
@@ -2669,6 +2930,12 @@
         }
         <?php } ?>
 
+        <?php if (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+
+
+        <?php } ?>
+
         if (errorMessage === "") {
             return true;
         } else {
@@ -2684,7 +2951,9 @@
                 ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                 ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
-                ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER")) { ?>
+                ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
+                ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
+                ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
     function updateGenStandLetterButton() {
         let standLetterIssueDate = document.querySelector("#standLetterIssueDate");
         let standLetterFaxRefNo = document.querySelector("#standLetterFaxRefNo");

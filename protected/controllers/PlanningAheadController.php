@@ -107,7 +107,13 @@ class PlanningAheadController extends Controller {
                     $failSchemeNo = "";
 
                     for ($row = 2; $row <= $highestRow; ++$row) {
+
                         $excelSchemeNo = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
+
+                        if (!isset($excelSchemeNo)) {
+                            continue;
+                        }
+
                         $excel1stPreferredMeetingDate = $objWorksheet->getCellByColumnAndRow(1, $row)->getValue();
                         $excel2ndPreferredMeetingDate = $objWorksheet->getCellByColumnAndRow(2, $row)->getValue();
                         $excelRejectReason = $objWorksheet->getCellByColumnAndRow(3, $row)->getValue();
@@ -194,103 +200,133 @@ class PlanningAheadController extends Controller {
                     $failSchemeNo = "";
 
                     for ($row = 2; $row <= $highestRow; ++$row) {
+
                         $excelSchemeNo = $objWorksheet->getCellByColumnAndRow(1, $row)->getValue();
-                        $excelBmsYesNo = $objWorksheet->getCellByColumnAndRow(4, $row)->getValue();
+
+                        if (!isset($excelSchemeNo)) {
+                            continue;
+                        }
+
+                        $excelBmsYesNo = $objWorksheet->getCellByColumnAndRow(5, $row)->getValue();
                         if (strtoupper($excelBmsYesNo) == 'YES') {
                             $excelBmsYesNo = 'Y';
                         } else {
                             $excelBmsYesNo = 'N';
                         }
-                        $excelBmsServerCentralComputer = $objWorksheet->getCellByColumnAndRow(5, $row)->getValue();
-                        $excelBmsDdc = $objWorksheet->getCellByColumnAndRow(6, $row)->getValue();
-                        $excelChangeoverSchemeYesNo = $objWorksheet->getCellByColumnAndRow(7, $row)->getValue();
+                        $excelBmsServerCentralComputer = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(6, $row)->getValue());
+                        $excelBmsDdc = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(7, $row)->getValue());
+                        $excelChangeoverSchemeYesNo = $objWorksheet->getCellByColumnAndRow(8, $row)->getValue();
                         if (strtoupper($excelChangeoverSchemeYesNo) == 'YES') {
                             $excelChangeoverSchemeYesNo = 'Y';
                         } else {
                             $excelChangeoverSchemeYesNo = 'N';
                         }
-                        $excelChangeoverSchemeControl = $objWorksheet->getCellByColumnAndRow(8, $row)->getValue();
-                        $excelChangeoverSchemeUv = $objWorksheet->getCellByColumnAndRow(9, $row)->getValue();
-                        $excelChillerPlantYesNo = $objWorksheet->getCellByColumnAndRow(10, $row)->getValue();
+                        $excelChangeoverSchemeControl = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(9, $row)->getValue());
+                        $excelChangeoverSchemeUv = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(10, $row)->getValue());
+                        $excelChillerPlantYesNo = $objWorksheet->getCellByColumnAndRow(11, $row)->getValue();
                         if (strtoupper($excelChillerPlantYesNo) == 'YES') {
                             $excelChillerPlantYesNo = 'Y';
                         } else {
                             $excelChillerPlantYesNo = 'N';
                         }
-                        $excelChillerPlantAhu = $objWorksheet->getCellByColumnAndRow(11, $row)->getValue();
-                        $excelChillerPlantChiller = $objWorksheet->getCellByColumnAndRow(12, $row)->getValue();
-                        $excelEscalatorYesNo = $objWorksheet->getCellByColumnAndRow(13, $row)->getValue();
+                        $excelChillerPlantAhuControl = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(12, $row)->getValue());
+                        $excelChillerPlantAhuStartup = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(13, $row)->getValue());
+                        $excelChillerPlantVsd = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(14, $row)->getValue());
+                        $excelChillerPlantAhuChilledWater = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(15, $row)->getValue());
+                        $excelChillerPlantStandbyAhu = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(16, $row)->getValue());
+                        $excelChillerPlantChiller = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(17, $row)->getValue());
+                        $excelEscalatorYesNo = $objWorksheet->getCellByColumnAndRow(18, $row)->getValue();
                         if (strtoupper($excelEscalatorYesNo) == 'YES') {
                             $excelEscalatorYesNo = 'Y';
                         } else {
                             $excelEscalatorYesNo = 'N';
                         }
-                        $excelEscalatorBrakingSystem = $objWorksheet->getCellByColumnAndRow(14, $row)->getValue();
-                        $excelEscalatorControl = $objWorksheet->getCellByColumnAndRow(15, $row)->getValue();
-                        $excelLiftYesNo = $objWorksheet->getCellByColumnAndRow(16, $row)->getValue();
+                        $excelEscalatorMotorStartup = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(19, $row)->getValue());
+                        $excelEscalatorVsdMitigation = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(20, $row)->getValue());
+                        $excelEscalatorBrakingSystem = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(21, $row)->getValue());
+                        $excelEscalatorControl = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(22, $row)->getValue());
+                        $excelLiftYesNo = $objWorksheet->getCellByColumnAndRow(23, $row)->getValue();
                         if (strtoupper($excelLiftYesNo) == 'YES') {
                             $excelLiftYesNo = 'Y';
                         } else {
                             $excelLiftYesNo = 'N';
                         }
-                        $excelLiftOperation = $objWorksheet->getCellByColumnAndRow(17, $row)->getValue();
-                        $excelHidLampYesNo = $objWorksheet->getCellByColumnAndRow(18, $row)->getValue();
+                        $excelLiftOperation = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(24, $row)->getValue());
+                        $excelHidLampYesNo = $objWorksheet->getCellByColumnAndRow(25, $row)->getValue();
                         if (strtoupper($excelHidLampYesNo) == 'YES') {
                             $excelHidLampYesNo = 'Y';
                         } else {
                             $excelHidLampYesNo = 'N';
                         }
-                        $excelHidLampBallast = $objWorksheet->getCellByColumnAndRow(19, $row)->getValue();
-                        $excelHidLampAddOnProtection = $objWorksheet->getCellByColumnAndRow(20, $row)->getValue();
-                        $excelSensitiveMachineYesNo = $objWorksheet->getCellByColumnAndRow(21, $row)->getValue();
+                        $excelHidLampMitigation = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(26, $row)->getValue());
+                        $excelSensitiveMachineYesNo = $objWorksheet->getCellByColumnAndRow(27, $row)->getValue();
                         if (strtoupper($excelSensitiveMachineYesNo) == 'YES') {
                             $excelSensitiveMachineYesNo = 'Y';
                         } else {
                             $excelSensitiveMachineYesNo = 'N';
                         }
-                        $excelSensitiveMachineMitigation = $objWorksheet->getCellByColumnAndRow(22, $row)->getValue();
-                        $excelTelecomMachineYesNo = $objWorksheet->getCellByColumnAndRow(23, $row)->getValue();
+                        $excelSensitiveMachineMitigation = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(28, $row)->getValue());
+                        $excelTelecomMachineYesNo = $objWorksheet->getCellByColumnAndRow(29, $row)->getValue();
                         if (strtoupper($excelTelecomMachineYesNo) == 'YES') {
                             $excelTelecomMachineYesNo = 'Y';
                         } else {
                             $excelTelecomMachineYesNo = 'N';
                         }
-                        $excelTelecomMachineServerOrComputer = $objWorksheet->getCellByColumnAndRow(24, $row)->getValue();
-                        $excelTelecomMachinePeripherals = $objWorksheet->getCellByColumnAndRow(25, $row)->getValue();
-                        $excelTelecomMachineHarmonicEmission = $objWorksheet->getCellByColumnAndRow(26, $row)->getValue();
-                        $excelAirConditionersYesNo = $objWorksheet->getCellByColumnAndRow(27, $row)->getValue();
+                        $excelTelecomMachineServerOrComputer = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(30, $row)->getValue());
+                        $excelTelecomMachinePeripherals = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(31, $row)->getValue());
+                        $excelTelecomMachineHarmonicEmission = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(32, $row)->getValue());
+                        $excelAirConditionersYesNo = $objWorksheet->getCellByColumnAndRow(33, $row)->getValue();
                         if (strtoupper($excelAirConditionersYesNo) == 'YES') {
                             $excelAirConditionersYesNo = 'Y';
                         } else {
                             $excelAirConditionersYesNo = 'N';
                         }
-                        $excelAirConditionersMicb = $objWorksheet->getCellByColumnAndRow(28, $row)->getValue();
-                        $excelAirConditionersLoadForecasting = $objWorksheet->getCellByColumnAndRow(29, $row)->getValue();
-                        $excelAirConditionersType = $objWorksheet->getCellByColumnAndRow(30, $row)->getValue();
-                        $excelNonLinearLoadYesNo = $objWorksheet->getCellByColumnAndRow(31, $row)->getValue();
+                        $excelAirConditionersMicb = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(34, $row)->getValue());
+                        $excelAirConditionersLoadForecasting = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(35, $row)->getValue());
+                        $excelAirConditionersType = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(36, $row)->getValue());
+                        $excelNonLinearLoadYesNo = $objWorksheet->getCellByColumnAndRow(37, $row)->getValue();
                         if (strtoupper($excelNonLinearLoadYesNo) == 'YES') {
                             $excelNonLinearLoadYesNo = 'Y';
                         } else {
                             $excelNonLinearLoadYesNo = 'N';
                         }
-                        $excelNonLinearLoadHarmonicEmission = $objWorksheet->getCellByColumnAndRow(32, $row)->getValue();
-                        $excelRenewableEnergyYesNo = $objWorksheet->getCellByColumnAndRow(33, $row)->getValue();
+                        $excelNonLinearLoadHarmonicEmission = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(38, $row)->getValue());
+                        $excelRenewableEnergyYesNo = $objWorksheet->getCellByColumnAndRow(39, $row)->getValue();
                         if (strtoupper($excelRenewableEnergyYesNo) == 'YES') {
                             $excelRenewableEnergyYesNo = 'Y';
                         } else {
                             $excelRenewableEnergyYesNo = 'N';
                         }
-                        $excelRenewableEnergyInverterAndControls = $objWorksheet->getCellByColumnAndRow(34, $row)->getValue();
-                        $excelRenewableEnergyHarmonicEmission = $objWorksheet->getCellByColumnAndRow(35, $row)->getValue();
-                        $excelEvChargerSystemYesNo = $objWorksheet->getCellByColumnAndRow(36, $row)->getValue();
+                        $excelRenewableEnergyInverterAndControls = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(40, $row)->getValue());
+                        $excelRenewableEnergyHarmonicEmission = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(41, $row)->getValue());
+                        $excelEvChargerSystemYesNo = $objWorksheet->getCellByColumnAndRow(42, $row)->getValue();
                         if (strtoupper($excelEvChargerSystemYesNo) == 'YES') {
                             $excelEvChargerSystemYesNo = 'Y';
                         } else {
                             $excelEvChargerSystemYesNo = 'N';
                         }
-                        $excelEvChargerSystemEvCharger = $objWorksheet->getCellByColumnAndRow(37, $row)->getValue();
-                        $excelEvChargerSystemSmartChargingSystem = $objWorksheet->getCellByColumnAndRow(38, $row)->getValue();
-                        $excelEvChargerSystemHarmonicEmission = $objWorksheet->getCellByColumnAndRow(39, $row)->getValue();
+                        $excelEvControlYesNo = $objWorksheet->getCellByColumnAndRow(43, $row)->getValue();
+                        if (strtoupper($excelEvControlYesNo) == 'YES') {
+                            $excelEvControlYesNo = 'Y';
+                        } else {
+                            $excelEvControlYesNo = 'N';
+                        }
+                        $excelEvChargerSystemEvCharger = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(44, $row)->getValue());
+                        $excelEvChargerSystemSmartYesNo = $objWorksheet->getCellByColumnAndRow(45, $row)->getValue();
+                        if (strtoupper($excelEvChargerSystemSmartYesNo) == 'YES') {
+                            $excelEvChargerSystemSmartYesNo = 'Y';
+                        } else {
+                            $excelEvChargerSystemSmartYesNo = 'N';
+                        }
+                        $excelEvChargerSystemSmartChargingSystem = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(46, $row)->getValue());
+                        $excelEvChargerSystemHarmonicEmission = $this->replaceListToLines($objWorksheet->getCellByColumnAndRow(47, $row)->getValue());
+
+                        $excelConsultantNameConfirmation = $objWorksheet->getCellByColumnAndRow(48, $row)->getValue();
+                        $excelConsultantCompany = $objWorksheet->getCellByColumnAndRow(50, $row)->getValue();
+
+                        $excelProjectOwnerNameConfirmation = $objWorksheet->getCellByColumnAndRow(51, $row)->getValue();
+                        $excelProjectOwnerCompany = $objWorksheet->getCellByColumnAndRow(53, $row)->getValue();
+
                         $createdBy = Yii::app()->session['tblUserDo']['username'];
                         $createdTime = date("Y-m-d H:i");
                         $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
@@ -303,33 +339,43 @@ class PlanningAheadController extends Controller {
                                 $result = Yii::app()->planningAheadDao->addReplySlip($excelSchemeNo,$targetFilePath,
                                     $excelBmsYesNo,$excelBmsServerCentralComputer,$excelBmsDdc,
                                     $excelChangeoverSchemeYesNo,$excelChangeoverSchemeControl,$excelChangeoverSchemeUv,
-                                    $excelChillerPlantYesNo,$excelChillerPlantAhu,$excelChillerPlantChiller,
-                                    $excelEscalatorYesNo,$excelEscalatorBrakingSystem,$excelEscalatorControl,
-                                    $excelLiftYesNo,$excelLiftOperation,$excelHidLampYesNo,$excelHidLampBallast,
-                                    $excelHidLampAddOnProtection,$excelSensitiveMachineYesNo,$excelSensitiveMachineMitigation,
+                                    $excelChillerPlantYesNo,$excelChillerPlantAhuControl,$excelChillerPlantAhuStartup,$excelChillerPlantVsd,
+                                    $excelChillerPlantAhuChilledWater,$excelChillerPlantStandbyAhu,$excelChillerPlantChiller,
+                                    $excelEscalatorYesNo,$excelEscalatorMotorStartup,$excelEscalatorVsdMitigation,
+                                    $excelEscalatorBrakingSystem,$excelEscalatorControl,
+                                    $excelLiftYesNo,$excelLiftOperation,$excelHidLampYesNo,$excelHidLampMitigation,
+                                    $excelSensitiveMachineYesNo,$excelSensitiveMachineMitigation,
                                     $excelTelecomMachineYesNo,$excelTelecomMachineServerOrComputer,$excelTelecomMachinePeripherals,
                                     $excelTelecomMachineHarmonicEmission,$excelAirConditionersYesNo,$excelAirConditionersMicb,
                                     $excelAirConditionersLoadForecasting,$excelAirConditionersType,$excelNonLinearLoadYesNo,
                                     $excelNonLinearLoadHarmonicEmission,$excelRenewableEnergyYesNo,$excelRenewableEnergyInverterAndControls,
-                                    $excelRenewableEnergyHarmonicEmission,$excelEvChargerSystemYesNo,$excelEvChargerSystemEvCharger,
+                                    $excelRenewableEnergyHarmonicEmission,$excelEvChargerSystemYesNo,$excelEvControlYesNo,
+                                    $excelEvChargerSystemEvCharger,$excelEvChargerSystemSmartYesNo,
                                     $excelEvChargerSystemSmartChargingSystem,$excelEvChargerSystemHarmonicEmission,
+                                    $excelConsultantNameConfirmation,$excelConsultantCompany,
+                                    $excelProjectOwnerNameConfirmation,$excelProjectOwnerCompany,
                                     $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime);
 
                             } else {
                                 $result = Yii::app()->planningAheadDao->updateReplySlip($projectDetail['meetingReplySlipId'],
                                     $targetFilePath, $excelBmsYesNo,$excelBmsServerCentralComputer,$excelBmsDdc,
                                     $excelChangeoverSchemeYesNo,$excelChangeoverSchemeControl,$excelChangeoverSchemeUv,
-                                    $excelChillerPlantYesNo,$excelChillerPlantAhu,$excelChillerPlantChiller,
-                                    $excelEscalatorYesNo,$excelEscalatorBrakingSystem,$excelEscalatorControl,
-                                    $excelLiftYesNo,$excelLiftOperation,$excelHidLampYesNo,$excelHidLampBallast,
-                                    $excelHidLampAddOnProtection,$excelSensitiveMachineYesNo,$excelSensitiveMachineMitigation,
+                                    $excelChillerPlantYesNo,$excelChillerPlantAhuControl,$excelChillerPlantAhuStartup,$excelChillerPlantVsd,
+                                    $excelChillerPlantAhuChilledWater,$excelChillerPlantStandbyAhu,$excelChillerPlantChiller,
+                                    $excelEscalatorYesNo,$excelEscalatorMotorStartup,$excelEscalatorVsdMitigation,
+                                    $excelEscalatorBrakingSystem,$excelEscalatorControl,
+                                    $excelLiftYesNo,$excelLiftOperation,$excelHidLampYesNo,$excelHidLampMitigation,
+                                    $excelSensitiveMachineYesNo,$excelSensitiveMachineMitigation,
                                     $excelTelecomMachineYesNo,$excelTelecomMachineServerOrComputer,$excelTelecomMachinePeripherals,
                                     $excelTelecomMachineHarmonicEmission,$excelAirConditionersYesNo,$excelAirConditionersMicb,
                                     $excelAirConditionersLoadForecasting,$excelAirConditionersType,$excelNonLinearLoadYesNo,
                                     $excelNonLinearLoadHarmonicEmission,$excelRenewableEnergyYesNo,$excelRenewableEnergyInverterAndControls,
-                                    $excelRenewableEnergyHarmonicEmission,$excelEvChargerSystemYesNo,$excelEvChargerSystemEvCharger,
+                                    $excelRenewableEnergyHarmonicEmission,$excelEvChargerSystemYesNo,$excelEvControlYesNo,
+                                    $excelEvChargerSystemEvCharger,$excelEvChargerSystemSmartYesNo,
                                     $excelEvChargerSystemSmartChargingSystem,$excelEvChargerSystemHarmonicEmission,
-                                    $lastUpdatedBy,$lastUpdatedTime);
+                                    $excelConsultantNameConfirmation,$excelConsultantCompany,
+                                    $excelProjectOwnerNameConfirmation,$excelProjectOwnerCompany,
+                                    $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime);
                             }
 
                             if ($result['status'] == 'OK') {
@@ -454,14 +500,19 @@ class PlanningAheadController extends Controller {
             $this->viewbag['replySlipChangeoverSchemeControl'] = $recordList['replySlipChangeoverSchemeControl'];
             $this->viewbag['replySlipChangeoverSchemeUv'] = $recordList['replySlipChangeoverSchemeUv'];
             $this->viewbag['replySlipChillerPlantYesNo'] = $recordList['replySlipChillerPlantYesNo'];
-            $this->viewbag['replySlipChillerPlantAhu'] = $recordList['replySlipChillerPlantAhu'];
+            $this->viewbag['replySlipChillerPlantAhuControl'] = $recordList['replySlipChillerPlantAhuControl'];
+            $this->viewbag['replySlipChillerPlantAhuStartup'] = $recordList['replySlipChillerPlantAhuStartup'];
+            $this->viewbag['replySlipChillerPlantVsd'] = $recordList['replySlipChillerPlantVsd'];
+            $this->viewbag['replySlipChillerPlantAhuChilledWater'] = $recordList['replySlipChillerPlantAhuChilledWater'];
+            $this->viewbag['replySlipChillerPlantStandbyAhu'] = $recordList['replySlipChillerPlantStandbyAhu'];
             $this->viewbag['replySlipChillerPlantChiller'] = $recordList['replySlipChillerPlantChiller'];
             $this->viewbag['replySlipEscalatorYesNo'] = $recordList['replySlipEscalatorYesNo'];
+            $this->viewbag['replySlipEscalatorMotorStartup'] = $recordList['replySlipEscalatorMotorStartup'];
+            $this->viewbag['replySlipEscalatorVsdMitigation'] = $recordList['replySlipEscalatorVsdMitigation'];
             $this->viewbag['replySlipEscalatorBrakingSystem'] = $recordList['replySlipEscalatorBrakingSystem'];
             $this->viewbag['replySlipEscalatorControl'] = $recordList['replySlipEscalatorControl'];
             $this->viewbag['replySlipHidLampYesNo'] = $recordList['replySlipHidLampYesNo'];
-            $this->viewbag['replySlipHidLampBallast'] = $recordList['replySlipHidLampBallast'];
-            $this->viewbag['replySlipHidLampAddOnProtection'] = $recordList['replySlipHidLampAddOnProtection'];
+            $this->viewbag['replySlipHidLampMitigation'] = $recordList['replySlipHidLampMitigation'];
             $this->viewbag['replySlipLiftYesNo'] = $recordList['replySlipLiftYesNo'];
             $this->viewbag['replySlipLiftOperation'] = $recordList['replySlipLiftOperation'];
             $this->viewbag['replySlipSensitiveMachineYesNo'] = $recordList['replySlipSensitiveMachineYesNo'];
@@ -480,9 +531,15 @@ class PlanningAheadController extends Controller {
             $this->viewbag['replySlipRenewableEnergyInverterAndControls'] = $recordList['replySlipRenewableEnergyInverterAndControls'];
             $this->viewbag['replySlipRenewableEnergyHarmonicEmission'] = $recordList['replySlipRenewableEnergyHarmonicEmission'];
             $this->viewbag['replySlipEvChargerSystemYesNo'] = $recordList['replySlipEvChargerSystemYesNo'];
+            $this->viewbag['replySlipEvControlYesNo'] = $recordList['replySlipEvControlYesNo'];
             $this->viewbag['replySlipEvChargerSystemEvCharger'] = $recordList['replySlipEvChargerSystemEvCharger'];
+            $this->viewbag['replySlipEvChargerSystemSmartYesNo'] = $recordList['replySlipEvChargerSystemSmartYesNo'];
             $this->viewbag['replySlipEvChargerSystemSmartChargingSystem'] = $recordList['replySlipEvChargerSystemSmartChargingSystem'];
             $this->viewbag['replySlipEvChargerSystemHarmonicEmission'] = $recordList['replySlipEvChargerSystemHarmonicEmission'];
+            $this->viewbag['replySlipConsultantNameConfirmation'] = $recordList['replySlipConsultantNameConfirmation'];
+            $this->viewbag['replySlipConsultantCompany'] = $recordList['replySlipConsultantCompany'];
+            $this->viewbag['replySlipProjectOwnerNameConfirmation'] = $recordList['replySlipProjectOwnerNameConfirmation'];
+            $this->viewbag['replySlipProjectOwnerCompany'] = $recordList['replySlipProjectOwnerCompany'];
             $this->viewbag['firstInvitationLetterIssueDate'] = $recordList['firstInvitationLetterIssueDate'];
             $this->viewbag['firstInvitationLetterFaxRefNo'] = $recordList['firstInvitationLetterFaxRefNo'];
             $this->viewbag['firstInvitationLetterEdmsLink'] = $recordList['firstInvitationLetterEdmsLink'];
@@ -504,6 +561,156 @@ class PlanningAheadController extends Controller {
             $this->viewbag['forthInvitationLetterAccept'] = $recordList['forthInvitationLetterAccept'];
             $this->viewbag['forthInvitationLetterWalkDate'] = $recordList['forthInvitationLetterWalkDate'];
             $this->viewbag['evaReportId'] = $recordList['evaReportId'];
+            $this->viewbag['evaReportRemark'] = $recordList['evaReportRemark'];
+            $this->viewbag['evaReportEdmsLink'] = $recordList['evaReportEdmsLink'];
+            $this->viewbag['evaReportIssueDate'] = $recordList['evaReportIssueDate'];
+            $this->viewbag['evaReportFaxRefNo'] = $recordList['evaReportFaxRefNo'];
+            $this->viewbag['evaReportScore'] = $recordList['evaReportScore'];
+            $this->viewbag['evaReportBmsYesNo'] = $recordList['evaReportBmsYesNo'];
+            $this->viewbag['evaReportBmsServerCentralComputerYesNo'] = $recordList['evaReportBmsServerCentralComputerYesNo'];
+            $this->viewbag['evaReportBmsServerCentralComputerFinding'] = $recordList['evaReportBmsServerCentralComputerFinding'];
+            $this->viewbag['evaReportBmsServerCentralComputerRecommend'] = $recordList['evaReportBmsServerCentralComputerRecommend'];
+            $this->viewbag['evaReportBmsServerCentralComputerPass'] = $recordList['evaReportBmsServerCentralComputerPass'];
+            $this->viewbag['evaReportBmsDdcYesNo'] = $recordList['evaReportBmsDdcYesNo'];
+            $this->viewbag['evaReportBmsDdcFinding'] = $recordList['evaReportBmsDdcFinding'];
+            $this->viewbag['evaReportBmsDdcRecommend'] = $recordList['evaReportBmsDdcRecommend'];
+            $this->viewbag['evaReportBmsDdcPass'] = $recordList['evaReportBmsDdcPass'];
+            $this->viewbag['evaReportBmsSupplementYesNo'] = $recordList['evaReportBmsSupplementYesNo'];
+            $this->viewbag['evaReportBmsSupplement'] = $recordList['evaReportBmsSupplement'];
+            $this->viewbag['evaReportBmsSupplementPass'] = $recordList['evaReportBmsSupplementPass'];
+            $this->viewbag['evaReportChangeoverSchemeYesNo'] = $recordList['evaReportChangeoverSchemeYesNo'];
+            $this->viewbag['evaReportChangeoverSchemeControlYesNo'] = $recordList['evaReportChangeoverSchemeControlYesNo'];
+            $this->viewbag['evaReportChangeoverSchemeControlFinding'] = $recordList['evaReportChangeoverSchemeControlFinding'];
+            $this->viewbag['evaReportChangeoverSchemeControlRecommend'] = $recordList['evaReportChangeoverSchemeControlRecommend'];
+            $this->viewbag['evaReportChangeoverSchemeControlPass'] = $recordList['evaReportChangeoverSchemeControlPass'];
+            $this->viewbag['evaReportChangeoverSchemeUvYesNo'] = $recordList['evaReportChangeoverSchemeUvYesNo'];
+            $this->viewbag['evaReportChangeoverSchemeUvFinding'] = $recordList['evaReportChangeoverSchemeUvFinding'];
+            $this->viewbag['evaReportChangeoverSchemeUvRecommend'] = $recordList['evaReportChangeoverSchemeUvRecommend'];
+            $this->viewbag['evaReportChangeoverSchemeUvPass'] = $recordList['evaReportChangeoverSchemeUvPass'];
+            $this->viewbag['evaReportChangeoverSchemeSupplementYesNo'] = $recordList['evaReportChangeoverSchemeSupplementYesNo'];
+            $this->viewbag['evaReportChangeoverSchemeSupplement'] = $recordList['evaReportChangeoverSchemeSupplement'];
+            $this->viewbag['evaReportChangeoverSchemeSupplementPass'] = $recordList['evaReportChangeoverSchemeSupplementPass'];
+            $this->viewbag['evaReportChillerPlantYesNo'] = $recordList['evaReportChillerPlantYesNo'];
+            $this->viewbag['evaReportChillerPlantAhuChilledWaterYesNo'] = $recordList['evaReportChillerPlantAhuChilledWaterYesNo'];
+            $this->viewbag['evaReportChillerPlantAhuChilledWaterFinding'] = $recordList['evaReportChillerPlantAhuChilledWaterFinding'];
+            $this->viewbag['evaReportChillerPlantAhuChilledWaterRecommend'] = $recordList['evaReportChillerPlantAhuChilledWaterRecommend'];
+            $this->viewbag['evaReportChillerPlantAhuChilledWaterPass'] = $recordList['evaReportChillerPlantAhuChilledWaterPass'];
+            $this->viewbag['evaReportChillerPlantChillerYesNo'] = $recordList['evaReportChillerPlantChillerYesNo'];
+            $this->viewbag['evaReportChillerPlantChillerFinding'] = $recordList['evaReportChillerPlantChillerFinding'];
+            $this->viewbag['evaReportChillerPlantChillerRecommend'] = $recordList['evaReportChillerPlantChillerRecommend'];
+            $this->viewbag['evaReportChillerPlantChillerPass'] = $recordList['evaReportChillerPlantChillerPass'];
+            $this->viewbag['evaReportChillerPlantSupplementYesNo'] = $recordList['evaReportChillerPlantSupplementYesNo'];
+            $this->viewbag['evaReportChillerPlantSupplement'] = $recordList['evaReportChillerPlantSupplement'];
+            $this->viewbag['evaReportChillerPlantSupplementPass'] = $recordList['evaReportChillerPlantSupplementPass'];
+            $this->viewbag['evaReportEscalatorYesNo'] = $recordList['evaReportEscalatorYesNo'];
+            $this->viewbag['evaReportEscalatorBrakingSystemYesNo'] = $recordList['evaReportEscalatorBrakingSystemYesNo'];
+            $this->viewbag['evaReportEscalatorBrakingSystemFinding'] = $recordList['evaReportEscalatorBrakingSystemFinding'];
+            $this->viewbag['evaReportEscalatorBrakingSystemRecommend'] = $recordList['evaReportEscalatorBrakingSystemRecommend'];
+            $this->viewbag['evaReportEscalatorBrakingSystemPass'] = $recordList['evaReportEscalatorBrakingSystemPass'];
+            $this->viewbag['evaReportEscalatorControlYesNo'] = $recordList['evaReportEscalatorControlYesNo'];
+            $this->viewbag['evaReportEscalatorControlFinding'] = $recordList['evaReportEscalatorControlFinding'];
+            $this->viewbag['evaReportEscalatorControlRecommend'] = $recordList['evaReportEscalatorControlRecommend'];
+            $this->viewbag['evaReportEscalatorControlPass'] = $recordList['evaReportEscalatorControlPass'];
+            $this->viewbag['evaReportEscalatorSupplementYesNo'] = $recordList['evaReportEscalatorSupplementYesNo'];
+            $this->viewbag['evaReportEscalatorSupplement'] = $recordList['evaReportEscalatorSupplement'];
+            $this->viewbag['evaReportEscalatorSupplementPass'] = $recordList['evaReportEscalatorSupplementPass'];
+            $this->viewbag['evaReportLiftYesNo'] = $recordList['evaReportLiftYesNo'];
+            $this->viewbag['evaReportLiftOperationYesNo'] = $recordList['evaReportLiftOperationYesNo'];
+            $this->viewbag['evaReportLiftOperationFinding'] = $recordList['evaReportLiftOperationFinding'];
+            $this->viewbag['evaReportLiftOperationRecommend'] = $recordList['evaReportLiftOperationRecommend'];
+            $this->viewbag['evaReportLiftOperationPass'] = $recordList['evaReportLiftOperationPass'];
+            $this->viewbag['evaReportLiftMainSupplyYesNo'] = $recordList['evaReportLiftMainSupplyYesNo'];
+            $this->viewbag['evaReportLiftMainSupplyFinding'] = $recordList['evaReportLiftMainSupplyFinding'];
+            $this->viewbag['evaReportLiftMainSupplyRecommend'] = $recordList['evaReportLiftMainSupplyRecommend'];
+            $this->viewbag['evaReportLiftMainSupplyPass'] = $recordList['evaReportLiftMainSupplyPass'];
+            $this->viewbag['evaReportLiftSupplementYesNo'] = $recordList['evaReportLiftSupplementYesNo'];
+            $this->viewbag['evaReportLiftSupplement'] = $recordList['evaReportLiftSupplement'];
+            $this->viewbag['evaReportLiftSupplementPass'] = $recordList['evaReportLiftSupplementPass'];
+            $this->viewbag['evaReportHidLampYesNo'] = $recordList['evaReportHidLampYesNo'];
+            $this->viewbag['evaReportHidLampBallastYesNo'] = $recordList['evaReportHidLampBallastYesNo'];
+            $this->viewbag['evaReportHidLampBallastFinding'] = $recordList['evaReportHidLampBallastFinding'];
+            $this->viewbag['evaReportHidLampBallastRecommend'] = $recordList['evaReportHidLampBallastRecommend'];
+            $this->viewbag['evaReportHidLampBallastPass'] = $recordList['evaReportHidLampBallastPass'];
+            $this->viewbag['evaReportHidLampAddonProtectYesNo'] = $recordList['evaReportHidLampAddonProtectYesNo'];
+            $this->viewbag['evaReportHidLampAddonProtectFinding'] = $recordList['evaReportHidLampAddonProtectFinding'];
+            $this->viewbag['evaReportHidLampAddonProtectRecommend'] = $recordList['evaReportHidLampAddonProtectRecommend'];
+            $this->viewbag['evaReportHidLampAddonProtectPass'] = $recordList['evaReportHidLampAddonProtectPass'];
+            $this->viewbag['evaReportHidLampSupplementYesNo'] = $recordList['evaReportHidLampSupplementYesNo'];
+            $this->viewbag['evaReportHidLampSupplement'] = $recordList['evaReportHidLampSupplement'];
+            $this->viewbag['evaReportHidLampSupplementPass'] = $recordList['evaReportHidLampSupplementPass'];
+            $this->viewbag['evaReportSensitiveMachineYesNo'] = $recordList['evaReportSensitiveMachineYesNo'];
+            $this->viewbag['evaReportSensitiveMachineMedicalYesNo'] = $recordList['evaReportSensitiveMachineMedicalYesNo'];
+            $this->viewbag['evaReportSensitiveMachineMedicalFinding'] = $recordList['evaReportSensitiveMachineMedicalFinding'];
+            $this->viewbag['evaReportSensitiveMachineMedicalRecommend'] = $recordList['evaReportSensitiveMachineMedicalRecommend'];
+            $this->viewbag['evaReportSensitiveMachineMedicalPass'] = $recordList['evaReportSensitiveMachineMedicalPass'];
+            $this->viewbag['evaReportSensitiveMachineSupplementYesNo'] = $recordList['evaReportSensitiveMachineSupplementYesNo'];
+            $this->viewbag['evaReportSensitiveMachineSupplement'] = $recordList['evaReportSensitiveMachineSupplement'];
+            $this->viewbag['evaReportSensitiveMachineSupplementPass'] = $recordList['evaReportSensitiveMachineSupplementPass'];
+            $this->viewbag['evaReportTelecomMachineYesNo'] = $recordList['evaReportTelecomMachineYesNo'];
+            $this->viewbag['evaReportTelecomMachineServerOrComputerYesNo'] = $recordList['evaReportTelecomMachineServerOrComputerYesNo'];
+            $this->viewbag['evaReportTelecomMachineServerOrComputerFinding'] = $recordList['evaReportTelecomMachineServerOrComputerFinding'];
+            $this->viewbag['evaReportTelecomMachineServerOrComputerRecommend'] = $recordList['evaReportTelecomMachineServerOrComputerRecommend'];
+            $this->viewbag['evaReportTelecomMachineServerOrComputerPass'] = $recordList['evaReportTelecomMachineServerOrComputerPass'];
+            $this->viewbag['evaReportTelecomMachinePeripheralsYesNo'] = $recordList['evaReportTelecomMachinePeripheralsYesNo'];
+            $this->viewbag['evaReportTelecomMachinePeripheralsFinding'] = $recordList['evaReportTelecomMachinePeripheralsFinding'];
+            $this->viewbag['evaReportTelecomMachinePeripheralsRecommend'] = $recordList['evaReportTelecomMachinePeripheralsRecommend'];
+            $this->viewbag['evaReportTelecomMachinePeripheralsPass'] = $recordList['evaReportTelecomMachinePeripheralsPass'];
+            $this->viewbag['evaReportTelecomMachineHarmonicEmissionYesNo'] = $recordList['evaReportTelecomMachineHarmonicEmissionYesNo'];
+            $this->viewbag['evaReportTelecomMachineHarmonicEmissionFinding'] = $recordList['evaReportTelecomMachineHarmonicEmissionFinding'];
+            $this->viewbag['evaReportTelecomMachineHarmonicEmissionRecommend'] = $recordList['evaReportTelecomMachineHarmonicEmissionRecommend'];
+            $this->viewbag['evaReportTelecomMachineHarmonicEmissionPass'] = $recordList['evaReportTelecomMachineHarmonicEmissionPass'];
+            $this->viewbag['evaReportTelecomMachineSupplementYesNo'] = $recordList['evaReportTelecomMachineSupplementYesNo'];
+            $this->viewbag['evaReportTelecomMachineSupplement'] = $recordList['evaReportTelecomMachineSupplement'];
+            $this->viewbag['evaReportTelecomMachineSupplementPass'] = $recordList['evaReportTelecomMachineSupplementPass'];
+            $this->viewbag['evaReportAirConditionersYesNo'] = $recordList['evaReportAirConditionersYesNo'];
+            $this->viewbag['evaReportAirConditionersMicbYesNo'] = $recordList['evaReportAirConditionersMicbYesNo'];
+            $this->viewbag['evaReportAirConditionersMicbFinding'] = $recordList['evaReportAirConditionersMicbFinding'];
+            $this->viewbag['evaReportAirConditionersMicbRecommend'] = $recordList['evaReportAirConditionersMicbRecommend'];
+            $this->viewbag['evaReportAirConditionersMicbPass'] = $recordList['evaReportAirConditionersMicbPass'];
+            $this->viewbag['evaReportAirConditionersLoadForecastingYesNo'] = $recordList['evaReportAirConditionersLoadForecastingYesNo'];
+            $this->viewbag['evaReportAirConditionersLoadForecastingFinding'] = $recordList['evaReportAirConditionersLoadForecastingFinding'];
+            $this->viewbag['evaReportAirConditionersLoadForecastingRecommend'] = $recordList['evaReportAirConditionersLoadForecastingRecommend'];
+            $this->viewbag['evaReportAirConditionersLoadForecastingPass'] = $recordList['evaReportAirConditionersLoadForecastingPass'];
+            $this->viewbag['evaReportAirConditionersTypeYesNo'] = $recordList['evaReportAirConditionersTypeYesNo'];
+            $this->viewbag['evaReportAirConditionersTypeFinding'] = $recordList['evaReportAirConditionersTypeFinding'];
+            $this->viewbag['evaReportAirConditionersTypeRecommend'] = $recordList['evaReportAirConditionersTypeRecommend'];
+            $this->viewbag['evaReportAirConditionersTypePass'] = $recordList['evaReportAirConditionersTypePass'];
+            $this->viewbag['evaReportAirConditionersSupplementYesNo'] = $recordList['evaReportAirConditionersSupplementYesNo'];
+            $this->viewbag['evaReportAirConditionersSupplement'] = $recordList['evaReportAirConditionersSupplement'];
+            $this->viewbag['evaReportAirConditionersSupplementPass'] = $recordList['evaReportAirConditionersSupplementPass'];
+            $this->viewbag['evaReportNonLinearLoadYesNo'] = $recordList['evaReportNonLinearLoadYesNo'];
+            $this->viewbag['evaReportNonLinearLoadHarmonicEmissionYesNo'] = $recordList['evaReportNonLinearLoadHarmonicEmissionYesNo'];
+            $this->viewbag['evaReportNonLinearLoadHarmonicEmissionFinding'] = $recordList['evaReportNonLinearLoadHarmonicEmissionFinding'];
+            $this->viewbag['evaReportNonLinearLoadHarmonicEmissionRecommend'] = $recordList['evaReportNonLinearLoadHarmonicEmissionRecommend'];
+            $this->viewbag['evaReportNonLinearLoadHarmonicEmissionPass'] = $recordList['evaReportNonLinearLoadHarmonicEmissionPass'];
+            $this->viewbag['evaReportRenewableEnergyYesNo'] = $recordList['evaReportRenewableEnergyYesNo'];
+            $this->viewbag['evaReportRenewableEnergyInverterAndControlsYesNo'] = $recordList['evaReportRenewableEnergyInverterAndControlsYesNo'];
+            $this->viewbag['evaReportRenewableEnergyInverterAndControlsFinding'] = $recordList['evaReportRenewableEnergyInverterAndControlsFinding'];
+            $this->viewbag['evaReportRenewableEnergyInverterAndControlsRecommend'] = $recordList['evaReportRenewableEnergyInverterAndControlsRecommend'];
+            $this->viewbag['evaReportRenewableEnergyInverterAndControlsPass'] = $recordList['evaReportRenewableEnergyInverterAndControlsPass'];
+            $this->viewbag['evaReportRenewableEnergyHarmonicEmissionYesNo'] = $recordList['evaReportRenewableEnergyHarmonicEmissionYesNo'];
+            $this->viewbag['evaReportRenewableEnergyHarmonicEmissionFinding'] = $recordList['evaReportRenewableEnergyHarmonicEmissionFinding'];
+            $this->viewbag['evaReportRenewableEnergyHarmonicEmissionRecommend'] = $recordList['evaReportRenewableEnergyHarmonicEmissionRecommend'];
+            $this->viewbag['evaReportRenewableEnergyHarmonicEmissionPass'] = $recordList['evaReportRenewableEnergyHarmonicEmissionPass'];
+            $this->viewbag['evaReportRenewableEnergySupplementYesNo'] = $recordList['evaReportRenewableEnergySupplementYesNo'];
+            $this->viewbag['evaReportRenewableEnergySupplement'] = $recordList['evaReportRenewableEnergySupplement'];
+            $this->viewbag['evaReportRenewableEnergySupplementPass'] = $recordList['evaReportRenewableEnergySupplementPass'];
+            $this->viewbag['evaReportEvChargerSystemYesNo'] = $recordList['evaReportEvChargerSystemYesNo'];
+            $this->viewbag['evaReportEvChargerSystemEvChargerYesNo'] = $recordList['evaReportEvChargerSystemEvChargerYesNo'];
+            $this->viewbag['evaReportEvChargerSystemEvChargerFinding'] = $recordList['evaReportEvChargerSystemEvChargerFinding'];
+            $this->viewbag['evaReportEvChargerSystemEvChargerRecommend'] = $recordList['evaReportEvChargerSystemEvChargerRecommend'];
+            $this->viewbag['evaReportEvChargerSystemEvChargerPass'] = $recordList['evaReportEvChargerSystemEvChargerPass'];
+            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemYesNo'] = $recordList['evaReportEvChargerSystemSmartChargingSystemYesNo'];
+            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemFinding'] = $recordList['evaReportEvChargerSystemSmartChargingSystemFinding'];
+            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemRecommend'] = $recordList['evaReportEvChargerSystemSmartChargingSystemRecommend'];
+            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemPass'] = $recordList['evaReportEvChargerSystemSmartChargingSystemPass'];
+            $this->viewbag['evaReportEvChargerSystemHarmonicEmissionYesNo'] = $recordList['evaReportEvChargerSystemHarmonicEmissionYesNo'];
+            $this->viewbag['evaReportEvChargerSystemHarmonicEmissionFinding'] = $recordList['evaReportEvChargerSystemHarmonicEmissionFinding'];
+            $this->viewbag['evaReportEvChargerSystemHarmonicEmissionRecommend'] = $recordList['evaReportEvChargerSystemHarmonicEmissionRecommend'];
+            $this->viewbag['evaReportEvChargerSystemHarmonicEmissionPass'] = $recordList['evaReportEvChargerSystemHarmonicEmissionPass'];
+            $this->viewbag['evaReportEvChargerSystemSupplementYesNo'] = $recordList['evaReportEvChargerSystemSupplementYesNo'];
+            $this->viewbag['evaReportEvChargerSystemSupplement'] = $recordList['evaReportEvChargerSystemSupplement'];
+            $this->viewbag['evaReportEvChargerSystemSupplementPass'] = $recordList['evaReportEvChargerSystemSupplementPass'];
             $this->viewbag['state'] = $recordList['state'];
             $this->viewbag['active'] = $recordList['active'];
             $this->viewbag['createdBy'] = $recordList['createdBy'];
@@ -552,13 +759,13 @@ class PlanningAheadController extends Controller {
 
         $templateProcessor = new TemplateProcessor($standardLetterTemplatePath['configValue'] . $projectType[0]['projectTypeTemplateFileName']);
         $templateProcessor->setValue('consultantTitle', $recordList['firstConsultantTitle']);
-        $templateProcessor->setValue('consultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('consultantCompanyName', $recordList['firstConsultantCompany']);
-        $templateProcessor->setValue('consultantEmail', $recordList['firstConsultantEmail']);
+        $templateProcessor->setValue('consultantSurname', $this->formatToWordTemplate($recordList['firstConsultantSurname']));
+        $templateProcessor->setValue('consultantCompanyName', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
+        $templateProcessor->setValue('consultantEmail', $this->formatToWordTemplate($recordList['firstConsultantEmail']));
         $templateProcessor->setValue('faxRefNo', $standLetterFaxRefNo);
         $templateProcessor->setValue('faxDate', $standLetterFaxYear . "-" . $standLetterFaxMonth);
         $templateProcessor->setValue('issueDate', $standLetterIssueDay . " " . $standLetterIssueMonth . " " . $standLetterIssueYear);
-        $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
 
         $pathToSave = $standardLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' . $projectType[0]['projectTypeTemplateFileName'];
         $templateProcessor->saveAs($pathToSave);
@@ -573,11 +780,158 @@ class PlanningAheadController extends Controller {
         flush();
 
         //Read the size of the file
-        readfile($pathToSave,true);
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
 
         die();
 
     }
+
+    public function actionGetPlanningAheadProjectDetailReplySlipTemplate() {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        $schemeNo = $param['schemeNo'];
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+        $checkedBox='<w:sym w:font="Wingdings" w:char="F0FE"/>';
+        $unCheckedBox = '<w:sym w:font="Wingdings" w:char="F0A8"/>';
+
+        $replySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+        $replySlipTemplateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplateFileName');
+
+        $templateProcessor = new TemplateProcessor($replySlipTemplatePath['configValue'] . $replySlipTemplateFileName['configValue']);
+
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+        $templateProcessor->setValue('commissionDate', $recordList['commissionDate']);
+        if ($recordList['replySlipBmsYesNo'] == 'Y') {
+            $templateProcessor->setValue('BmsYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('BmsYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('BmsServerCentralComputer', $this->formatToWordTemplate($recordList['replySlipBmsServerCentralComputer']));
+        $templateProcessor->setValue('BmsDdc', $this->formatToWordTemplate($recordList['replySlipBmsDdc']));
+        if ($recordList['replySlipChangeoverSchemeYesNo'] == 'Y') {
+            $templateProcessor->setValue('ChangeoverSchemeYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('ChangeoverSchemeYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('ChangeoverSchemeControl', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeControl']));
+        $templateProcessor->setValue('ChangeoverSchemeUv', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeUv']));
+
+        if ($recordList['replySlipChillerPlantYesNo'] == 'Y') {
+            $templateProcessor->setValue('ChillerPlantYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('ChillerPlantYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('ChillerPlantAhuControl', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuControl']));
+        $templateProcessor->setValue('ChillerPlantAhuStartup', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuStartup']));
+        $templateProcessor->setValue('ChillerPlantVsd', $this->formatToWordTemplate($recordList['replySlipChillerPlantVsd']));
+        $templateProcessor->setValue('ChillerPlantAhuChilledWater', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuChilledWater']));
+        $templateProcessor->setValue('ChillerPlantStandbyAhu', $this->formatToWordTemplate($recordList['replySlipChillerPlantStandbyAhu']));
+        $templateProcessor->setValue('ChillerPlantChiller', $this->formatToWordTemplate($recordList['replySlipChillerPlantChiller']));
+        if ($recordList['replySlipEscalatorYesNo'] == 'Y') {
+            $templateProcessor->setValue('EscalatorYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EscalatorYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('EscalatorMotorStartup', $this->formatToWordTemplate($recordList['replySlipEscalatorMotorStartup']));
+        $templateProcessor->setValue('EscalatorVsdMitigation', $this->formatToWordTemplate($recordList['replySlipEscalatorVsdMitigation']));
+        $templateProcessor->setValue('EscalatorBrakingSystem', $this->formatToWordTemplate($recordList['replySlipEscalatorBrakingSystem']));
+        $templateProcessor->setValue('EscalatorControl', $this->formatToWordTemplate($recordList['replySlipEscalatorControl']));
+        if ($recordList['replySlipHidLampYesNo'] == 'Y') {
+            $templateProcessor->setValue('HidLampYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('HidLampYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('HidLampMitigation', $this->formatToWordTemplate($recordList['replySlipHidLampMitigation']));
+        if ($recordList['replySlipLiftYesNo'] == 'Y') {
+            $templateProcessor->setValue('LiftYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('LiftYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('LiftOperation', $this->formatToWordTemplate($recordList['replySlipLiftOperation']));
+        if ($recordList['replySlipSensitiveMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('SensitiveMachineYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('SensitiveMachineYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('SensitiveMachineMitigation', $this->formatToWordTemplate($recordList['replySlipSensitiveMachineMitigation']));
+        if ($recordList['replySlipTelecomMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('TelecomMachineYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('TelecomMachineYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('TelecomMachineServerOrComputer', $this->formatToWordTemplate($recordList['replySlipTelecomMachineServerOrComputer']));
+        $templateProcessor->setValue('TelecomMachinePeripherals', $this->formatToWordTemplate($recordList['replySlipTelecomMachinePeripherals']));
+        $templateProcessor->setValue('TelecomMachineHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipTelecomMachineHarmonicEmission']));
+        if ($recordList['replySlipAirConditionersYesNo'] == 'Y') {
+            $templateProcessor->setValue('AirConditionersYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('AirConditionersYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('AirConditionersMicb', $this->formatToWordTemplate($recordList['replySlipAirConditionersMicb']));
+        $templateProcessor->setValue('AirConditionersLoadForecasting', $this->formatToWordTemplate($recordList['replySlipAirConditionersLoadForecasting']));
+        $templateProcessor->setValue('AirConditionersType', $this->formatToWordTemplate($recordList['replySlipAirConditionersType']));
+        if ($recordList['replySlipNonLinearLoadYesNo'] == 'Y') {
+            $templateProcessor->setValue('NonLinearLoadYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('NonLinearLoadYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('NonLinearLoadHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipNonLinearLoadHarmonicEmission']));
+        if ($recordList['replySlipRenewableEnergyYesNo'] == 'Y') {
+            $templateProcessor->setValue('RenewableEnergyYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('RenewableEnergyYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('RenewableEnergyInverterAndControls', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyInverterAndControls']));
+        $templateProcessor->setValue('RenewableEnergyHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyHarmonicEmission']));
+        if ($recordList['replySlipEvChargerSystemYesNo'] == 'Y') {
+            $templateProcessor->setValue('EvChargerSystemYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EvChargerSystemYesNo', $unCheckedBox);
+        }
+        if ($recordList['replySlipEvControlYesNo'] == 'Y') {
+            $templateProcessor->setValue('EvControlYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EvControlYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('EvChargerSystemEvCharger', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemEvCharger']));
+        if ($recordList['replySlipEvChargerSystemSmartYesNo'] == 'Y') {
+            $templateProcessor->setValue('EvChargerSystemSmartYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EvChargerSystemSmartYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('EvChargerSystemSmartChargingSystem', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemSmartChargingSystem']));
+        $templateProcessor->setValue('EvChargerSystemHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemHarmonicEmission']));
+        $templateProcessor->setValue('ConsultantNameConfirmation', $this->formatToWordTemplate($recordList['replySlipConsultantNameConfirmation']));
+        $templateProcessor->setValue('ConsultantCompany', $this->formatToWordTemplate($recordList['replySlipConsultantCompany']));
+        $templateProcessor->setValue('ProjectOwnerNameConfirmation', $this->formatToWordTemplate($recordList['replySlipProjectOwnerNameConfirmation']));
+        $templateProcessor->setValue('ProjectOwnerCompany', $this->formatToWordTemplate($recordList['replySlipProjectOwnerCompany']));
+
+        $pathToSave = $replySlipTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' . $replySlipTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+        chmod($pathToSave, 0644);
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header('Content-Disposition: attachment; filename='. basename($pathToSave));
+        header('Content-Length: ' . filesize($pathToSave));
+        header('Content-Transfer-Encoding: binary');
+        header('Pragma: public');
+
+        //Clear system output buffer
+        flush();
+
+        //Read the size of the file
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
+
+        die();
+
+    }
+
+
 
     public function actionGetPlanningAheadProjectDetailFirstInvitationLetterTemplate() {
 
@@ -613,18 +967,23 @@ class PlanningAheadController extends Controller {
             $firstInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
-        $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
-        $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
-        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
-        $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
+
+        if (isset($recordList['secondConsultantSurname'])) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+            $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        }
+
         $templateProcessor->setValue('faxRefNo', $firstInvitationLetterFaxRefNo);
         $templateProcessor->setValue('faxDate', $firstInvitationLetterFaxYear . "-" . $firstInvitationLetterFaxMonth);
         $templateProcessor->setValue('issueDate', $firstInvitationLetterIssueDateDay . " " .
                                                     $firstInvitationLetterIssueDateMonth . " " .
                                                     $firstInvitationLetterIssueDateYear);
-        $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
         $templateProcessor->setValue('replySlipReturnDate', $replySlip['replySlipLastUpdateTime']);
 
         $pathToSave = $firstInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
@@ -641,7 +1000,8 @@ class PlanningAheadController extends Controller {
         flush();
 
         //Read the size of the file
-        readfile($pathToSave,true);
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
 
         die();
 
@@ -686,22 +1046,28 @@ class PlanningAheadController extends Controller {
             $secondInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
-        $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
-        $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
-        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
-        $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
+
+        if (isset($recordList['secondConsultantSurname'])) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+            $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        }
+
         $templateProcessor->setValue('faxRefNo', $secondInvitationLetterFaxRefNo);
         $templateProcessor->setValue('faxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
         $templateProcessor->setValue('issueDate', $secondInvitationLetterIssueDateDay . " " .
                                                     $secondInvitationLetterIssueDateMonth . " " .
                                                     $secondInvitationLetterIssueDateYear);
-        $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
         $templateProcessor->setValue('firstLetterSendDate', $firstInvitationLetterIssueDate);
 
         $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $secondInvitationLetterTemplateFileName['configValue'];
+
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -714,7 +1080,8 @@ class PlanningAheadController extends Controller {
         flush();
 
         //Read the size of the file
-        readfile($pathToSave,true);
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
 
         die();
 
@@ -766,18 +1133,23 @@ class PlanningAheadController extends Controller {
             $secondInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('firstConsultantCompany', $recordList['firstConsultantCompany']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
-        $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
-        $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
-        $templateProcessor->setValue('secondConsultantCompany', $recordList['secondConsultantCompany']);
-        $templateProcessor->setValue('secondConsultantEmail', $recordList['secondConsultantEmail']);
+
+        if (isset($recordList['secondConsultantSurname'])) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+            $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        }
+
         $templateProcessor->setValue('faxRefNo', $thirdInvitationLetterFaxRefNo);
         $templateProcessor->setValue('faxDate', $thirdInvitationLetterFaxYear . "-" . $thirdInvitationLetterFaxMonth);
         $templateProcessor->setValue('issueDate', $thirdInvitationLetterIssueDateDay . " " .
                                                     $thirdInvitationLetterIssueDateMonth . " " .
                                                     $thirdInvitationLetterIssueDateYear);
-        $templateProcessor->setValue('projectTitle', $recordList['projectTitle']);
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
         $templateProcessor->setValue('firstLetterIssueDate', $firstInvitationLetterIssueDate);
         $templateProcessor->setValue('firstLetterFaxRefNo', $firstInvitationLetterFaxRefNo);
         $templateProcessor->setValue('firstFaxDate', $firstInvitationLetterFaxYear . "-" . $firstInvitationLetterFaxMonth);
@@ -799,7 +1171,8 @@ class PlanningAheadController extends Controller {
         flush();
 
         //Read the size of the file
-        readfile($pathToSave,true);
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
 
         die();
 
@@ -942,14 +1315,19 @@ class PlanningAheadController extends Controller {
             $txnReplySlipChangeoverSchemeControl = $this->getPostParamString('replySlipChangeoverSchemeControl');
             $txnReplySlipChangeoverSchemeUv = $this->getPostParamString('replySlipChangeoverSchemeUv');
             $txnReplySlipChillerPlantYesNo = $this->getPostParamBoolean('replySlipChillerPlantYesNo');
-            $txnReplySlipChillerPlantAhu = $this->getPostParamString('replySlipChillerPlantAhu');
+            $txnReplySlipChillerPlantAhuControl = $this->getPostParamString('replySlipChillerPlantAhuControl');
+            $txnReplySlipChillerPlantAhuStartup = $this->getPostParamString('replySlipChillerPlantAhuStartup');
+            $txnReplySlipChillerPlantVsd = $this->getPostParamString('replySlipChillerPlantVsd');
+            $txnReplySlipChillerPlantAhuChilledWater = $this->getPostParamString('replySlipChillerPlantAhuChilledWater');
+            $txnReplySlipChillerPlantStandbyAhu = $this->getPostParamString('replySlipChillerPlantStandbyAhu');
             $txnReplySlipChillerPlantChiller = $this->getPostParamString('replySlipChillerPlantChiller');
             $txnReplySlipEscalatorYesNo = $this->getPostParamBoolean('replySlipEscalatorYesNo');
+            $txnReplySlipEscalatorMotorStartup = $this->getPostParamBoolean('replySlipEscalatorMotorStartup');
+            $txnReplySlipEscalatorVsdMitigation = $this->getPostParamString('replySlipEscalatorVsdMitigation');
             $txnReplySlipEscalatorBrakingSystem = $this->getPostParamString('replySlipEscalatorBrakingSystem');
             $txnReplySlipEscalatorControl = $this->getPostParamString('replySlipEscalatorControl');
             $txnReplySlipHidLampYesNo = $this->getPostParamBoolean('replyHidLampYesNo');
-            $txnReplySlipHidLampBallast = $this->getPostParamString('replySlipHidLampBallast');
-            $txnReplySlipHidLampAddOnProtection = $this->getPostParamString('replySlipHidLampAddOnProtection');
+            $txnReplySlipHidLampMitigation = $this->getPostParamString('replySlipHidLampMitigation');
             $txnReplySlipLiftYesNo = $this->getPostParamBoolean('replyLiftYesNo');
             $txnReplySlipLiftOperation = $this->getPostParamString('replySlipLiftOperation');
             $txnReplySlipSensitiveMachineYesNo = $this->getPostParamBoolean('replySlipSensitiveMachineYesNo');
@@ -968,9 +1346,15 @@ class PlanningAheadController extends Controller {
             $txnReplySlipRenewableEnergyInverterAndControls = $this->getPostParamString('replySlipRenewableEnergyInverterAndControls');
             $txnReplySlipRenewableEnergyHarmonicEmission = $this->getPostParamString('replySlipRenewableEnergyHarmonicEmission');
             $txnReplySlipEvChargerSystemYesNo = $this->getPostParamBoolean('replySlipEvChargerSystemYesNo');
+            $txnReplySlipEvControlYesNo = $this->getPostParamBoolean('replySlipEvControlYesNo');
             $txnReplySlipEvChargerSystemEvCharger = $this->getPostParamString('replySlipEvChargerSystemEvCharger');
+            $txnReplySlipEvChargerSystemSmartYesNo = $this->getPostParamString('replySlipEvChargerSystemSmartYesNo');
             $txnReplySlipEvChargerSystemSmartChargingSystem = $this->getPostParamString('replySlipEvChargerSystemSmartChargingSystem');
             $txnReplySlipEvChargerSystemHarmonicEmission = $this->getPostParamString('replySlipEvChargerSystemHarmonicEmission');
+            $txnReplySlipConsultantNameConfirmation = $this->getPostParamString('replySlipConsultantNameConfirmation');
+            $txnReplySlipConsultantCompany = $this->getPostParamString('replySlipConsultantCompany');
+            $txnReplySlipProjectOwnerNameConfirmation = $this->getPostParamString('replySlipProjectOwnerNameConfirmation');
+            $txnReplySlipProjectOwnerCompany = $this->getPostParamString('replySlipProjectOwnerCompany');
             $txnFirstInvitationLetterIssueDate = $this->getPostParamString('firstInvitationLetterIssueDate');
             $txnFirstInvitationLetterFaxRefNo = $this->getPostParamString('firstInvitationLetterFaxRefNo');
             $txnFirstInvitationLetterEdmsLink = $this->getPostParamString('firstInvitationLetterEdmsLink');
@@ -1011,12 +1395,15 @@ class PlanningAheadController extends Controller {
                 $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                 $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                 $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
-                $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
+                $txnMeetingConsentOwner,$txnMeetingReplySlipId,
+                $txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                 $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
-                $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
-                $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampBallast,
-                $txnReplySlipHidLampAddOnProtection,$txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
                 $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
                 $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
                 $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
@@ -1024,9 +1411,11 @@ class PlanningAheadController extends Controller {
                 $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
                 $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
                 $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
-                $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                $txnReplySlipEvChargerSystemHarmonicEmission,
+                $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
                 $txnFirstInvitationLetterIssueDate,
                 $txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                 $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
@@ -1177,14 +1566,19 @@ class PlanningAheadController extends Controller {
             $txnReplySlipChangeoverSchemeControl = $this->getPostParamString('replySlipChangeoverSchemeControl');
             $txnReplySlipChangeoverSchemeUv = $this->getPostParamString('replySlipChangeoverSchemeUv');
             $txnReplySlipChillerPlantYesNo = $this->getPostParamBoolean('replySlipChillerPlantYesNo');
-            $txnReplySlipChillerPlantAhu = $this->getPostParamString('replySlipChillerPlantAhu');
+            $txnReplySlipChillerPlantAhuControl = $this->getPostParamString('replySlipChillerPlantAhuControl');
+            $txnReplySlipChillerPlantAhuStartup = $this->getPostParamString('replySlipChillerPlantAhuStartup');
+            $txnReplySlipChillerPlantVsd = $this->getPostParamString('replySlipChillerPlantVsd');
+            $txnReplySlipChillerPlantAhuChilledWater = $this->getPostParamString('replySlipChillerPlantAhuChilledWater');
+            $txnReplySlipChillerPlantStandbyAhu = $this->getPostParamString('replySlipChillerPlantStandbyAhu');
             $txnReplySlipChillerPlantChiller = $this->getPostParamString('replySlipChillerPlantChiller');
             $txnReplySlipEscalatorYesNo = $this->getPostParamBoolean('replySlipEscalatorYesNo');
+            $txnReplySlipEscalatorMotorStartup = $this->getPostParamBoolean('replySlipEscalatorMotorStartup');
+            $txnReplySlipEscalatorVsdMitigation = $this->getPostParamString('replySlipEscalatorVsdMitigation');
             $txnReplySlipEscalatorBrakingSystem = $this->getPostParamString('replySlipEscalatorBrakingSystem');
             $txnReplySlipEscalatorControl = $this->getPostParamString('replySlipEscalatorControl');
             $txnReplySlipHidLampYesNo = $this->getPostParamBoolean('replyHidLampYesNo');
-            $txnReplySlipHidLampBallast = $this->getPostParamString('replySlipHidLampBallast');
-            $txnReplySlipHidLampAddOnProtection = $this->getPostParamString('replySlipHidLampAddOnProtection');
+            $txnReplySlipHidLampMitigation = $this->getPostParamString('replySlipHidLampMitigation');
             $txnReplySlipLiftYesNo = $this->getPostParamBoolean('replyLiftYesNo');
             $txnReplySlipLiftOperation = $this->getPostParamString('replySlipLiftOperation');
             $txnReplySlipSensitiveMachineYesNo = $this->getPostParamBoolean('replySlipSensitiveMachineYesNo');
@@ -1203,9 +1597,15 @@ class PlanningAheadController extends Controller {
             $txnReplySlipRenewableEnergyInverterAndControls = $this->getPostParamString('replySlipRenewableEnergyInverterAndControls');
             $txnReplySlipRenewableEnergyHarmonicEmission = $this->getPostParamString('replySlipRenewableEnergyHarmonicEmission');
             $txnReplySlipEvChargerSystemYesNo = $this->getPostParamBoolean('replySlipEvChargerSystemYesNo');
+            $txnReplySlipEvControlYesNo = $this->getPostParamBoolean('replySlipEvControlYesNo');
             $txnReplySlipEvChargerSystemEvCharger = $this->getPostParamString('replySlipEvChargerSystemEvCharger');
+            $txnReplySlipEvChargerSystemSmartYesNo = $this->getPostParamString('replySlipEvChargerSystemSmartYesNo');
             $txnReplySlipEvChargerSystemSmartChargingSystem = $this->getPostParamString('replySlipEvChargerSystemSmartChargingSystem');
             $txnReplySlipEvChargerSystemHarmonicEmission = $this->getPostParamString('replySlipEvChargerSystemHarmonicEmission');
+            $txnReplySlipConsultantNameConfirmation = $this->getPostParamString('replySlipConsultantNameConfirmation');
+            $txnReplySlipConsultantCompany = $this->getPostParamString('replySlipConsultantCompany');
+            $txnReplySlipProjectOwnerNameConfirmation = $this->getPostParamString('replySlipProjectOwnerNameConfirmation');
+            $txnReplySlipProjectOwnerCompany = $this->getPostParamString('replySlipProjectOwnerCompany');
             $txnFirstInvitationLetterIssueDate = $this->getPostParamString('firstInvitationLetterIssueDate');
             $txnFirstInvitationLetterFaxRefNo = $this->getPostParamString('firstInvitationLetterFaxRefNo');
             $txnFirstInvitationLetterEdmsLink = $this->getPostParamString('firstInvitationLetterEdmsLink');
@@ -1271,12 +1671,15 @@ class PlanningAheadController extends Controller {
                     $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
                     $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                     $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
-                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
+                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,
+                    $txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                     $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
-                    $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
-                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampBallast,
-                    $txnReplySlipHidLampAddOnProtection,$txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                    $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                    $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                    $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                    $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
                     $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
                     $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
                     $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
@@ -1284,9 +1687,11 @@ class PlanningAheadController extends Controller {
                     $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
                     $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
                     $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
-                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                    $txnReplySlipEvChargerSystemHarmonicEmission,
+                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                    $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                    $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                    $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
                     $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                     $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
                     $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
@@ -1336,6 +1741,28 @@ class PlanningAheadController extends Controller {
             return 0;
         }
     }
+
+    private function replaceListToLines($value) {
+        if (isset($value)) {
+            $value = str_replace("[\"","",$value);
+            $value = str_replace("\"]","",$value);
+
+            return str_replace("\",\"","\n",$value);
+        } else {
+            return $value;
+        }
+    }
+
+    private function formatToWordTemplate($value) {
+        if (isset($value)) {
+            $value = htmlspecialchars($value);
+            return str_replace("\\n", "<w:br />", $value);
+        } else {
+            return $value;
+        }
+    }
+
+
 
 
 

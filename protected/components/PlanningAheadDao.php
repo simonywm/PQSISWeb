@@ -146,14 +146,19 @@ class PlanningAheadDao extends CApplicationComponent {
                     $record['replySlipChangeoverSchemeControl'] = Encoding::escapleAllCharacter($item['replySlipChangeoverSchemeControl']);
                     $record['replySlipChangeoverSchemeUv'] = Encoding::escapleAllCharacter($item['replySlipChangeoverSchemeUv']);
                     $record['replySlipChillerPlantYesNo'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantYesNo']);
-                    $record['replySlipChillerPlantAhu'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantAhu']);
+                    $record['replySlipChillerPlantAhuControl'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantAhuControl']);
+                    $record['replySlipChillerPlantAhuStartup'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantAhuStartup']);
+                    $record['replySlipChillerPlantVsd'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantVsd']);
+                    $record['replySlipChillerPlantAhuChilledWater'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantAhuChilledWater']);
+                    $record['replySlipChillerPlantStandbyAhu'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantStandbyAhu']);
                     $record['replySlipChillerPlantChiller'] = Encoding::escapleAllCharacter($item['replySlipChillerPlantChiller']);
                     $record['replySlipEscalatorYesNo'] = Encoding::escapleAllCharacter($item['replySlipEscalatorYesNo']);
+                    $record['replySlipEscalatorMotorStartup'] = Encoding::escapleAllCharacter($item['replySlipEscalatorMotorStartup']);
+                    $record['replySlipEscalatorVsdMitigation'] = Encoding::escapleAllCharacter($item['replySlipEscalatorVsdMitigation']);
                     $record['replySlipEscalatorBrakingSystem'] = Encoding::escapleAllCharacter($item['replySlipEscalatorBrakingSystem']);
                     $record['replySlipEscalatorControl'] = Encoding::escapleAllCharacter($item['replySlipEscalatorControl']);
                     $record['replySlipHidLampYesNo'] = Encoding::escapleAllCharacter($item['replySlipHidLampYesNo']);
-                    $record['replySlipHidLampBallast'] = Encoding::escapleAllCharacter($item['replySlipHidLampBallast']);
-                    $record['replySlipHidLampAddOnProtection'] = Encoding::escapleAllCharacter($item['replySlipHidLampAddOnProtection']);
+                    $record['replySlipHidLampMitigation'] = Encoding::escapleAllCharacter($item['replySlipHidLampMitigation']);
                     $record['replySlipLiftYesNo'] = Encoding::escapleAllCharacter($item['replySlipLiftYesNo']);
                     $record['replySlipLiftOperation'] = Encoding::escapleAllCharacter($item['replySlipLiftOperation']);
                     $record['replySlipSensitiveMachineYesNo'] = Encoding::escapleAllCharacter($item['replySlipSensitiveMachineYesNo']);
@@ -172,9 +177,15 @@ class PlanningAheadDao extends CApplicationComponent {
                     $record['replySlipRenewableEnergyInverterAndControls'] = Encoding::escapleAllCharacter($item['replySlipRenewableEnergyInverterAndControls']);
                     $record['replySlipRenewableEnergyHarmonicEmission'] = Encoding::escapleAllCharacter($item['replySlipRenewableEnergyHarmonicEmission']);
                     $record['replySlipEvChargerSystemYesNo'] = Encoding::escapleAllCharacter($item['replySlipEvChargerSystemYesNo']);
+                    $record['replySlipEvControlYesNo'] = Encoding::escapleAllCharacter($item['replySlipEvControlYesNo']);
                     $record['replySlipEvChargerSystemEvCharger'] = Encoding::escapleAllCharacter($item['replySlipEvChargerSystemEvCharger']);
+                    $record['replySlipEvChargerSystemSmartYesNo'] = Encoding::escapleAllCharacter($item['replySlipEvChargerSystemSmartYesNo']);
                     $record['replySlipEvChargerSystemSmartChargingSystem'] = Encoding::escapleAllCharacter($item['replySlipEvChargerSystemSmartChargingSystem']);
                     $record['replySlipEvChargerSystemHarmonicEmission'] = Encoding::escapleAllCharacter($item['replySlipEvChargerSystemHarmonicEmission']);
+                    $record['replySlipConsultantNameConfirmation'] = Encoding::escapleAllCharacter($item['replySlipConsultantNameConfirmation']);
+                    $record['replySlipConsultantCompany'] = Encoding::escapleAllCharacter($item['replySlipConsultantCompany']);
+                    $record['replySlipProjectOwnerNameConfirmation'] = Encoding::escapleAllCharacter($item['replySlipProjectOwnerNameConfirmation']);
+                    $record['replySlipProjectOwnerCompany'] = Encoding::escapleAllCharacter($item['replySlipProjectOwnerCompany']);
                 } else {
                     $record['replySlipBmsYesNo'] = "";
                     $record['replySlipBmsServerCentralComputer'] = "";
@@ -183,14 +194,19 @@ class PlanningAheadDao extends CApplicationComponent {
                     $record['replySlipChangeoverSchemeControl'] = "";
                     $record['replySlipChangeoverSchemeUv'] = "";
                     $record['replySlipChillerPlantYesNo'] = "";
-                    $record['replySlipChillerPlantAhu'] = "";
+                    $record['replySlipChillerPlantAhuControl'] = "";
+                    $record['replySlipChillerPlantAhuStartup'] = "";
+                    $record['replySlipChillerPlantVsd'] = "";
+                    $record['replySlipChillerPlantAhuChilledWater'] = "";
+                    $record['replySlipChillerPlantStandbyAhu'] = "";
                     $record['replySlipChillerPlantChiller'] = "";
                     $record['replySlipEscalatorYesNo'] = "";
+                    $record['replySlipEscalatorMotorStartup'] = "";
+                    $record['replySlipEscalatorVsdMitigation'] = "";
                     $record['replySlipEscalatorBrakingSystem'] = "";
                     $record['replySlipEscalatorControl'] = "";
                     $record['replySlipHidLampYesNo'] = "";
-                    $record['replySlipHidLampBallast'] = "";
-                    $record['replySlipHidLampAddOnProtection'] = "";
+                    $record['replySlipHidLampMitigation'] = "";
                     $record['replySlipLiftYesNo'] = "";
                     $record['replySlipLiftOperation'] = "";
                     $record['replySlipSensitiveMachineYesNo'] = "";
@@ -209,9 +225,15 @@ class PlanningAheadDao extends CApplicationComponent {
                     $record['replySlipRenewableEnergyInverterAndControls'] = "";
                     $record['replySlipRenewableEnergyHarmonicEmission'] = "";
                     $record['replySlipEvChargerSystemYesNo'] = "";
+                    $record['replySlipEvControlYesNo'] = "";
                     $record['replySlipEvChargerSystemEvCharger'] = "";
+                    $record['replySlipEvChargerSystemSmartYesNo'] = "";
                     $record['replySlipEvChargerSystemSmartChargingSystem'] = "";
                     $record['replySlipEvChargerSystemHarmonicEmission'] = "";
+                    $record['replySlipConsultantNameConfirmation'] = "";
+                    $record['replySlipConsultantCompany'] = "";
+                    $record['replySlipProjectOwnerNameConfirmation'] = "";
+                    $record['replySlipProjectOwnerCompany'] = "";
                 }
                 if (isset($result[0]['first_invitation_letter_issue_date'])) {
                     $firstInvitationLetterIssueDateYear = date("Y", strtotime($result[0]['first_invitation_letter_issue_date']));
@@ -310,6 +332,327 @@ class PlanningAheadDao extends CApplicationComponent {
                 }
 
                 $record['evaReportId'] = $result[0]['eva_report_id'];
+
+                if (isset($record['evaReportId']) && ($record['evaReportId'] > 0)) {
+
+                    $sql = 'SELECT * FROM "tbl_evaluation_report" 
+                        WHERE "evaluation_report_id" = :evaluationReportId';
+                    $sth = Yii::app()->db->createCommand($sql);
+                    $sth->bindParam(':evaluationReportId', $record['evaReportId']);
+                    $evaRecord = $sth->queryAll();
+
+                    $record['evaReportRemark'] = Encoding::escapleAllCharacter($evaRecord['evaluation_report_remark']);
+                    $record['evaReportEdmsLink'] = Encoding::escapleAllCharacter($evaRecord['evaluation_report_edms_link']);
+                    $evaReportIssueDateYear = date("Y", strtotime($result[0]['evaluation_report_issue_date']));
+                    $evaReportIssueDateMonth = date("m", strtotime($result[0]['evaluation_report_issue_date']));
+                    $evaReportIssueDateDay = date("d", strtotime($result[0]['evaluation_report_issue_date']));
+                    $record['evaReportIssueDate'] = $evaReportIssueDateYear . "-" . $evaReportIssueDateMonth . "-" . $evaReportIssueDateDay;
+                    $record['evaReportFaxRefNo'] = Encoding::escapleAllCharacter($evaRecord['evaluation_report_fax_ref_no']);
+                    $record['evaReportScore'] = $evaRecord['evaluation_report_score'];
+                    $record['evaReportBmsYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_yes_no']);
+                    $record['evaReportBmsServerCentralComputerYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_yes_no']);
+                    $record['evaReportBmsServerCentralComputerFinding'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_finding']);
+                    $record['evaReportBmsServerCentralComputerRecommend'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_recommend']);
+                    $record['evaReportBmsServerCentralComputerPass'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_pass']);
+                    $record['evaReportBmsDdcYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_yes_no']);
+                    $record['evaReportBmsDdcFinding'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_finding']);
+                    $record['evaReportBmsDdcRecommend'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_recommend']);
+                    $record['evaReportBmsDdcPass'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_yes_no']);
+                    $record['evaReportBmsSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_supplement_yes_no']);
+                    $record['evaReportBmsSupplement'] = Encoding::escapleAllCharacter($evaRecord['bms_supplement']);
+                    $record['evaReportBmsSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['bms_supplement_pass']);
+                    $record['evaReportChangeoverSchemeYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_yes_no']);
+                    $record['evaReportChangeoverSchemeControlYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_yes_no']);
+                    $record['evaReportChangeoverSchemeControlFinding'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_finding']);
+                    $record['evaReportChangeoverSchemeControlRecommend'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_recommend']);
+                    $record['evaReportChangeoverSchemeControlPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_pass']);
+                    $record['evaReportChangeoverSchemeUvYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_yes_no']);
+                    $record['evaReportChangeoverSchemeUvFinding'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_finding']);
+                    $record['evaReportChangeoverSchemeUvRecommend'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_recommend']);
+                    $record['evaReportChangeoverSchemeUvPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_pass']);
+                    $record['evaReportChangeoverSchemeSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_yes_no']);
+                    $record['evaReportChangeoverSchemeSupplement'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement']);
+                    $record['evaReportChangeoverSchemeSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_pass']);
+                    $record['evaReportChillerPlantYesNo'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_yes_no']);
+                    $record['evaReportChillerPlantAhuChilledWaterYesNo'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_yes_no']);
+                    $record['evaReportChillerPlantAhuChilledWaterFinding'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_finding']);
+                    $record['evaReportChillerPlantAhuChilledWaterRecommend'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_recommend']);
+                    $record['evaReportChillerPlantAhuChilledWaterPass'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_pass']);
+                    $record['evaReportChillerPlantChillerYesNo'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_yes_no']);
+                    $record['evaReportChillerPlantChillerFinding'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_finding']);
+                    $record['evaReportChillerPlantChillerRecommend'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_recommend']);
+                    $record['evaReportChillerPlantChillerPass'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_pass']);
+                    $record['evaReportChillerPlantSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_yes_no']);
+                    $record['evaReportChillerPlantSupplement'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement']);
+                    $record['evaReportChillerPlantSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_pass']);
+                    $record['evaReportEscalatorYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_yes_no']);
+                    $record['evaReportEscalatorBrakingSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_yes_no']);
+                    $record['evaReportEscalatorBrakingSystemFinding'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_finding']);
+                    $record['evaReportEscalatorBrakingSystemRecommend'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_recommend']);
+                    $record['evaReportEscalatorBrakingSystemPass'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_pass']);
+                    $record['evaReportEscalatorControlYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_yes_no']);
+                    $record['evaReportEscalatorControlFinding'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_finding']);
+                    $record['evaReportEscalatorControlRecommend'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_recommend']);
+                    $record['evaReportEscalatorControlPass'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_pass']);
+                    $record['evaReportEscalatorSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_supplement_yes_no']);
+                    $record['evaReportEscalatorSupplement'] = Encoding::escapleAllCharacter($evaRecord['escalator_supplement']);
+                    $record['evaReportEscalatorSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['escalator_supplement_pass']);
+                    $record['evaReportLiftYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_yes_no']);
+                    $record['evaReportLiftOperationYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_yes_no']);
+                    $record['evaReportLiftOperationFinding'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_finding']);
+                    $record['evaReportLiftOperationRecommend'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_recommend']);
+                    $record['evaReportLiftOperationPass'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_pass']);
+                    $record['evaReportLiftMainSupplyYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_yes_no']);
+                    $record['evaReportLiftMainSupplyFinding'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_finding']);
+                    $record['evaReportLiftMainSupplyRecommend'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_recommend']);
+                    $record['evaReportLiftMainSupplyPass'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_pass']);
+                    $record['evaReportLiftSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_supplement_yes_no']);
+                    $record['evaReportLiftSupplement'] = Encoding::escapleAllCharacter($evaRecord['lift_supplement']);
+                    $record['evaReportLiftSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['lift_supplement_pass']);
+                    $record['evaReportHidLampYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_yes_no']);
+                    $record['evaReportHidLampBallastYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_yes_no']);
+                    $record['evaReportHidLampBallastFinding'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_finding']);
+                    $record['evaReportHidLampBallastRecommend'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_recommend']);
+                    $record['evaReportHidLampBallastPass'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_pass']);
+                    $record['evaReportHidLampAddonProtectYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_yes_no']);
+                    $record['evaReportHidLampAddonProtectFinding'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_finding']);
+                    $record['evaReportHidLampAddonProtectRecommend'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_recommend']);
+                    $record['evaReportHidLampAddonProtectPass'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_pass']);
+                    $record['evaReportHidLampSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_supplement_yes_no']);
+                    $record['evaReportHidLampSupplement'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_supplement']);
+                    $record['evaReportHidLampSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_supplement_pass']);
+                    $record['evaReportSensitiveMachineYesNo'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_yes_no']);
+                    $record['evaReportSensitiveMachineMedicalYesNo'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_yes_no']);
+                    $record['evaReportSensitiveMachineMedicalFinding'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_finding']);
+                    $record['evaReportSensitiveMachineMedicalRecommend'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_recommend']);
+                    $record['evaReportSensitiveMachineMedicalPass'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_pass']);
+                    $record['evaReportSensitiveMachineSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_supplement_yes_no']);
+                    $record['evaReportSensitiveMachineSupplement'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_supplement']);
+                    $record['evaReportSensitiveMachineSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_supplement_pass']);
+                    $record['evaReportTelecomMachineYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_yes_no']);
+                    $record['evaReportTelecomMachineServerOrComputerYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_yes_no']);
+                    $record['evaReportTelecomMachineServerOrComputerFinding'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_finding']);
+                    $record['evaReportTelecomMachineServerOrComputerRecommend'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_recommend']);
+                    $record['evaReportTelecomMachineServerOrComputerPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_pass']);
+                    $record['evaReportTelecomMachinePeripheralsYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_yes_no']);
+                    $record['evaReportTelecomMachinePeripheralsFinding'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_finding']);
+                    $record['evaReportTelecomMachinePeripheralsRecommend'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_recommend']);
+                    $record['evaReportTelecomMachinePeripheralsPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_pass']);
+                    $record['evaReportTelecomMachineHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_yes_no']);
+                    $record['evaReportTelecomMachineHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_finding']);
+                    $record['evaReportTelecomMachineHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_recommend']);
+                    $record['evaReportTelecomMachineHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_pass']);
+                    $record['evaReportTelecomMachineSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_supplement_yes_no']);
+                    $record['evaReportTelecomMachineSupplement'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_supplement']);
+                    $record['evaReportTelecomMachineSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_supplement_pass']);
+                    $record['evaReportAirConditionersYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_yes_no']);
+                    $record['evaReportAirConditionersMicbYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_yes_no']);
+                    $record['evaReportAirConditionersMicbFinding'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_finding']);
+                    $record['evaReportAirConditionersMicbRecommend'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_recommend']);
+                    $record['evaReportAirConditionersMicbPass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_pass']);
+                    $record['evaReportAirConditionersLoadForecastingYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_yes_no']);
+                    $record['evaReportAirConditionersLoadForecastingFinding'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_finding']);
+                    $record['evaReportAirConditionersLoadForecastingRecommend'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_recommend']);
+                    $record['evaReportAirConditionersLoadForecastingPass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_pass']);
+                    $record['evaReportAirConditionersTypeYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_yes_no']);
+                    $record['evaReportAirConditionersTypeFinding'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_finding']);
+                    $record['evaReportAirConditionersTypeRecommend'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_recommend']);
+                    $record['evaReportAirConditionersTypePass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_pass']);
+                    $record['evaReportAirConditionersSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_supplement_yes_no']);
+                    $record['evaReportAirConditionersSupplement'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_supplement']);
+                    $record['evaReportAirConditionersSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_supplement_pass']);
+                    $record['evaReportNonLinearLoadYesNo'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_yes_no']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_yes_no']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_finding']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_recommend']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_pass']);
+                    $record['evaReportNonLinearLoadSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_supplement_yes_no']);
+                    $record['evaReportNonLinearLoadSupplement'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_supplement']);
+                    $record['evaReportNonLinearLoadSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_supplement_pass']);
+                    $record['evaReportRenewableEnergyYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_yes_no']);
+                    $record['evaReportRenewableEnergyInverterAndControlsYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_yes_no']);
+                    $record['evaReportRenewableEnergyInverterAndControlsFinding'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_finding']);
+                    $record['evaReportRenewableEnergyInverterAndControlsRecommend'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_recommend']);
+                    $record['evaReportRenewableEnergyInverterAndControlsPass'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_pass']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_yes_no']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_finding']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_recommend']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_pass']);
+                    $record['evaReportRenewableEnergySupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_supplement_yes_no']);
+                    $record['evaReportRenewableEnergySupplement'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_supplement']);
+                    $record['evaReportRenewableEnergySupplementPass'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_supplement_pass']);
+                    $record['evaReportEvChargerSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_yes_no']);
+                    $record['evaReportEvChargerSystemEvChargerYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_yes_no']);
+                    $record['evaReportEvChargerSystemEvChargerFinding'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_finding']);
+                    $record['evaReportEvChargerSystemEvChargerRecommend'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_recommend']);
+                    $record['evaReportEvChargerSystemEvChargerPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_pass']);
+                    $record['evaReportEvChargerSystemSmartChargingSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_yes_no']);
+                    $record['evaReportEvChargerSystemSmartChargingSystemFinding'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_finding']);
+                    $record['evaReportEvChargerSystemSmartChargingSystemRecommend'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_recommend']);
+                    $record['evaReportEvChargerSystemSmartChargingSystemPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_pass']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_yes_no']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_finding']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_recommend']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_pass']);
+                    $record['evaReportEvChargerSystemSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_supplement_yes_no']);
+                    $record['evaReportEvChargerSystemSupplement'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_supplement']);
+                    $record['evaReportEvChargerSystemSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_supplement_pass']);
+                } else {
+                    $record['evaReportRemark'] = "";
+                    $record['evaReportEdmsLink'] = "";
+                    $record['evaReportIssueDate'] = "";
+                    $record['evaReportFaxRefNo'] = "";
+                    $record['evaReportScore'] = "";
+                    $record['evaReportBmsYesNo'] = "";
+                    $record['evaReportBmsServerCentralComputerYesNo'] = "";
+                    $record['evaReportBmsServerCentralComputerFinding'] = "";
+                    $record['evaReportBmsServerCentralComputerRecommend'] = "";
+                    $record['evaReportBmsServerCentralComputerPass'] = "";
+                    $record['evaReportBmsDdcYesNo'] = "";
+                    $record['evaReportBmsDdcFinding'] = "";
+                    $record['evaReportBmsDdcRecommend'] = "";
+                    $record['evaReportBmsDdcPass'] = "";
+                    $record['evaReportBmsSupplementYesNo'] = "";
+                    $record['evaReportBmsSupplement'] = "";
+                    $record['evaReportBmsSupplementPass'] = "";
+                    $record['evaReportChangeoverSchemeYesNo'] = "";
+                    $record['evaReportChangeoverSchemeControlYesNo'] = "";
+                    $record['evaReportChangeoverSchemeControlFinding'] = "";
+                    $record['evaReportChangeoverSchemeControlRecommend'] = "";
+                    $record['evaReportChangeoverSchemeControlPass'] = "";
+                    $record['evaReportChangeoverSchemeUvYesNo'] = "";
+                    $record['evaReportChangeoverSchemeUvFinding'] = "";
+                    $record['evaReportChangeoverSchemeUvRecommend'] = "";
+                    $record['evaReportChangeoverSchemeUvPass'] = "";
+                    $record['evaReportChangeoverSchemeSupplementYesNo'] = "";
+                    $record['evaReportChangeoverSchemeSupplement'] = "";
+                    $record['evaReportChangeoverSchemeSupplementPass'] = "";
+                    $record['evaReportChillerPlantYesNo'] = "";
+                    $record['evaReportChillerPlantAhuChilledWaterYesNo'] = "";
+                    $record['evaReportChillerPlantAhuChilledWaterFinding'] = "";
+                    $record['evaReportChillerPlantAhuChilledWaterRecommend'] = "";
+                    $record['evaReportChillerPlantAhuChilledWaterPass'] = "";
+                    $record['evaReportChillerPlantChillerYesNo'] = "";
+                    $record['evaReportChillerPlantChillerFinding'] = "";
+                    $record['evaReportChillerPlantChillerRecommend'] = "";
+                    $record['evaReportChillerPlantChillerPass'] = "";
+                    $record['evaReportChillerPlantSupplementYesNo'] = "";
+                    $record['evaReportChillerPlantSupplement'] = "";
+                    $record['evaReportChillerPlantSupplementPass'] = "";
+                    $record['evaReportEscalatorYesNo'] = "";
+                    $record['evaReportEscalatorBrakingSystemYesNo'] = "";
+                    $record['evaReportEscalatorBrakingSystemFinding'] = "";
+                    $record['evaReportEscalatorBrakingSystemRecommend'] = "";
+                    $record['evaReportEscalatorBrakingSystemPass'] = "";
+                    $record['evaReportEscalatorControlYesNo'] = "";
+                    $record['evaReportEscalatorControlFinding'] = "";
+                    $record['evaReportEscalatorControlRecommend'] = "";
+                    $record['evaReportEscalatorControlPass'] = "";
+                    $record['evaReportEscalatorSupplementYesNo'] = "";
+                    $record['evaReportEscalatorSupplement'] = "";
+                    $record['evaReportEscalatorSupplementPass'] = "";
+                    $record['evaReportLiftYesNo'] = "";
+                    $record['evaReportLiftOperationYesNo'] = "";
+                    $record['evaReportLiftOperationFinding'] = "";
+                    $record['evaReportLiftOperationRecommend'] = "";
+                    $record['evaReportLiftOperationPass'] = "";
+                    $record['evaReportLiftMainSupplyYesNo'] = "";
+                    $record['evaReportLiftMainSupplyFinding'] = "";
+                    $record['evaReportLiftMainSupplyRecommend'] = "";
+                    $record['evaReportLiftMainSupplyPass'] = "";
+                    $record['evaReportLiftSupplementYesNo'] = "";
+                    $record['evaReportLiftSupplement'] = "";
+                    $record['evaReportLiftSupplementPass'] = "";
+                    $record['evaReportHidLampYesNo'] = "";
+                    $record['evaReportHidLampBallastYesNo'] = "";
+                    $record['evaReportHidLampBallastFinding'] = "";
+                    $record['evaReportHidLampBallastRecommend'] = "";
+                    $record['evaReportHidLampBallastPass'] = "";
+                    $record['evaReportHidLampAddonProtectYesNo'] = "";
+                    $record['evaReportHidLampAddonProtectFinding'] = "";
+                    $record['evaReportHidLampAddonProtectRecommend'] = "";
+                    $record['evaReportHidLampAddonProtectPass'] = "";
+                    $record['evaReportHidLampSupplementYesNo'] = "";
+                    $record['evaReportHidLampSupplement'] = "";
+                    $record['evaReportHidLampSupplementPass'] = "";
+                    $record['evaReportSensitiveMachineYesNo'] = "";
+                    $record['evaReportSensitiveMachineMedicalYesNo'] = "";
+                    $record['evaReportSensitiveMachineMedicalFinding'] = "";
+                    $record['evaReportSensitiveMachineMedicalRecommend'] = "";
+                    $record['evaReportSensitiveMachineMedicalPass'] = "";
+                    $record['evaReportSensitiveMachineSupplementYesNo'] = "";
+                    $record['evaReportSensitiveMachineSupplement'] = "";
+                    $record['evaReportSensitiveMachineSupplementPass'] = "";
+                    $record['evaReportTelecomMachineYesNo'] = "";
+                    $record['evaReportTelecomMachineServerOrComputerYesNo'] = "";
+                    $record['evaReportTelecomMachineServerOrComputerFinding'] = "";
+                    $record['evaReportTelecomMachineServerOrComputerRecommend'] = "";
+                    $record['evaReportTelecomMachineServerOrComputerPass'] = "";
+                    $record['evaReportTelecomMachinePeripheralsYesNo'] = "";
+                    $record['evaReportTelecomMachinePeripheralsFinding'] = "";
+                    $record['evaReportTelecomMachinePeripheralsRecommend'] = "";
+                    $record['evaReportTelecomMachinePeripheralsPass'] = "";
+                    $record['evaReportTelecomMachineHarmonicEmissionYesNo'] = "";
+                    $record['evaReportTelecomMachineHarmonicEmissionFinding'] = "";
+                    $record['evaReportTelecomMachineHarmonicEmissionRecommend'] = "";
+                    $record['evaReportTelecomMachineHarmonicEmissionPass'] = "";
+                    $record['evaReportTelecomMachineSupplementYesNo'] = "";
+                    $record['evaReportTelecomMachineSupplement'] = "";
+                    $record['evaReportTelecomMachineSupplementPass'] = "";
+                    $record['evaReportAirConditionersYesNo'] = "";
+                    $record['evaReportAirConditionersMicbYesNo'] = "";
+                    $record['evaReportAirConditionersMicbFinding'] = "";
+                    $record['evaReportAirConditionersMicbRecommend'] = "";
+                    $record['evaReportAirConditionersMicbPass'] = "";
+                    $record['evaReportAirConditionersLoadForecastingYesNo'] = "";
+                    $record['evaReportAirConditionersLoadForecastingFinding'] = "";
+                    $record['evaReportAirConditionersLoadForecastingRecommend'] = "";
+                    $record['evaReportAirConditionersLoadForecastingPass'] = "";
+                    $record['evaReportAirConditionersTypeYesNo'] = "";
+                    $record['evaReportAirConditionersTypeFinding'] = "";
+                    $record['evaReportAirConditionersTypeRecommend'] = "";
+                    $record['evaReportAirConditionersTypePass'] = "";
+                    $record['evaReportAirConditionersSupplementYesNo'] = "";
+                    $record['evaReportAirConditionersSupplement'] = "";
+                    $record['evaReportAirConditionersSupplementPass'] = "";
+                    $record['evaReportNonLinearLoadYesNo'] = "";
+                    $record['evaReportNonLinearLoadHarmonicEmissionYesNo'] = "";
+                    $record['evaReportNonLinearLoadHarmonicEmissionFinding'] = "";
+                    $record['evaReportNonLinearLoadHarmonicEmissionRecommend'] = "";
+                    $record['evaReportNonLinearLoadHarmonicEmissionPass'] = "";
+                    $record['evaReportNonLinearLoadSupplementYesNo'] = "";
+                    $record['evaReportNonLinearLoadSupplement'] = "";
+                    $record['evaReportNonLinearLoadSupplementPass'] = "";
+                    $record['evaReportRenewableEnergyYesNo'] = "";
+                    $record['evaReportRenewableEnergyInverterAndControlsYesNo'] = "";
+                    $record['evaReportRenewableEnergyInverterAndControlsFinding'] = "";
+                    $record['evaReportRenewableEnergyInverterAndControlsRecommend'] = "";
+                    $record['evaReportRenewableEnergyInverterAndControlsPass'] = "";
+                    $record['evaReportRenewableEnergyHarmonicEmissionYesNo'] = "";
+                    $record['evaReportRenewableEnergyHarmonicEmissionFinding'] = "";
+                    $record['evaReportRenewableEnergyHarmonicEmissionRecommend'] = "";
+                    $record['evaReportRenewableEnergyHarmonicEmissionPass'] = "";
+                    $record['evaReportRenewableEnergySupplementYesNo'] = "";
+                    $record['evaReportRenewableEnergySupplement'] = "";
+                    $record['evaReportRenewableEnergySupplementPass'] = "";
+                    $record['evaReportEvChargerSystemYesNo'] = "";
+                    $record['evaReportEvChargerSystemEvChargerYesNo'] = "";
+                    $record['evaReportEvChargerSystemEvChargerFinding'] = "";
+                    $record['evaReportEvChargerSystemEvChargerRecommend'] = "";
+                    $record['evaReportEvChargerSystemEvChargerPass'] = "";
+                    $record['evaReportEvChargerSystemSmartChargingSystemYesNo'] = "";
+                    $record['evaReportEvChargerSystemSmartChargingSystemFinding'] = "";
+                    $record['evaReportEvChargerSystemSmartChargingSystemRecommend'] = "";
+                    $record['evaReportEvChargerSystemSmartChargingSystemPass'] = "";
+                    $record['evaReportEvChargerSystemHarmonicEmissionYesNo'] = "";
+                    $record['evaReportEvChargerSystemHarmonicEmissionFinding'] = "";
+                    $record['evaReportEvChargerSystemHarmonicEmissionRecommend'] = "";
+                    $record['evaReportEvChargerSystemHarmonicEmissionPass'] = "";
+                    $record['evaReportEvChargerSystemSupplementYesNo'] = "";
+                    $record['evaReportEvChargerSystemSupplement'] = "";
+                    $record['evaReportEvChargerSystemSupplementPass'] = "";
+                }
+
                 $record['state'] = Encoding::escapleAllCharacter($result[0]['state']);
                 $record['active'] = Encoding::escapleAllCharacter($result[0]['active']);
                 $record['createdBy'] = Encoding::escapleAllCharacter($result[0]['created_by']);
@@ -341,14 +684,19 @@ class PlanningAheadDao extends CApplicationComponent {
                 $item['replySlipChangeoverSchemeControl'] = $row['changeover_scheme_control'];
                 $item['replySlipChangeoverSchemeUv'] = $row['changeover_scheme_uv'];
                 $item['replySlipChillerPlantYesNo'] = $row['chiller_plant_yes_no'];
-                $item['replySlipChillerPlantAhu'] = $row['chiller_plant_ahu'];
+                $item['replySlipChillerPlantAhuControl'] = $row['chiller_plant_ahu_control'];
+                $item['replySlipChillerPlantAhuStartup'] = $row['chiller_plant_ahu_startup'];
+                $item['replySlipChillerPlantVsd'] = $row['chiller_plant_vsd'];
+                $item['replySlipChillerPlantAhuChilledWater'] = $row['chiller_plant_ahu_chilled_water'];
+                $item['replySlipChillerPlantStandbyAhu'] = $row['chiller_plant_standby_ahu'];
                 $item['replySlipChillerPlantChiller'] = $row['chiller_plant_chiller'];
                 $item['replySlipEscalatorYesNo'] = $row['escalator_yes_no'];
+                $item['replySlipEscalatorMotorStartup'] = $row['escalator_motor_startup'];
+                $item['replySlipEscalatorVsdMitigation'] = $row['escalator_vsd_mitigation'];
                 $item['replySlipEscalatorBrakingSystem'] = $row['escalator_braking_system'];
                 $item['replySlipEscalatorControl'] = $row['escalator_control'];
                 $item['replySlipHidLampYesNo'] = $row['hid_lamp_yes_no'];
-                $item['replySlipHidLampBallast'] = $row['hid_lamp_ballast'];
-                $item['replySlipHidLampAddOnProtection'] = $row['hid_lamp_add_on_protection'];
+                $item['replySlipHidLampMitigation'] = $row['hid_lamp_mitigation'];
                 $item['replySlipLiftYesNo'] = $row['lift_yes_no'];
                 $item['replySlipLiftOperation'] = $row['lift_operation'];
                 $item['replySlipSensitiveMachineYesNo'] = $row['sensitive_machine_yes_no'];
@@ -367,9 +715,15 @@ class PlanningAheadDao extends CApplicationComponent {
                 $item['replySlipRenewableEnergyInverterAndControls'] = $row['renewable_energy_inverter_and_controls'];
                 $item['replySlipRenewableEnergyHarmonicEmission'] = $row['renewable_energy_harmonic_emission'];
                 $item['replySlipEvChargerSystemYesNo'] = $row['ev_charger_system_yes_no'];
+                $item['replySlipEvControlYesNo'] = $row['ev_control_yes_no'];
                 $item['replySlipEvChargerSystemEvCharger'] = $row['ev_charger_system_ev_charger'];
+                $item['replySlipEvChargerSystemSmartYesNo'] = $row['ev_charger_system_smart_yes_no'];
                 $item['replySlipEvChargerSystemSmartChargingSystem'] = $row['ev_charger_system_smart_charging_system'];
                 $item['replySlipEvChargerSystemHarmonicEmission'] = $row['ev_charger_system_harmonic_emission'];
+                $item['replySlipConsultantNameConfirmation'] = $row['consultant_name_confirmation'];
+                $item['replySlipConsultantCompany'] = $row['consultant_company'];
+                $item['replySlipProjectOwnerNameConfirmation'] = $row['project_owner_name_confirmation'];
+                $item['replySlipProjectOwnerCompany'] = $row['project_owner_company'];
 
                 if (isset($row['last_updated_time'])) {
                     $replySlipLastUpdateTimeYear = date("Y", strtotime($row['last_updated_time']));
@@ -517,10 +871,12 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                                                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                                                    $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                                                   $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
-                                                   $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
-                                                   $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampBallast,
-                                                   $txnReplySlipHidLampAddOnProtection,$txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                                                   $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                                                   $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                                                   $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                                                   $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                                                   $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                                                   $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
                                                    $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
                                                    $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
                                                    $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
@@ -528,9 +884,11 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
                                                    $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
                                                    $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                                                   $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
-                                                   $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                                                   $txnReplySlipEvChargerSystemHarmonicEmission,
+                                                   $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                                                   $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                                                   $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                                                   $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                                                   $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
                                                    $txnFirstInvitationLetterIssueDate,
                                                    $txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                                                    $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
@@ -629,9 +987,11 @@ class PlanningAheadDao extends CApplicationComponent {
             if ($txnMeetingReplySlipId>0) {
                 $sql = 'UPDATE "tbl_slip_reply" SET "bms_yes_no"=?, "bms_server_central_computer"=?,
                             "bms_ddc"=?, "changeover_scheme_yes_no"=?, "changeover_scheme_control"=?, 
-                            "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu"=?, 
-                            "chiller_plant_chiller"=?, "escalator_yes_no"=?, "escalator_braking_system"=?, 
-                            "escalator_control"=?, "hid_lamp_yes_no"=?, "hid_lamp_ballast"=?, "hid_lamp_add_on_protection"=?,
+                            "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu_control"=?,
+                            "chiller_plant_ahu_startup"=?, "chiller_plant_vsd"=?, "chiller_plant_ahu_chilled_water"=?,
+                            "chiller_plant_standby_ahu"=?, "chiller_plant_chiller"=?, "escalator_yes_no"=?, 
+                            "escalator_motor_startup"=?, "escalator_vsd_mitigation"=?, "escalator_braking_system"=?, 
+                            "escalator_control"=?, "hid_lamp_yes_no"=?, "hid_lamp_mitigation"=?, 
                             "lift_yes_no"=?, "lift_operation"=?, "sensitive_machine_yes_no"=?,
                             "sensitive_machine_mitigation"=?, "telecom_machine_yes_no"=?, 
                             "telecom_machine_server_or_computer"=?, "telecom_machine_peripherals"=?, 
@@ -639,19 +999,23 @@ class PlanningAheadDao extends CApplicationComponent {
                             "air_conditioners_micb"=?, "air_conditioners_load_forecasting"=?, 
                             "air_conditioners_type"=?, "non_linear_load_yes_no"=?, "non_linear_load_harmonic_emission"=?, 
                             "renewable_energy_yes_no"=?, "renewable_energy_inverter_and_controls"=?, 
-                            "renewable_energy_harmonic_emission"=?, "ev_charger_system_yes_no"=?,
-                            "ev_charger_system_ev_charger"=?, "ev_charger_system_smart_charging_system"=?, 
-                            "ev_charger_system_harmonic_emission"=?, 
+                            "renewable_energy_harmonic_emission"=?, "ev_charger_system_yes_no"=?, "ev_control_yes_no"=?, 
+                            "ev_charger_system_ev_charger"=?, "ev_charger_system_smart_yes_no"=?, 
+                            "ev_charger_system_smart_charging_system"=?, "ev_charger_system_harmonic_emission"=?, 
+                            "consultant_name_confirmation"=?, "consultant_company"=?, 
+                            "project_owner_name_confirmation"=?, "project_owner_company"=?, 
                             "last_updated_by"=?, "last_updated_time"=? 
                             WHERE "reply_slip_id"=?';
 
                 $stmt = Yii::app()->db->createCommand($sql);
                 $result = $stmt->execute(array($txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                     $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
-                    $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
-                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampBallast,
-                    $txnReplySlipHidLampAddOnProtection,$txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                    $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                    $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                    $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                    $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
                     $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
                     $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
                     $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
@@ -659,9 +1023,11 @@ class PlanningAheadDao extends CApplicationComponent {
                     $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
                     $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
                     $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
-                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                    $txnReplySlipEvChargerSystemHarmonicEmission,
+                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                    $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                    $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                    $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
                     $lastUpdatedBy,$lastUpdatedTime,$txnMeetingReplySlipId));
             }
 
@@ -705,10 +1071,12 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                                                      $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                                                      $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                                                     $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
-                                                     $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
-                                                     $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampBallast,
-                                                     $txnReplySlipHidLampAddOnProtection,$txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                                                     $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                                                     $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                                                     $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                                                     $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                                                     $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                                                     $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
                                                      $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
                                                      $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
                                                      $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
@@ -716,9 +1084,11 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
                                                      $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
                                                      $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                                                     $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
-                                                     $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                                                     $txnReplySlipEvChargerSystemHarmonicEmission,
+                                                     $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                                                     $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                                                     $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                                                     $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                                                     $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
                                                      $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
                                                      $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
                                                      $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
@@ -815,9 +1185,11 @@ class PlanningAheadDao extends CApplicationComponent {
             if ($txnMeetingReplySlipId>0) {
                 $sql = 'UPDATE "tbl_slip_reply" SET "bms_yes_no"=?, "bms_server_central_computer"=?,
                             "bms_ddc"=?, "changeover_scheme_yes_no"=?, "changeover_scheme_control"=?, 
-                            "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu"=?, 
-                            "chiller_plant_chiller"=?, "escalator_yes_no"=?, "escalator_braking_system"=?, 
-                            "escalator_control"=?, "hid_lamp_yes_no"=?, "hid_lamp_ballast"=?, "hid_lamp_add_on_protection"=?,
+                            "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu_control"=?,
+                            "chiller_plant_ahu_startup"=?, "chiller_plant_vsd"=?, "chiller_plant_ahu_chilled_water"=?,
+                            "chiller_plant_standby_ahu"=?, "chiller_plant_chiller"=?, "escalator_yes_no"=?, 
+                            "escalator_motor_startup"=?, "escalator_vsd_mitigation"=?, "escalator_braking_system"=?, 
+                            "escalator_control"=?, "hid_lamp_yes_no"=?, "hid_lamp_mitigation"=?, 
                             "lift_yes_no"=?, "lift_operation"=?, "sensitive_machine_yes_no"=?,
                             "sensitive_machine_mitigation"=?, "telecom_machine_yes_no"=?, 
                             "telecom_machine_server_or_computer"=?, "telecom_machine_peripherals"=?, 
@@ -825,19 +1197,23 @@ class PlanningAheadDao extends CApplicationComponent {
                             "air_conditioners_micb"=?, "air_conditioners_load_forecasting"=?, 
                             "air_conditioners_type"=?, "non_linear_load_yes_no"=?, "non_linear_load_harmonic_emission"=?, 
                             "renewable_energy_yes_no"=?, "renewable_energy_inverter_and_controls"=?, 
-                            "renewable_energy_harmonic_emission"=?, "ev_charger_system_yes_no"=?,
-                            "ev_charger_system_ev_charger"=?, "ev_charger_system_smart_charging_system"=?, 
-                            "ev_charger_system_harmonic_emission"=?, 
+                            "renewable_energy_harmonic_emission"=?, "ev_charger_system_yes_no"=?, "ev_control_yes_no"=?, 
+                            "ev_charger_system_ev_charger"=?, "ev_charger_system_smart_yes_no"=?, 
+                            "ev_charger_system_smart_charging_system"=?, "ev_charger_system_harmonic_emission"=?, 
+                            "consultant_name_confirmation"=?, "consultant_company"=?, 
+                            "project_owner_name_confirmation"=?, "project_owner_company"=?, 
                             "last_updated_by"=?, "last_updated_time"=? 
                             WHERE "reply_slip_id"=?';
 
                 $stmt = Yii::app()->db->createCommand($sql);
                 $result = $stmt->execute(array($txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
                     $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhu,
-                    $txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,$txnReplySlipEscalatorBrakingSystem,
-                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampBallast,
-                    $txnReplySlipHidLampAddOnProtection,$txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                    $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                    $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                    $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                    $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
                     $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
                     $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
                     $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
@@ -845,9 +1221,11 @@ class PlanningAheadDao extends CApplicationComponent {
                     $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
                     $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
                     $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,
-                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartChargingSystem,
-                    $txnReplySlipEvChargerSystemHarmonicEmission,
+                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                    $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                    $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                    $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
                     $lastUpdatedBy,$lastUpdatedTime,$txnMeetingReplySlipId));
             }
 
@@ -1069,32 +1447,44 @@ class PlanningAheadDao extends CApplicationComponent {
     }
 
     public function addReplySlip($schemeNo,$replySlipLoc,$bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
-                                    $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
-                                    $chillerPlantYesNo,$chillerPlantAhu,$chillerPlantChiller,
-                                    $escalatorYesNo,$escalatorBrakingSystem,$escalatorControl,
-                                    $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampBallast,
-                                    $hidLampAddOnProtection,$sensitiveMachineYesNo,$sensitiveMachineMitigation,
-                                    $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
-                                    $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
-                                    $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
-                                    $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
-                                    $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evChargerSystemEvCharger,
-                                    $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
-                                    $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime) {
+                                 $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
+                                 $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
+                                 $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
+                                 $chillerPlantChiller,$escalatorYesNo,$escalatorMotorStartup,
+                                 $escalatorVsdMitigation,$escalatorBrakingSystem,$escalatorControl,
+                                 $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampMitigation,
+                                 $sensitiveMachineYesNo,$sensitiveMachineMitigation,
+                                 $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
+                                 $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
+                                 $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
+                                 $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
+                                 $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evControlYesNo,
+                                 $evChargerSystemEvCharger,$evChargerSystemSmartYesNo,
+                                 $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
+                                 $consultantNameConfirmation,$consultantCompany,
+                                 $projectOwnerNameConfirmation,$projectOwnerCompany,
+                                 $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime) {
 
         $sql = 'INSERT INTO "tbl_slip_reply" ("reply_slip_loc","scheme_no", "bms_yes_no","bms_server_central_computer",
                               "bms_ddc","changeover_scheme_yes_no","changeover_scheme_control","changeover_scheme_uv",
-                              "chiller_plant_yes_no","chiller_plant_ahu","chiller_plant_chiller","escalator_yes_no",
+                              "chiller_plant_yes_no","chiller_plant_ahu_control","chiller_plant_ahu_startup",
+                              "chiller_plant_vsd","chiller_plant_ahu_chilled_water","chiller_plant_standby_ahu",
+                              "chiller_plant_chiller","escalator_yes_no","escalator_motor_startup","escalator_vsd_mitigation",
                               "escalator_braking_system","escalator_control","lift_yes_no","lift_operation",
-                              "hid_lamp_yes_no","hid_lamp_ballast","hid_lamp_add_on_protection","sensitive_machine_yes_no",
+                              "hid_lamp_yes_no","hid_lamp_mitigation","sensitive_machine_yes_no",
                               "sensitive_machine_mitigation","telecom_machine_yes_no","telecom_machine_server_or_computer",
                               "telecom_machine_peripherals","telecom_machine_harmonic_emission","air_conditioners_yes_no",
                               "air_conditioners_micb","air_conditioners_load_forecasting","air_conditioners_type",
                               "non_linear_load_yes_no","non_linear_load_harmonic_emission","renewable_energy_yes_no",
                               "renewable_energy_inverter_and_controls","renewable_energy_harmonic_emission",
-                              "ev_charger_system_yes_no","ev_charger_system_ev_charger","ev_charger_system_smart_charging_system",
-                              "ev_charger_system_harmonic_emission","created_by","created_time","last_updated_by","last_updated_time") 
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ';
+                              "ev_charger_system_yes_no","ev_control_yes_no","ev_charger_system_ev_charger",
+                              "ev_charger_system_smart_yes_no","ev_charger_system_smart_charging_system",
+                              "ev_charger_system_harmonic_emission",
+                              "consultant_name_confirmation","consultant_company",
+                              "project_owner_name_confirmation","project_owner_company",
+                              "created_by","created_time",
+                              "last_updated_by","last_updated_time") 
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ';
 
         try {
             //We start our transaction.
@@ -1104,16 +1494,21 @@ class PlanningAheadDao extends CApplicationComponent {
 
             $result = $stmt->execute(array($replySlipLoc,$schemeNo,$bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
                 $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
-                $chillerPlantYesNo,$chillerPlantAhu,$chillerPlantChiller,
-                $escalatorYesNo,$escalatorBrakingSystem,$escalatorControl,
-                $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampBallast,
-                $hidLampAddOnProtection,$sensitiveMachineYesNo,$sensitiveMachineMitigation,
+                $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
+                $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
+                $chillerPlantChiller,$escalatorYesNo,$escalatorMotorStartup,
+                $escalatorVsdMitigation,$escalatorBrakingSystem,$escalatorControl,
+                $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampMitigation,
+                $sensitiveMachineYesNo,$sensitiveMachineMitigation,
                 $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
                 $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
                 $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
                 $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
-                $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evChargerSystemEvCharger,
+                $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evControlYesNo,
+                $evChargerSystemEvCharger,$evChargerSystemSmartYesNo,
                 $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
+                $consultantNameConfirmation,$consultantCompany,
+                $projectOwnerNameConfirmation,$projectOwnerCompany,
                 $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime));
 
             if ($result) {
@@ -1158,32 +1553,43 @@ class PlanningAheadDao extends CApplicationComponent {
     }
 
     public function updateReplySlip($replySlipId,$replySlipLoc,$bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
-                                 $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
-                                 $chillerPlantYesNo,$chillerPlantAhu,$chillerPlantChiller,
-                                 $escalatorYesNo,$escalatorBrakingSystem,$escalatorControl,
-                                 $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampBallast,
-                                 $hidLampAddOnProtection,$sensitiveMachineYesNo,$sensitiveMachineMitigation,
-                                 $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
-                                 $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
-                                 $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
-                                 $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
-                                 $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evChargerSystemEvCharger,
-                                 $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
-                                 $lastUpdatedBy,$lastUpdatedTime) {
-        $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?, "bms_yes_no"=?, "bms_server_central_computer"=?, 
-                           "bms_ddc"=?, "changeover_scheme_yes_no"=?, "changeover_scheme_control"=?, 
-                           "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu"=?, 
-                           "chiller_plant_chiller"=?, "escalator_yes_no"=?, "escalator_braking_system"=?, 
-                           "escalator_control"=?, "lift_yes_no"=?, "lift_operation"=?, "hid_lamp_yes_no"=?,
-                           "hid_lamp_ballast"=?, "hid_lamp_add_on_protection"=?, "sensitive_machine_yes_no"=?,
-                           "sensitive_machine_mitigation"=?, "telecom_machine_yes_no"=?, "telecom_machine_server_or_computer"=?,
-                           "telecom_machine_peripherals"=?, "telecom_machine_harmonic_emission"=?, "air_conditioners_yes_no"=?,
-                           "air_conditioners_micb"=?, "air_conditioners_load_forecasting"=?, "air_conditioners_type"=?,
-                           "non_linear_load_yes_no"=?, "non_linear_load_harmonic_emission"=?, "renewable_energy_yes_no"=?,
-                           "renewable_energy_inverter_and_controls"=?, "renewable_energy_harmonic_emission"=?,
-                           "ev_charger_system_yes_no"=?, "ev_charger_system_ev_charger"=?, 
-                           "ev_charger_system_smart_charging_system"=?, "ev_charger_system_harmonic_emission"=?,
-                           "last_updated_by"=?, "last_updated_time"=? WHERE "reply_slip_id"=?';
+                                   $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
+                                   $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
+                                   $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
+                                   $chillerPlantChiller,$escalatorYesNo,$escalatorMotorStartup,
+                                   $escalatorVsdMitigation,$escalatorBrakingSystem,$escalatorControl,
+                                   $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampMitigation,
+                                   $sensitiveMachineYesNo,$sensitiveMachineMitigation,
+                                   $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
+                                   $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
+                                   $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
+                                   $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
+                                   $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evControlYesNo,
+                                   $evChargerSystemEvCharger,$evChargerSystemSmartYesNo,
+                                   $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
+                                   $consultantNameConfirmation,$consultantCompany,
+                                   $projectOwnerNameConfirmation,$projectOwnerCompany,
+                                   $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime) {
+        $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?, "bms_yes_no"=?, "bms_server_central_computer"=?,
+                            "bms_ddc"=?, "changeover_scheme_yes_no"=?, "changeover_scheme_control"=?, 
+                            "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu_control"=?,
+                            "chiller_plant_ahu_startup"=?, "chiller_plant_vsd"=?, "chiller_plant_ahu_chilled_water"=?,
+                            "chiller_plant_standby_ahu"=?, "chiller_plant_chiller"=?, "escalator_yes_no"=?, 
+                            "escalator_motor_startup"=?, "escalator_vsd_mitigation"=?, "escalator_braking_system"=?, 
+                            "escalator_control"=?, "hid_lamp_yes_no"=?, "hid_lamp_mitigation"=?, 
+                            "lift_yes_no"=?, "lift_operation"=?, "sensitive_machine_yes_no"=?,
+                            "sensitive_machine_mitigation"=?, "telecom_machine_yes_no"=?, 
+                            "telecom_machine_server_or_computer"=?, "telecom_machine_peripherals"=?, 
+                            "telecom_machine_harmonic_emission"=?, "air_conditioners_yes_no"=?, 
+                            "air_conditioners_micb"=?, "air_conditioners_load_forecasting"=?, 
+                            "air_conditioners_type"=?, "non_linear_load_yes_no"=?, "non_linear_load_harmonic_emission"=?, 
+                            "renewable_energy_yes_no"=?, "renewable_energy_inverter_and_controls"=?, 
+                            "renewable_energy_harmonic_emission"=?, "ev_charger_system_yes_no"=?, "ev_control_yes_no"=?, 
+                            "ev_charger_system_ev_charger"=?, "ev_charger_system_smart_yes_no"=?, 
+                            "ev_charger_system_smart_charging_system"=?, "ev_charger_system_harmonic_emission"=?, 
+                            "consultant_name_confirmation"=?, "consultant_company"=?,
+                            "project_owner_name_confirmation"=?, "project_owner_company"=?,
+                            "last_updated_by"=?, "last_updated_time"=? WHERE "reply_slip_id"=?';
 
         try {
             //We start our transaction.
@@ -1193,16 +1599,21 @@ class PlanningAheadDao extends CApplicationComponent {
 
             $result = $stmt->execute(array($replySlipLoc,$bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
                 $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
-                $chillerPlantYesNo,$chillerPlantAhu,$chillerPlantChiller,
-                $escalatorYesNo,$escalatorBrakingSystem,$escalatorControl,
-                $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampBallast,
-                $hidLampAddOnProtection,$sensitiveMachineYesNo,$sensitiveMachineMitigation,
+                $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
+                $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
+                $chillerPlantChiller,$escalatorYesNo,$escalatorMotorStartup,
+                $escalatorVsdMitigation,$escalatorBrakingSystem,$escalatorControl,
+                $hidLampYesNo,$hidLampMitigation,$liftYesNo,$liftOperation,
+                $sensitiveMachineYesNo,$sensitiveMachineMitigation,
                 $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
                 $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
                 $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
                 $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
-                $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evChargerSystemEvCharger,
+                $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evControlYesNo,
+                $evChargerSystemEvCharger,$evChargerSystemSmartYesNo,
                 $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
+                $consultantNameConfirmation,$consultantCompany,
+                $projectOwnerNameConfirmation,$projectOwnerCompany,
                 $lastUpdatedBy,$lastUpdatedTime,$replySlipId));
 
             $transaction->commit();
