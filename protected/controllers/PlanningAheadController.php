@@ -2,6 +2,7 @@
 
 use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\PhpWord\Element\ListItem;
 
 Yii::import('application.vendor.PHPExcel', true);
 Yii::import('application.vendor.autoload', true);
@@ -683,6 +684,9 @@ class PlanningAheadController extends Controller {
             $this->viewbag['evaReportNonLinearLoadHarmonicEmissionFinding'] = $recordList['evaReportNonLinearLoadHarmonicEmissionFinding'];
             $this->viewbag['evaReportNonLinearLoadHarmonicEmissionRecommend'] = $recordList['evaReportNonLinearLoadHarmonicEmissionRecommend'];
             $this->viewbag['evaReportNonLinearLoadHarmonicEmissionPass'] = $recordList['evaReportNonLinearLoadHarmonicEmissionPass'];
+            $this->viewbag['evaReportNonLinearLoadSupplementYesNo'] = $recordList['evaReportNonLinearLoadSupplementYesNo'];
+            $this->viewbag['evaReportNonLinearLoadSupplement'] = $recordList['evaReportNonLinearLoadSupplement'];
+            $this->viewbag['evaReportNonLinearLoadSupplementPass'] = $recordList['evaReportNonLinearLoadSupplementPass'];
             $this->viewbag['evaReportRenewableEnergyYesNo'] = $recordList['evaReportRenewableEnergyYesNo'];
             $this->viewbag['evaReportRenewableEnergyInverterAndControlsYesNo'] = $recordList['evaReportRenewableEnergyInverterAndControlsYesNo'];
             $this->viewbag['evaReportRenewableEnergyInverterAndControlsFinding'] = $recordList['evaReportRenewableEnergyInverterAndControlsFinding'];
@@ -700,10 +704,6 @@ class PlanningAheadController extends Controller {
             $this->viewbag['evaReportEvChargerSystemEvChargerFinding'] = $recordList['evaReportEvChargerSystemEvChargerFinding'];
             $this->viewbag['evaReportEvChargerSystemEvChargerRecommend'] = $recordList['evaReportEvChargerSystemEvChargerRecommend'];
             $this->viewbag['evaReportEvChargerSystemEvChargerPass'] = $recordList['evaReportEvChargerSystemEvChargerPass'];
-            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemYesNo'] = $recordList['evaReportEvChargerSystemSmartChargingSystemYesNo'];
-            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemFinding'] = $recordList['evaReportEvChargerSystemSmartChargingSystemFinding'];
-            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemRecommend'] = $recordList['evaReportEvChargerSystemSmartChargingSystemRecommend'];
-            $this->viewbag['evaReportEvChargerSystemSmartChargingSystemPass'] = $recordList['evaReportEvChargerSystemSmartChargingSystemPass'];
             $this->viewbag['evaReportEvChargerSystemHarmonicEmissionYesNo'] = $recordList['evaReportEvChargerSystemHarmonicEmissionYesNo'];
             $this->viewbag['evaReportEvChargerSystemHarmonicEmissionFinding'] = $recordList['evaReportEvChargerSystemHarmonicEmissionFinding'];
             $this->viewbag['evaReportEvChargerSystemHarmonicEmissionRecommend'] = $recordList['evaReportEvChargerSystemHarmonicEmissionRecommend'];
@@ -931,8 +931,6 @@ class PlanningAheadController extends Controller {
 
     }
 
-
-
     public function actionGetPlanningAheadProjectDetailFirstInvitationLetterTemplate() {
 
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -1113,10 +1111,10 @@ class PlanningAheadController extends Controller {
             $thirdInvitationLetterIssueDate,$thirdInvitationLetterFaxRefNo,
             $lastUpdatedBy,$lastUpdatedTime);
 
-        $secondInvitationLetterTemplatePath = Yii::app()->commonUtil->
+        $thirdInvitationLetterTemplatePath = Yii::app()->commonUtil->
         getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
 
-        $secondInvitationLetterTemplateFileName = Yii::app()->commonUtil->
+        $thirdInvitationLetterTemplateFileName = Yii::app()->commonUtil->
         getConfigValueByConfigName('planningAheadThirdInvitationLetterTemplateFileName');
 
         $firstInvitationLetterFaxYear = date("y", strtotime($firstInvitationLetterIssueDate));
@@ -1129,8 +1127,8 @@ class PlanningAheadController extends Controller {
         $thirdInvitationLetterIssueDateMonth = date("M", strtotime($thirdInvitationLetterIssueDate));
         $thirdInvitationLetterIssueDateYear = date("Y", strtotime($thirdInvitationLetterIssueDate));
 
-        $templateProcessor = new TemplateProcessor($secondInvitationLetterTemplatePath['configValue'] .
-            $secondInvitationLetterTemplateFileName['configValue']);
+        $templateProcessor = new TemplateProcessor($thirdInvitationLetterTemplatePath['configValue'] .
+            $thirdInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
@@ -1157,8 +1155,139 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('secondLetterFaxRefNo', $secondInvitationLetterFaxRefNo);
         $templateProcessor->setValue('secondFaxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
 
-        $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $secondInvitationLetterTemplateFileName['configValue'];
+        $pathToSave = $thirdInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
+            $thirdInvitationLetterTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header('Content-Disposition: attachment; filename='. basename($pathToSave));
+        header('Content-Length: ' . filesize($pathToSave));
+        header('Pragma: public');
+
+        //Clear system output buffer
+        flush();
+
+        //Read the size of the file
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
+
+        die();
+
+    }
+
+    public function actionGetPlanningAheadProjectDetailEvaReportTemplate()
+    {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        $schemeNo = $param['schemeNo'];
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+        $checkedBox = '<w:sym w:font="Wingdings" w:char="F0FE"/>';
+        $unCheckedBox = '<w:sym w:font="Wingdings" w:char="F0A8"/>';
+
+        $evaReportTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplatePath');
+        $evaReportTemplateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplateFileName');
+
+        $evaReportIssueDateDay = date("j", strtotime($recordList['evaReportIssueDate']));
+        $evaReportIssueDateMonth = date("M", strtotime($recordList['evaReportIssueDate']));
+        $evaReportIssueDateYear = date("Y", strtotime($recordList['evaReportIssueDate']));
+        $evaReportFaxDateMonth = date("m", strtotime($recordList['evaReportIssueDate']));
+        $evaReportFaxDateYear = date("y", strtotime($recordList['evaReportIssueDate']));
+
+        $templateProcessor = new TemplateProcessor($evaReportTemplatePath['configValue'] . $evaReportTemplateFileName['configValue']);
+
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+        $templateProcessor->setValue('issueDate', $evaReportIssueDateDay . " " . $evaReportIssueDateMonth . " " . $evaReportIssueDateYear);
+        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
+        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
+        $templateProcessor->setValue('faxRefNo', $this->formatToWordTemplate($recordList['evaReportFaxRefNo']));
+        $templateProcessor->setValue('faxDate', $evaReportFaxDateYear . "-" . $evaReportFaxDateMonth);
+        if (isset($recordList['secondConsultantSurname'])) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantCompany', "(" . $this->formatToWordTemplate($recordList['secondConsultantCompany']) . ")");
+            $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        }
+        if (isset($recordList['firstInvitationLetterWalkDate'])) {
+            $templateProcessor->setValue('siteVisitDate', $recordList['firstInvitationLetterWalkDate']);
+        } else if (isset($recordList['secondInvitationLetterWalkDate'])) {
+            $templateProcessor->setValue('siteVisitDate', $recordList['secondInvitationLetterWalkDate']);
+        } else if (isset($recordList['thirdInvitationLetterWalkDate'])) {
+            $templateProcessor->setValue('siteVisitDate', $recordList['thirdInvitationLetterWalkDate']);
+        }
+
+        $bmsItemRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
+        $changeoverControlRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
+        $changeoverUvRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
+
+        // check if BMS contains information
+        $content = "";
+        if (isset($recordList['evaReportBmsServerCentralComputerFinding']) && ($recordList['evaReportBmsServerCentralComputerFinding']!="")) {
+            $content = $content . $recordList['evaReportBmsServerCentralComputerFinding'];
+            if (isset($recordList['evaReportBmsServerCentralComputerRecommend']) && (trim($recordList['evaReportBmsServerCentralComputerRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportBmsServerCentralComputerRecommend'];
+            } else {
+                $content = $content . " hence, their operations for controlling building facilities would be sustained under voltage dip incidents.";
+            }
+        }
+        if (isset($recordList['evaReportBmsDdcFinding']) && ($recordList['evaReportBmsDdcFinding']!="")) {
+            $content = $content . " " . $recordList['evaReportBmsDdcFinding'];
+            if (isset($recordList['evaReportBmsDdcRecommend']) && (trim($recordList['evaReportBmsDdcRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportBmsDdcRecommend'];
+            }
+        }
+        if (isset($recordList['evaReportBmsSupplement']) && ($recordList['evaReportBmsSupplement']!="")) {
+            $content = $content . " " . $recordList['evaReportBmsSupplement'];
+        }
+        if (isset($content) && (trim($content) != "")) {
+            $bmsItemRun->addText($this->formatToWordTemplate($content));
+            $templateProcessor->setComplexBlock('bmsContent', $bmsItemRun);
+        } else {
+            $templateProcessor->setValue('bmsContent', "");
+        }
+
+
+
+        // check if changeover Control contains information
+        $content = "";
+        if (isset($recordList['evaReportChangeoverSchemeControlFinding']) && ($recordList['evaReportChangeoverSchemeControlFinding']!="")) {
+            $content = $content . $recordList['evaReportChangeoverSchemeControlFinding'];
+            if (isset($recordList['evaReportChangeoverSchemeControlRecommend']) && (trim($recordList['evaReportChangeoverSchemeControlRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportChangeoverSchemeControlRecommend'];
+            }
+        }
+        if (isset($content) && (trim($content) != "")) {
+            $changeoverControlRun->addText($this->formatToWordTemplate($content));
+            $templateProcessor->setComplexBlock('changoverControlContent', $changeoverControlRun);
+        } else {
+            $templateProcessor->setValue('changoverControlContent', "");
+        }
+
+        // check if changeover UV contains information
+        $content = "";
+        if (isset($recordList['evaReportChangeoverSchemeUvFinding']) && ($recordList['evaReportChangeoverSchemeUvFinding']!="")) {
+            $content = $content . $recordList['evaReportChangeoverSchemeUvFinding'];
+            if (isset($recordList['evaReportChangeoverSchemeUvRecommend']) && (trim($recordList['evaReportChangeoverSchemeUvRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportChangeoverSchemeUvRecommend'];
+            }
+        }
+        $content = "";
+        if (isset($content) && (trim($content) != "")) {
+            $changeoverUvRun->addText($this->formatToWordTemplate($content));
+            $templateProcessor->setComplexBlock('changoverUvContent', $changeoverUvRun);
+        } else {
+            $templateProcessor->setValue('changoverUvContent', "");
+        }
+
+
+
+        $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
+            $evaReportTemplateFileName['configValue'];
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -1371,6 +1500,157 @@ class PlanningAheadController extends Controller {
             $txnThirdInvitationLetterAccept = $this->getPostParamString('thirdInvitationLetterAccept');
             $txnThirdInvitationLetterWalkDate = $this->getPostParamString('thirdInvitationLetterWalkDate');
 
+            $txnEvaReportId = $this->getPostParamString('evaReportId');
+            $txnEvaReportRemark = $this->getPostParamString('evaReportRemark');
+            $txnEvaReportEdmsLink = $this->getPostParamString('evaReportEdmsLink');
+            $txnEvaReportIssueDate = $this->getPostParamString('evaReportIssueDate');
+            $txnEvaReportFaxRefNo = $this->getPostParamString('evaReportFaxRefNo');
+            $txnEvaReportScore = $this->getPostParamString('evaReportScore');
+            $txnEvaReportBmsYesNo = $this->getPostParamString('evaReportBmsYesNo');
+            $txnEvaReportBmsServerCentralComputerYesNo = $this->getPostParamString('evaReportBmsServerCentralComputerYesNo');
+            $txnEvaReportBmsServerCentralComputerFinding = $this->getPostParamString('evaReportBmsServerCentralComputerFinding');
+            $txnEvaReportBmsServerCentralComputerRecommend = $this->getPostParamString('evaReportBmsServerCentralComputerRecommend');
+            $txnEvaReportBmsServerCentralComputerPass = $this->getPostParamString('evaReportBmsServerCentralComputerPass');
+            $txnEvaReportBmsDdcYesNo = $this->getPostParamString('evaReportBmsDdcYesNo');
+            $txnEvaReportBmsDdcFinding = $this->getPostParamString('evaReportBmsDdcFinding');
+            $txnEvaReportBmsDdcRecommend = $this->getPostParamString('evaReportBmsDdcRecommend');
+            $txnEvaReportBmsDdcPass = $this->getPostParamString('evaReportBmsDdcPass');
+            $txnEvaReportBmsSupplementYesNo = $this->getPostParamString('evaReportBmsSupplementYesNo');
+            $txnEvaReportBmsSupplement = $this->getPostParamString('evaReportBmsSupplement');
+            $txnEvaReportBmsSupplementPass = $this->getPostParamString('evaReportBmsSupplementPass');
+            $txnEvaReportChangeoverSchemeYesNo = $this->getPostParamString('evaReportChangeoverSchemeYesNo');
+            $txnEvaReportChangeoverSchemeControlYesNo = $this->getPostParamString('evaReportChangeoverSchemeControlYesNo');
+            $txnEvaReportChangeoverSchemeControlFinding = $this->getPostParamString('evaReportChangeoverSchemeControlFinding');
+            $txnEvaReportChangeoverSchemeControlRecommend = $this->getPostParamString('evaReportChangeoverSchemeControlRecommend');
+            $txnEvaReportChangeoverSchemeControlPass = $this->getPostParamString('evaReportChangeoverSchemeControlPass');
+            $txnEvaReportChangeoverSchemeUvYesNo = $this->getPostParamString('evaReportChangeoverSchemeUvYesNo');
+            $txnEvaReportChangeoverSchemeUvFinding = $this->getPostParamString('evaReportChangeoverSchemeUvFinding');
+            $txnEvaReportChangeoverSchemeUvRecommend = $this->getPostParamString('evaReportChangeoverSchemeUvRecommend');
+            $txnEvaReportChangeoverSchemeUvPass = $this->getPostParamString('evaReportChangeoverSchemeUvPass');
+            $txnEvaReportChangeoverSchemeSupplementYesNo = $this->getPostParamString('evaReportChangeoverSchemeSupplementYesNo');
+            $txnEvaReportChangeoverSchemeSupplement = $this->getPostParamString('evaReportChangeoverSchemeSupplement');
+            $txnEvaReportChangeoverSchemeSupplementPass = $this->getPostParamString('evaReportChangeoverSchemeSupplementPass');
+            $txnEvaReportChillerPlantYesNo = $this->getPostParamString('evaReportChillerPlantYesNo');
+            $txnEvaReportChillerPlantAhuChilledWaterYesNo = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterYesNo');
+            $txnEvaReportChillerPlantAhuChilledWaterFinding = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterFinding');
+            $txnEvaReportChillerPlantAhuChilledWaterRecommend = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterRecommend');
+            $txnEvaReportChillerPlantAhuChilledWaterPass = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterPass');
+            $txnEvaReportChillerPlantChillerYesNo = $this->getPostParamString('evaReportChillerPlantChillerYesNo');
+            $txnEvaReportChillerPlantChillerFinding = $this->getPostParamString('evaReportChillerPlantChillerFinding');
+            $txnEvaReportChillerPlantChillerRecommend = $this->getPostParamString('evaReportChillerPlantChillerRecommend');
+            $txnEvaReportChillerPlantChillerPass = $this->getPostParamString('evaReportChillerPlantChillerPass');
+            $txnEvaReportChillerPlantSupplementYesNo = $this->getPostParamString('evaReportChillerPlantSupplementYesNo');
+            $txnEvaReportChillerPlantSupplement = $this->getPostParamString('evaReportChillerPlantSupplement');
+            $txnEvaReportChillerPlantSupplementPass = $this->getPostParamString('evaReportChillerPlantSupplementPass');
+            $txnEvaReportEscalatorYesNo = $this->getPostParamString('evaReportEscalatorYesNo');
+            $txnEvaReportEscalatorBrakingSystemYesNo = $this->getPostParamString('evaReportEscalatorBrakingSystemYesNo');
+            $txnEvaReportEscalatorBrakingSystemFinding = $this->getPostParamString('evaReportEscalatorBrakingSystemFinding');
+            $txnEvaReportEscalatorBrakingSystemRecommend = $this->getPostParamString('evaReportEscalatorBrakingSystemRecommend');
+            $txnEvaReportEscalatorBrakingSystemPass = $this->getPostParamString('evaReportEscalatorBrakingSystemPass');
+            $txnEvaReportEscalatorControlYesNo = $this->getPostParamString('evaReportEscalatorControlYesNo');
+            $txnEvaReportEscalatorControlFinding = $this->getPostParamString('evaReportEscalatorControlFinding');
+            $txnEvaReportEscalatorControlRecommend = $this->getPostParamString('evaReportEscalatorControlRecommend');
+            $txnEvaReportEscalatorControlPass = $this->getPostParamString('evaReportEscalatorControlPass');
+            $txnEvaReportEscalatorSupplementYesNo = $this->getPostParamString('evaReportEscalatorSupplementYesNo');
+            $txnEvaReportEscalatorSupplement = $this->getPostParamString('evaReportEscalatorSupplement');
+            $txnEvaReportEscalatorSupplementPass = $this->getPostParamString('evaReportEscalatorSupplementPass');
+            $txnEvaReportLiftYesNo = $this->getPostParamString('evaReportLiftYesNo');
+            $txnEvaReportLiftOperationYesNo = $this->getPostParamString('evaReportLiftOperationYesNo');
+            $txnEvaReportLiftOperationFinding = $this->getPostParamString('evaReportLiftOperationFinding');
+            $txnEvaReportLiftOperationRecommend = $this->getPostParamString('evaReportLiftOperationRecommend');
+            $txnEvaReportLiftOperationPass = $this->getPostParamString('evaReportLiftOperationPass');
+            $txnEvaReportLiftMainSupplyYesNo = $this->getPostParamString('evaReportLiftMainSupplyYesNo');
+            $txnEvaReportLiftMainSupplyFinding = $this->getPostParamString('evaReportLiftMainSupplyFinding');
+            $txnEvaReportLiftMainSupplyRecommend = $this->getPostParamString('evaReportLiftMainSupplyRecommend');
+            $txnEvaReportLiftMainSupplyPass = $this->getPostParamString('evaReportLiftMainSupplyPass');
+            $txnEvaReportLiftSupplementYesNo = $this->getPostParamString('evaReportLiftSupplementYesNo');
+            $txnEvaReportLiftSupplement = $this->getPostParamString('evaReportLiftSupplement');
+            $txnEvaReportLiftSupplementPass = $this->getPostParamString('evaReportLiftSupplementPass');
+            $txnEvaReportHidLampYesNo = $this->getPostParamString('evaReportHidLampYesNo');
+            $txnEvaReportHidLampBallastYesNo = $this->getPostParamString('evaReportHidLampBallastYesNo');
+            $txnEvaReportHidLampBallastFinding = $this->getPostParamString('evaReportHidLampBallastFinding');
+            $txnEvaReportHidLampBallastRecommend = $this->getPostParamString('evaReportHidLampBallastRecommend');
+            $txnEvaReportHidLampBallastPass = $this->getPostParamString('evaReportHidLampBallastPass');
+            $txnEvaReportHidLampAddonProtectYesNo = $this->getPostParamString('evaReportHidLampAddonProtectYesNo');
+            $txnEvaReportHidLampAddonProtectFinding = $this->getPostParamString('evaReportHidLampAddonProtectFinding');
+            $txnEvaReportHidLampAddonProtectRecommend = $this->getPostParamString('evaReportHidLampAddonProtectRecommend');
+            $txnEvaReportHidLampAddonProtectPass = $this->getPostParamString('evaReportHidLampAddonProtectPass');
+            $txnEvaReportHidLampSupplementYesNo = $this->getPostParamString('evaReportHidLampSupplementYesNo');
+            $txnEvaReportHidLampSupplement = $this->getPostParamString('evaReportHidLampSupplement');
+            $txnEvaReportHidLampSupplementPass = $this->getPostParamString('evaReportHidLampSupplementPass');
+            $txnEvaReportSensitiveMachineYesNo = $this->getPostParamString('evaReportSensitiveMachineYesNo');
+            $txnEvaReportSensitiveMachineMedicalYesNo = $this->getPostParamString('evaReportSensitiveMachineMedicalYesNo');
+            $txnEvaReportSensitiveMachineMedicalFinding = $this->getPostParamString('evaReportSensitiveMachineMedicalFinding');
+            $txnEvaReportSensitiveMachineMedicalRecommend = $this->getPostParamString('evaReportSensitiveMachineMedicalRecommend');
+            $txnEvaReportSensitiveMachineMedicalPass = $this->getPostParamString('evaReportSensitiveMachineMedicalPass');
+            $txnEvaReportSensitiveMachineSupplementYesNo = $this->getPostParamString('evaReportSensitiveMachineSupplementYesNo');
+            $txnEvaReportSensitiveMachineSupplement = $this->getPostParamString('evaReportSensitiveMachineSupplement');
+            $txnEvaReportSensitiveMachineSupplementPass = $this->getPostParamString('evaReportSensitiveMachineSupplementPass');
+            $txnEvaReportTelecomMachineYesNo = $this->getPostParamString('evaReportTelecomMachineYesNo');
+            $txnEvaReportTelecomMachineServerOrComputerYesNo = $this->getPostParamString('evaReportTelecomMachineServerOrComputerYesNo');
+            $txnEvaReportTelecomMachineServerOrComputerFinding = $this->getPostParamString('evaReportTelecomMachineServerOrComputerFinding');
+            $txnEvaReportTelecomMachineServerOrComputerRecommend = $this->getPostParamString('evaReportTelecomMachineServerOrComputerRecommend');
+            $txnEvaReportTelecomMachineServerOrComputerPass = $this->getPostParamString('evaReportTelecomMachineServerOrComputerPass');
+            $txnEvaReportTelecomMachinePeripheralsYesNo = $this->getPostParamString('evaReportTelecomMachinePeripheralsYesNo');
+            $txnEvaReportTelecomMachinePeripheralsFinding = $this->getPostParamString('evaReportTelecomMachinePeripheralsFinding');
+            $txnEvaReportTelecomMachinePeripheralsRecommend = $this->getPostParamString('evaReportTelecomMachinePeripheralsRecommend');
+            $txnEvaReportTelecomMachinePeripheralsPass = $this->getPostParamString('evaReportTelecomMachinePeripheralsPass');
+            $txnEvaReportTelecomMachineHarmonicEmissionYesNo = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionYesNo');
+            $txnEvaReportTelecomMachineHarmonicEmissionFinding = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionFinding');
+            $txnEvaReportTelecomMachineHarmonicEmissionRecommend = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionRecommend');
+            $txnEvaReportTelecomMachineHarmonicEmissionPass = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionPass');
+            $txnEvaReportTelecomMachineSupplementYesNo = $this->getPostParamString('evaReportTelecomMachineSupplementYesNo');
+            $txnEvaReportTelecomMachineSupplement = $this->getPostParamString('evaReportTelecomMachineSupplement');
+            $txnEvaReportTelecomMachineSupplementPass = $this->getPostParamString('evaReportTelecomMachineSupplementPass');
+            $txnEvaReportAirConditionersYesNo = $this->getPostParamString('evaReportAirConditionersYesNo');
+            $txnEvaReportAirConditionersMicbYesNo = $this->getPostParamString('evaReportAirConditionersMicbYesNo');
+            $txnEvaReportAirConditionersMicbFinding = $this->getPostParamString('evaReportAirConditionersMicbFinding');
+            $txnEvaReportAirConditionersMicbRecommend = $this->getPostParamString('evaReportAirConditionersMicbRecommend');
+            $txnEvaReportAirConditionersMicbPass = $this->getPostParamString('evaReportAirConditionersMicbPass');
+            $txnEvaReportAirConditionersLoadForecastingYesNo = $this->getPostParamString('evaReportAirConditionersLoadForecastingYesNo');
+            $txnEvaReportAirConditionersLoadForecastingFinding = $this->getPostParamString('evaReportAirConditionersLoadForecastingFinding');
+            $txnEvaReportAirConditionersLoadForecastingRecommend = $this->getPostParamString('evaReportAirConditionersLoadForecastingRecommend');
+            $txnEvaReportAirConditionersLoadForecastingPass = $this->getPostParamString('evaReportAirConditionersLoadForecastingPass');
+            $txnEvaReportAirConditionersTypeYesNo = $this->getPostParamString('evaReportAirConditionersTypeYesNo');
+            $txnEvaReportAirConditionersTypeFinding = $this->getPostParamString('evaReportAirConditionersTypeFinding');
+            $txnEvaReportAirConditionersTypeRecommend = $this->getPostParamString('evaReportAirConditionersTypeRecommend');
+            $txnEvaReportAirConditionersTypePass = $this->getPostParamString('evaReportAirConditionersTypePass');
+            $txnEvaReportAirConditionersSupplementYesNo = $this->getPostParamString('evaReportAirConditionersSupplementYesNo');
+            $txnEvaReportAirConditionersSupplement = $this->getPostParamString('evaReportAirConditionersSupplement');
+            $txnEvaReportAirConditionersSupplementPass = $this->getPostParamString('evaReportAirConditionersSupplementPass');
+            $txnEvaReportNonLinearLoadYesNo = $this->getPostParamString('evaReportNonLinearLoadYesNo');
+            $txnEvaReportNonLinearLoadHarmonicEmissionYesNo = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionYesNo');
+            $txnEvaReportNonLinearLoadHarmonicEmissionFinding = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionFinding');
+            $txnEvaReportNonLinearLoadHarmonicEmissionRecommend = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionRecommend');
+            $txnEvaReportNonLinearLoadHarmonicEmissionPass = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionPass');
+            $txnEvaReportNonLinearLoadSupplementYesNo = $this->getPostParamString('evaReportNonLinearLoadSupplementYesNo');
+            $txnEvaReportNonLinearLoadSupplement = $this->getPostParamString('evaReportNonLinearLoadSupplement');
+            $txnEvaReportNonLinearLoadSupplementPass = $this->getPostParamString('evaReportNonLinearLoadSupplementPass');
+            $txnEvaReportRenewableEnergyYesNo = $this->getPostParamString('evaReportRenewableEnergyYesNo');
+            $txnEvaReportRenewableEnergyInverterAndControlsYesNo = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsYesNo');
+            $txnEvaReportRenewableEnergyInverterAndControlsFinding = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsFinding');
+            $txnEvaReportRenewableEnergyInverterAndControlsRecommend = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsRecommend');
+            $txnEvaReportRenewableEnergyInverterAndControlsPass = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsPass');
+            $txnEvaReportRenewableEnergyHarmonicEmissionYesNo = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionYesNo');
+            $txnEvaReportRenewableEnergyHarmonicEmissionFinding = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionFinding');
+            $txnEvaReportRenewableEnergyHarmonicEmissionRecommend = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionRecommend');
+            $txnEvaReportRenewableEnergyHarmonicEmissionPass = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionPass');
+            $txnEvaReportRenewableEnergySupplementYesNo = $this->getPostParamString('evaReportRenewableEnergySupplementYesNo');
+            $txnEvaReportRenewableEnergySupplement = $this->getPostParamString('evaReportRenewableEnergySupplement');
+            $txnEvaReportRenewableEnergySupplementPass = $this->getPostParamString('evaReportRenewableEnergySupplementPass');
+            $txnEvaReportEvChargerSystemYesNo = $this->getPostParamString('evaReportEvChargerSystemYesNo');
+            $txnEvaReportEvChargerSystemEvChargerYesNo = $this->getPostParamString('evaReportEvChargerSystemEvChargerYesNo');
+            $txnEvaReportEvChargerSystemEvChargerFinding = $this->getPostParamString('evaReportEvChargerSystemEvChargerFinding');
+            $txnEvaReportEvChargerSystemEvChargerRecommend = $this->getPostParamString('evaReportEvChargerSystemEvChargerRecommend');
+            $txnEvaReportEvChargerSystemEvChargerPass = $this->getPostParamString('evaReportEvChargerSystemEvChargerPass');
+            $txnEvaReportEvChargerSystemHarmonicEmissionYesNo = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionYesNo');
+            $txnEvaReportEvChargerSystemHarmonicEmissionFinding = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionFinding');
+            $txnEvaReportEvChargerSystemHarmonicEmissionRecommend = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionRecommend');
+            $txnEvaReportEvChargerSystemHarmonicEmissionPass = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionPass');
+            $txnEvaReportEvChargerSystemSupplementYesNo = $this->getPostParamString('evaReportEvChargerSystemSupplementYesNo');
+            $txnEvaReportEvChargerSystemSupplement = $this->getPostParamString('evaReportEvChargerSystemSupplement');
+            $txnEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('evaReportEvChargerSystemSupplementPass');
+
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
 
@@ -1425,8 +1705,69 @@ class PlanningAheadController extends Controller {
                 $txnThirdInvitationLetterIssueDate,
                 $txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
                 $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                $lastUpdatedBy,$lastUpdatedTime,
-                $txnPlanningAheadId);
+                $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
+                $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportLiftYesNo,
+                $txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,$txnEvaReportLiftOperationRecommend,
+                $txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,$txnEvaReportLiftMainSupplyFinding,
+                $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,$txnEvaReportLiftSupplementYesNo,
+                $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,$txnEvaReportHidLampYesNo,
+                $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                $txnState,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId);
 
         } else {
             $retJson['status'] = 'NOTOK';
@@ -1621,6 +1962,157 @@ class PlanningAheadController extends Controller {
             $txnThirdInvitationLetterEdmsLink = $this->getPostParamString('thirdInvitationLetterEdmsLink');
             $txnThirdInvitationLetterAccept = $this->getPostParamString('thirdInvitationLetterAccept');
             $txnThirdInvitationLetterWalkDate = $this->getPostParamString('thirdInvitationLetterWalkDate');
+
+            $txnEvaReportId = $this->getPostParamString('evaReportId');
+            $txnEvaReportRemark = $this->getPostParamString('evaReportRemark');
+            $txnEvaReportEdmsLink = $this->getPostParamString('evaReportEdmsLink');
+            $txnEvaReportIssueDate = $this->getPostParamString('evaReportIssueDate');
+            $txnEvaReportFaxRefNo = $this->getPostParamString('evaReportFaxRefNo');
+            $txnEvaReportScore = $this->getPostParamString('evaReportScore');
+            $txnEvaReportBmsYesNo = $this->getPostParamString('evaReportBmsYesNo');
+            $txnEvaReportBmsServerCentralComputerYesNo = $this->getPostParamString('evaReportBmsServerCentralComputerYesNo');
+            $txnEvaReportBmsServerCentralComputerFinding = $this->getPostParamString('evaReportBmsServerCentralComputerFinding');
+            $txnEvaReportBmsServerCentralComputerRecommend = $this->getPostParamString('evaReportBmsServerCentralComputerRecommend');
+            $txnEvaReportBmsServerCentralComputerPass = $this->getPostParamString('evaReportBmsServerCentralComputerPass');
+            $txnEvaReportBmsDdcYesNo = $this->getPostParamString('evaReportBmsDdcYesNo');
+            $txnEvaReportBmsDdcFinding = $this->getPostParamString('evaReportBmsDdcFinding');
+            $txnEvaReportBmsDdcRecommend = $this->getPostParamString('evaReportBmsDdcRecommend');
+            $txnEvaReportBmsDdcPass = $this->getPostParamString('evaReportBmsDdcPass');
+            $txnEvaReportBmsSupplementYesNo = $this->getPostParamString('evaReportBmsSupplementYesNo');
+            $txnEvaReportBmsSupplement = $this->getPostParamString('evaReportBmsSupplement');
+            $txnEvaReportBmsSupplementPass = $this->getPostParamString('evaReportBmsSupplementPass');
+            $txnEvaReportChangeoverSchemeYesNo = $this->getPostParamString('evaReportChangeoverSchemeYesNo');
+            $txnEvaReportChangeoverSchemeControlYesNo = $this->getPostParamString('evaReportChangeoverSchemeControlYesNo');
+            $txnEvaReportChangeoverSchemeControlFinding = $this->getPostParamString('evaReportChangeoverSchemeControlFinding');
+            $txnEvaReportChangeoverSchemeControlRecommend = $this->getPostParamString('evaReportChangeoverSchemeControlRecommend');
+            $txnEvaReportChangeoverSchemeControlPass = $this->getPostParamString('evaReportChangeoverSchemeControlPass');
+            $txnEvaReportChangeoverSchemeUvYesNo = $this->getPostParamString('evaReportChangeoverSchemeUvYesNo');
+            $txnEvaReportChangeoverSchemeUvFinding = $this->getPostParamString('evaReportChangeoverSchemeUvFinding');
+            $txnEvaReportChangeoverSchemeUvRecommend = $this->getPostParamString('evaReportChangeoverSchemeUvRecommend');
+            $txnEvaReportChangeoverSchemeUvPass = $this->getPostParamString('evaReportChangeoverSchemeUvPass');
+            $txnEvaReportChangeoverSchemeSupplementYesNo = $this->getPostParamString('evaReportChangeoverSchemeSupplementYesNo');
+            $txnEvaReportChangeoverSchemeSupplement = $this->getPostParamString('evaReportChangeoverSchemeSupplement');
+            $txnEvaReportChangeoverSchemeSupplementPass = $this->getPostParamString('evaReportChangeoverSchemeSupplementPass');
+            $txnEvaReportChillerPlantYesNo = $this->getPostParamString('evaReportChillerPlantYesNo');
+            $txnEvaReportChillerPlantAhuChilledWaterYesNo = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterYesNo');
+            $txnEvaReportChillerPlantAhuChilledWaterFinding = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterFinding');
+            $txnEvaReportChillerPlantAhuChilledWaterRecommend = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterRecommend');
+            $txnEvaReportChillerPlantAhuChilledWaterPass = $this->getPostParamString('evaReportChillerPlantAhuChilledWaterPass');
+            $txnEvaReportChillerPlantChillerYesNo = $this->getPostParamString('evaReportChillerPlantChillerYesNo');
+            $txnEvaReportChillerPlantChillerFinding = $this->getPostParamString('evaReportChillerPlantChillerFinding');
+            $txnEvaReportChillerPlantChillerRecommend = $this->getPostParamString('evaReportChillerPlantChillerRecommend');
+            $txnEvaReportChillerPlantChillerPass = $this->getPostParamString('evaReportChillerPlantChillerPass');
+            $txnEvaReportChillerPlantSupplementYesNo = $this->getPostParamString('evaReportChillerPlantSupplementYesNo');
+            $txnEvaReportChillerPlantSupplement = $this->getPostParamString('evaReportChillerPlantSupplement');
+            $txnEvaReportChillerPlantSupplementPass = $this->getPostParamString('evaReportChillerPlantSupplementPass');
+            $txnEvaReportEscalatorYesNo = $this->getPostParamString('evaReportEscalatorYesNo');
+            $txnEvaReportEscalatorBrakingSystemYesNo = $this->getPostParamString('evaReportEscalatorBrakingSystemYesNo');
+            $txnEvaReportEscalatorBrakingSystemFinding = $this->getPostParamString('evaReportEscalatorBrakingSystemFinding');
+            $txnEvaReportEscalatorBrakingSystemRecommend = $this->getPostParamString('evaReportEscalatorBrakingSystemRecommend');
+            $txnEvaReportEscalatorBrakingSystemPass = $this->getPostParamString('evaReportEscalatorBrakingSystemPass');
+            $txnEvaReportEscalatorControlYesNo = $this->getPostParamString('evaReportEscalatorControlYesNo');
+            $txnEvaReportEscalatorControlFinding = $this->getPostParamString('evaReportEscalatorControlFinding');
+            $txnEvaReportEscalatorControlRecommend = $this->getPostParamString('evaReportEscalatorControlRecommend');
+            $txnEvaReportEscalatorControlPass = $this->getPostParamString('evaReportEscalatorControlPass');
+            $txnEvaReportEscalatorSupplementYesNo = $this->getPostParamString('evaReportEscalatorSupplementYesNo');
+            $txnEvaReportEscalatorSupplement = $this->getPostParamString('evaReportEscalatorSupplement');
+            $txnEvaReportEscalatorSupplementPass = $this->getPostParamString('evaReportEscalatorSupplementPass');
+            $txnEvaReportLiftYesNo = $this->getPostParamString('evaReportLiftYesNo');
+            $txnEvaReportLiftOperationYesNo = $this->getPostParamString('evaReportLiftOperationYesNo');
+            $txnEvaReportLiftOperationFinding = $this->getPostParamString('evaReportLiftOperationFinding');
+            $txnEvaReportLiftOperationRecommend = $this->getPostParamString('evaReportLiftOperationRecommend');
+            $txnEvaReportLiftOperationPass = $this->getPostParamString('evaReportLiftOperationPass');
+            $txnEvaReportLiftMainSupplyYesNo = $this->getPostParamString('evaReportLiftMainSupplyYesNo');
+            $txnEvaReportLiftMainSupplyFinding = $this->getPostParamString('evaReportLiftMainSupplyFinding');
+            $txnEvaReportLiftMainSupplyRecommend = $this->getPostParamString('evaReportLiftMainSupplyRecommend');
+            $txnEvaReportLiftMainSupplyPass = $this->getPostParamString('evaReportLiftMainSupplyPass');
+            $txnEvaReportLiftSupplementYesNo = $this->getPostParamString('evaReportLiftSupplementYesNo');
+            $txnEvaReportLiftSupplement = $this->getPostParamString('evaReportLiftSupplement');
+            $txnEvaReportLiftSupplementPass = $this->getPostParamString('evaReportLiftSupplementPass');
+            $txnEvaReportHidLampYesNo = $this->getPostParamString('evaReportHidLampYesNo');
+            $txnEvaReportHidLampBallastYesNo = $this->getPostParamString('evaReportHidLampBallastYesNo');
+            $txnEvaReportHidLampBallastFinding = $this->getPostParamString('evaReportHidLampBallastFinding');
+            $txnEvaReportHidLampBallastRecommend = $this->getPostParamString('evaReportHidLampBallastRecommend');
+            $txnEvaReportHidLampBallastPass = $this->getPostParamString('evaReportHidLampBallastPass');
+            $txnEvaReportHidLampAddonProtectYesNo = $this->getPostParamString('evaReportHidLampAddonProtectYesNo');
+            $txnEvaReportHidLampAddonProtectFinding = $this->getPostParamString('evaReportHidLampAddonProtectFinding');
+            $txnEvaReportHidLampAddonProtectRecommend = $this->getPostParamString('evaReportHidLampAddonProtectRecommend');
+            $txnEvaReportHidLampAddonProtectPass = $this->getPostParamString('evaReportHidLampAddonProtectPass');
+            $txnEvaReportHidLampSupplementYesNo = $this->getPostParamString('evaReportHidLampSupplementYesNo');
+            $txnEvaReportHidLampSupplement = $this->getPostParamString('evaReportHidLampSupplement');
+            $txnEvaReportHidLampSupplementPass = $this->getPostParamString('evaReportHidLampSupplementPass');
+            $txnEvaReportSensitiveMachineYesNo = $this->getPostParamString('evaReportSensitiveMachineYesNo');
+            $txnEvaReportSensitiveMachineMedicalYesNo = $this->getPostParamString('evaReportSensitiveMachineMedicalYesNo');
+            $txnEvaReportSensitiveMachineMedicalFinding = $this->getPostParamString('evaReportSensitiveMachineMedicalFinding');
+            $txnEvaReportSensitiveMachineMedicalRecommend = $this->getPostParamString('evaReportSensitiveMachineMedicalRecommend');
+            $txnEvaReportSensitiveMachineMedicalPass = $this->getPostParamString('evaReportSensitiveMachineMedicalPass');
+            $txnEvaReportSensitiveMachineSupplementYesNo = $this->getPostParamString('evaReportSensitiveMachineSupplementYesNo');
+            $txnEvaReportSensitiveMachineSupplement = $this->getPostParamString('evaReportSensitiveMachineSupplement');
+            $txnEvaReportSensitiveMachineSupplementPass = $this->getPostParamString('evaReportSensitiveMachineSupplementPass');
+            $txnEvaReportTelecomMachineYesNo = $this->getPostParamString('evaReportTelecomMachineYesNo');
+            $txnEvaReportTelecomMachineServerOrComputerYesNo = $this->getPostParamString('evaReportTelecomMachineServerOrComputerYesNo');
+            $txnEvaReportTelecomMachineServerOrComputerFinding = $this->getPostParamString('evaReportTelecomMachineServerOrComputerFinding');
+            $txnEvaReportTelecomMachineServerOrComputerRecommend = $this->getPostParamString('evaReportTelecomMachineServerOrComputerRecommend');
+            $txnEvaReportTelecomMachineServerOrComputerPass = $this->getPostParamString('evaReportTelecomMachineServerOrComputerPass');
+            $txnEvaReportTelecomMachinePeripheralsYesNo = $this->getPostParamString('evaReportTelecomMachinePeripheralsYesNo');
+            $txnEvaReportTelecomMachinePeripheralsFinding = $this->getPostParamString('evaReportTelecomMachinePeripheralsFinding');
+            $txnEvaReportTelecomMachinePeripheralsRecommend = $this->getPostParamString('evaReportTelecomMachinePeripheralsRecommend');
+            $txnEvaReportTelecomMachinePeripheralsPass = $this->getPostParamString('evaReportTelecomMachinePeripheralsPass');
+            $txnEvaReportTelecomMachineHarmonicEmissionYesNo = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionYesNo');
+            $txnEvaReportTelecomMachineHarmonicEmissionFinding = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionFinding');
+            $txnEvaReportTelecomMachineHarmonicEmissionRecommend = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionRecommend');
+            $txnEvaReportTelecomMachineHarmonicEmissionPass = $this->getPostParamString('evaReportTelecomMachineHarmonicEmissionPass');
+            $txnEvaReportTelecomMachineSupplementYesNo = $this->getPostParamString('evaReportTelecomMachineSupplementYesNo');
+            $txnEvaReportTelecomMachineSupplement = $this->getPostParamString('evaReportTelecomMachineSupplement');
+            $txnEvaReportTelecomMachineSupplementPass = $this->getPostParamString('evaReportTelecomMachineSupplementPass');
+            $txnEvaReportAirConditionersYesNo = $this->getPostParamString('evaReportAirConditionersYesNo');
+            $txnEvaReportAirConditionersMicbYesNo = $this->getPostParamString('evaReportAirConditionersMicbYesNo');
+            $txnEvaReportAirConditionersMicbFinding = $this->getPostParamString('evaReportAirConditionersMicbFinding');
+            $txnEvaReportAirConditionersMicbRecommend = $this->getPostParamString('evaReportAirConditionersMicbRecommend');
+            $txnEvaReportAirConditionersMicbPass = $this->getPostParamString('evaReportAirConditionersMicbPass');
+            $txnEvaReportAirConditionersLoadForecastingYesNo = $this->getPostParamString('evaReportAirConditionersLoadForecastingYesNo');
+            $txnEvaReportAirConditionersLoadForecastingFinding = $this->getPostParamString('evaReportAirConditionersLoadForecastingFinding');
+            $txnEvaReportAirConditionersLoadForecastingRecommend = $this->getPostParamString('evaReportAirConditionersLoadForecastingRecommend');
+            $txnEvaReportAirConditionersLoadForecastingPass = $this->getPostParamString('evaReportAirConditionersLoadForecastingPass');
+            $txnEvaReportAirConditionersTypeYesNo = $this->getPostParamString('evaReportAirConditionersTypeYesNo');
+            $txnEvaReportAirConditionersTypeFinding = $this->getPostParamString('evaReportAirConditionersTypeFinding');
+            $txnEvaReportAirConditionersTypeRecommend = $this->getPostParamString('evaReportAirConditionersTypeRecommend');
+            $txnEvaReportAirConditionersTypePass = $this->getPostParamString('evaReportAirConditionersTypePass');
+            $txnEvaReportAirConditionersSupplementYesNo = $this->getPostParamString('evaReportAirConditionersSupplementYesNo');
+            $txnEvaReportAirConditionersSupplement = $this->getPostParamString('evaReportAirConditionersSupplement');
+            $txnEvaReportAirConditionersSupplementPass = $this->getPostParamString('evaReportAirConditionersSupplementPass');
+            $txnEvaReportNonLinearLoadYesNo = $this->getPostParamString('evaReportNonLinearLoadYesNo');
+            $txnEvaReportNonLinearLoadHarmonicEmissionYesNo = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionYesNo');
+            $txnEvaReportNonLinearLoadHarmonicEmissionFinding = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionFinding');
+            $txnEvaReportNonLinearLoadHarmonicEmissionRecommend = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionRecommend');
+            $txnEvaReportNonLinearLoadHarmonicEmissionPass = $this->getPostParamString('evaReportNonLinearLoadHarmonicEmissionPass');
+            $txnEvaReportNonLinearLoadSupplementYesNo = $this->getPostParamString('evaReportNonLinearLoadSupplementYesNo');
+            $txnEvaReportNonLinearLoadSupplement = $this->getPostParamString('evaReportNonLinearLoadSupplement');
+            $txnEvaReportNonLinearLoadSupplementPass = $this->getPostParamString('evaReportNonLinearLoadSupplementPass');
+            $txnEvaReportRenewableEnergyYesNo = $this->getPostParamString('evaReportRenewableEnergyYesNo');
+            $txnEvaReportRenewableEnergyInverterAndControlsYesNo = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsYesNo');
+            $txnEvaReportRenewableEnergyInverterAndControlsFinding = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsFinding');
+            $txnEvaReportRenewableEnergyInverterAndControlsRecommend = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsRecommend');
+            $txnEvaReportRenewableEnergyInverterAndControlsPass = $this->getPostParamString('evaReportRenewableEnergyInverterAndControlsPass');
+            $txnEvaReportRenewableEnergyHarmonicEmissionYesNo = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionYesNo');
+            $txnEvaReportRenewableEnergyHarmonicEmissionFinding = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionFinding');
+            $txnEvaReportRenewableEnergyHarmonicEmissionRecommend = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionRecommend');
+            $txnEvaReportRenewableEnergyHarmonicEmissionPass = $this->getPostParamString('evaReportRenewableEnergyHarmonicEmissionPass');
+            $txnEvaReportRenewableEnergySupplementYesNo = $this->getPostParamString('evaReportRenewableEnergySupplementYesNo');
+            $txnEvaReportRenewableEnergySupplement = $this->getPostParamString('evaReportRenewableEnergySupplement');
+            $txnEvaReportRenewableEnergySupplementPass = $this->getPostParamString('evaReportRenewableEnergySupplementPass');
+            $txnEvaReportEvChargerSystemYesNo = $this->getPostParamString('evaReportEvChargerSystemYesNo');
+            $txnEvaReportEvChargerSystemEvChargerYesNo = $this->getPostParamString('evaReportEvChargerSystemEvChargerYesNo');
+            $txnEvaReportEvChargerSystemEvChargerFinding = $this->getPostParamString('evaReportEvChargerSystemEvChargerFinding');
+            $txnEvaReportEvChargerSystemEvChargerRecommend = $this->getPostParamString('evaReportEvChargerSystemEvChargerRecommend');
+            $txnEvaReportEvChargerSystemEvChargerPass = $this->getPostParamString('evaReportEvChargerSystemEvChargerPass');
+            $txnEvaReportEvChargerSystemHarmonicEmissionYesNo = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionYesNo');
+            $txnEvaReportEvChargerSystemHarmonicEmissionFinding = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionFinding');
+            $txnEvaReportEvChargerSystemHarmonicEmissionRecommend = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionRecommend');
+            $txnEvaReportEvChargerSystemHarmonicEmissionPass = $this->getPostParamString('evaReportEvChargerSystemHarmonicEmissionPass');
+            $txnEvaReportEvChargerSystemSupplementYesNo = $this->getPostParamString('evaReportEvChargerSystemSupplementYesNo');
+            $txnEvaReportEvChargerSystemSupplement = $this->getPostParamString('evaReportEvChargerSystemSupplement');
+            $txnEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('evaReportEvChargerSystemSupplementPass');
 
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");

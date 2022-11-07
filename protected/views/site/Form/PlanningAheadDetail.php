@@ -1891,7 +1891,7 @@
                         <div class="row">
                             <div class="col-9">&nbsp;</div>
                             <div class="col-3 pb-2">
-                                <input class="btn btn-warning form-control" type="button" name="genEvaluationReportDetail"
+                                <input class="btn btn-warning form-control" type="submit" name="genEvaluationReportDetail"
                                        id="genEvaluationReportDetail" value="Generate Evaluation Report">
                             </div>
                         </div>
@@ -1916,19 +1916,1348 @@
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
-                                    <th style="width: 5%">&nbsp;</th>
+                                    <th style="width: 3%">&nbsp;</th>
                                     <th style="width: 15%">Equipment</th>
-                                    <th style="width: 5%">&nbsp;</th>
-                                    <th style="width: 20%">Component</th>
-                                    <th style="width: 25%">Findings during PQ Site Walk</th>
-                                    <th style="width: 25%">Any further PQ recommendations</th>
+                                    <th style="width: 3%">&nbsp;</th>
+                                    <th style="width: 15%">Component</th>
+                                    <th style="width: 29%">Findings during PQ Site Walk</th>
+                                    <th style="width: 30%">Any further PQ recommendations</th>
                                     <th style="width: 5%">Pass?</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportBmsYesNo'] == 'Y') { ?>
+                                        <input id="evaReportBmsYesNo" name="evaReportBmsYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsYesNo" name="evaReportBmsYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">BMS</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportBmsServerCentralComputerYesNo'] == 'Y') { ?>
+                                        <input id="evaReportBmsServerCentralComputerYesNo"
+                                               name="evaReportBmsServerCentralComputerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsServerCentralComputerYesNo"
+                                               name="evaReportBmsServerCentralComputerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Server or Central Computer</td>
+                                <td>
+                                        <textarea id="evaReportBmsServerCentralComputerFinding"
+                                                  name="evaReportBmsServerCentralComputerFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportBmsServerCentralComputerRecommend"
+                                                  name="evaReportBmsServerCentralComputerRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportBmsServerCentralComputerPass'] == 'Y') { ?>
+                                        <input id="evaReportBmsServerCentralComputerPass"
+                                               name="evaReportBmsServerCentralComputerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsServerCentralComputerPass"
+                                               name="evaReportBmsServerCentralComputerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportBmsDdcYesNo'] == 'Y') { ?>
+                                        <input id="evaReportBmsDdcYesNo"
+                                               name="evaReportBmsDdcYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsDdcYesNo"
+                                               name="evaReportBmsDdcYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Distributed Digital Control (DDC)</td>
+                                <td>
+                                        <textarea id="evaReportBmsDdcFinding"
+                                                  name="evaReportBmsDdcFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportBmsDdcRecommend"
+                                                  name="evaReportBmsDdcRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportBmsDdcPass'] == 'Y') { ?>
+                                        <input id="evaReportBmsDdcPass"
+                                               name="evaReportBmsDdcPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsDdcPass"
+                                               name="evaReportBmsDdcPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportBmsSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportBmsSupplementYesNo"
+                                               name="evaReportBmsSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsSupplementYesNo"
+                                               name="evaReportBmsSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportBmsSupplement"
+                                                  name="evaReportBmsSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportBmsSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportBmsSupplementPass"
+                                               name="evaReportBmsSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportBmsSupplementPass"
+                                               name="evaReportBmsSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
 
-                                </tr>
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeYesNo" name="evaReportChangeoverSchemeYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeYesNo" name="evaReportChangeoverSchemeYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">Changeover Scheme</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeControlYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeControlYesNo"
+                                               name="evaReportChangeoverSchemeControlYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeControlYesNo"
+                                               name="evaReportChangeoverSchemeControlYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Controls, relays, main contactor</td>
+                                <td>
+                                        <textarea id="evaReportChangeoverSchemeControlFinding"
+                                                  name="evaReportChangeoverSchemeControlFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportChangeoverSchemeControlRecommend"
+                                                  name="evaReportChangeoverSchemeControlRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeControlPass'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeControlPass"
+                                               name="evaReportChangeoverSchemeControlPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeControlPass"
+                                               name="evaReportChangeoverSchemeControlPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeUvYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeUvYesNo"
+                                               name="evaReportChangeoverSchemeUvYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeUvYesNo"
+                                               name="evaReportChangeoverSchemeUvYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Under-voltage (UV) relay</td>
+                                <td>
+                                        <textarea id="evaReportChangeoverSchemeUvFinding"
+                                                  name="evaReportChangeoverSchemeUvFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportChangeoverSchemeUvRecommend"
+                                                  name="evaReportChangeoverSchemeUvRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeUvPass'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeUvPass"
+                                               name="evaReportChangeoverSchemeUvPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeUvPass"
+                                               name="evaReportChangeoverSchemeUvPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeSupplementYesNo"
+                                               name="evaReportChangeoverSchemeSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeSupplementYesNo"
+                                               name="evaReportChangeoverSchemeSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportChangeoverSchemeSupplement"
+                                                  name="evaReportChangeoverSchemeSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChangeoverSchemeSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportChangeoverSchemeSupplementPass"
+                                               name="evaReportChangeoverSchemeSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChangeoverSchemeSupplementPass"
+                                               name="evaReportChangeoverSchemeSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantYesNo" name="evaReportChillerPlantYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantYesNo" name="evaReportChillerPlantYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">Chiller Plant</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantAhuChilledWaterYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantAhuChilledWaterYesNo"
+                                               name="evaReportChillerPlantAhuChilledWaterYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantAhuChilledWaterYesNo"
+                                               name="evaReportChillerPlantAhuChilledWaterYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">AHU, chilled/ condenser water pump</td>
+                                <td>
+                                        <textarea id="evaReportChillerPlantAhuChilledWaterFinding"
+                                                  name="evaReportChillerPlantAhuChilledWaterFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportChillerPlantAhuChilledWaterRecommend"
+                                                  name="evaReportChillerPlantAhuChilledWaterRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantAhuChilledWaterPass'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantAhuChilledWaterPass"
+                                               name="evaReportChillerPlantAhuChilledWaterPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantAhuChilledWaterPass"
+                                               name="evaReportChillerPlantAhuChilledWaterPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantChillerYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantChillerYesNo"
+                                               name="evaReportChillerPlantChillerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantChillerYesNo"
+                                               name="evaReportChillerPlantChillerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Chiller</td>
+                                <td>
+                                        <textarea id="evaReportChillerPlantChillerFinding"
+                                                  name="evaReportChillerPlantChillerFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportChillerPlantChillerRecommend"
+                                                  name="evaReportChillerPlantChillerRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantChillerPass'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantChillerPass"
+                                               name="evaReportChillerPlantChillerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantChillerPass"
+                                               name="evaReportChillerPlantChillerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantSupplementYesNo"
+                                               name="evaReportChillerPlantSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantSupplementYesNo"
+                                               name="evaReportChillerPlantSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportChillerPlantSupplement"
+                                                  name="evaReportChillerPlantSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportChillerPlantSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportChillerPlantSupplementPass"
+                                               name="evaReportChillerPlantSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportChillerPlantSupplementPass"
+                                               name="evaReportChillerPlantSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportEscalatorYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorYesNo" name="evaReportEscalatorYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorYesNo" name="evaReportEscalatorYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">Escalator</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEscalatorBrakingSystemYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorBrakingSystemYesNo"
+                                               name="evaReportEscalatorBrakingSystemYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorBrakingSystemYesNo"
+                                               name="evaReportEscalatorBrakingSystemYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Braking system</td>
+                                <td>
+                                        <textarea id="evaReportEscalatorBrakingSystemFinding"
+                                                  name="evaReportEscalatorBrakingSystemFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportEscalatorBrakingSystemRecommend"
+                                                  name="evaReportEscalatorBrakingSystemRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEscalatorBrakingSystemPass'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorBrakingSystemPass"
+                                               name="evaReportEscalatorBrakingSystemPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorBrakingSystemPass"
+                                               name="evaReportEscalatorBrakingSystemPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEscalatorControlYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorControlYesNo"
+                                               name="evaReportEscalatorControlYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorControlYesNo"
+                                               name="evaReportEscalatorControlYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Controls</td>
+                                <td>
+                                        <textarea id="evaReportEscalatorControlFinding"
+                                                  name="evaReportEscalatorControlFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportEscalatorControlRecommend"
+                                                  name="evaReportEscalatorControlRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEscalatorControlPass'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorControlPass"
+                                               name="evaReportEscalatorControlPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorControlPass"
+                                               name="evaReportEscalatorControlPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEscalatorSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorSupplementYesNo"
+                                               name="evaReportEscalatorSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorSupplementYesNo"
+                                               name="evaReportEscalatorSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportEscalatorSupplement"
+                                                  name="evaReportEscalatorSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEscalatorSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportEscalatorSupplementPass"
+                                               name="evaReportEscalatorSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEscalatorSupplementPass"
+                                               name="evaReportEscalatorSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportHidLampYesNo'] == 'Y') { ?>
+                                        <input id="evaReportHidLampYesNo" name="evaReportHidLampYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampYesNo" name="evaReportHidLampYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">LED Lighting</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportHidLampBallastYesNo'] == 'Y') { ?>
+                                        <input id="evaReportHidLampBallastYesNo"
+                                               name="evaReportHidLampBallastYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampBallastYesNo"
+                                               name="evaReportHidLampBallastYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Ballast</td>
+                                <td>
+                                        <textarea id="evaReportHidLampBallastFinding"
+                                                  name="evaReportHidLampBallastFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportHidLampBallastRecommend"
+                                                  name="evaReportHidLampBallastRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportHidLampBallastPass'] == 'Y') { ?>
+                                        <input id="evaReportHidLampBallastPass"
+                                               name="evaReportHidLampBallastPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampBallastPass"
+                                               name="evaReportHidLampBallastPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportHidLampAddonProtectYesNo'] == 'Y') { ?>
+                                        <input id="evaReportHidLampAddonProtectYesNo"
+                                               name="evaReportHidLampAddonProtectYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampAddonProtectYesNo"
+                                               name="evaReportHidLampAddonProtectYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Add-on protection</td>
+                                <td>
+                                        <textarea id="evaReportHidLampAddonProtectFinding"
+                                                  name="evaReportHidLampAddonProtectFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportHidLampAddonProtectRecommend"
+                                                  name="evaReportHidLampAddonProtectRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportHidLampAddonProtectPass'] == 'Y') { ?>
+                                        <input id="evaReportHidLampAddonProtectPass"
+                                               name="evaReportHidLampAddonProtectPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampAddonProtectPass"
+                                               name="evaReportHidLampAddonProtectPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportHidLampSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportHidLampSupplementYesNo"
+                                               name="evaReportHidLampSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampSupplementYesNo"
+                                               name="evaReportHidLampSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportHidLampSupplement"
+                                                  name="evaReportHidLampSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportHidLampSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportHidLampSupplementPass"
+                                               name="evaReportHidLampSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportHidLampSupplementPass"
+                                               name="evaReportHidLampSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportLiftYesNo'] == 'Y') { ?>
+                                        <input id="evaReportLiftYesNo" name="evaReportLiftYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftYesNo" name="evaReportLiftYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">Lift</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportLiftOperationYesNo'] == 'Y') { ?>
+                                        <input id="evaReportLiftOperationYesNo"
+                                               name="evaReportLiftOperationYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftOperationYesNo"
+                                               name="evaReportLiftOperationYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Controls</td>
+                                <td>
+                                        <textarea id="evaReportLiftOperationFinding"
+                                                  name="evaReportLiftOperationFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportLiftOperationRecommend"
+                                                  name="evaReportLiftOperationRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportLiftOperationPass'] == 'Y') { ?>
+                                        <input id="evaReportLiftOperationPass"
+                                               name="evaReportLiftOperationPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftOperationPass"
+                                               name="evaReportLiftOperationPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportLiftMainSupplyYesNo'] == 'Y') { ?>
+                                        <input id="evaReportLiftMainSupplyYesNo"
+                                               name="evaReportLiftMainSupplyYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftMainSupplyYesNo"
+                                               name="evaReportLiftMainSupplyYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Main Supply</td>
+                                <td>
+                                        <textarea id="evaReportLiftMainSupplyFinding"
+                                                  name="evaReportLiftMainSupplyFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportLiftMainSupplyRecommend"
+                                                  name="evaReportLiftMainSupplyRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportLiftMainSupplyPass'] == 'Y') { ?>
+                                        <input id="evaReportLiftMainSupplyPass"
+                                               name="evaReportLiftMainSupplyPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftMainSupplyPass"
+                                               name="evaReportLiftMainSupplyPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportLiftSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportLiftSupplementYesNo"
+                                               name="evaReportLiftSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftSupplementYesNo"
+                                               name="evaReportLiftSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportLiftSupplement"
+                                                  name="evaReportLiftSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportLiftSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportLiftSupplementPass"
+                                               name="evaReportLiftSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportLiftSupplementPass"
+                                               name="evaReportLiftSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="2">
+                                    <?php if ($this->viewbag['evaReportSensitiveMachineYesNo'] == 'Y') { ?>
+                                        <input id="evaReportSensitiveMachineYesNo" name="evaReportSensitiveMachineYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportSensitiveMachineYesNo" name="evaReportSensitiveMachineYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="2">Sensitive Machine</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportSensitiveMachineMedicalYesNo'] == 'Y') { ?>
+                                        <input id="evaReportSensitiveMachineMedicalYesNo"
+                                               name="evaReportSensitiveMachineMedicalYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportSensitiveMachineMedicalYesNo"
+                                               name="evaReportSensitiveMachineMedicalYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Medical equipment, Controls, PLC</td>
+                                <td>
+                                        <textarea id="evaReportSensitiveMachineMedicalFinding"
+                                                  name="evaReportSensitiveMachineMedicalFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportSensitiveMachineMedicalRecommend"
+                                                  name="evaReportSensitiveMachineMedicalRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportSensitiveMachineMedicalPass'] == 'Y') { ?>
+                                        <input id="evaReportSensitiveMachineMedicalPass"
+                                               name="evaReportSensitiveMachineMedicalPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportSensitiveMachineMedicalPass"
+                                               name="evaReportSensitiveMachineMedicalPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportSensitiveMachineSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportSensitiveMachineSupplementYesNo"
+                                               name="evaReportSensitiveMachineSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportSensitiveMachineSupplementYesNo"
+                                               name="evaReportSensitiveMachineSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportSensitiveMachineSupplement"
+                                                  name="evaReportSensitiveMachineSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportSensitiveMachineSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportSensitiveMachineSupplementPass"
+                                               name="evaReportSensitiveMachineSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportSensitiveMachineSupplementPass"
+                                               name="evaReportSensitiveMachineSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="4">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineYesNo'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineYesNo" name="evaReportTelecomMachineYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineYesNo" name="evaReportTelecomMachineYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="4">Telecom, IT Equipment, Data Centre & Harmonic</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineServerOrComputerYesNo'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineServerOrComputerYesNo"
+                                               name="evaReportTelecomMachineServerOrComputerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineServerOrComputerYesNo"
+                                               name="evaReportTelecomMachineServerOrComputerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Server or computer</td>
+                                <td>
+                                        <textarea id="evaReportTelecomMachineServerOrComputerFinding"
+                                                  name="evaReportTelecomMachineServerOrComputerFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportTelecomMachineServerOrComputerRecommend"
+                                                  name="evaReportTelecomMachineServerOrComputerRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineServerOrComputerPass'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineServerOrComputerPass"
+                                               name="evaReportTelecomMachineServerOrComputerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineServerOrComputerPass"
+                                               name="evaReportTelecomMachineServerOrComputerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachinePeripheralsYesNo'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachinePeripheralsYesNo"
+                                               name="evaReportTelecomMachinePeripheralsYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachinePeripheralsYesNo"
+                                               name="evaReportTelecomMachinePeripheralsYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Peripherals such as modem, router</td>
+                                <td>
+                                        <textarea id="evaReportTelecomMachinePeripheralsFinding"
+                                                  name="evaReportTelecomMachinePeripheralsFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportTelecomMachinePeripheralsRecommend"
+                                                  name="evaReportTelecomMachinePeripheralsRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachinePeripheralsPass'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachinePeripheralsPass"
+                                               name="evaReportTelecomMachinePeripheralsPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachinePeripheralsPass"
+                                               name="evaReportTelecomMachinePeripheralsPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineHarmonicEmissionYesNo'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineHarmonicEmissionYesNo"
+                                               name="evaReportTelecomMachineHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineHarmonicEmissionYesNo"
+                                               name="evaReportTelecomMachineHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Harmonic emission</td>
+                                <td>
+                                        <textarea id="evaReportTelecomMachineHarmonicEmissionFinding"
+                                                  name="evaReportTelecomMachineHarmonicEmissionFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportTelecomMachineHarmonicEmissionRecommend"
+                                                  name="evaReportTelecomMachineHarmonicEmissionRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineHarmonicEmissionPass'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineHarmonicEmissionPass"
+                                               name="evaReportTelecomMachineHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineHarmonicEmissionPass"
+                                               name="evaReportTelecomMachineHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineSupplementYesNo"
+                                               name="evaReportTelecomMachineSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineSupplementYesNo"
+                                               name="evaReportTelecomMachineSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportTelecomMachineSupplement"
+                                                  name="evaReportTelecomMachineSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportTelecomMachineSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportTelecomMachineSupplementPass"
+                                               name="evaReportTelecomMachineSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportTelecomMachineSupplementPass"
+                                               name="evaReportTelecomMachineSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="4">
+                                    <?php if ($this->viewbag['evaReportAirConditionersYesNo'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersYesNo" name="evaReportAirConditionersYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersYesNo" name="evaReportAirConditionersYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="4">Air-conditioners</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersMicbYesNo'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersMicbYesNo"
+                                               name="evaReportAirConditionersMicbYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersMicbYesNo"
+                                               name="evaReportAirConditionersMicbYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Protection Facilities of Main Incoming Circuit Breaker</td>
+                                <td>
+                                        <textarea id="evaReportAirConditionersMicbFinding"
+                                                  name="evaReportAirConditionersMicbFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportAirConditionersMicbRecommend"
+                                                  name="evaReportAirConditionersMicbRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersMicbPass'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersMicbPass"
+                                               name="evaReportAirConditionersMicbPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersMicbPass"
+                                               name="evaReportAirConditionersMicbPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersLoadForecastingYesNo'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersLoadForecastingYesNo"
+                                               name="evaReportAirConditionersLoadForecastingYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersLoadForecastingYesNo"
+                                               name="evaReportAirConditionersLoadForecastingYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Load forecasting for air-conditioning load</td>
+                                <td>
+                                        <textarea id="evaReportAirConditionersLoadForecastingFinding"
+                                                  name="evaReportAirConditionersLoadForecastingFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportAirConditionersLoadForecastingRecommend"
+                                                  name="evaReportAirConditionersLoadForecastingRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersLoadForecastingPass'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersLoadForecastingPass"
+                                               name="evaReportAirConditionersLoadForecastingPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersLoadForecastingPass"
+                                               name="evaReportAirConditionersLoadForecastingPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersTypeYesNo'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersTypeYesNo"
+                                               name="evaReportAirConditionersTypeYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersTypeYesNo"
+                                               name="evaReportAirConditionersTypeYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Type of Air-conditioner</td>
+                                <td>
+                                        <textarea id="evaReportAirConditionersTypeFinding"
+                                                  name="evaReportAirConditionersTypeFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportAirConditionersTypeRecommend"
+                                                  name="evaReportAirConditionersTypeRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersTypePass'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersTypePass"
+                                               name="evaReportAirConditionersTypePass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersTypePass"
+                                               name="evaReportAirConditionersTypePass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersSupplementYesNo"
+                                               name="evaReportAirConditionersSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersSupplementYesNo"
+                                               name="evaReportAirConditionersSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportAirConditionersSupplement"
+                                                  name="evaReportAirConditionersSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportAirConditionersSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportAirConditionersSupplementPass"
+                                               name="evaReportAirConditionersSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportAirConditionersSupplementPass"
+                                               name="evaReportAirConditionersSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="2">
+                                    <?php if ($this->viewbag['evaReportNonLinearLoadYesNo'] == 'Y') { ?>
+                                        <input id="evaReportNonLinearLoadYesNo" name="evaReportNonLinearLoadYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportNonLinearLoadYesNo" name="evaReportNonLinearLoadYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="2">Buildings with high penetration of energy efficient equipment, e.g. LED lighting, VSD Air Conditioner, and other non-linear loads etc.</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportNonLinearLoadHarmonicEmissionYesNo'] == 'Y') { ?>
+                                        <input id="evaReportNonLinearLoadHarmonicEmissionYesNo"
+                                               name="evaReportNonLinearLoadHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportNonLinearLoadHarmonicEmissionYesNo"
+                                               name="evaReportNonLinearLoadHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Harmonic emission</td>
+                                <td>
+                                        <textarea id="evaReportNonLinearLoadHarmonicEmissionFinding"
+                                                  name="evaReportNonLinearLoadHarmonicEmissionFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportNonLinearLoadHarmonicEmissionRecommend"
+                                                  name="evaReportNonLinearLoadHarmonicEmissionRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportNonLinearLoadHarmonicEmissionPass'] == 'Y') { ?>
+                                        <input id="evaReportNonLinearLoadHarmonicEmissionPass"
+                                               name="evaReportNonLinearLoadHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportNonLinearLoadHarmonicEmissionPass"
+                                               name="evaReportNonLinearLoadHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportNonLinearLoadSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportNonLinearLoadSupplementYesNo"
+                                               name="evaReportNonLinearLoadSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportNonLinearLoadSupplementYesNo"
+                                               name="evaReportNonLinearLoadSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportNonLinearLoadSupplement"
+                                                  name="evaReportNonLinearLoadSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportNonLinearLoadSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportNonLinearLoadSupplementPass"
+                                               name="evaReportNonLinearLoadSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportNonLinearLoadSupplementPass"
+                                               name="evaReportNonLinearLoadSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergyYesNo'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergyYesNo" name="evaReportRenewableEnergyYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergyYesNo" name="evaReportRenewableEnergyYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">Renewable Energy, e.g. photovoltaic or wind energy system etc.</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergyInverterAndControlsYesNo'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergyInverterAndControlsYesNo"
+                                               name="evaReportRenewableEnergyInverterAndControlsYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergyInverterAndControlsYesNo"
+                                               name="evaReportRenewableEnergyInverterAndControlsYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Inverter, controls</td>
+                                <td>
+                                        <textarea id="evaReportRenewableEnergyInverterAndControlsFinding"
+                                                  name="evaReportRenewableEnergyInverterAndControlsFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportRenewableEnergyInverterAndControlsRecommend"
+                                                  name="evaReportRenewableEnergyInverterAndControlsRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergyInverterAndControlsPass'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergyInverterAndControlsPass"
+                                               name="evaReportRenewableEnergyInverterAndControlsPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergyInverterAndControlsPass"
+                                               name="evaReportRenewableEnergyInverterAndControlsPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergyHarmonicEmissionYesNo'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergyHarmonicEmissionYesNo"
+                                               name="evaReportRenewableEnergyHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergyHarmonicEmissionYesNo"
+                                               name="evaReportRenewableEnergyHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Harmonic emission</td>
+                                <td>
+                                        <textarea id="evaReportRenewableEnergyHarmonicEmissionFinding"
+                                                  name="evaReportRenewableEnergyHarmonicEmissionFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportRenewableEnergyHarmonicEmissionRecommend"
+                                                  name="evaReportRenewableEnergyHarmonicEmissionRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergyHarmonicEmissionPass'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergyHarmonicEmissionPass"
+                                               name="evaReportRenewableEnergyHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergyHarmonicEmissionPass"
+                                               name="evaReportRenewableEnergyHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergySupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergySupplementYesNo"
+                                               name="evaReportRenewableEnergySupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergySupplementYesNo"
+                                               name="evaReportRenewableEnergySupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportRenewableEnergySupplement"
+                                                  name="evaReportRenewableEnergySupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportRenewableEnergySupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportRenewableEnergySupplementPass"
+                                               name="evaReportRenewableEnergySupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportRenewableEnergySupplementPass"
+                                               name="evaReportRenewableEnergySupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="pt-3" rowspan="3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemYesNo" name="evaReportEvChargerSystemYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemYesNo" name="evaReportEvChargerSystemYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3" rowspan="3">EV charger system</td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemEvChargerYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemEvChargerYesNo"
+                                               name="evaReportEvChargerSystemEvChargerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemEvChargerYesNo"
+                                               name="evaReportEvChargerSystemEvChargerYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Controls</td>
+                                <td>
+                                        <textarea id="evaReportEvChargerSystemEvChargerFinding"
+                                                  name="evaReportEvChargerSystemEvChargerFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportEvChargerSystemEvChargerRecommend"
+                                                  name="evaReportEvChargerSystemEvChargerRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemEvChargerPass'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemEvChargerPass"
+                                               name="evaReportEvChargerSystemEvChargerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemEvChargerPass"
+                                               name="evaReportEvChargerSystemEvChargerPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemHarmonicEmissionYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemHarmonicEmissionYesNo"
+                                               name="evaReportEvChargerSystemHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemHarmonicEmissionYesNo"
+                                               name="evaReportEvChargerSystemHarmonicEmissionYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Harmonic emission</td>
+                                <td>
+                                        <textarea id="evaReportEvChargerSystemHarmonicEmissionFinding"
+                                                  name="evaReportEvChargerSystemHarmonicEmissionFinding"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td>
+                                        <textarea id="evaReportEvChargerSystemHarmonicEmissionRecommend"
+                                                  name="evaReportEvChargerSystemHarmonicEmissionRecommend"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemHarmonicEmissionPass'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemHarmonicEmissionPass"
+                                               name="evaReportEvChargerSystemHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemHarmonicEmissionPass"
+                                               name="evaReportEvChargerSystemHarmonicEmissionPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemSupplementYesNo'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemSupplementYesNo"
+                                               name="evaReportEvChargerSystemSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemSupplementYesNo"
+                                               name="evaReportEvChargerSystemSupplementYesNo" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                                <td class="pt-3">Supplement (if any)</td>
+                                <td colspan="2">
+                                        <textarea id="evaReportEvChargerSystemSupplement"
+                                                  name="evaReportEvChargerSystemSupplement"
+                                                  type="text" class="form-control"></textarea>
+                                </td>
+                                <td class="pt-3">
+                                    <?php if ($this->viewbag['evaReportEvChargerSystemSupplementPass'] == 'Y') { ?>
+                                        <input id="evaReportEvChargerSystemSupplementPass"
+                                               name="evaReportEvChargerSystemSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px" checked>
+                                    <?php } else { ?>
+                                        <input id="evaReportEvChargerSystemSupplementPass"
+                                               name="evaReportEvChargerSystemSupplementPass" type="checkbox"
+                                               class="form-control" value="Y" style="width:25px; height: 25px">
+                                    <?php } ?>
+                                </td>
+                            </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -2199,6 +3528,60 @@
                     $("#saveDraftBtn").attr("disabled", false);
                     $("#saveProcessBtn").attr("disabled", false);
                 });
+            } else if ($(this).find("input[type=submit]:focus" ).val() == 'Generate Evaluation Report') {
+
+                $(this).attr("disabled", true);
+
+                let errorMessage = "";
+                let i = 1;
+
+                let result = validateEmpty("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i);
+                errorMessage = result[0]; i = result[1];
+
+                result = validateEmpty("#evaReportFaxRefNo", "Evaluation Report Fax Reference No.", errorMessage, i);
+                errorMessage = result[0]; i = result[1];
+
+                result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i);
+                errorMessage = result[0]; i = result[1];
+
+                if (!(errorMessage == "")) {
+                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
+                    return false;
+                }
+
+                if (!validateDraftInput()) {
+                    return;
+                }
+
+                $("#loading-modal").modal("show");
+
+                $.ajax({
+                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailDraftUpdate",
+                    type: "POST",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: new FormData(this),
+                    success: function(data) {
+                        let retJson = JSON.parse(data);
+                        if (retJson.status == "OK") {
+                            // Generate Evaluation Report
+                            window.location.href =
+                                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailEvaReportTemplate" +
+                                "&schemeNo=" + $("#schemeNo").val();
+                            $(this).attr("disabled", false);
+                        } else {
+                            // error message
+                            showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                        }
+                    }
+                }).fail(function(event, jqXHR, settings, thrownError) {
+                    if (event.status != 440) {
+                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
+                    }
+                }).always(function(data) {
+                    $("#loading-modal").modal("hide");
+                });
             }
         });
 
@@ -2451,6 +3834,69 @@
 
         $('#evaReportRemark').val("<?php echo $this->viewbag['evaReportRemark']; ?>");
         $('#evaReportEdmsLink').val("<?php echo $this->viewbag['evaReportEdmsLink']; ?>");
+        $('#evaReportIssueDate').val("<?php echo $this->viewbag['evaReportIssueDate']; ?>");
+        $('#evaReportFaxRefNo').val("<?php echo $this->viewbag['evaReportFaxRefNo']; ?>");
+        $('#evaReportScore').val("<?php echo $this->viewbag['evaReportScore']; ?>");
+        $('#evaReportBmsServerCentralComputerFinding').val("<?php echo $this->viewbag['evaReportBmsServerCentralComputerFinding']; ?>");
+        $('#evaReportBmsServerCentralComputerRecommend').val("<?php echo $this->viewbag['evaReportBmsServerCentralComputerRecommend']; ?>");
+        $('#evaReportBmsDdcFinding').val("<?php echo $this->viewbag['evaReportBmsDdcFinding']; ?>");
+        $('#evaReportBmsDdcRecommend').val("<?php echo $this->viewbag['evaReportBmsDdcRecommend']; ?>");
+        $('#evaReportBmsSupplement').val("<?php echo $this->viewbag['evaReportBmsSupplement']; ?>");
+        $('#evaReportChangeoverSchemeControlFinding').val("<?php echo $this->viewbag['evaReportChangeoverSchemeControlFinding']; ?>");
+        $('#evaReportChangeoverSchemeControlRecommend').val("<?php echo $this->viewbag['evaReportChangeoverSchemeControlRecommend']; ?>");
+        $('#evaReportChangeoverSchemeUvFinding').val("<?php echo $this->viewbag['evaReportChangeoverSchemeUvFinding']; ?>");
+        $('#evaReportChangeoverSchemeUvRecommend').val("<?php echo $this->viewbag['evaReportChangeoverSchemeUvRecommend']; ?>");
+        $('#evaReportChangeoverSchemeSupplement').val("<?php echo $this->viewbag['evaReportChangeoverSchemeSupplement']; ?>");
+        $('#evaReportChillerPlantAhuChilledWaterFinding').val("<?php echo $this->viewbag['evaReportChillerPlantAhuChilledWaterFinding']; ?>");
+        $('#evaReportChillerPlantAhuChilledWaterRecommend').val("<?php echo $this->viewbag['evaReportChillerPlantAhuChilledWaterRecommend']; ?>");
+        $('#evaReportChillerPlantChillerFinding').val("<?php echo $this->viewbag['evaReportChillerPlantChillerFinding']; ?>");
+        $('#evaReportChillerPlantChillerRecommend').val("<?php echo $this->viewbag['evaReportChillerPlantChillerRecommend']; ?>");
+        $('#evaReportChillerPlantSupplement').val("<?php echo $this->viewbag['evaReportChillerPlantSupplement']; ?>");
+        $('#evaReportEscalatorBrakingSystemFinding').val("<?php echo $this->viewbag['evaReportEscalatorBrakingSystemFinding']; ?>");
+        $('#evaReportEscalatorBrakingSystemRecommend').val("<?php echo $this->viewbag['evaReportEscalatorBrakingSystemRecommend']; ?>");
+        $('#evaReportEscalatorControlFinding').val("<?php echo $this->viewbag['evaReportEscalatorControlFinding']; ?>");
+        $('#evaReportEscalatorControlRecommend').val("<?php echo $this->viewbag['evaReportEscalatorControlRecommend']; ?>");
+        $('#evaReportEscalatorSupplement').val("<?php echo $this->viewbag['evaReportEscalatorSupplement']; ?>");
+        $('#evaReportLiftOperationFinding').val("<?php echo $this->viewbag['evaReportLiftOperationFinding']; ?>");
+        $('#evaReportLiftOperationRecommend').val("<?php echo $this->viewbag['evaReportLiftOperationRecommend']; ?>");
+        $('#evaReportLiftMainSupplyFinding').val("<?php echo $this->viewbag['evaReportLiftMainSupplyFinding']; ?>");
+        $('#evaReportLiftMainSupplyRecommend').val("<?php echo $this->viewbag['evaReportLiftMainSupplyRecommend']; ?>");
+        $('#evaReportLiftSupplement').val("<?php echo $this->viewbag['evaReportLiftSupplement']; ?>");
+        $('#evaReportHidLampBallastFinding').val("<?php echo $this->viewbag['evaReportHidLampBallastFinding']; ?>");
+        $('#evaReportHidLampBallastRecommend').val("<?php echo $this->viewbag['evaReportHidLampBallastRecommend']; ?>");
+        $('#evaReportHidLampAddonProtectFinding').val("<?php echo $this->viewbag['evaReportHidLampAddonProtectFinding']; ?>");
+        $('#evaReportHidLampAddonProtectRecommend').val("<?php echo $this->viewbag['evaReportHidLampAddonProtectRecommend']; ?>");
+        $('#evaReportHidLampSupplement').val("<?php echo $this->viewbag['evaReportHidLampSupplement']; ?>");
+        $('#evaReportSensitiveMachineMedicalFinding').val("<?php echo $this->viewbag['evaReportSensitiveMachineMedicalFinding']; ?>");
+        $('#evaReportSensitiveMachineMedicalRecommend').val("<?php echo $this->viewbag['evaReportSensitiveMachineMedicalRecommend']; ?>");
+        $('#evaReportSensitiveMachineSupplement').val("<?php echo $this->viewbag['evaReportSensitiveMachineSupplement']; ?>");
+        $('#evaReportTelecomMachineServerOrComputerFinding').val("<?php echo $this->viewbag['evaReportTelecomMachineServerOrComputerFinding']; ?>");
+        $('#evaReportTelecomMachineServerOrComputerRecommend').val("<?php echo $this->viewbag['evaReportTelecomMachineServerOrComputerRecommend']; ?>");
+        $('#evaReportTelecomMachinePeripheralsFinding').val("<?php echo $this->viewbag['evaReportTelecomMachinePeripheralsFinding']; ?>");
+        $('#evaReportTelecomMachinePeripheralsRecommend').val("<?php echo $this->viewbag['evaReportTelecomMachinePeripheralsRecommend']; ?>");
+        $('#evaReportTelecomMachineHarmonicEmissionFinding').val("<?php echo $this->viewbag['evaReportTelecomMachineHarmonicEmissionFinding']; ?>");
+        $('#evaReportTelecomMachineHarmonicEmissionRecommend').val("<?php echo $this->viewbag['evaReportTelecomMachineHarmonicEmissionRecommend']; ?>");
+        $('#evaReportTelecomMachineSupplement').val("<?php echo $this->viewbag['evaReportTelecomMachineSupplement']; ?>");
+        $('#evaReportAirConditionersMicbFinding').val("<?php echo $this->viewbag['evaReportAirConditionersMicbFinding']; ?>");
+        $('#evaReportAirConditionersMicbRecommend').val("<?php echo $this->viewbag['evaReportAirConditionersMicbRecommend']; ?>");
+        $('#evaReportAirConditionersLoadForecastingFinding').val("<?php echo $this->viewbag['evaReportAirConditionersLoadForecastingFinding']; ?>");
+        $('#evaReportAirConditionersLoadForecastingRecommend').val("<?php echo $this->viewbag['evaReportAirConditionersLoadForecastingRecommend']; ?>");
+        $('#evaReportAirConditionersTypeFinding').val("<?php echo $this->viewbag['evaReportAirConditionersTypeFinding']; ?>");
+        $('#evaReportAirConditionersTypeRecommend').val("<?php echo $this->viewbag['evaReportAirConditionersTypeRecommend']; ?>");
+        $('#evaReportAirConditionersSupplement').val("<?php echo $this->viewbag['evaReportAirConditionersSupplement']; ?>");
+        $('#evaReportNonLinearLoadHarmonicEmissionFinding').val("<?php echo $this->viewbag['evaReportNonLinearLoadHarmonicEmissionFinding']; ?>");
+        $('#evaReportNonLinearLoadHarmonicEmissionRecommend').val("<?php echo $this->viewbag['evaReportNonLinearLoadHarmonicEmissionRecommend']; ?>");
+        $('#evaReportNonLinearLoadSupplement').val("<?php echo $this->viewbag['evaReportNonLinearLoadSupplement']; ?>");
+        $('#evaReportRenewableEnergyInverterAndControlsFinding').val("<?php echo $this->viewbag['evaReportRenewableEnergyInverterAndControlsFinding']; ?>");
+        $('#evaReportRenewableEnergyInverterAndControlsRecommend').val("<?php echo $this->viewbag['evaReportRenewableEnergyInverterAndControlsRecommend']; ?>");
+        $('#evaReportRenewableEnergyHarmonicEmissionFinding').val("<?php echo $this->viewbag['evaReportRenewableEnergyHarmonicEmissionFinding']; ?>");
+        $('#evaReportRenewableEnergyHarmonicEmissionRecommend').val("<?php echo $this->viewbag['evaReportRenewableEnergyHarmonicEmissionRecommend']; ?>");
+        $('#evaReportRenewableEnergySupplement').val("<?php echo $this->viewbag['evaReportRenewableEnergySupplement']; ?>");
+        $('#evaReportEvChargerSystemEvChargerFinding').val("<?php echo $this->viewbag['evaReportEvChargerSystemEvChargerFinding']; ?>");
+        $('#evaReportEvChargerSystemEvChargerRecommend').val("<?php echo $this->viewbag['evaReportEvChargerSystemEvChargerRecommend']; ?>");
+        $('#evaReportEvChargerSystemHarmonicEmissionFinding').val("<?php echo $this->viewbag['evaReportEvChargerSystemHarmonicEmissionFinding']; ?>");
+        $('#evaReportEvChargerSystemHarmonicEmissionRecommend').val("<?php echo $this->viewbag['evaReportEvChargerSystemHarmonicEmissionRecommend']; ?>");
+        $('#evaReportEvChargerSystemSupplement').val("<?php echo $this->viewbag['evaReportEvChargerSystemSupplement']; ?>");
 
         $("#showEvaReportBtn").on("click", function() {
             if ($('#showEvaReportBtn').val() == 'Show Evaluation Report Detail') {
@@ -2462,18 +3908,237 @@
             }
         });
 
-        $("#genEvaReportDetail").on("click", function() {
-            $(this).attr("disabled", true);
-            window.location.href =
-                "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailReplySlipTemplate" +
-                "&schemeNo=" + $("#schemeNo").val();
-            $(this).attr("disabled", false);
-        });
+        $('input[name=evaReportBmsServerCentralComputerYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportBmsServerCentralComputerPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportBmsDdcYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportBmsDdcPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportBmsSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportBmsSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportBmsServerCentralComputerYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChangeoverSchemeControlPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChangeoverSchemeUvYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChangeoverSchemeUvPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChangeoverSchemeSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChangeoverSchemeSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChillerPlantAhuChilledWaterYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChillerPlantAhuChilledWaterPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChillerPlantChillerYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChillerPlantChillerPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChillerPlantSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportChillerPlantSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEscalatorBrakingSystemYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEscalatorBrakingSystemPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEscalatorControlYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEscalatorControlPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEscalatorSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEscalatorSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportLiftOperationYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportLiftOperationPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportLiftMainSupplyYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportLiftMainSupplyPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportLiftSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportLiftSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportHidLampBallastYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportHidLampBallastPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportHidLampAddonProtectYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportHidLampAddonProtectPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportHidLampSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportHidLampSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportSensitiveMachineYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportSensitiveMachineMedicalPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportSensitiveMachineSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportSensitiveMachineSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachineServerOrComputerYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachineServerOrComputerPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachinePeripheralsYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachinePeripheralsPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachineHarmonicEmissionYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachineHarmonicEmissionPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachineSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportTelecomMachineSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersMicbYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersMicbPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersLoadForecastingYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersLoadForecastingPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersTypeYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersTypePass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportAirConditionersSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportNonLinearLoadHarmonicEmissionYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportNonLinearLoadHarmonicEmissionPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportNonLinearLoadSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportNonLinearLoadSupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportRenewableEnergyInverterAndControlsYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportRenewableEnergyInverterAndControlsPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportRenewableEnergyHarmonicEmissionYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportRenewableEnergyHarmonicEmissionPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportRenewableEnergySupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportRenewableEnergySupplementPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEvChargerSystemEvChargerYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEvChargerSystemEvChargerPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEvChargerSystemHarmonicEmissionYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEvChargerSystemHarmonicEmissionPass]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEvChargerSystemSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportEvChargerSystemSupplementPass]', '#detailForm').on('click', updateEvaScore);
+
+        function updateEvaScore() {
+
+            let itemsCount = 0.0;
+            let passCount = 0.0;
+
+            let result = calReportScore('evaReportBmsServerCentralComputerYesNo', 'evaReportBmsServerCentralComputerPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportBmsDdcYesNo', 'evaReportBmsDdcPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportBmsSupplementYesNo', 'evaReportBmsSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportChangeoverSchemeControlYesNo', 'evaReportChangeoverSchemeControlPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportChangeoverSchemeUvYesNo', 'evaReportChangeoverSchemeUvPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportChangeoverSchemeSupplementYesNo', 'evaReportChangeoverSchemeSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportChillerPlantAhuChilledWaterYesNo', 'evaReportChillerPlantAhuChilledWaterPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportChillerPlantChillerYesNo', 'evaReportChillerPlantChillerPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportChillerPlantSupplementYesNo', 'evaReportChillerPlantSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportEscalatorBrakingSystemYesNo', 'evaReportEscalatorBrakingSystemPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportEscalatorControlYesNo', 'evaReportEscalatorControlPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportEscalatorSupplementYesNo', 'evaReportEscalatorSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportLiftOperationYesNo', 'evaReportLiftOperationPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportLiftMainSupplyYesNo', 'evaReportLiftMainSupplyPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportLiftSupplementYesNo', 'evaReportLiftSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportHidLampBallastYesNo', 'evaReportHidLampBallastPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportHidLampAddonProtectYesNo', 'evaReportHidLampAddonProtectPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportHidLampSupplementYesNo', 'evaReportHidLampSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportSensitiveMachineYesNo', 'evaReportSensitiveMachineMedicalPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportSensitiveMachineSupplementYesNo', 'evaReportSensitiveMachineSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportTelecomMachineServerOrComputerYesNo', 'evaReportTelecomMachineServerOrComputerPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportTelecomMachinePeripheralsYesNo', 'evaReportTelecomMachinePeripheralsPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportTelecomMachineHarmonicEmissionYesNo', 'evaReportTelecomMachineHarmonicEmissionPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportTelecomMachineSupplementYesNo', 'evaReportTelecomMachineSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportAirConditionersMicbYesNo', 'evaReportAirConditionersMicbPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportAirConditionersLoadForecastingYesNo', 'evaReportAirConditionersLoadForecastingPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportAirConditionersTypeYesNo', 'evaReportAirConditionersTypePass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportAirConditionersSupplementYesNo', 'evaReportAirConditionersSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportNonLinearLoadHarmonicEmissionYesNo', 'evaReportNonLinearLoadHarmonicEmissionPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportNonLinearLoadSupplementYesNo', 'evaReportNonLinearLoadSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportRenewableEnergyInverterAndControlsYesNo', 'evaReportRenewableEnergyInverterAndControlsPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportRenewableEnergyHarmonicEmissionYesNo', 'evaReportRenewableEnergyHarmonicEmissionPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportRenewableEnergySupplementYesNo', 'evaReportRenewableEnergySupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportEvChargerSystemEvChargerYesNo', 'evaReportEvChargerSystemEvChargerPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportEvChargerSystemHarmonicEmissionYesNo', 'evaReportEvChargerSystemHarmonicEmissionPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportEvChargerSystemSupplementYesNo', 'evaReportEvChargerSystemSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            let score = (passCount / itemsCount * 100).toFixed(2);
+
+            $("#evaReportScore").val(score);
+        }
 
         <?php } ?>
 
-
     });
+
 
     function validateDraftInput() {
 
@@ -2570,6 +4235,13 @@
         errorMessage = result[0]; i = result[1];
 
         result = validateDateOnlyFormat("#thirdInvitationLetterWalkDate", "3rd Invitation Letter PQ Walk Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        <?php } ?>
+
+        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+
+        result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
 
         <?php } ?>
@@ -2930,9 +4602,16 @@
         }
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
 
+        result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateEmpty("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
+
+        result = validateEmpty("#evaReportFaxRefNo", "Evaluation Report Fax Reference Number", errorMessage, i)
+        errorMessage = result[0]; i = result[1];
 
         <?php } ?>
 
@@ -3061,6 +4740,22 @@
             }
         }
         return [errorMsg, i];
+    }
+
+    function calReportScore(yesNoId,passId) {
+
+        if (!($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == null) &&
+            !($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == "")) {
+
+            if (!($('input[name=' + passId + ']:checked', '#detailForm').val() == null) &&
+                !($('input[name=' + passId + ']:checked', '#detailForm').val() == "")) {
+
+                return [1.0,1.0];
+            } else {
+                return [1.0,0.0];
+            }
+        }
+        return [0.0,0.0];
     }
 
 </script>

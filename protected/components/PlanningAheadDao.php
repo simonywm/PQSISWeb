@@ -341,162 +341,163 @@ class PlanningAheadDao extends CApplicationComponent {
                     $sth->bindParam(':evaluationReportId', $record['evaReportId']);
                     $evaRecord = $sth->queryAll();
 
-                    $record['evaReportRemark'] = Encoding::escapleAllCharacter($evaRecord['evaluation_report_remark']);
-                    $record['evaReportEdmsLink'] = Encoding::escapleAllCharacter($evaRecord['evaluation_report_edms_link']);
-                    $evaReportIssueDateYear = date("Y", strtotime($result[0]['evaluation_report_issue_date']));
-                    $evaReportIssueDateMonth = date("m", strtotime($result[0]['evaluation_report_issue_date']));
-                    $evaReportIssueDateDay = date("d", strtotime($result[0]['evaluation_report_issue_date']));
-                    $record['evaReportIssueDate'] = $evaReportIssueDateYear . "-" . $evaReportIssueDateMonth . "-" . $evaReportIssueDateDay;
-                    $record['evaReportFaxRefNo'] = Encoding::escapleAllCharacter($evaRecord['evaluation_report_fax_ref_no']);
-                    $record['evaReportScore'] = $evaRecord['evaluation_report_score'];
-                    $record['evaReportBmsYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_yes_no']);
-                    $record['evaReportBmsServerCentralComputerYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_yes_no']);
-                    $record['evaReportBmsServerCentralComputerFinding'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_finding']);
-                    $record['evaReportBmsServerCentralComputerRecommend'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_recommend']);
-                    $record['evaReportBmsServerCentralComputerPass'] = Encoding::escapleAllCharacter($evaRecord['bms_server_central_computer_pass']);
-                    $record['evaReportBmsDdcYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_yes_no']);
-                    $record['evaReportBmsDdcFinding'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_finding']);
-                    $record['evaReportBmsDdcRecommend'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_recommend']);
-                    $record['evaReportBmsDdcPass'] = Encoding::escapleAllCharacter($evaRecord['bms_ddc_yes_no']);
-                    $record['evaReportBmsSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['bms_supplement_yes_no']);
-                    $record['evaReportBmsSupplement'] = Encoding::escapleAllCharacter($evaRecord['bms_supplement']);
-                    $record['evaReportBmsSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['bms_supplement_pass']);
-                    $record['evaReportChangeoverSchemeYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_yes_no']);
-                    $record['evaReportChangeoverSchemeControlYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_yes_no']);
-                    $record['evaReportChangeoverSchemeControlFinding'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_finding']);
-                    $record['evaReportChangeoverSchemeControlRecommend'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_recommend']);
-                    $record['evaReportChangeoverSchemeControlPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_control_pass']);
-                    $record['evaReportChangeoverSchemeUvYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_yes_no']);
-                    $record['evaReportChangeoverSchemeUvFinding'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_finding']);
-                    $record['evaReportChangeoverSchemeUvRecommend'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_recommend']);
-                    $record['evaReportChangeoverSchemeUvPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_uv_pass']);
-                    $record['evaReportChangeoverSchemeSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_yes_no']);
-                    $record['evaReportChangeoverSchemeSupplement'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement']);
-                    $record['evaReportChangeoverSchemeSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_pass']);
-                    $record['evaReportChillerPlantYesNo'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_yes_no']);
-                    $record['evaReportChillerPlantAhuChilledWaterYesNo'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_yes_no']);
-                    $record['evaReportChillerPlantAhuChilledWaterFinding'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_finding']);
-                    $record['evaReportChillerPlantAhuChilledWaterRecommend'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_recommend']);
-                    $record['evaReportChillerPlantAhuChilledWaterPass'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_ahu_chilled_water_pass']);
-                    $record['evaReportChillerPlantChillerYesNo'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_yes_no']);
-                    $record['evaReportChillerPlantChillerFinding'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_finding']);
-                    $record['evaReportChillerPlantChillerRecommend'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_recommend']);
-                    $record['evaReportChillerPlantChillerPass'] = Encoding::escapleAllCharacter($evaRecord['chiller_plant_chiller_pass']);
-                    $record['evaReportChillerPlantSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_yes_no']);
-                    $record['evaReportChillerPlantSupplement'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement']);
-                    $record['evaReportChillerPlantSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['changeover_scheme_supplement_pass']);
-                    $record['evaReportEscalatorYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_yes_no']);
-                    $record['evaReportEscalatorBrakingSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_yes_no']);
-                    $record['evaReportEscalatorBrakingSystemFinding'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_finding']);
-                    $record['evaReportEscalatorBrakingSystemRecommend'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_recommend']);
-                    $record['evaReportEscalatorBrakingSystemPass'] = Encoding::escapleAllCharacter($evaRecord['escalator_braking_system_pass']);
-                    $record['evaReportEscalatorControlYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_yes_no']);
-                    $record['evaReportEscalatorControlFinding'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_finding']);
-                    $record['evaReportEscalatorControlRecommend'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_recommend']);
-                    $record['evaReportEscalatorControlPass'] = Encoding::escapleAllCharacter($evaRecord['escalator_control_pass']);
-                    $record['evaReportEscalatorSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['escalator_supplement_yes_no']);
-                    $record['evaReportEscalatorSupplement'] = Encoding::escapleAllCharacter($evaRecord['escalator_supplement']);
-                    $record['evaReportEscalatorSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['escalator_supplement_pass']);
-                    $record['evaReportLiftYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_yes_no']);
-                    $record['evaReportLiftOperationYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_yes_no']);
-                    $record['evaReportLiftOperationFinding'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_finding']);
-                    $record['evaReportLiftOperationRecommend'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_recommend']);
-                    $record['evaReportLiftOperationPass'] = Encoding::escapleAllCharacter($evaRecord['lift_operation_pass']);
-                    $record['evaReportLiftMainSupplyYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_yes_no']);
-                    $record['evaReportLiftMainSupplyFinding'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_finding']);
-                    $record['evaReportLiftMainSupplyRecommend'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_recommend']);
-                    $record['evaReportLiftMainSupplyPass'] = Encoding::escapleAllCharacter($evaRecord['lift_main_supply_pass']);
-                    $record['evaReportLiftSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['lift_supplement_yes_no']);
-                    $record['evaReportLiftSupplement'] = Encoding::escapleAllCharacter($evaRecord['lift_supplement']);
-                    $record['evaReportLiftSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['lift_supplement_pass']);
-                    $record['evaReportHidLampYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_yes_no']);
-                    $record['evaReportHidLampBallastYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_yes_no']);
-                    $record['evaReportHidLampBallastFinding'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_finding']);
-                    $record['evaReportHidLampBallastRecommend'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_recommend']);
-                    $record['evaReportHidLampBallastPass'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_ballast_pass']);
-                    $record['evaReportHidLampAddonProtectYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_yes_no']);
-                    $record['evaReportHidLampAddonProtectFinding'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_finding']);
-                    $record['evaReportHidLampAddonProtectRecommend'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_recommend']);
-                    $record['evaReportHidLampAddonProtectPass'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_addon_protect_pass']);
-                    $record['evaReportHidLampSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_supplement_yes_no']);
-                    $record['evaReportHidLampSupplement'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_supplement']);
-                    $record['evaReportHidLampSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['hid_lamp_supplement_pass']);
-                    $record['evaReportSensitiveMachineYesNo'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_yes_no']);
-                    $record['evaReportSensitiveMachineMedicalYesNo'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_yes_no']);
-                    $record['evaReportSensitiveMachineMedicalFinding'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_finding']);
-                    $record['evaReportSensitiveMachineMedicalRecommend'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_recommend']);
-                    $record['evaReportSensitiveMachineMedicalPass'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_medical_pass']);
-                    $record['evaReportSensitiveMachineSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_supplement_yes_no']);
-                    $record['evaReportSensitiveMachineSupplement'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_supplement']);
-                    $record['evaReportSensitiveMachineSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['sensitive_machine_supplement_pass']);
-                    $record['evaReportTelecomMachineYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_yes_no']);
-                    $record['evaReportTelecomMachineServerOrComputerYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_yes_no']);
-                    $record['evaReportTelecomMachineServerOrComputerFinding'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_finding']);
-                    $record['evaReportTelecomMachineServerOrComputerRecommend'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_recommend']);
-                    $record['evaReportTelecomMachineServerOrComputerPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_server_or_computer_pass']);
-                    $record['evaReportTelecomMachinePeripheralsYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_yes_no']);
-                    $record['evaReportTelecomMachinePeripheralsFinding'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_finding']);
-                    $record['evaReportTelecomMachinePeripheralsRecommend'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_recommend']);
-                    $record['evaReportTelecomMachinePeripheralsPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_peripherals_pass']);
-                    $record['evaReportTelecomMachineHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_yes_no']);
-                    $record['evaReportTelecomMachineHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_finding']);
-                    $record['evaReportTelecomMachineHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_recommend']);
-                    $record['evaReportTelecomMachineHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_harmonic_emission_pass']);
-                    $record['evaReportTelecomMachineSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_supplement_yes_no']);
-                    $record['evaReportTelecomMachineSupplement'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_supplement']);
-                    $record['evaReportTelecomMachineSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['telecom_machine_supplement_pass']);
-                    $record['evaReportAirConditionersYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_yes_no']);
-                    $record['evaReportAirConditionersMicbYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_yes_no']);
-                    $record['evaReportAirConditionersMicbFinding'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_finding']);
-                    $record['evaReportAirConditionersMicbRecommend'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_recommend']);
-                    $record['evaReportAirConditionersMicbPass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_micb_pass']);
-                    $record['evaReportAirConditionersLoadForecastingYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_yes_no']);
-                    $record['evaReportAirConditionersLoadForecastingFinding'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_finding']);
-                    $record['evaReportAirConditionersLoadForecastingRecommend'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_recommend']);
-                    $record['evaReportAirConditionersLoadForecastingPass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_load_forecasting_pass']);
-                    $record['evaReportAirConditionersTypeYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_yes_no']);
-                    $record['evaReportAirConditionersTypeFinding'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_finding']);
-                    $record['evaReportAirConditionersTypeRecommend'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_recommend']);
-                    $record['evaReportAirConditionersTypePass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_type_pass']);
-                    $record['evaReportAirConditionersSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_supplement_yes_no']);
-                    $record['evaReportAirConditionersSupplement'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_supplement']);
-                    $record['evaReportAirConditionersSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['air_conditioners_supplement_pass']);
-                    $record['evaReportNonLinearLoadYesNo'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_yes_no']);
-                    $record['evaReportNonLinearLoadHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_yes_no']);
-                    $record['evaReportNonLinearLoadHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_finding']);
-                    $record['evaReportNonLinearLoadHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_recommend']);
-                    $record['evaReportNonLinearLoadHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_harmonic_emission_pass']);
-                    $record['evaReportNonLinearLoadSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_supplement_yes_no']);
-                    $record['evaReportNonLinearLoadSupplement'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_supplement']);
-                    $record['evaReportNonLinearLoadSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['non_linear_load_supplement_pass']);
-                    $record['evaReportRenewableEnergyYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_yes_no']);
-                    $record['evaReportRenewableEnergyInverterAndControlsYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_yes_no']);
-                    $record['evaReportRenewableEnergyInverterAndControlsFinding'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_finding']);
-                    $record['evaReportRenewableEnergyInverterAndControlsRecommend'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_recommend']);
-                    $record['evaReportRenewableEnergyInverterAndControlsPass'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_inverter_and_controls_pass']);
-                    $record['evaReportRenewableEnergyHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_yes_no']);
-                    $record['evaReportRenewableEnergyHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_finding']);
-                    $record['evaReportRenewableEnergyHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_recommend']);
-                    $record['evaReportRenewableEnergyHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_harmonic_emission_pass']);
-                    $record['evaReportRenewableEnergySupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_supplement_yes_no']);
-                    $record['evaReportRenewableEnergySupplement'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_supplement']);
-                    $record['evaReportRenewableEnergySupplementPass'] = Encoding::escapleAllCharacter($evaRecord['renewable_energy_supplement_pass']);
-                    $record['evaReportEvChargerSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_yes_no']);
-                    $record['evaReportEvChargerSystemEvChargerYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_yes_no']);
-                    $record['evaReportEvChargerSystemEvChargerFinding'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_finding']);
-                    $record['evaReportEvChargerSystemEvChargerRecommend'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_recommend']);
-                    $record['evaReportEvChargerSystemEvChargerPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_ev_charger_pass']);
-                    $record['evaReportEvChargerSystemSmartChargingSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_yes_no']);
-                    $record['evaReportEvChargerSystemSmartChargingSystemFinding'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_finding']);
-                    $record['evaReportEvChargerSystemSmartChargingSystemRecommend'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_recommend']);
-                    $record['evaReportEvChargerSystemSmartChargingSystemPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_smart_charging_system_pass']);
-                    $record['evaReportEvChargerSystemHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_yes_no']);
-                    $record['evaReportEvChargerSystemHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_finding']);
-                    $record['evaReportEvChargerSystemHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_recommend']);
-                    $record['evaReportEvChargerSystemHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_harmonic_emission_pass']);
-                    $record['evaReportEvChargerSystemSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_supplement_yes_no']);
-                    $record['evaReportEvChargerSystemSupplement'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_supplement']);
-                    $record['evaReportEvChargerSystemSupplementPass'] = Encoding::escapleAllCharacter($evaRecord['ev_charger_system_supplement_pass']);
+                    $record['evaReportRemark'] = Encoding::escapleAllCharacter($evaRecord[0]['evaluation_report_remark']);
+                    $record['evaReportEdmsLink'] = Encoding::escapleAllCharacter($evaRecord[0]['evaluation_report_edms_link']);
+
+                    if (isset($evaRecord[0]['evaluation_report_issue_date'])) {
+                        $evaReportIssueDateYear = date("Y", strtotime($evaRecord[0]['evaluation_report_issue_date']));
+                        $evaReportIssueDateMonth = date("m", strtotime($evaRecord[0]['evaluation_report_issue_date']));
+                        $evaReportIssueDateDay = date("d", strtotime($evaRecord[0]['evaluation_report_issue_date']));
+                        $record['evaReportIssueDate'] = $evaReportIssueDateYear . "-" . $evaReportIssueDateMonth . "-" . $evaReportIssueDateDay;
+                    } else {
+                        $record['evaReportIssueDate'] = "";
+                    }
+                    $record['evaReportFaxRefNo'] = Encoding::escapleAllCharacter($evaRecord[0]['evaluation_report_fax_ref_no']);
+                    $record['evaReportScore'] = $evaRecord[0]['evaluation_report_score'];
+                    $record['evaReportBmsYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_yes_no']);
+                    $record['evaReportBmsServerCentralComputerYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_server_central_computer_yes_no']);
+                    $record['evaReportBmsServerCentralComputerFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_server_central_computer_finding']);
+                    $record['evaReportBmsServerCentralComputerRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_server_central_computer_recommend']);
+                    $record['evaReportBmsServerCentralComputerPass'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_server_central_computer_pass']);
+                    $record['evaReportBmsDdcYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_ddc_yes_no']);
+                    $record['evaReportBmsDdcFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_ddc_finding']);
+                    $record['evaReportBmsDdcRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_ddc_recommend']);
+                    $record['evaReportBmsDdcPass'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_ddc_pass']);
+                    $record['evaReportBmsSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_supplement_yes_no']);
+                    $record['evaReportBmsSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_supplement']);
+                    $record['evaReportBmsSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['bms_supplement_pass']);
+                    $record['evaReportChangeoverSchemeYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_yes_no']);
+                    $record['evaReportChangeoverSchemeControlYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_control_yes_no']);
+                    $record['evaReportChangeoverSchemeControlFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_control_finding']);
+                    $record['evaReportChangeoverSchemeControlRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_control_recommend']);
+                    $record['evaReportChangeoverSchemeControlPass'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_control_pass']);
+                    $record['evaReportChangeoverSchemeUvYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_uv_yes_no']);
+                    $record['evaReportChangeoverSchemeUvFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_uv_finding']);
+                    $record['evaReportChangeoverSchemeUvRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_uv_recommend']);
+                    $record['evaReportChangeoverSchemeUvPass'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_uv_pass']);
+                    $record['evaReportChangeoverSchemeSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_supplement_yes_no']);
+                    $record['evaReportChangeoverSchemeSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_supplement']);
+                    $record['evaReportChangeoverSchemeSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['changeover_scheme_supplement_pass']);
+                    $record['evaReportChillerPlantYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_yes_no']);
+                    $record['evaReportChillerPlantAhuChilledWaterYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_ahu_chilled_water_yes_no']);
+                    $record['evaReportChillerPlantAhuChilledWaterFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_ahu_chilled_water_finding']);
+                    $record['evaReportChillerPlantAhuChilledWaterRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_ahu_chilled_water_recommend']);
+                    $record['evaReportChillerPlantAhuChilledWaterPass'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_ahu_chilled_water_pass']);
+                    $record['evaReportChillerPlantChillerYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_chiller_yes_no']);
+                    $record['evaReportChillerPlantChillerFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_chiller_finding']);
+                    $record['evaReportChillerPlantChillerRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_chiller_recommend']);
+                    $record['evaReportChillerPlantChillerPass'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_chiller_pass']);
+                    $record['evaReportChillerPlantSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_supplement_yes_no']);
+                    $record['evaReportChillerPlantSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_supplement']);
+                    $record['evaReportChillerPlantSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['chiller_plant_supplement_pass']);
+                    $record['evaReportEscalatorYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_yes_no']);
+                    $record['evaReportEscalatorBrakingSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_braking_system_yes_no']);
+                    $record['evaReportEscalatorBrakingSystemFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_braking_system_finding']);
+                    $record['evaReportEscalatorBrakingSystemRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_braking_system_recommend']);
+                    $record['evaReportEscalatorBrakingSystemPass'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_braking_system_pass']);
+                    $record['evaReportEscalatorControlYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_control_yes_no']);
+                    $record['evaReportEscalatorControlFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_control_finding']);
+                    $record['evaReportEscalatorControlRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_control_recommend']);
+                    $record['evaReportEscalatorControlPass'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_control_pass']);
+                    $record['evaReportEscalatorSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_supplement_yes_no']);
+                    $record['evaReportEscalatorSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_supplement']);
+                    $record['evaReportEscalatorSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['escalator_supplement_pass']);
+                    $record['evaReportLiftYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_yes_no']);
+                    $record['evaReportLiftOperationYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_operation_yes_no']);
+                    $record['evaReportLiftOperationFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_operation_finding']);
+                    $record['evaReportLiftOperationRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_operation_recommend']);
+                    $record['evaReportLiftOperationPass'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_operation_pass']);
+                    $record['evaReportLiftMainSupplyYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_main_supply_yes_no']);
+                    $record['evaReportLiftMainSupplyFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_main_supply_finding']);
+                    $record['evaReportLiftMainSupplyRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_main_supply_recommend']);
+                    $record['evaReportLiftMainSupplyPass'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_main_supply_pass']);
+                    $record['evaReportLiftSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_supplement_yes_no']);
+                    $record['evaReportLiftSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_supplement']);
+                    $record['evaReportLiftSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['lift_supplement_pass']);
+                    $record['evaReportHidLampYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_yes_no']);
+                    $record['evaReportHidLampBallastYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_ballast_yes_no']);
+                    $record['evaReportHidLampBallastFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_ballast_finding']);
+                    $record['evaReportHidLampBallastRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_ballast_recommend']);
+                    $record['evaReportHidLampBallastPass'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_ballast_pass']);
+                    $record['evaReportHidLampAddonProtectYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_addon_protect_yes_no']);
+                    $record['evaReportHidLampAddonProtectFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_addon_protect_finding']);
+                    $record['evaReportHidLampAddonProtectRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_addon_protect_recommend']);
+                    $record['evaReportHidLampAddonProtectPass'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_addon_protect_pass']);
+                    $record['evaReportHidLampSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_supplement_yes_no']);
+                    $record['evaReportHidLampSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_supplement']);
+                    $record['evaReportHidLampSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['hid_lamp_supplement_pass']);
+                    $record['evaReportSensitiveMachineYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_yes_no']);
+                    $record['evaReportSensitiveMachineMedicalYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_medical_yes_no']);
+                    $record['evaReportSensitiveMachineMedicalFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_medical_finding']);
+                    $record['evaReportSensitiveMachineMedicalRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_medical_recommend']);
+                    $record['evaReportSensitiveMachineMedicalPass'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_medical_pass']);
+                    $record['evaReportSensitiveMachineSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_supplement_yes_no']);
+                    $record['evaReportSensitiveMachineSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_supplement']);
+                    $record['evaReportSensitiveMachineSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['sensitive_machine_supplement_pass']);
+                    $record['evaReportTelecomMachineYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_yes_no']);
+                    $record['evaReportTelecomMachineServerOrComputerYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_server_or_computer_yes_no']);
+                    $record['evaReportTelecomMachineServerOrComputerFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_server_or_computer_finding']);
+                    $record['evaReportTelecomMachineServerOrComputerRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_server_or_computer_recommend']);
+                    $record['evaReportTelecomMachineServerOrComputerPass'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_server_or_computer_pass']);
+                    $record['evaReportTelecomMachinePeripheralsYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_peripherals_yes_no']);
+                    $record['evaReportTelecomMachinePeripheralsFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_peripherals_finding']);
+                    $record['evaReportTelecomMachinePeripheralsRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_peripherals_recommend']);
+                    $record['evaReportTelecomMachinePeripheralsPass'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_peripherals_pass']);
+                    $record['evaReportTelecomMachineHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_harmonic_emission_yes_no']);
+                    $record['evaReportTelecomMachineHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_harmonic_emission_finding']);
+                    $record['evaReportTelecomMachineHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_harmonic_emission_recommend']);
+                    $record['evaReportTelecomMachineHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_harmonic_emission_pass']);
+                    $record['evaReportTelecomMachineSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_supplement_yes_no']);
+                    $record['evaReportTelecomMachineSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_supplement']);
+                    $record['evaReportTelecomMachineSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['telecom_machine_supplement_pass']);
+                    $record['evaReportAirConditionersYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_yes_no']);
+                    $record['evaReportAirConditionersMicbYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_micb_yes_no']);
+                    $record['evaReportAirConditionersMicbFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_micb_finding']);
+                    $record['evaReportAirConditionersMicbRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_micb_recommend']);
+                    $record['evaReportAirConditionersMicbPass'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_micb_pass']);
+                    $record['evaReportAirConditionersLoadForecastingYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_load_forecasting_yes_no']);
+                    $record['evaReportAirConditionersLoadForecastingFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_load_forecasting_finding']);
+                    $record['evaReportAirConditionersLoadForecastingRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_load_forecasting_recommend']);
+                    $record['evaReportAirConditionersLoadForecastingPass'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_load_forecasting_pass']);
+                    $record['evaReportAirConditionersTypeYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_type_yes_no']);
+                    $record['evaReportAirConditionersTypeFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_type_finding']);
+                    $record['evaReportAirConditionersTypeRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_type_recommend']);
+                    $record['evaReportAirConditionersTypePass'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_type_pass']);
+                    $record['evaReportAirConditionersSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_supplement_yes_no']);
+                    $record['evaReportAirConditionersSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_supplement']);
+                    $record['evaReportAirConditionersSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['air_conditioners_supplement_pass']);
+                    $record['evaReportNonLinearLoadYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_yes_no']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_harmonic_emission_yes_no']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_harmonic_emission_finding']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_harmonic_emission_recommend']);
+                    $record['evaReportNonLinearLoadHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_harmonic_emission_pass']);
+                    $record['evaReportNonLinearLoadSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_supplement_yes_no']);
+                    $record['evaReportNonLinearLoadSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_supplement']);
+                    $record['evaReportNonLinearLoadSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['non_linear_load_supplement_pass']);
+                    $record['evaReportRenewableEnergyYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_yes_no']);
+                    $record['evaReportRenewableEnergyInverterAndControlsYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_inverter_and_controls_yes_no']);
+                    $record['evaReportRenewableEnergyInverterAndControlsFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_inverter_and_controls_finding']);
+                    $record['evaReportRenewableEnergyInverterAndControlsRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_inverter_and_controls_recommend']);
+                    $record['evaReportRenewableEnergyInverterAndControlsPass'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_inverter_and_controls_pass']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_harmonic_emission_yes_no']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_harmonic_emission_finding']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_harmonic_emission_recommend']);
+                    $record['evaReportRenewableEnergyHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_harmonic_emission_pass']);
+                    $record['evaReportRenewableEnergySupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_supplement_yes_no']);
+                    $record['evaReportRenewableEnergySupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_supplement']);
+                    $record['evaReportRenewableEnergySupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['renewable_energy_supplement_pass']);
+                    $record['evaReportEvChargerSystemYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_yes_no']);
+                    $record['evaReportEvChargerSystemEvChargerYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_ev_charger_yes_no']);
+                    $record['evaReportEvChargerSystemEvChargerFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_ev_charger_finding']);
+                    $record['evaReportEvChargerSystemEvChargerRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_ev_charger_recommend']);
+                    $record['evaReportEvChargerSystemEvChargerPass'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_ev_charger_pass']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_harmonic_emission_yes_no']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionFinding'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_harmonic_emission_finding']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionRecommend'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_harmonic_emission_recommend']);
+                    $record['evaReportEvChargerSystemHarmonicEmissionPass'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_harmonic_emission_pass']);
+                    $record['evaReportEvChargerSystemSupplementYesNo'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_supplement_yes_no']);
+                    $record['evaReportEvChargerSystemSupplement'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_supplement']);
+                    $record['evaReportEvChargerSystemSupplementPass'] = Encoding::escapleAllCharacter($evaRecord[0]['ev_charger_system_supplement_pass']);
                 } else {
                     $record['evaReportRemark'] = "";
                     $record['evaReportEdmsLink'] = "";
@@ -640,10 +641,6 @@ class PlanningAheadDao extends CApplicationComponent {
                     $record['evaReportEvChargerSystemEvChargerFinding'] = "";
                     $record['evaReportEvChargerSystemEvChargerRecommend'] = "";
                     $record['evaReportEvChargerSystemEvChargerPass'] = "";
-                    $record['evaReportEvChargerSystemSmartChargingSystemYesNo'] = "";
-                    $record['evaReportEvChargerSystemSmartChargingSystemFinding'] = "";
-                    $record['evaReportEvChargerSystemSmartChargingSystemRecommend'] = "";
-                    $record['evaReportEvChargerSystemSmartChargingSystemPass'] = "";
                     $record['evaReportEvChargerSystemHarmonicEmissionYesNo'] = "";
                     $record['evaReportEvChargerSystemHarmonicEmissionFinding'] = "";
                     $record['evaReportEvChargerSystemHarmonicEmissionRecommend'] = "";
@@ -898,8 +895,318 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnThirdInvitationLetterIssueDate,
                                                    $txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
                                                    $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                                                   $lastUpdatedBy,$lastUpdatedTime,
-                                                   $txnPlanningAheadId) {
+                                                   $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
+                                                   $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                                                   $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                                                   $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                                                   $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                                                   $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                                                   $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                                                   $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                                                   $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                                                   $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                                                   $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                                                   $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                                                   $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                                                   $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                                                   $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                                                   $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                                                   $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                                                   $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                                                   $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                                                   $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                                                   $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                                                   $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportLiftYesNo,
+                                                   $txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,$txnEvaReportLiftOperationRecommend,
+                                                   $txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,$txnEvaReportLiftMainSupplyFinding,
+                                                   $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,$txnEvaReportLiftSupplementYesNo,
+                                                   $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,$txnEvaReportHidLampYesNo,
+                                                   $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                                                   $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                                                   $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                                                   $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                                                   $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                                                   $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                                                   $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                                                   $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                                                   $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                                                   $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                                                   $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                                                   $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                                                   $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                                                   $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                                                   $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                                                   $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                                                   $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                                                   $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                                                   $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                                                   $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                                                   $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                                                   $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                                                   $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                                                   $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                                                   $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                                                   $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                                                   $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                                                   $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                                                   $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                                                   $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                                                   $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                                                   $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                                                   $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                                                   $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                                                   $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                                                   $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                                                   $txnState,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId) {
+
+        if ($txnState == 'NOTIFIED_PQ_SITE_WALK') {
+            if ($txnEvaReportId == 0) {
+                $sql = "INSERT INTO public.tbl_evaluation_report(evaluation_report_remark, scheme_no, evaluation_report_edms_link, 
+                                         evaluation_report_issue_date, evaluation_report_fax_ref_no, evaluation_report_score, 
+                                         bms_yes_no, bms_server_central_computer_yes_no, bms_server_central_computer_finding, 
+                                         bms_server_central_computer_recommend, bms_server_central_computer_pass, bms_ddc_yes_no, 
+                                         bms_ddc_finding, bms_ddc_recommend, bms_ddc_pass, bms_supplement_yes_no, bms_supplement, 
+                                         bms_supplement_pass, changeover_scheme_yes_no, changeover_scheme_control_yes_no, 
+                                         changeover_scheme_control_finding, changeover_scheme_control_recommend, changeover_scheme_control_pass, 
+                                         changeover_scheme_uv_yes_no, changeover_scheme_uv_finding, changeover_scheme_uv_recommend, changeover_scheme_uv_pass, 
+                                         changeover_scheme_supplement_yes_no, changeover_scheme_supplement, changeover_scheme_supplement_pass, chiller_plant_yes_no, 
+                                         chiller_plant_ahu_chilled_water_yes_no, chiller_plant_ahu_chilled_water_finding, chiller_plant_ahu_chilled_water_recommend, 
+                                         chiller_plant_ahu_chilled_water_pass, chiller_plant_chiller_yes_no, chiller_plant_chiller_finding, 
+                                         chiller_plant_chiller_recommend, chiller_plant_chiller_pass, chiller_plant_supplement_yes_no, chiller_plant_supplement, 
+                                         chiller_plant_supplement_pass, escalator_yes_no, escalator_braking_system_yes_no, escalator_braking_system_finding, 
+                                         escalator_braking_system_recommend, escalator_braking_system_pass, escalator_control_yes_no, escalator_control_finding, 
+                                         escalator_control_recommend, escalator_control_pass, escalator_supplement_yes_no, escalator_supplement, 
+                                         escalator_supplement_pass, hid_lamp_yes_no, hid_lamp_ballast_yes_no, hid_lamp_ballast_finding, hid_lamp_ballast_recommend, 
+                                         hid_lamp_ballast_pass, hid_lamp_addon_protect_yes_no, hid_lamp_addon_protect_finding, hid_lamp_addon_protect_recommend, 
+                                         hid_lamp_addon_protect_pass, hid_lamp_supplement_yes_no, hid_lamp_supplement, hid_lamp_supplement_pass, lift_yes_no, 
+                                         lift_operation_yes_no, lift_operation_finding, lift_operation_recommend, lift_operation_pass, lift_main_supply_yes_no, 
+                                         lift_main_supply_finding, lift_main_supply_recommend, lift_main_supply_pass, lift_supplement_yes_no, lift_supplement, 
+                                         lift_supplement_pass, sensitive_machine_yes_no, sensitive_machine_medical_yes_no, sensitive_machine_medical_finding, 
+                                         sensitive_machine_medical_recommend, sensitive_machine_medical_pass, sensitive_machine_supplement_yes_no, 
+                                         sensitive_machine_supplement, sensitive_machine_supplement_pass, telecom_machine_yes_no, 
+                                         telecom_machine_server_or_computer_yes_no, telecom_machine_server_or_computer_finding, 
+                                         telecom_machine_server_or_computer_recommend, telecom_machine_server_or_computer_pass, telecom_machine_peripherals_yes_no, 
+                                         telecom_machine_peripherals_finding, telecom_machine_peripherals_recommend, telecom_machine_peripherals_pass, 
+                                         telecom_machine_harmonic_emission_yes_no, telecom_machine_harmonic_emission_finding, telecom_machine_harmonic_emission_recommend, 
+                                         telecom_machine_harmonic_emission_pass, telecom_machine_supplement_yes_no, telecom_machine_supplement, 
+                                         telecom_machine_supplement_pass, air_conditioners_yes_no, air_conditioners_micb_yes_no, air_conditioners_micb_finding, 
+                                         air_conditioners_micb_recommend, air_conditioners_micb_pass, air_conditioners_load_forecasting_yes_no, 
+                                         air_conditioners_load_forecasting_finding, air_conditioners_load_forecasting_recommend, air_conditioners_load_forecasting_pass, 
+                                         air_conditioners_type_yes_no, air_conditioners_type_finding, air_conditioners_type_recommend, air_conditioners_type_pass, 
+                                         air_conditioners_supplement_yes_no, air_conditioners_supplement, air_conditioners_supplement_pass, non_linear_load_yes_no, 
+                                         non_linear_load_harmonic_emission_yes_no, non_linear_load_harmonic_emission_finding, non_linear_load_harmonic_emission_recommend, 
+                                         non_linear_load_harmonic_emission_pass, non_linear_load_supplement_yes_no, non_linear_load_supplement, non_linear_load_supplement_pass, 
+                                         renewable_energy_yes_no, renewable_energy_inverter_and_controls_yes_no, renewable_energy_inverter_and_controls_finding, 
+                                         renewable_energy_inverter_and_controls_recommend, renewable_energy_inverter_and_controls_pass, renewable_energy_harmonic_emission_yes_no, 
+                                         renewable_energy_harmonic_emission_finding, renewable_energy_harmonic_emission_recommend, renewable_energy_harmonic_emission_pass, 
+                                         renewable_energy_supplement_yes_no, renewable_energy_supplement, renewable_energy_supplement_pass, ev_charger_system_yes_no, 
+                                         ev_charger_system_ev_charger_yes_no, ev_charger_system_ev_charger_finding, ev_charger_system_ev_charger_recommend, 
+                                         ev_charger_system_ev_charger_pass, ev_charger_system_harmonic_emission_yes_no, ev_charger_system_harmonic_emission_finding, 
+                                         ev_charger_system_harmonic_emission_recommend, ev_charger_system_harmonic_emission_pass, ev_charger_system_supplement_yes_no, 
+                                         ev_charger_system_supplement, ev_charger_system_supplement_pass, active, created_by, created_time, last_updated_by, last_updated_time)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+	        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+	        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+                $stmt = Yii::app()->db->createCommand($sql);
+                $result = $stmt->execute(array($txnEvaReportRemark,$txnSchemeNo,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,
+                    $txnEvaReportFaxRefNo,$txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                    $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                    $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                    $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                    $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                    $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                    $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                    $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                    $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                    $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                    $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                    $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                    $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                    $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                    $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                    $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                    $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                    $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                    $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                    $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                    $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportHidLampYesNo,
+                    $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                    $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                    $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                    $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                    $txnEvaReportLiftYesNo,$txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,
+                    $txnEvaReportLiftOperationRecommend,$txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,
+                    $txnEvaReportLiftMainSupplyFinding,$txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,
+                    $txnEvaReportLiftSupplementYesNo, $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,
+                    $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                    $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                    $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                    $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                    $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                    $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                    $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                    $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                    $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                    $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                    $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                    $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                    $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                    $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                    $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                    $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                    $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                    $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                    $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                    $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                    $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                    $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                    $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                    $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                    $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                    $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,'Y',
+                    $lastUpdatedBy,$lastUpdatedTime,$lastUpdatedBy,$lastUpdatedTime));
+
+                $sql = "SELECT * FROM \"tbl_evaluation_report\" WHERE \"active\"='Y' AND \"scheme_no\"=:scheme_no";
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':scheme_no', $txnSchemeNo);
+                $result = $sth->queryAll();
+
+                foreach($result as $row) {
+                    $txnEvaReportId = $row['evaluation_report_id'];
+                }
+            } else {
+
+                $sql = 'UPDATE public.tbl_evaluation_report
+	                        SET evaluation_report_remark=?, 
+	                            evaluation_report_edms_link=?, evaluation_report_issue_date=?, evaluation_report_fax_ref_no=?, 
+	                            evaluation_report_score=?, bms_yes_no=?, bms_server_central_computer_yes_no=?, 
+	                            bms_server_central_computer_finding=?, bms_server_central_computer_recommend=?, 
+	                            bms_server_central_computer_pass=?, bms_ddc_yes_no=?, bms_ddc_finding=?, bms_ddc_recommend=?, 
+	                            bms_ddc_pass=?, bms_supplement_yes_no=?, bms_supplement=?, bms_supplement_pass=?, 
+	                            changeover_scheme_yes_no=?, changeover_scheme_control_yes_no=?, 
+	                            changeover_scheme_control_finding=?, changeover_scheme_control_recommend=?, 
+	                            changeover_scheme_control_pass=?, changeover_scheme_uv_yes_no=?, changeover_scheme_uv_finding=?,
+	                            changeover_scheme_uv_recommend=?, changeover_scheme_uv_pass=?, changeover_scheme_supplement_yes_no=?, 
+	                            changeover_scheme_supplement=?, changeover_scheme_supplement_pass=?, chiller_plant_yes_no=?, 
+	                            chiller_plant_ahu_chilled_water_yes_no=?, chiller_plant_ahu_chilled_water_finding=?, 
+	                            chiller_plant_ahu_chilled_water_recommend=?, chiller_plant_ahu_chilled_water_pass=?, 
+	                            chiller_plant_chiller_yes_no=?, chiller_plant_chiller_finding=?, chiller_plant_chiller_recommend=?, 
+	                            chiller_plant_chiller_pass=?, chiller_plant_supplement_yes_no=?, chiller_plant_supplement=?, 
+	                            chiller_plant_supplement_pass=?, escalator_yes_no=?, escalator_braking_system_yes_no=?, 
+	                            escalator_braking_system_finding=?, escalator_braking_system_recommend=?, 
+	                            escalator_braking_system_pass=?, escalator_control_yes_no=?, escalator_control_finding=?, 
+	                            escalator_control_recommend=?, escalator_control_pass=?, escalator_supplement_yes_no=?, 
+	                            escalator_supplement=?, escalator_supplement_pass=?, hid_lamp_yes_no=?, hid_lamp_ballast_yes_no=?, 
+	                            hid_lamp_ballast_finding=?, hid_lamp_ballast_recommend=?, hid_lamp_ballast_pass=?, 
+	                            hid_lamp_addon_protect_yes_no=?, hid_lamp_addon_protect_finding=?, hid_lamp_addon_protect_recommend=?, 
+	                            hid_lamp_addon_protect_pass=?, hid_lamp_supplement_yes_no=?, hid_lamp_supplement=?, 
+	                            hid_lamp_supplement_pass=?, lift_yes_no=?, lift_operation_yes_no=?, lift_operation_finding=?, 
+	                            lift_operation_recommend=?, lift_operation_pass=?, lift_main_supply_yes_no=?, 
+	                            lift_main_supply_finding=?, lift_main_supply_recommend=?, lift_main_supply_pass=?, 
+	                            lift_supplement_yes_no=?, lift_supplement=?, lift_supplement_pass=?, sensitive_machine_yes_no=?, 
+	                            sensitive_machine_medical_yes_no=?, sensitive_machine_medical_finding=?, sensitive_machine_medical_recommend=?, 
+	                            sensitive_machine_medical_pass=?, sensitive_machine_supplement_yes_no=?, sensitive_machine_supplement=?, 
+	                            sensitive_machine_supplement_pass=?, telecom_machine_yes_no=?, telecom_machine_server_or_computer_yes_no=?, 
+	                            telecom_machine_server_or_computer_finding=?, telecom_machine_server_or_computer_recommend=?, 
+	                            telecom_machine_server_or_computer_pass=?, telecom_machine_peripherals_yes_no=?, telecom_machine_peripherals_finding=?,
+	                            telecom_machine_peripherals_recommend=?, telecom_machine_peripherals_pass=?, telecom_machine_harmonic_emission_yes_no=?,
+	                            telecom_machine_harmonic_emission_finding=?, telecom_machine_harmonic_emission_recommend=?, telecom_machine_harmonic_emission_pass=?, 
+	                            telecom_machine_supplement_yes_no=?, telecom_machine_supplement=?, telecom_machine_supplement_pass=?, 
+	                            air_conditioners_yes_no=?, air_conditioners_micb_yes_no=?, air_conditioners_micb_finding=?, 
+	                            air_conditioners_micb_recommend=?, air_conditioners_micb_pass=?, air_conditioners_load_forecasting_yes_no=?, 
+	                            air_conditioners_load_forecasting_finding=?, air_conditioners_load_forecasting_recommend=?, 
+	                            air_conditioners_load_forecasting_pass=?, air_conditioners_type_yes_no=?, air_conditioners_type_finding=?, 
+	                            air_conditioners_type_recommend=?, air_conditioners_type_pass=?, air_conditioners_supplement_yes_no=?, 
+	                            air_conditioners_supplement=?, air_conditioners_supplement_pass=?, non_linear_load_yes_no=?, 
+	                            non_linear_load_harmonic_emission_yes_no=?, non_linear_load_harmonic_emission_finding=?, 
+	                            non_linear_load_harmonic_emission_recommend=?, non_linear_load_harmonic_emission_pass=?, 
+	                            non_linear_load_supplement_yes_no=?, non_linear_load_supplement=?, non_linear_load_supplement_pass=?, 
+	                            renewable_energy_yes_no=?, renewable_energy_inverter_and_controls_yes_no=?, renewable_energy_inverter_and_controls_finding=?, 
+	                            renewable_energy_inverter_and_controls_recommend=?, renewable_energy_inverter_and_controls_pass=?, 
+	                            renewable_energy_harmonic_emission_yes_no=?, renewable_energy_harmonic_emission_finding=?, 
+	                            renewable_energy_harmonic_emission_recommend=?, renewable_energy_harmonic_emission_pass=?, 
+	                            renewable_energy_supplement_yes_no=?, renewable_energy_supplement=?, renewable_energy_supplement_pass=?, 
+	                            ev_charger_system_yes_no=?, ev_charger_system_ev_charger_yes_no=?, ev_charger_system_ev_charger_finding=?, 
+	                            ev_charger_system_ev_charger_recommend=?, ev_charger_system_ev_charger_pass=?, ev_charger_system_harmonic_emission_yes_no=?, 
+	                            ev_charger_system_harmonic_emission_finding=?, ev_charger_system_harmonic_emission_recommend=?, 
+	                            ev_charger_system_harmonic_emission_pass=?, ev_charger_system_supplement_yes_no=?, 
+	                            ev_charger_system_supplement=?, ev_charger_system_supplement_pass=?, 
+	                            last_updated_by=?, last_updated_time=?
+	                    WHERE evaluation_report_id=?';
+
+                $stmt = Yii::app()->db->createCommand($sql);
+                $result = $stmt->execute(array($txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,
+                    $txnEvaReportFaxRefNo,$txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                    $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                    $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                    $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                    $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                    $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                    $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                    $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                    $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                    $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                    $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                    $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                    $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                    $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                    $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                    $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                    $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                    $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                    $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                    $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                    $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportHidLampYesNo,
+                    $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                    $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                    $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                    $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                    $txnEvaReportLiftYesNo,$txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,
+                    $txnEvaReportLiftOperationRecommend,$txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,
+                    $txnEvaReportLiftMainSupplyFinding, $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,
+                    $txnEvaReportLiftSupplementYesNo, $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,
+                    $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                    $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                    $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                    $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                    $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                    $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                    $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                    $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                    $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                    $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                    $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                    $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                    $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                    $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                    $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                    $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                    $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                    $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                    $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                    $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                    $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                    $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                    $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                    $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                    $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                    $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                    $lastUpdatedBy,$lastUpdatedTime,$txnEvaReportId));
+            }
+        }
 
         $sql = 'UPDATE "tbl_planning_ahead" SET "project_title"=?, "scheme_no"=?, "region_id"=?, ';
         $sql = $sql . '"project_type_id"=?, "commission_date"=?, "key_infra"=?, "temp_project"=?, ';
@@ -931,7 +1238,7 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"second_invitation_letter_walk_date"=?, ';
         $sql = $sql . '"third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"third_invitation_letter_edms_link"=?, "third_invitation_letter_accept"=?, ';
-        $sql = $sql . '"third_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"third_invitation_letter_walk_date"=?, "eva_report_id"=?, ';
         $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
@@ -970,7 +1277,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnSecondInvitationLetterEdmsLink,$txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
                 $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
                 $txnThirdInvitationLetterEdmsLink,$txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                $lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+                $txnEvaReportId,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
 
             if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
                 $this->updateProjectOwnerCompanyByName($txnFirstProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
