@@ -1221,70 +1221,698 @@ class PlanningAheadController extends Controller {
             $templateProcessor->setValue('siteVisitDate', $recordList['thirdInvitationLetterWalkDate']);
         }
 
-        $bmsItemRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
-        $changeoverControlRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
-        $changeoverUvRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
+        $contentCount=1;
 
         // check if BMS contains information
-        $content = "";
+        if ($recordList['evaReportBmsYesNo'] == 'Y') {
+            $templateProcessor->setValue('bmsYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('bmsYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportBmsServerCentralComputerYesNo'] == 'Y') {
+            $templateProcessor->setValue('bmsServerCentralComputerYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('bmsServerCentralComputerYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportBmsDdcYesNo'] == 'Y') {
+            $templateProcessor->setValue('bmsDdcYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('bmsDdcYesNo', $unCheckedBox);
+        }
         if (isset($recordList['evaReportBmsServerCentralComputerFinding']) && ($recordList['evaReportBmsServerCentralComputerFinding']!="")) {
-            $content = $content . $recordList['evaReportBmsServerCentralComputerFinding'];
+            $content = $recordList['evaReportBmsServerCentralComputerFinding'];
+            $templateProcessor->setValue('bmsServerCentralComputerFinding', $this->formatToWordTemplate($recordList['evaReportBmsServerCentralComputerFinding']));
             if (isset($recordList['evaReportBmsServerCentralComputerRecommend']) && (trim($recordList['evaReportBmsServerCentralComputerRecommend']) != "")) {
                 $content = $content . " " . $recordList['evaReportBmsServerCentralComputerRecommend'];
+                $templateProcessor->setValue('bmsServerCentralComputerRecommend', $this->formatToWordTemplate($recordList['evaReportBmsServerCentralComputerRecommend']));
             } else {
                 $content = $content . " hence, their operations for controlling building facilities would be sustained under voltage dip incidents.";
+                $templateProcessor->setValue('bmsServerCentralComputerRecommend', 'Nil');
             }
+        } else {
+            $templateProcessor->setValue('bmsServerCentralComputerFinding', 'Nil');
+            $templateProcessor->setValue('bmsServerCentralComputerRecommend', 'Nil');
         }
         if (isset($recordList['evaReportBmsDdcFinding']) && ($recordList['evaReportBmsDdcFinding']!="")) {
             $content = $content . " " . $recordList['evaReportBmsDdcFinding'];
+            $templateProcessor->setValue('bmsDdcFinding', $this->formatToWordTemplate($recordList['evaReportBmsDdcFinding']));
             if (isset($recordList['evaReportBmsDdcRecommend']) && (trim($recordList['evaReportBmsDdcRecommend']) != "")) {
                 $content = $content . " " . $recordList['evaReportBmsDdcRecommend'];
+                $templateProcessor->setValue('bmsDdcRecommend', $this->formatToWordTemplate($recordList['evaReportBmsDdcRecommend']));
+            } else {
+                $templateProcessor->setValue('bmsDdcRecommend', 'Nil');
             }
+        } else {
+            $templateProcessor->setValue('bmsDdcFinding', 'Nil');
+            $templateProcessor->setValue('bmsDdcRecommend', 'Nil');
+        }
+        if (isset($content) && (trim($content) != "")) {
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
         }
         if (isset($recordList['evaReportBmsSupplement']) && ($recordList['evaReportBmsSupplement']!="")) {
-            $content = $content . " " . $recordList['evaReportBmsSupplement'];
-        }
-        if (isset($content) && (trim($content) != "")) {
-            $bmsItemRun->addText($this->formatToWordTemplate($content));
-            $templateProcessor->setComplexBlock('bmsContent', $bmsItemRun);
+            $content = $recordList['evaReportBmsSupplement'];
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $templateProcessor->setValue('bmsSupplement', $this->formatToWordTemplate($recordList['evaReportBmsSupplement']));
+            $contentCount++;
         } else {
-            $templateProcessor->setValue('bmsContent', "");
+            $templateProcessor->setValue('bmsSupplement', "Nil");
         }
 
-
-
-        // check if changeover Control contains information
-        $content = "";
+        // check if changeover contains information
+        $changeoverFindingCount=1; $changeoverFindingMaxCount=2;
+        $changeoverRecommendCount=1; $changeoverRecommendMaxCount=2;
+        if ($recordList['evaReportChangeoverSchemeYesNo'] == 'Y') {
+            $templateProcessor->setValue('changeoverSchemeYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('changeoverSchemeYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportChangeoverSchemeControlYesNo'] == 'Y') {
+            $templateProcessor->setValue('changeoverSchemeControlYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('changeoverSchemeControlYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportChangeoverSchemeYesNo'] == 'Y') {
+            $templateProcessor->setValue('changeoverSchemeUvYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('changeoverSchemeUvYesNo', $unCheckedBox);
+        }
         if (isset($recordList['evaReportChangeoverSchemeControlFinding']) && ($recordList['evaReportChangeoverSchemeControlFinding']!="")) {
-            $content = $content . $recordList['evaReportChangeoverSchemeControlFinding'];
+            $content = $recordList['evaReportChangeoverSchemeControlFinding'];
+            $templateProcessor->setComplexBlock('changeoverSchemeFinding' . $changeoverFindingCount, $this->getTableListItemRun($recordList['evaReportChangeoverSchemeControlFinding']));
+            $changeoverFindingCount++;
             if (isset($recordList['evaReportChangeoverSchemeControlRecommend']) && (trim($recordList['evaReportChangeoverSchemeControlRecommend']) != "")) {
                 $content = $content . " " . $recordList['evaReportChangeoverSchemeControlRecommend'];
+                $templateProcessor->setComplexBlock('changeoverSchemeRecommend' . $changeoverRecommendCount, $this->getTableListItemRun($recordList['evaReportChangeoverSchemeControlRecommend']));
+                $changeoverRecommendCount++;
             }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
         }
-        if (isset($content) && (trim($content) != "")) {
-            $changeoverControlRun->addText($this->formatToWordTemplate($content));
-            $templateProcessor->setComplexBlock('changoverControlContent', $changeoverControlRun);
-        } else {
-            $templateProcessor->setValue('changoverControlContent', "");
-        }
-
-        // check if changeover UV contains information
-        $content = "";
         if (isset($recordList['evaReportChangeoverSchemeUvFinding']) && ($recordList['evaReportChangeoverSchemeUvFinding']!="")) {
-            $content = $content . $recordList['evaReportChangeoverSchemeUvFinding'];
+            $content = $recordList['evaReportChangeoverSchemeUvFinding'];
+            $templateProcessor->setComplexBlock('changeoverSchemeFinding' . $changeoverFindingCount, $this->getTableListItemRun($recordList['evaReportChangeoverSchemeUvFinding']));
+            $changeoverFindingCount++;
             if (isset($recordList['evaReportChangeoverSchemeUvRecommend']) && (trim($recordList['evaReportChangeoverSchemeUvRecommend']) != "")) {
                 $content = $content . " " . $recordList['evaReportChangeoverSchemeUvRecommend'];
+                $templateProcessor->setComplexBlock('changeoverSchemeRecommend' . $changeoverRecommendCount, $this->getTableListItemRun($recordList['evaReportChangeoverSchemeUvRecommend']));
+                $changeoverRecommendCount++;
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        }
+        if (isset($recordList['evaReportChangeoverSchemeControlFinding']) && ($recordList['evaReportChangeoverSchemeControlFinding']!="") &&
+            isset($recordList['evaReportChangeoverSchemeUvFinding']) && ($recordList['evaReportChangeoverSchemeUvFinding']!="")) {
+            for ($x=$changeoverFindingCount; $x<=$changeoverFindingMaxCount; $x++) {
+                $templateProcessor->setValue('changeoverSchemeFinding' . $x, "");
+            }
+            for ($x=$changeoverRecommendCount; $x<=$changeoverRecommendMaxCount; $x++) {
+                $templateProcessor->setValue('changeoverSchemeRecommend' . $x, "");
             }
         }
-        $content = "";
-        if (isset($content) && (trim($content) != "")) {
-            $changeoverUvRun->addText($this->formatToWordTemplate($content));
-            $templateProcessor->setComplexBlock('changoverUvContent', $changeoverUvRun);
+        if (isset($recordList['evaReportChangeoverSchemeSupplement']) && ($recordList['evaReportChangeoverSchemeSupplement']!="")) {
+            $content = $recordList['evaReportChangeoverSchemeSupplement'];
+            $templateProcessor->setValue('changeoverSchemeSupplement', $this->formatToWordTemplate($recordList['evaReportChangeoverSchemeSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
         } else {
-            $templateProcessor->setValue('changoverUvContent', "");
+            $templateProcessor->setValue('changeoverSchemeSupplement', "Nil");
         }
 
+        // check if Chiller Plant contains information
+        if ($recordList['evaReportChillerPlantYesNo'] == 'Y') {
+            $templateProcessor->setValue('chillerPlantYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chillerPlantYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportChillerPlantAhuChilledWaterYesNo'] == 'Y') {
+            $templateProcessor->setValue('chillerPlantAhuChilledWaterYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chillerPlantAhuChilledWaterYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportChillerPlantChillerYesNo'] == 'Y') {
+            $templateProcessor->setValue('chillerPlantChillerYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chillerPlantChillerYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportChillerPlantAhuChilledWaterFinding']) && ($recordList['evaReportChillerPlantAhuChilledWaterFinding']!="")) {
+            $content = $recordList['evaReportChillerPlantAhuChilledWaterFinding'];
+            $templateProcessor->setValue('chillerPlantAhuChilledWaterFinding', $this->formatToWordTemplate($recordList['evaReportChillerPlantAhuChilledWaterFinding']));
+            if (isset($recordList['evaReportChillerPlantAhuChilledWaterRecommend']) && (trim($recordList['evaReportChillerPlantAhuChilledWaterRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportChillerPlantAhuChilledWaterRecommend'];
+                $templateProcessor->setValue('chillerPlantAhuChilledWaterRecommend', $this->formatToWordTemplate($recordList['evaReportChillerPlantAhuChilledWaterFinding']));
+            } else {
+                $templateProcessor->setValue('chillerPlantAhuChilledWaterRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('chillerPlantAhuChilledWaterFinding', "Nil");
+            $templateProcessor->setValue('chillerPlantAhuChilledWaterRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportChillerPlantChillerFinding']) && ($recordList['evaReportChillerPlantChillerFinding']!="")) {
+            $content = $recordList['evaReportChillerPlantChillerFinding'];
+            $templateProcessor->setValue('chillerPlantChillerFinding', $this->formatToWordTemplate($recordList['evaReportChillerPlantChillerFinding']));
+            if (isset($recordList['evaReportChillerPlantChillerRecommend']) && (trim($recordList['evaReportChillerPlantChillerRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportChillerPlantChillerRecommend'];
+                $templateProcessor->setValue('chillerPlantChillerRecommend', $this->formatToWordTemplate($recordList['evaReportChillerPlantChillerRecommend']));
+            } else {
+                $templateProcessor->setValue('chillerPlantChillerRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('chillerPlantChillerFinding', "Nil");
+            $templateProcessor->setValue('chillerPlantChillerRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportChillerPlantSupplement']) && ($recordList['evaReportChillerPlantSupplement']!="")) {
+            $content = $recordList['evaReportChillerPlantSupplement'];
+            $templateProcessor->setValue('chillerPlantSupplement', $this->formatToWordTemplate($recordList['evaReportChillerPlantSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('chillerPlantSupplement', "Nil");
+        }
 
+        // check if escalator contains information
+        if ($recordList['evaReportEscalatorYesNo'] == 'Y') {
+            $templateProcessor->setValue('escalatorYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('escalatorYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportEscalatorBrakingSystemYesNo'] == 'Y') {
+            $templateProcessor->setValue('escalatorBrakingSystemYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('escalatorBrakingSystemYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportEscalatorControlYesNo'] == 'Y') {
+            $templateProcessor->setValue('escalatorControlYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('escalatorControlYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportEscalatorBrakingSystemFinding']) && ($recordList['evaReportEscalatorBrakingSystemFinding']!="")) {
+            $content = $recordList['evaReportEscalatorBrakingSystemFinding'];
+            $templateProcessor->setValue('escalatorBrakingSystemFinding', $this->formatToWordTemplate($recordList['evaReportEscalatorBrakingSystemFinding']));
+            if (isset($recordList['evaReportEscalatorBrakingSystemRecommend']) && (trim($recordList['evaReportEscalatorBrakingSystemRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportEscalatorBrakingSystemRecommend'];
+                $templateProcessor->setValue('escalatorBrakingSystemRecommend', $this->formatToWordTemplate($recordList['evaReportEscalatorBrakingSystemRecommend']));
+            } else {
+                $templateProcessor->setValue('escalatorBrakingSystemRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('escalatorBrakingSystemFinding', "Nil");
+            $templateProcessor->setValue('escalatorBrakingSystemRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportEscalatorControlFinding']) && ($recordList['evaReportEscalatorControlFinding']!="")) {
+            $content = $recordList['evaReportEscalatorControlFinding'];
+            $templateProcessor->setValue('escalatorControlFinding', $this->formatToWordTemplate($recordList['evaReportEscalatorControlFinding']));
+            if (isset($recordList['evaReportEscalatorControlRecommend']) && (trim($recordList['evaReportEscalatorControlRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportEscalatorControlRecommend'];
+                $templateProcessor->setValue('escalatorControlRecommend', $this->formatToWordTemplate($recordList['evaReportEscalatorControlRecommend']));
+            } else {
+                $templateProcessor->setValue('escalatorControlRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('escalatorControlFinding', "Nil");
+            $templateProcessor->setValue('escalatorControlRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportEscalatorSupplement']) && ($recordList['evaReportEscalatorSupplement']!="")) {
+            $content = $recordList['evaReportEscalatorSupplement'];
+            $templateProcessor->setValue('escalatorSupplement', $this->formatToWordTemplate($recordList['evaReportEscalatorSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('escalatorSupplement', "Nil");
+        }
+
+        // check if LED Lighting contains information
+        if ($recordList['evaReportHidLampYesNo'] == 'Y') {
+            $templateProcessor->setValue('hidLampYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('hidLampYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportHidLampBallastYesNo'] == 'Y') {
+            $templateProcessor->setValue('hidLampBallastYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('hidLampBallastYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportHidLampAddonProtectYesNo'] == 'Y') {
+            $templateProcessor->setValue('hidLampAddonProtectYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('hidLampAddonProtectYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportHidLampBallastFinding']) && ($recordList['evaReportHidLampBallastFinding']!="")) {
+            $content = $recordList['evaReportHidLampBallastFinding'];
+            $templateProcessor->setValue('hidLampBallastFinding', $this->formatToWordTemplate($recordList['evaReportHidLampBallastFinding']));
+            if (isset($recordList['evaReportHidLampBallastRecommend']) && (trim($recordList['evaReportHidLampBallastRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportHidLampBallastRecommend'];
+                $templateProcessor->setValue('hidLampBallastRecommend', $this->formatToWordTemplate($recordList['evaReportHidLampBallastRecommend']));
+            } else {
+                $templateProcessor->setValue('hidLampBallastRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('hidLampBallastFinding', "Nil");
+            $templateProcessor->setValue('hidLampBallastRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportHidLampAddonProtectFinding']) && ($recordList['evaReportHidLampAddonProtectFinding']!="")) {
+            $content = $recordList['evaReportHidLampAddonProtectFinding'];
+            $templateProcessor->setValue('hidLampAddonProtectFinding', $this->formatToWordTemplate($recordList['evaReportHidLampAddonProtectFinding']));
+            if (isset($recordList['evaReportHidLampAddonProtectRecommend']) && (trim($recordList['evaReportHidLampAddonProtectRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportHidLampAddonProtectRecommend'];
+                $templateProcessor->setValue('hidLampAddonProtectRecommend', $this->formatToWordTemplate($recordList['evaReportHidLampAddonProtectRecommend']));
+            } else {
+                $templateProcessor->setValue('hidLampAddonProtectRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('hidLampAddonProtectFinding', "Nil");
+            $templateProcessor->setValue('hidLampAddonProtectRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportHidLampSupplement']) && ($recordList['evaReportHidLampSupplement']!="")) {
+            $content = $recordList['evaReportHidLampSupplement'];
+            $templateProcessor->setValue('hidLampSupplement', $this->formatToWordTemplate($recordList['evaReportHidLampSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('hidLampSupplement', "Nil");
+        }
+
+        // check if Lift contains information
+        if ($recordList['evaReportLiftYesNo'] == 'Y') {
+            $templateProcessor->setValue('liftYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('liftYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportLiftOperationYesNo'] == 'Y') {
+            $templateProcessor->setValue('liftOperationYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('liftOperationYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportLiftMainSupplyYesNo'] == 'Y') {
+            $templateProcessor->setValue('liftMainSupplyYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('liftMainSupplyYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportLiftOperationFinding']) && ($recordList['evaReportLiftOperationFinding']!="")) {
+            $content = $recordList['evaReportLiftOperationFinding'];
+            $templateProcessor->setValue('liftOperationFinding', $this->formatToWordTemplate($recordList['evaReportLiftOperationFinding']));
+            if (isset($recordList['evaReportLiftOperationRecommend']) && (trim($recordList['evaReportLiftOperationRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportLiftOperationRecommend'];
+                $templateProcessor->setValue('liftOperationRecommend', $this->formatToWordTemplate($recordList['evaReportLiftOperationRecommend']));
+            } else {
+                $templateProcessor->setValue('liftOperationRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('liftOperationFinding', "Nil");
+            $templateProcessor->setValue('liftOperationRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportLiftMainSupplyFinding']) && ($recordList['evaReportLiftMainSupplyFinding']!="")) {
+            $content = $recordList['evaReportLiftMainSupplyFinding'];
+            $templateProcessor->setValue('liftMainSupplyFinding', $this->formatToWordTemplate($recordList['evaReportLiftMainSupplyFinding']));
+            if (isset($recordList['evaReportLiftMainSupplyRecommend']) && (trim($recordList['evaReportLiftMainSupplyRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportLiftMainSupplyRecommend'];
+                $templateProcessor->setValue('liftMainSupplyRecommend', $this->formatToWordTemplate($recordList['evaReportLiftMainSupplyRecommend']));
+            } else {
+                $templateProcessor->setValue('liftMainSupplyRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('liftMainSupplyFinding', "Nil");
+            $templateProcessor->setValue('liftMainSupplyRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportLiftSupplement']) && ($recordList['evaReportLiftSupplement']!="")) {
+            $content = $recordList['evaReportLiftSupplement'];
+            $templateProcessor->setValue('liftSupplement', $this->formatToWordTemplate($recordList['evaReportLiftSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('liftSupplement', "Nil");
+        }
+
+        // check if Sensitive Machine contains information
+        if ($recordList['evaReportSensitiveMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('sensitiveMachineYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('sensitiveMachineYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportSensitiveMachineMedicalYesNo'] == 'Y') {
+            $templateProcessor->setValue('sensitiveMachineMedicalYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('sensitiveMachineMedicalYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportSensitiveMachineMedicalFinding']) && ($recordList['evaReportSensitiveMachineMedicalFinding']!="")) {
+            $content = $recordList['evaReportSensitiveMachineMedicalFinding'];
+            $templateProcessor->setValue('sensitiveMachineMedicalFinding', $this->formatToWordTemplate($recordList['evaReportSensitiveMachineMedicalFinding']));
+            if (isset($recordList['evaReportSensitiveMachineMedicalRecommend']) && (trim($recordList['evaReportSensitiveMachineMedicalRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportSensitiveMachineMedicalRecommend'];
+                $templateProcessor->setValue('sensitiveMachineMedicalRecommend', $this->formatToWordTemplate($recordList['evaReportSensitiveMachineMedicalRecommend']));
+            } else {
+                $templateProcessor->setValue('sensitiveMachineMedicalRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('sensitiveMachineMedicalFinding', "Nil");
+            $templateProcessor->setValue('sensitiveMachineMedicalRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportSensitiveMachineSupplement']) && ($recordList['evaReportSensitiveMachineSupplement']!="")) {
+            $content = $recordList['evaReportSensitiveMachineSupplement'];
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $templateProcessor->setValue('sensitiveMachineSupplement', $this->formatToWordTemplate($recordList['evaReportSensitiveMachineSupplement']));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('sensitiveMachineSupplement', "Nil");
+        }
+
+        // check if Telecom contains information
+        if ($recordList['evaReportTelecomMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('telecomMachineYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telecomMachineYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportTelecomMachineServerOrComputerYesNo'] == 'Y') {
+            $templateProcessor->setValue('telecomMachineServerOrComputerYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telecomMachineServerOrComputerYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportTelecomMachinePeripheralsYesNo'] == 'Y') {
+            $templateProcessor->setValue('telecomMachinePeripheralsYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telecomMachinePeripheralsYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportTelecomMachineHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('telecomMachineHarmonicEmissionYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telecomMachineHarmonicEmissionYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportTelecomMachineServerOrComputerFinding']) && ($recordList['evaReportTelecomMachineServerOrComputerFinding']!="")) {
+            $content = $recordList['evaReportTelecomMachineServerOrComputerFinding'];
+            $templateProcessor->setValue('telecomMachineServerOrComputerFinding', $this->formatToWordTemplate($recordList['evaReportTelecomMachineServerOrComputerFinding']));
+            if (isset($recordList['evaReportTelecomMachineServerOrComputerRecommend']) && (trim($recordList['evaReportTelecomMachineServerOrComputerRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportTelecomMachineServerOrComputerRecommend'];
+                $templateProcessor->setValue('telecomMachineServerOrComputerRecommend', $this->formatToWordTemplate($recordList['evaReportTelecomMachineServerOrComputerRecommend']));
+            } else {
+                $templateProcessor->setValue('telecomMachineServerOrComputerRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telecomMachineServerOrComputerFinding', "Nil");
+            $templateProcessor->setValue('telecomMachineServerOrComputerRecommend', "Nil");
+        }
+        $content = "";
+        if (isset($recordList['evaReportTelecomMachinePeripheralsFinding']) && ($recordList['evaReportTelecomMachinePeripheralsFinding']!="")) {
+            $content = $content . $recordList['evaReportTelecomMachinePeripheralsFinding'];
+            $templateProcessor->setValue('telecomMachinePeripheralsFinding', $this->formatToWordTemplate($recordList['evaReportTelecomMachinePeripheralsFinding']));
+            if (isset($recordList['evaReportTelecomMachinePeripheralsRecommend']) && (trim($recordList['evaReportTelecomMachinePeripheralsRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportTelecomMachinePeripheralsRecommend'];
+                $templateProcessor->setValue('telecomMachinePeripheralsRecommend', $this->formatToWordTemplate($recordList['evaReportTelecomMachinePeripheralsRecommend']));
+            } else {
+                $templateProcessor->setValue('telecomMachinePeripheralsRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telecomMachinePeripheralsFinding', "Nil");
+            $templateProcessor->setValue('telecomMachinePeripheralsRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportTelecomMachineHarmonicEmissionFinding']) && ($recordList['evaReportTelecomMachineHarmonicEmissionFinding']!="")) {
+            $content = $recordList['evaReportTelecomMachineHarmonicEmissionFinding'];
+            $templateProcessor->setValue('telecomMachineHarmonicEmissionFinding', $this->formatToWordTemplate($recordList['evaReportTelecomMachineHarmonicEmissionFinding']));
+            if (isset($recordList['evaReportTelecomMachineHarmonicEmissionRecommend']) && (trim($recordList['evaReportTelecomMachineHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportTelecomMachineHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('telecomMachineHarmonicEmissionRecommend', $this->formatToWordTemplate($recordList['evaReportTelecomMachineHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('telecomMachineHarmonicEmissionRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telecomMachineHarmonicEmissionFinding', "Nil");
+            $templateProcessor->setValue('telecomMachineHarmonicEmissionRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportTelecomMachineSupplement']) && ($recordList['evaReportTelecomMachineSupplement']!="")) {
+            $content = $recordList['evaReportTelecomMachineSupplement'];
+            $templateProcessor->setValue('telecomMachineSupplement', $this->formatToWordTemplate($recordList['evaReportTelecomMachineSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telecomMachineSupplement', "Nil");
+        }
+
+        // check if Air Conditioners contains information
+        if ($recordList['evaReportAirConditionersYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConditionersYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConditionersYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportAirConditionersMicbYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConditionersMicbYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConditionersMicbYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportAirConditionersLoadForecastingYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConditionersLoadForecastingYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConditionersLoadForecastingYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportAirConditionersTypeYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConditionersTypeYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConditionersTypeYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportAirConditionersMicbFinding']) && ($recordList['evaReportAirConditionersMicbFinding']!="")) {
+            $content = $recordList['evaReportAirConditionersMicbFinding'];
+            $templateProcessor->setValue('airConditionersMicbFinding', $this->formatToWordTemplate($recordList['evaReportAirConditionersMicbFinding']));
+            if (isset($recordList['evaReportAirConditionersMicbRecommend']) && (trim($recordList['evaReportAirConditionersMicbRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportAirConditionersMicbRecommend'];
+                $templateProcessor->setValue('airConditionersMicbRecommend', $this->formatToWordTemplate($recordList['evaReportAirConditionersMicbRecommend']));
+            } else {
+                $templateProcessor->setValue('airConditionersMicbRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConditionersMicbFinding', "Nil");
+            $templateProcessor->setValue('airConditionersMicbRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportAirConditionersLoadForecastingFinding']) && ($recordList['evaReportAirConditionersLoadForecastingFinding']!="")) {
+            $content = $recordList['evaReportAirConditionersLoadForecastingFinding'];
+            $templateProcessor->setValue('airConditionersLoadForecastingFinding', $this->formatToWordTemplate($recordList['evaReportAirConditionersLoadForecastingFinding']));
+            if (isset($recordList['evaReportAirConditionersLoadForecastingRecommend']) && (trim($recordList['evaReportAirConditionersLoadForecastingRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportAirConditionersLoadForecastingRecommend'];
+                $templateProcessor->setValue('airConditionersLoadForecastingRecommend', $this->formatToWordTemplate($recordList['evaReportAirConditionersLoadForecastingRecommend']));
+            } else {
+                $templateProcessor->setValue('airConditionersLoadForecastingRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConditionersLoadForecastingFinding', "Nil");
+            $templateProcessor->setValue('airConditionersLoadForecastingRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportAirConditionersTypeFinding']) && ($recordList['evaReportAirConditionersTypeFinding']!="")) {
+            $content = $recordList['evaReportAirConditionersTypeFinding'];
+            $templateProcessor->setValue('airConditionersTypeFinding', $this->formatToWordTemplate($recordList['evaReportAirConditionersTypeFinding']));
+            if (isset($recordList['evaReportAirConditionersTypeRecommend']) && (trim($recordList['evaReportAirConditionersTypeRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportAirConditionersTypeRecommend'];
+                $templateProcessor->setValue('airConditionersTypeRecommend', $this->formatToWordTemplate($recordList['evaReportAirConditionersTypeRecommend']));
+            } else {
+                $templateProcessor->setValue('airConditionersTypeRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConditionersTypeFinding', "Nil");
+            $templateProcessor->setValue('airConditionersTypeRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportAirConditionersSupplement']) && ($recordList['evaReportAirConditionersSupplement']!="")) {
+            $content = $recordList['evaReportAirConditionersSupplement'];
+            $templateProcessor->setValue('airConditionersSupplement', $this->formatToWordTemplate($recordList['evaReportAirConditionersSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConditionersSupplement', "Nil");
+        }
+
+        // check if Non-linear contains information
+        if ($recordList['evaReportNonLinearLoadYesNo'] == 'Y') {
+            $templateProcessor->setValue('nonLinearLoadYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('nonLinearLoadYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportNonLinearLoadHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('nonLinearLoadHarmonicEmissionYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('nonLinearLoadHarmonicEmissionYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportNonLinearLoadHarmonicEmissionFinding']) && ($recordList['evaReportNonLinearLoadHarmonicEmissionFinding']!="")) {
+            $content = $content . $recordList['evaReportNonLinearLoadHarmonicEmissionFinding'];
+            $templateProcessor->setValue('nonLinearLoadHarmonicEmissionFinding', $this->formatToWordTemplate($recordList['evaReportNonLinearLoadHarmonicEmissionFinding']));
+            if (isset($recordList['evaReportNonLinearLoadHarmonicEmissionRecommend']) && (trim($recordList['evaReportNonLinearLoadHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportNonLinearLoadHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('nonLinearLoadHarmonicEmissionRecommend', $this->formatToWordTemplate($recordList['evaReportNonLinearLoadHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('nonLinearLoadHarmonicEmissionRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('nonLinearLoadHarmonicEmissionFinding', "Nil");
+            $templateProcessor->setValue('nonLinearLoadHarmonicEmissionRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportNonLinearLoadSupplement']) && ($recordList['evaReportNonLinearLoadSupplement']!="")) {
+            $content = $recordList['evaReportNonLinearLoadSupplement'];
+            $templateProcessor->setValue('nonLinearLoadSupplement', $this->formatToWordTemplate($recordList['evaReportNonLinearLoadSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('nonLinearLoadSupplement', "Nil");
+        }
+
+        // check if renewable energy contains information
+        if ($recordList['evaReportRenewableEnergyYesNo'] == 'Y') {
+            $templateProcessor->setValue('renewableEnergyYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('renewableEnergyYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportRenewableEnergyInverterAndControlsYesNo'] == 'Y') {
+            $templateProcessor->setValue('renewableEnergyInverterAndControlsYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('renewableEnergyInverterAndControlsYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportRenewableEnergyHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('renewableEnergyHarmonicEmissionYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('renewableEnergyHarmonicEmissionYesNo', $unCheckedBox);
+        }
+
+        if (isset($recordList['evaReportRenewableEnergyInverterAndControlsFinding']) && ($recordList['evaReportRenewableEnergyInverterAndControlsFinding']!="")) {
+            $content = $recordList['evaReportRenewableEnergyInverterAndControlsFinding'];
+            $templateProcessor->setValue('renewableEnergyInverterAndControlsFinding', $this->formatToWordTemplate($recordList['evaReportRenewableEnergyInverterAndControlsFinding']));
+            if (isset($recordList['evaReportRenewableEnergyInverterAndControlsRecommend']) && (trim($recordList['evaReportRenewableEnergyInverterAndControlsRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportRenewableEnergyInverterAndControlsRecommend'];
+                $templateProcessor->setValue('renewableEnergyInverterAndControlsRecommend', $this->formatToWordTemplate($recordList['evaReportRenewableEnergyInverterAndControlsRecommend']));
+            } else {
+                $templateProcessor->setValue('renewableEnergyInverterAndControlsRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('renewableEnergyInverterAndControlsFinding', "Nil");
+            $templateProcessor->setValue('renewableEnergyInverterAndControlsRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportRenewableEnergyHarmonicEmissionFinding']) && ($recordList['evaReportRenewableEnergyHarmonicEmissionFinding']!="")) {
+            $content = $recordList['evaReportRenewableEnergyHarmonicEmissionFinding'];
+            $templateProcessor->setValue('renewableEnergyHarmonicEmissionFinding', $this->formatToWordTemplate($recordList['evaReportRenewableEnergyHarmonicEmissionFinding']));
+            if (isset($recordList['evaReportRenewableEnergyHarmonicEmissionRecommend']) && (trim($recordList['evaReportRenewableEnergyHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportRenewableEnergyHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('renewableEnergyHarmonicEmissionRecommend', $this->formatToWordTemplate($recordList['evaReportRenewableEnergyHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('renewableEnergyHarmonicEmissionRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('renewableEnergyHarmonicEmissionFinding', "Nil");
+            $templateProcessor->setValue('renewableEnergyHarmonicEmissionRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportRenewableEnergySupplement']) && ($recordList['evaReportRenewableEnergySupplement']!="")) {
+            $content = $recordList['evaReportRenewableEnergySupplement'];
+            $templateProcessor->setValue('renewableEnergySupplement', $this->formatToWordTemplate($recordList['evaReportRenewableEnergySupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('renewableEnergySupplement', "Nil");
+        }
+
+        // check if EV charge contains information
+        if ($recordList['evaReportEvChargerSystemYesNo'] == 'Y') {
+            $templateProcessor->setValue('evChargerSystemYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('evChargerSystemYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportEvChargerSystemEvChargerYesNo'] == 'Y') {
+            $templateProcessor->setValue('evChargerSystemEvChargerYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('evChargerSystemEvChargerYesNo', $unCheckedBox);
+        }
+        if ($recordList['evaReportEvChargerSystemHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('evChargerSystemHarmonicEmissionYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('evChargerSystemHarmonicEmissionYesNo', $unCheckedBox);
+        }
+        if (isset($recordList['evaReportEvChargerSystemEvChargerFinding']) && ($recordList['evaReportEvChargerSystemEvChargerFinding']!="")) {
+            $content = $recordList['evaReportEvChargerSystemEvChargerFinding'];
+            $templateProcessor->setValue('evChargerSystemEvChargerFinding', $this->formatToWordTemplate($recordList['evaReportEvChargerSystemEvChargerFinding']));
+            if (isset($recordList['evaReportEvChargerSystemEvChargerRecommend']) && (trim($recordList['evaReportEvChargerSystemEvChargerRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportEvChargerSystemEvChargerRecommend'];
+                $templateProcessor->setValue('evChargerSystemEvChargerRecommend', $this->formatToWordTemplate($recordList['evaReportEvChargerSystemEvChargerRecommend']));
+            } else {
+                $templateProcessor->setValue('evChargerSystemEvChargerRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('evChargerSystemEvChargerFinding', "Nil");
+            $templateProcessor->setValue('evChargerSystemEvChargerRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportEvChargerSystemHarmonicEmissionFinding']) && ($recordList['evaReportEvChargerSystemHarmonicEmissionFinding']!="")) {
+            $content = $content . $recordList['evaReportEvChargerSystemHarmonicEmissionFinding'];
+            $templateProcessor->setValue('evChargerSystemHarmonicEmissionFinding', $this->formatToWordTemplate($recordList['evaReportEvChargerSystemHarmonicEmissionFinding']));
+            if (isset($recordList['evaReportEvChargerSystemHarmonicEmissionRecommend']) && (trim($recordList['evaReportEvChargerSystemHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['evaReportEvChargerSystemHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('evChargerSystemHarmonicEmissionRecommend', $this->formatToWordTemplate($recordList['evaReportEvChargerSystemHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('evChargerSystemHarmonicEmissionRecommend', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('evChargerSystemHarmonicEmissionFinding', "Nil");
+            $templateProcessor->setValue('evChargerSystemHarmonicEmissionRecommend', "Nil");
+        }
+        if (isset($recordList['evaReportEvChargerSystemSupplement']) && ($recordList['evaReportEvChargerSystemSupplement']!="")) {
+            $content = $recordList['evaReportEvChargerSystemSupplement'];
+            $templateProcessor->setValue('evChargerSystemSupplement', $this->formatToWordTemplate($recordList['evaReportEvChargerSystemSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('evChargerSystemSupplement', "Nil");
+        }
+
+        // Display the footer messages
+        $footerTextRun = new \PhpOffice\PhpWord\Element\TextRun(array('align'=>'both'));
+        $footerTextRun->addText("We are committed in assisting our customers to resolve the potential PQ issues and it is our pleasure to have this chance to have a PQ site walk with you to share the mitigation solutions to alleviate the impacts on your critical equipment caused by PQ issues. We would be grateful to conduct further study with your team by carrying out voltage dip simulation tests or PQ measurement on the concerned equipment and devising possible cost-effective mitigation solutions to improve the performances of the concerned equipment caused by PQ issues.");
+        $footerTextRun->addTextBreak(2);
+        $footerTextRun->addText("Should you have any query, please feel free to contact our Mr. K.Y. Poon at 2678 6047 or Mr. K.W. Chan at 2678 7518 for assistance.");
+        $footerTextRun->addTextBreak(2);
+        $footerTextRun->addText("Yours sincerely,");
+        $footerTextRun->addTextBreak(1);
+        $footerTextRun->addText("CLP Power Hong Kong Limited");
+        $footerTextRun->addTextBreak(5);
+        $footerTextRun->addText("Edmond Chan");
+        $footerTextRun->addTextBreak(1);
+        $footerTextRun->addText("Principal Manager – Systems Engineering");
+        $footerTextRun->addTextBreak(1);
+        $footerTextRun->addText("4817", array('size'=>8));
+        $templateProcessor->setComplexBlock('content' . $contentCount, $footerTextRun);
+        $contentCount++;
+
+        $contentMaxCount = 36;
+        for ($x=$contentCount; $x<=$contentMaxCount; $x++) {
+            $templateProcessor->setValue('content' . $x, "");
+        }
 
         $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $evaReportTemplateFileName['configValue'];
@@ -1305,6 +1933,20 @@ class PlanningAheadController extends Controller {
 
         die();
 
+    }
+
+    private function getListItemRun($content) {
+        $listItemRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
+        $listItemRun->addText($this->formatToWordTemplate(trim($content)));
+        $listItemRun->addTextBreak(1);
+        return $listItemRun;
+    }
+
+    private function getTableListItemRun($content) {
+        $listItemRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
+        $listItemRun->addText($this->formatToWordTemplate(trim($content)),array('size'=> 8, 'name'=>'Arial'));
+        $listItemRun->addTextBreak(1);
+        return $listItemRun;
     }
 
 
@@ -2247,7 +2889,7 @@ class PlanningAheadController extends Controller {
 
     private function formatToWordTemplate($value) {
         if (isset($value)) {
-            $value = htmlspecialchars($value);
+            $value = htmlspecialchars(trim($value));
             return str_replace("\\n", "<w:br />", $value);
         } else {
             return $value;
