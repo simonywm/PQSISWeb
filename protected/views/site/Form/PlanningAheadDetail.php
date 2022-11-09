@@ -4058,10 +4058,6 @@
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportSensitiveMachineYesNo', 'evaReportSensitiveMachineMedicalPass');
-            itemsCount = itemsCount + result[0];
-            passCount = passCount + result[1];
-
             result = calReportScore('evaReportSensitiveMachineSupplementYesNo', 'evaReportSensitiveMachineSupplementPass');
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
@@ -4130,9 +4126,12 @@
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            let score = (passCount / itemsCount * 100).toFixed(2);
-
-            $("#evaReportScore").val(score);
+            if (itemsCount > 0) {
+                let score = (passCount / itemsCount * 100).toFixed(2);
+                $("#evaReportScore").val(score);
+            } else {
+                $("#evaReportScore").val('NA');
+            }
         }
 
         <?php } ?>

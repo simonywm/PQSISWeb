@@ -47,6 +47,22 @@ class PlanningAheadDao extends CApplicationComponent {
                 $record['firstConsultantSurname'] = Encoding::escapleAllCharacter($result[0]['first_consultant_surname']);
                 $record['firstConsultantOtherName'] = Encoding::escapleAllCharacter($result[0]['first_consultant_other_name']);
                 $record['firstConsultantCompany'] = Encoding::escapleAllCharacter($result[0]['first_consultant_company']);
+
+                if (isset($record['firstConsultantCompany']) && trim($record['firstConsultantCompany']) != "") {
+                    $consultantCompany = $this->getConsultantCompanyAddressInfo($record['firstConsultantCompany']);
+                    if (isset($consultantCompany) && count($consultantCompany)>0) {
+                        $record['firstConsultantCompanyAdd1'] = $consultantCompany[0]['addressLine1'];
+                        $record['firstConsultantCompanyAdd2'] = $consultantCompany[0]['addressLine2'];
+                        $record['firstConsultantCompanyAdd3'] = $consultantCompany[0]['addressLine3'];
+                        $record['firstConsultantCompanyAdd4'] = $consultantCompany[0]['addressLine4'];
+                    } else {
+                        $record['firstConsultantCompanyAdd1'] = "";
+                        $record['firstConsultantCompanyAdd2'] = "";
+                        $record['firstConsultantCompanyAdd3'] = "";
+                        $record['firstConsultantCompanyAdd4'] = "";
+                    }
+                }
+
                 $record['firstConsultantPhone'] = Encoding::escapleAllCharacter($result[0]['first_consultant_phone']);
                 $record['firstConsultantEmail'] = Encoding::escapleAllCharacter($result[0]['first_consultant_email']);
                 $record['secondConsultantTitle'] = Encoding::escapleAllCharacter($result[0]['second_consultant_title']);
@@ -186,6 +202,7 @@ class PlanningAheadDao extends CApplicationComponent {
                     $record['replySlipConsultantCompany'] = Encoding::escapleAllCharacter($item['replySlipConsultantCompany']);
                     $record['replySlipProjectOwnerNameConfirmation'] = Encoding::escapleAllCharacter($item['replySlipProjectOwnerNameConfirmation']);
                     $record['replySlipProjectOwnerCompany'] = Encoding::escapleAllCharacter($item['replySlipProjectOwnerCompany']);
+                    $record['replySlipLastUploadTime'] = Encoding::escapleAllCharacter($item['replySlipLastUploadTime']);
                 } else {
                     $record['replySlipBmsYesNo'] = "";
                     $record['replySlipBmsServerCentralComputer'] = "";
@@ -731,6 +748,16 @@ class PlanningAheadDao extends CApplicationComponent {
                 } else {
                     $item['replySlipLastUpdateTime'] = null;
                 }
+
+                if (isset($row['last_upload_time'])) {
+                    $replySlipLastUploadTimeYear = date("Y", strtotime($row['last_upload_time']));
+                    $replySlipLastUploadTimeMonth = date("m", strtotime($row['last_upload_time']));
+                    $replySlipLastUploadTimeDay = date("d", strtotime($row['last_upload_time']));
+                    $item['replySlipLastUploadTime'] = $replySlipLastUploadTimeYear . "-" .
+                        $replySlipLastUploadTimeMonth . "-" . $replySlipLastUploadTimeDay;
+                } else {
+                    $item['replySlipLastUploadTime'] = null;
+                }
             }
 
         } catch (PDOException $e) {
@@ -824,6 +851,27 @@ class PlanningAheadDao extends CApplicationComponent {
             echo "Exception " . $e->getMessage();
         }
 
+        return $List;
+    }
+
+    public function getConsultantCompanyAddressInfo($companyName) {
+        $List = array();
+        try {
+            $sql = "SELECT * FROM \"TblConsultantCompany\" WHERE \"consultantCompanyName\"=:companyName";
+            $sth = Yii::app()->db->createCommand($sql);
+            $sth->bindParam(':companyName', $companyName);
+            $result = $sth->queryAll();
+            //while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+            foreach($result as $row) {
+                $array['addressLine1'] = Encoding::escapleAllCharacter($row['addressLine1']);
+                $array['addressLine2'] = Encoding::escapleAllCharacter($row['addressLine2']);
+                $array['addressLine3'] = Encoding::escapleAllCharacter($row['addressLine3']);
+                $array['addressLine4'] = Encoding::escapleAllCharacter($row['addressLine4']);
+                array_push($List, $array);
+            }
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
         return $List;
     }
 
@@ -1770,7 +1818,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                  $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
                                  $consultantNameConfirmation,$consultantCompany,
                                  $projectOwnerNameConfirmation,$projectOwnerCompany,
-                                 $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime) {
+                                 $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime,$lastUploadTime) {
 
         $sql = 'INSERT INTO "tbl_slip_reply" ("reply_slip_loc","scheme_no", "bms_yes_no","bms_server_central_computer",
                               "bms_ddc","changeover_scheme_yes_no","changeover_scheme_control","changeover_scheme_uv",
@@ -1790,8 +1838,8 @@ class PlanningAheadDao extends CApplicationComponent {
                               "consultant_name_confirmation","consultant_company",
                               "project_owner_name_confirmation","project_owner_company",
                               "created_by","created_time",
-                              "last_updated_by","last_updated_time") 
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ';
+                              "last_updated_by","last_updated_time","last_upload_time") 
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ';
 
         try {
             //We start our transaction.
@@ -1816,7 +1864,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
                 $consultantNameConfirmation,$consultantCompany,
                 $projectOwnerNameConfirmation,$projectOwnerCompany,
-                $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime));
+                $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime,$lastUploadTime));
 
             if ($result) {
                 $sql = "SELECT \"reply_slip_id\" FROM \"tbl_slip_reply\" WHERE \"scheme_no\"=:scheme_no";
@@ -1876,7 +1924,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                    $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
                                    $consultantNameConfirmation,$consultantCompany,
                                    $projectOwnerNameConfirmation,$projectOwnerCompany,
-                                   $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime) {
+                                   $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime,$lastUploadTime) {
         $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?, "bms_yes_no"=?, "bms_server_central_computer"=?,
                             "bms_ddc"=?, "changeover_scheme_yes_no"=?, "changeover_scheme_control"=?, 
                             "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu_control"=?,
@@ -1896,7 +1944,7 @@ class PlanningAheadDao extends CApplicationComponent {
                             "ev_charger_system_smart_charging_system"=?, "ev_charger_system_harmonic_emission"=?, 
                             "consultant_name_confirmation"=?, "consultant_company"=?,
                             "project_owner_name_confirmation"=?, "project_owner_company"=?,
-                            "last_updated_by"=?, "last_updated_time"=? WHERE "reply_slip_id"=?';
+                            "last_updated_by"=?, "last_updated_time"=?, "last_upload_time"=? WHERE "reply_slip_id"=?';
 
         try {
             //We start our transaction.
@@ -1921,7 +1969,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
                 $consultantNameConfirmation,$consultantCompany,
                 $projectOwnerNameConfirmation,$projectOwnerCompany,
-                $lastUpdatedBy,$lastUpdatedTime,$replySlipId));
+                $lastUpdatedBy,$lastUpdatedTime,$lastUploadTime,$replySlipId));
 
             $transaction->commit();
             $retJson['status'] = 'OK';
