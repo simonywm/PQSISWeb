@@ -15,8 +15,7 @@ class PlanningAheadDao extends CApplicationComponent {
             $sth->bindParam(':schemeNo', $schemeNo);
             $result = $sth->queryAll();
 
-
-            if (isset($result)) {
+            if (isset($result) && count($result)>0) {
                 $record['planningAheadId'] = $result[0]['planning_ahead_id'];
                 $record['projectTitle'] = Encoding::escapleAllCharacter($result[0]['project_title']);
                 $record['schemeNo'] = Encoding::escapleAllCharacter($result[0]['scheme_no']);
@@ -673,6 +672,8 @@ class PlanningAheadDao extends CApplicationComponent {
                 $record['createdTime'] = $result[0]['created_time'];
                 $record['lastUpdatedBy'] = Encoding::escapleAllCharacter($result[0]['last_updated_by']);
                 $record['lastUpdatedTime'] = $result[0]['last_updated_time'];
+            } else {
+                return null;
             }
         } catch (PDOException $e) {
             echo "Exception " . $e->getMessage();
@@ -1450,9 +1451,320 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
                                                      $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
                                                      $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                                                     $txnNewState, $lastUpdatedBy,$lastUpdatedTime,
+                                                     $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
+                                                     $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                                                     $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                                                     $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                                                     $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                                                     $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                                                     $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                                                     $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                                                     $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                                                     $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                                                     $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                                                     $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                                                     $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                                                     $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                                                     $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                                                     $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                                                     $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                                                     $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                                                     $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                                                     $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                                                     $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                                                     $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportLiftYesNo,
+                                                     $txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,$txnEvaReportLiftOperationRecommend,
+                                                     $txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,$txnEvaReportLiftMainSupplyFinding,
+                                                     $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,$txnEvaReportLiftSupplementYesNo,
+                                                     $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,$txnEvaReportHidLampYesNo,
+                                                     $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                                                     $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                                                     $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                                                     $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                                                     $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                                                     $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                                                     $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                                                     $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                                                     $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                                                     $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                                                     $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                                                     $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                                                     $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                                                     $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                                                     $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                                                     $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                                                     $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                                                     $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                                                     $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                                                     $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                                                     $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                                                     $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                                                     $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                                                     $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                                                     $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                                                     $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                                                     $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                                                     $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                                                     $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                                                     $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                                                     $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                                                     $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                                                     $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                                                     $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                                                     $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                                                     $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                                                     $txnState,$txnNewState, $lastUpdatedBy,$lastUpdatedTime,
                                                      $txnPlanningAheadId)
     {
+
+        if ($txnState == 'NOTIFIED_PQ_SITE_WALK') {
+            if ($txnEvaReportId == 0) {
+                $sql = "INSERT INTO public.tbl_evaluation_report(evaluation_report_remark, scheme_no, evaluation_report_edms_link, 
+                                         evaluation_report_issue_date, evaluation_report_fax_ref_no, evaluation_report_score, 
+                                         bms_yes_no, bms_server_central_computer_yes_no, bms_server_central_computer_finding, 
+                                         bms_server_central_computer_recommend, bms_server_central_computer_pass, bms_ddc_yes_no, 
+                                         bms_ddc_finding, bms_ddc_recommend, bms_ddc_pass, bms_supplement_yes_no, bms_supplement, 
+                                         bms_supplement_pass, changeover_scheme_yes_no, changeover_scheme_control_yes_no, 
+                                         changeover_scheme_control_finding, changeover_scheme_control_recommend, changeover_scheme_control_pass, 
+                                         changeover_scheme_uv_yes_no, changeover_scheme_uv_finding, changeover_scheme_uv_recommend, changeover_scheme_uv_pass, 
+                                         changeover_scheme_supplement_yes_no, changeover_scheme_supplement, changeover_scheme_supplement_pass, chiller_plant_yes_no, 
+                                         chiller_plant_ahu_chilled_water_yes_no, chiller_plant_ahu_chilled_water_finding, chiller_plant_ahu_chilled_water_recommend, 
+                                         chiller_plant_ahu_chilled_water_pass, chiller_plant_chiller_yes_no, chiller_plant_chiller_finding, 
+                                         chiller_plant_chiller_recommend, chiller_plant_chiller_pass, chiller_plant_supplement_yes_no, chiller_plant_supplement, 
+                                         chiller_plant_supplement_pass, escalator_yes_no, escalator_braking_system_yes_no, escalator_braking_system_finding, 
+                                         escalator_braking_system_recommend, escalator_braking_system_pass, escalator_control_yes_no, escalator_control_finding, 
+                                         escalator_control_recommend, escalator_control_pass, escalator_supplement_yes_no, escalator_supplement, 
+                                         escalator_supplement_pass, hid_lamp_yes_no, hid_lamp_ballast_yes_no, hid_lamp_ballast_finding, hid_lamp_ballast_recommend, 
+                                         hid_lamp_ballast_pass, hid_lamp_addon_protect_yes_no, hid_lamp_addon_protect_finding, hid_lamp_addon_protect_recommend, 
+                                         hid_lamp_addon_protect_pass, hid_lamp_supplement_yes_no, hid_lamp_supplement, hid_lamp_supplement_pass, lift_yes_no, 
+                                         lift_operation_yes_no, lift_operation_finding, lift_operation_recommend, lift_operation_pass, lift_main_supply_yes_no, 
+                                         lift_main_supply_finding, lift_main_supply_recommend, lift_main_supply_pass, lift_supplement_yes_no, lift_supplement, 
+                                         lift_supplement_pass, sensitive_machine_yes_no, sensitive_machine_medical_yes_no, sensitive_machine_medical_finding, 
+                                         sensitive_machine_medical_recommend, sensitive_machine_medical_pass, sensitive_machine_supplement_yes_no, 
+                                         sensitive_machine_supplement, sensitive_machine_supplement_pass, telecom_machine_yes_no, 
+                                         telecom_machine_server_or_computer_yes_no, telecom_machine_server_or_computer_finding, 
+                                         telecom_machine_server_or_computer_recommend, telecom_machine_server_or_computer_pass, telecom_machine_peripherals_yes_no, 
+                                         telecom_machine_peripherals_finding, telecom_machine_peripherals_recommend, telecom_machine_peripherals_pass, 
+                                         telecom_machine_harmonic_emission_yes_no, telecom_machine_harmonic_emission_finding, telecom_machine_harmonic_emission_recommend, 
+                                         telecom_machine_harmonic_emission_pass, telecom_machine_supplement_yes_no, telecom_machine_supplement, 
+                                         telecom_machine_supplement_pass, air_conditioners_yes_no, air_conditioners_micb_yes_no, air_conditioners_micb_finding, 
+                                         air_conditioners_micb_recommend, air_conditioners_micb_pass, air_conditioners_load_forecasting_yes_no, 
+                                         air_conditioners_load_forecasting_finding, air_conditioners_load_forecasting_recommend, air_conditioners_load_forecasting_pass, 
+                                         air_conditioners_type_yes_no, air_conditioners_type_finding, air_conditioners_type_recommend, air_conditioners_type_pass, 
+                                         air_conditioners_supplement_yes_no, air_conditioners_supplement, air_conditioners_supplement_pass, non_linear_load_yes_no, 
+                                         non_linear_load_harmonic_emission_yes_no, non_linear_load_harmonic_emission_finding, non_linear_load_harmonic_emission_recommend, 
+                                         non_linear_load_harmonic_emission_pass, non_linear_load_supplement_yes_no, non_linear_load_supplement, non_linear_load_supplement_pass, 
+                                         renewable_energy_yes_no, renewable_energy_inverter_and_controls_yes_no, renewable_energy_inverter_and_controls_finding, 
+                                         renewable_energy_inverter_and_controls_recommend, renewable_energy_inverter_and_controls_pass, renewable_energy_harmonic_emission_yes_no, 
+                                         renewable_energy_harmonic_emission_finding, renewable_energy_harmonic_emission_recommend, renewable_energy_harmonic_emission_pass, 
+                                         renewable_energy_supplement_yes_no, renewable_energy_supplement, renewable_energy_supplement_pass, ev_charger_system_yes_no, 
+                                         ev_charger_system_ev_charger_yes_no, ev_charger_system_ev_charger_finding, ev_charger_system_ev_charger_recommend, 
+                                         ev_charger_system_ev_charger_pass, ev_charger_system_harmonic_emission_yes_no, ev_charger_system_harmonic_emission_finding, 
+                                         ev_charger_system_harmonic_emission_recommend, ev_charger_system_harmonic_emission_pass, ev_charger_system_supplement_yes_no, 
+                                         ev_charger_system_supplement, ev_charger_system_supplement_pass, active, created_by, created_time, last_updated_by, last_updated_time)
+	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+	        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+	        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+                $stmt = Yii::app()->db->createCommand($sql);
+                $result = $stmt->execute(array($txnEvaReportRemark,$txnSchemeNo,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,
+                    $txnEvaReportFaxRefNo,$txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                    $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                    $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                    $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                    $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                    $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                    $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                    $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                    $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                    $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                    $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                    $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                    $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                    $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                    $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                    $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                    $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                    $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                    $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                    $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                    $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportHidLampYesNo,
+                    $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                    $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                    $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                    $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                    $txnEvaReportLiftYesNo,$txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,
+                    $txnEvaReportLiftOperationRecommend,$txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,
+                    $txnEvaReportLiftMainSupplyFinding,$txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,
+                    $txnEvaReportLiftSupplementYesNo, $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,
+                    $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                    $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                    $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                    $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                    $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                    $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                    $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                    $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                    $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                    $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                    $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                    $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                    $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                    $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                    $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                    $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                    $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                    $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                    $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                    $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                    $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                    $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                    $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                    $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                    $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                    $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,'Y',
+                    $lastUpdatedBy,$lastUpdatedTime,$lastUpdatedBy,$lastUpdatedTime));
+
+                $sql = "SELECT * FROM \"tbl_evaluation_report\" WHERE \"active\"='Y' AND \"scheme_no\"=:scheme_no";
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':scheme_no', $txnSchemeNo);
+                $result = $sth->queryAll();
+
+                foreach($result as $row) {
+                    $txnEvaReportId = $row['evaluation_report_id'];
+                }
+            } else {
+
+                $sql = 'UPDATE public.tbl_evaluation_report
+	                        SET evaluation_report_remark=?, 
+	                            evaluation_report_edms_link=?, evaluation_report_issue_date=?, evaluation_report_fax_ref_no=?, 
+	                            evaluation_report_score=?, bms_yes_no=?, bms_server_central_computer_yes_no=?, 
+	                            bms_server_central_computer_finding=?, bms_server_central_computer_recommend=?, 
+	                            bms_server_central_computer_pass=?, bms_ddc_yes_no=?, bms_ddc_finding=?, bms_ddc_recommend=?, 
+	                            bms_ddc_pass=?, bms_supplement_yes_no=?, bms_supplement=?, bms_supplement_pass=?, 
+	                            changeover_scheme_yes_no=?, changeover_scheme_control_yes_no=?, 
+	                            changeover_scheme_control_finding=?, changeover_scheme_control_recommend=?, 
+	                            changeover_scheme_control_pass=?, changeover_scheme_uv_yes_no=?, changeover_scheme_uv_finding=?,
+	                            changeover_scheme_uv_recommend=?, changeover_scheme_uv_pass=?, changeover_scheme_supplement_yes_no=?, 
+	                            changeover_scheme_supplement=?, changeover_scheme_supplement_pass=?, chiller_plant_yes_no=?, 
+	                            chiller_plant_ahu_chilled_water_yes_no=?, chiller_plant_ahu_chilled_water_finding=?, 
+	                            chiller_plant_ahu_chilled_water_recommend=?, chiller_plant_ahu_chilled_water_pass=?, 
+	                            chiller_plant_chiller_yes_no=?, chiller_plant_chiller_finding=?, chiller_plant_chiller_recommend=?, 
+	                            chiller_plant_chiller_pass=?, chiller_plant_supplement_yes_no=?, chiller_plant_supplement=?, 
+	                            chiller_plant_supplement_pass=?, escalator_yes_no=?, escalator_braking_system_yes_no=?, 
+	                            escalator_braking_system_finding=?, escalator_braking_system_recommend=?, 
+	                            escalator_braking_system_pass=?, escalator_control_yes_no=?, escalator_control_finding=?, 
+	                            escalator_control_recommend=?, escalator_control_pass=?, escalator_supplement_yes_no=?, 
+	                            escalator_supplement=?, escalator_supplement_pass=?, hid_lamp_yes_no=?, hid_lamp_ballast_yes_no=?, 
+	                            hid_lamp_ballast_finding=?, hid_lamp_ballast_recommend=?, hid_lamp_ballast_pass=?, 
+	                            hid_lamp_addon_protect_yes_no=?, hid_lamp_addon_protect_finding=?, hid_lamp_addon_protect_recommend=?, 
+	                            hid_lamp_addon_protect_pass=?, hid_lamp_supplement_yes_no=?, hid_lamp_supplement=?, 
+	                            hid_lamp_supplement_pass=?, lift_yes_no=?, lift_operation_yes_no=?, lift_operation_finding=?, 
+	                            lift_operation_recommend=?, lift_operation_pass=?, lift_main_supply_yes_no=?, 
+	                            lift_main_supply_finding=?, lift_main_supply_recommend=?, lift_main_supply_pass=?, 
+	                            lift_supplement_yes_no=?, lift_supplement=?, lift_supplement_pass=?, sensitive_machine_yes_no=?, 
+	                            sensitive_machine_medical_yes_no=?, sensitive_machine_medical_finding=?, sensitive_machine_medical_recommend=?, 
+	                            sensitive_machine_medical_pass=?, sensitive_machine_supplement_yes_no=?, sensitive_machine_supplement=?, 
+	                            sensitive_machine_supplement_pass=?, telecom_machine_yes_no=?, telecom_machine_server_or_computer_yes_no=?, 
+	                            telecom_machine_server_or_computer_finding=?, telecom_machine_server_or_computer_recommend=?, 
+	                            telecom_machine_server_or_computer_pass=?, telecom_machine_peripherals_yes_no=?, telecom_machine_peripherals_finding=?,
+	                            telecom_machine_peripherals_recommend=?, telecom_machine_peripherals_pass=?, telecom_machine_harmonic_emission_yes_no=?,
+	                            telecom_machine_harmonic_emission_finding=?, telecom_machine_harmonic_emission_recommend=?, telecom_machine_harmonic_emission_pass=?, 
+	                            telecom_machine_supplement_yes_no=?, telecom_machine_supplement=?, telecom_machine_supplement_pass=?, 
+	                            air_conditioners_yes_no=?, air_conditioners_micb_yes_no=?, air_conditioners_micb_finding=?, 
+	                            air_conditioners_micb_recommend=?, air_conditioners_micb_pass=?, air_conditioners_load_forecasting_yes_no=?, 
+	                            air_conditioners_load_forecasting_finding=?, air_conditioners_load_forecasting_recommend=?, 
+	                            air_conditioners_load_forecasting_pass=?, air_conditioners_type_yes_no=?, air_conditioners_type_finding=?, 
+	                            air_conditioners_type_recommend=?, air_conditioners_type_pass=?, air_conditioners_supplement_yes_no=?, 
+	                            air_conditioners_supplement=?, air_conditioners_supplement_pass=?, non_linear_load_yes_no=?, 
+	                            non_linear_load_harmonic_emission_yes_no=?, non_linear_load_harmonic_emission_finding=?, 
+	                            non_linear_load_harmonic_emission_recommend=?, non_linear_load_harmonic_emission_pass=?, 
+	                            non_linear_load_supplement_yes_no=?, non_linear_load_supplement=?, non_linear_load_supplement_pass=?, 
+	                            renewable_energy_yes_no=?, renewable_energy_inverter_and_controls_yes_no=?, renewable_energy_inverter_and_controls_finding=?, 
+	                            renewable_energy_inverter_and_controls_recommend=?, renewable_energy_inverter_and_controls_pass=?, 
+	                            renewable_energy_harmonic_emission_yes_no=?, renewable_energy_harmonic_emission_finding=?, 
+	                            renewable_energy_harmonic_emission_recommend=?, renewable_energy_harmonic_emission_pass=?, 
+	                            renewable_energy_supplement_yes_no=?, renewable_energy_supplement=?, renewable_energy_supplement_pass=?, 
+	                            ev_charger_system_yes_no=?, ev_charger_system_ev_charger_yes_no=?, ev_charger_system_ev_charger_finding=?, 
+	                            ev_charger_system_ev_charger_recommend=?, ev_charger_system_ev_charger_pass=?, ev_charger_system_harmonic_emission_yes_no=?, 
+	                            ev_charger_system_harmonic_emission_finding=?, ev_charger_system_harmonic_emission_recommend=?, 
+	                            ev_charger_system_harmonic_emission_pass=?, ev_charger_system_supplement_yes_no=?, 
+	                            ev_charger_system_supplement=?, ev_charger_system_supplement_pass=?, 
+	                            last_updated_by=?, last_updated_time=?
+	                    WHERE evaluation_report_id=?';
+
+                $stmt = Yii::app()->db->createCommand($sql);
+                $result = $stmt->execute(array($txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,
+                    $txnEvaReportFaxRefNo,$txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                    $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                    $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                    $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                    $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                    $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                    $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                    $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                    $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                    $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                    $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                    $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                    $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                    $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                    $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                    $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                    $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                    $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                    $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                    $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                    $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportHidLampYesNo,
+                    $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                    $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                    $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                    $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                    $txnEvaReportLiftYesNo,$txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,
+                    $txnEvaReportLiftOperationRecommend,$txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,
+                    $txnEvaReportLiftMainSupplyFinding, $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,
+                    $txnEvaReportLiftSupplementYesNo, $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,
+                    $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                    $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                    $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                    $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                    $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                    $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                    $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                    $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                    $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                    $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                    $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                    $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                    $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                    $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                    $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                    $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                    $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                    $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                    $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                    $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                    $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                    $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                    $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                    $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                    $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                    $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                    $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                    $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                    $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                    $lastUpdatedBy,$lastUpdatedTime,$txnEvaReportId));
+            }
+        }
 
         $sql = 'UPDATE "tbl_planning_ahead" SET "project_title"=?, "scheme_no"=?, "region_id"=?, ';
         $sql = $sql . '"project_type_id"=?, "commission_date"=?, "key_infra"=?, "temp_project"=?, ';
@@ -1484,7 +1796,7 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"second_invitation_letter_walk_date"=?, ';
         $sql = $sql . '"third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"third_invitation_letter_edms_link"=?, "third_invitation_letter_accept"=?, ';
-        $sql = $sql . '"third_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"third_invitation_letter_walk_date"=?, "eva_report_id"=?, ';
         $sql = $sql . '"state"=?, "last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
@@ -1522,6 +1834,7 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnSecondInvitationLetterEdmsLink, $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
                 $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
                 $txnThirdInvitationLetterEdmsLink, $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                $txnEvaReportId,
                 $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
                 $txnPlanningAheadId));
 
@@ -1801,7 +2114,9 @@ class PlanningAheadDao extends CApplicationComponent {
         return $retJson;
     }
 
-    public function addReplySlip($schemeNo,$replySlipLoc,$bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
+    public function addReplySlip($schemeNo,$state,$replySlipLoc,$meetingRejReason,$meetingFirstPreferMeetingDate,
+                                 $meetingSecondPreferMeetingDate,$meetingConsentConsultant,$meetingConsentOwner,
+                                 $bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
                                  $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
                                  $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
                                  $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
@@ -1878,12 +2193,22 @@ class PlanningAheadDao extends CApplicationComponent {
                 }
 
                 if (isset($replySlipId)) {
+
+                    if (isset($state) && $state == 'WAITING_CONSULTANT_MEETING_INFO') {
+                        $newState = "COMPLETED_CONSULTANT_MEETING_INFO";
+                    } else {
+                        $newState = $state;
+                    }
+
                     $sql = 'UPDATE "tbl_planning_ahead" SET "meeting_reply_slip_id"=?,  
-                                "last_updated_by"=?, "last_updated_time"=?
+                                "meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?,
+                                "meeting_rej_reason"=?, "meeting_consent_consultant"=?,
+                                "meeting_consent_owner"=?, "state"=?, "last_updated_by"=?, "last_updated_time"=?
                                 WHERE "scheme_no"=?';
                     $stmt = Yii::app()->db->createCommand($sql);
-                    $result = $stmt->execute(array($replySlipId,$lastUpdatedBy,$lastUpdatedTime,$schemeNo));
-
+                    $result = $stmt->execute(array($replySlipId,$meetingFirstPreferMeetingDate,$meetingSecondPreferMeetingDate,
+                        $meetingRejReason,$meetingConsentConsultant,$meetingConsentOwner,$newState,$lastUpdatedBy,
+                        $lastUpdatedTime,$schemeNo));
                 } else {
                     $retJson['status'] = 'NOTOK';
                     $retJson['retMessage'] = 'Error in processing Scheme No [' . $schemeNo . ']';
@@ -1907,24 +2232,26 @@ class PlanningAheadDao extends CApplicationComponent {
         return $retJson;
     }
 
-    public function updateReplySlip($replySlipId,$replySlipLoc,$bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
-                                   $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
-                                   $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
-                                   $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
-                                   $chillerPlantChiller,$escalatorYesNo,$escalatorMotorStartup,
-                                   $escalatorVsdMitigation,$escalatorBrakingSystem,$escalatorControl,
-                                   $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampMitigation,
-                                   $sensitiveMachineYesNo,$sensitiveMachineMitigation,
-                                   $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
-                                   $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
-                                   $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
-                                   $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
-                                   $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evControlYesNo,
-                                   $evChargerSystemEvCharger,$evChargerSystemSmartYesNo,
-                                   $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
-                                   $consultantNameConfirmation,$consultantCompany,
-                                   $projectOwnerNameConfirmation,$projectOwnerCompany,
-                                   $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime,$lastUploadTime) {
+    public function updateReplySlip($schemeNo,$state,$replySlipId,$replySlipLoc,$meetingRejReason,$meetingFirstPreferMeetingDate,
+                                    $meetingSecondPreferMeetingDate,$meetingConsentConsultant,$meetingConsentOwner,
+                                    $bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
+                                    $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
+                                    $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
+                                    $chillerPlantVsd,$chillerPlantAhuChilledWater,$chillerPlantStandbyAhu,
+                                    $chillerPlantChiller,$escalatorYesNo,$escalatorMotorStartup,
+                                    $escalatorVsdMitigation,$escalatorBrakingSystem,$escalatorControl,
+                                    $liftYesNo,$liftOperation,$hidLampYesNo,$hidLampMitigation,
+                                    $sensitiveMachineYesNo,$sensitiveMachineMitigation,
+                                    $telecomMachineYesNo,$telecomMachineServerOrComputer,$telecomMachinePeripherals,
+                                    $telecomMachineHarmonicEmission,$airConditionersYesNo,$airConditionersMicb,
+                                    $airConditionersLoadForecasting,$airConditionersType,$nonLinearLoadYesNo,
+                                    $nonLinearLoadHarmonicEmission,$renewableEnergyYesNo,$renewableEnergyInverterAndControls,
+                                    $renewableEnergyHarmonicEmission,$evChargerSystemYesNo,$evControlYesNo,
+                                    $evChargerSystemEvCharger,$evChargerSystemSmartYesNo,
+                                    $evChargerSystemSmartChargingSystem,$evChargerSystemHarmonicEmission,
+                                    $consultantNameConfirmation,$consultantCompany,
+                                    $projectOwnerNameConfirmation,$projectOwnerCompany,
+                                    $lastUpdatedBy,$lastUpdatedTime,$lastUploadTime) {
         $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?, "bms_yes_no"=?, "bms_server_central_computer"=?,
                             "bms_ddc"=?, "changeover_scheme_yes_no"=?, "changeover_scheme_control"=?, 
                             "changeover_scheme_uv"=?, "chiller_plant_yes_no"=?, "chiller_plant_ahu_control"=?,
@@ -1970,6 +2297,22 @@ class PlanningAheadDao extends CApplicationComponent {
                 $consultantNameConfirmation,$consultantCompany,
                 $projectOwnerNameConfirmation,$projectOwnerCompany,
                 $lastUpdatedBy,$lastUpdatedTime,$lastUploadTime,$replySlipId));
+
+
+            if (isset($state) && $state == 'WAITING_CONSULTANT_MEETING_INFO') {
+                $newState = "COMPLETED_CONSULTANT_MEETING_INFO";
+            } else {
+                $newState = $state;
+            }
+            $sql = 'UPDATE "tbl_planning_ahead" SET "meeting_reply_slip_id"=?,  
+                                "meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?,
+                                "meeting_rej_reason"=?, "meeting_consent_consultant"=?, "meeting_consent_owner"=?,  
+                                "state"=?, "last_updated_by"=?, "last_updated_time"=?
+                                WHERE "scheme_no"=?';
+            $stmt = Yii::app()->db->createCommand($sql);
+            $result = $stmt->execute(array($replySlipId,$meetingFirstPreferMeetingDate,$meetingSecondPreferMeetingDate,
+                $meetingRejReason,$meetingConsentConsultant,$meetingConsentOwner,$newState,$lastUpdatedBy,
+                $lastUpdatedTime,$schemeNo));
 
             $transaction->commit();
             $retJson['status'] = 'OK';

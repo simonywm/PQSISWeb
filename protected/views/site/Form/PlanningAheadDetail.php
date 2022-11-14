@@ -20,30 +20,20 @@
     <form action="#" method="post" id="detailForm">
         <div class="form-group row pt-3">
             <div class="input-group col-12">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Project Title: </span>
-                </div>
-                <input id="projectTitle" name="projectTitle" type="text"
-                       class="form-control"
-                       oninvalid="this.setCustomValidity('Project Title is required!')"
-                       oninput="this.setCustomValidity('')"
+                <div class="input-group-prepend"><span class="input-group-text">Project Title: </span></div>
+                <input id="projectTitle" name="projectTitle" type="text" class="form-control"
                        autocomplete="off">
             </div>
         </div>
 
         <div class="form-group row">
             <div class="input-group col-6">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Scheme No.: </span>
-                </div>
-                <input id="schemeNo" name="schemeNo" type="text"
-                       class="form-control"
+                <div class="input-group-prepend"><span class="input-group-text">Scheme No.: </span></div>
+                <input id="schemeNo" name="schemeNo" type="text" class="form-control"
                        autocomplete="off">
             </div>
             <div class="input-group col-6">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Project Region: </span>
-                </div>
+                <div class="input-group-prepend"><span class="input-group-text">Project Region: </span></div>
                 <select id="region" name="region" class="form-control">
                     <?php foreach($this->viewbag['regionList'] as $regionList){
                         if ($regionList['regionId'] == $this->viewbag['regionId']) {?>
@@ -63,9 +53,7 @@
 
         <div class="form-group row">
             <div class="input-group col-6">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Type of Project: </span>
-                </div>
+                <div class="input-group-prepend"><span class="input-group-text">Type of Project: </span></div>
                 <select id="typeOfProject" name="typeOfProject" class="form-control">
                     <option value="0" selected disabled>------</option>
                     <?php foreach($this->viewbag['projectTypeList'] as $projectTypeList){
@@ -83,9 +71,7 @@
                 </select>
             </div>
             <div class="input-group col-6">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Planned Commission Date: </span>
-                </div>
+                <div class="input-group-prepend"><span class="input-group-text">Planned Commission Date: </span></div>
                 <input id="commissionDate" name="commissionDate" type="text" placeholder="YYYY-mm-dd"
                        class="form-control" autocomplete="off">
             </div>
@@ -93,9 +79,7 @@
 
         <div class="form-group row">
             <div class="input-group col-12">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Key Infrastructure: </span>
-                </div>
+                <div class="input-group-prepend"><span class="input-group-text">Key Infrastructure: </span></div>
                 <?php if ($this->viewbag['keyInfra'] == 'Y') { ?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
@@ -135,9 +119,7 @@
 
         <div class="form-group row">
             <div class="input-group col-12">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Temp Project: </span>
-                </div>
+                <div class="input-group-prepend"><span class="input-group-text">Temp Project: </span></div>
                 <?php if ($this->viewbag['tempProject'] == 'Y') { ?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
@@ -822,11 +804,13 @@
             ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
             ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
             ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+            ($this->viewbag['state']=="SENT_MEETING_ACK") ||
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailofPQStandardLetter">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -899,11 +883,13 @@
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
             ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+            ($this->viewbag['state']=="SENT_MEETING_ACK") ||
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailofMeeting">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -1475,7 +1461,8 @@
             ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofFirstInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1590,7 +1577,8 @@
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
             ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofSecondInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1704,7 +1692,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
             <div id="accordionDetailofThirdInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1816,7 +1805,8 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         <div id="accordionDetailOfEvaluationReport">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -3590,11 +3580,13 @@
                     ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+                    ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         $("#genStandLetterBtn").on("click", function() {
 
             let errorMessage = "";
@@ -3625,11 +3617,13 @@
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+                    ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         $('#replySlipBmsServerCentralComputer').val("<?php echo $this->viewbag['replySlipBmsServerCentralComputer']; ?>");
         $('#replySlipBmsDdc').val("<?php echo $this->viewbag['replySlipBmsDdc']; ?>");
         $('#replySlipChangeoverSchemeControl').val("<?php echo $this->viewbag['replySlipChangeoverSchemeControl']; ?>");
@@ -3687,7 +3681,8 @@
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         $('#firstInvitationLetterIssueDate').val("<?php echo $this->viewbag['firstInvitationLetterIssueDate']; ?>");
         $('#firstInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['firstInvitationLetterFaxRefNo']; ?>");
         $('#firstInvitationLetterEdmsLink').val("<?php echo $this->viewbag['firstInvitationLetterEdmsLink']; ?>");
@@ -3725,7 +3720,8 @@
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         $('#secondInvitationLetterIssueDate').val("<?php echo $this->viewbag['secondInvitationLetterIssueDate']; ?>");
         $('#secondInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['secondInvitationLetterFaxRefNo']; ?>");
         $('#secondInvitationLetterEdmsLink').val("<?php echo $this->viewbag['secondInvitationLetterEdmsLink']; ?>");
@@ -3773,7 +3769,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         $('#thirdInvitationLetterIssueDate').val("<?php echo $this->viewbag['thirdInvitationLetterIssueDate']; ?>");
         $('#thirdInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['thirdInvitationLetterFaxRefNo']; ?>");
         $('#thirdInvitationLetterEdmsLink').val("<?php echo $this->viewbag['thirdInvitationLetterEdmsLink']; ?>");
@@ -3830,7 +3827,8 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")  ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         $('#evaReportRemark').val("<?php echo $this->viewbag['evaReportRemark']; ?>");
         $('#evaReportEdmsLink').val("<?php echo $this->viewbag['evaReportEdmsLink']; ?>");
@@ -3944,7 +3942,7 @@
         $('input[name=evaReportHidLampAddonProtectPass]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportHidLampSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportHidLampSupplementPass]', '#detailForm').on('click', updateEvaScore);
-        $('input[name=evaReportSensitiveMachineYesNo]', '#detailForm').on('click', updateEvaScore);
+        $('input[name=evaReportSensitiveMachineMedicalYesNo]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportSensitiveMachineMedicalPass]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportSensitiveMachineSupplementYesNo]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportSensitiveMachineSupplementPass]', '#detailForm').on('click', updateEvaScore);
@@ -4055,6 +4053,10 @@
             passCount = passCount + result[1];
 
             result = calReportScore('evaReportHidLampSupplementYesNo', 'evaReportHidLampSupplementPass');
+            itemsCount = itemsCount + result[0];
+            passCount = passCount + result[1];
+
+            result = calReportScore('evaReportSensitiveMachineMedicalYesNo', 'evaReportSensitiveMachineMedicalYesNo');
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
@@ -4169,11 +4171,13 @@
                     ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+                    ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#standLetterIssueDate", "Standard Letter", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4182,11 +4186,13 @@
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+                    ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateAndTimeFormat("#meetingFirstPreferMeetingDate", "1st Preferred Meeting Date & Time", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4203,7 +4209,8 @@
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4216,7 +4223,8 @@
         <?php if (($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4228,7 +4236,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4238,10 +4247,16 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")  ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
+
+        if ($("#evaReportScore").val() == 'NA') {
+            errorMessage = errorMessage + "Error " + i + ": At least one of the item must be checked for evaluation report<br/>";
+            i = i + 1;
+        }
 
         <?php } ?>
 
@@ -4353,7 +4368,8 @@
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateEmpty("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4377,11 +4393,13 @@
 
         <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+                    ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateEmpty("#meetingActualMeetingDate", "Actual Meeting Date & Time", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4487,7 +4505,8 @@
 
         <?php if (($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
         if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
                 ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == "")) &&
             (($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
@@ -4601,7 +4620,8 @@
         }
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
 
         result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -4611,6 +4631,11 @@
 
         result = validateEmpty("#evaReportFaxRefNo", "Evaluation Report Fax Reference Number", errorMessage, i)
         errorMessage = result[0]; i = result[1];
+
+        if ($("#evaReportScore").val() == 'NA') {
+            errorMessage = errorMessage + "Error " + i + ": At least one of the item must be checked for evaluation report<br/>";
+            i = i + 1;
+        }
 
         <?php } ?>
 
@@ -4627,11 +4652,13 @@
                 ($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
                 ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                 ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
+                ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                 ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="SENT_SECOND_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="SENT_THIRD_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="WAITING_PQ_SITE_WALK") ||
-                ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK")) { ?>
+                ($this->viewbag['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK")) { ?>
     function updateGenStandLetterButton() {
         let standLetterIssueDate = document.querySelector("#standLetterIssueDate");
         let standLetterFaxRefNo = document.querySelector("#standLetterFaxRefNo");

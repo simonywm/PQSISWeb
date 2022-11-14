@@ -106,14 +106,15 @@
                     <ul class="dropdown-menu" aria-labelledby="aMenuFormLink">
                         <li><a id="aMenuFormLinkCF" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch">All PQSIS Case</a></li>
                         <li><a id="aMenuFormLinkPHOld" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/PlanningAheadSearch">Planning Ahead (Old)</a></li>
+                        <?php if (Yii::app()->session['tblUserDo']['roleId']==2) { ?>
                         <li>
                             <a id="aMenuFormLinkPH" class="dropdown-item" href="#">Planning Ahead &raquo </a>
                             <ul class="submenu dropdown-menu">
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadConditionLetterForm">Upload Condition Letter</a>
-                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadConsultantMeetingInfoForm">Upload Consultant Meeting Information File</a>
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadReplySlipForm">Upload Reply Slip File</a>
                             </ul>
                         </li>
+                        <?php } ?>
                         <li><a id="aMenuFormLinkCFIS" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=InvestigationS">Investigation(S) </a></li>
                         <li><a id="aMenuFormLinkCFIL" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=InvestigationL">Investigation(L) </a></li>
                         <li><a id="aMenuFormLinkCFE" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=Enquiry">Enquiry </a></li>
