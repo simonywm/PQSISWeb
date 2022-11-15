@@ -790,6 +790,156 @@ class PlanningAheadController extends Controller {
                 $this->viewbag['evaReportEvChargerSystemSupplementYesNo'] = $recordList['evaReportEvChargerSystemSupplementYesNo'];
                 $this->viewbag['evaReportEvChargerSystemSupplement'] = $recordList['evaReportEvChargerSystemSupplement'];
                 $this->viewbag['evaReportEvChargerSystemSupplementPass'] = $recordList['evaReportEvChargerSystemSupplementPass'];
+                $this->viewbag['reEvaReportId'] = $recordList['reEvaReportId'];
+                $this->viewbag['reEvaReportRemark'] = $recordList['reEvaReportRemark'];
+                $this->viewbag['reEvaReportEdmsLink'] = $recordList['reEvaReportEdmsLink'];
+                $this->viewbag['reEvaReportIssueDate'] = $recordList['reEvaReportIssueDate'];
+                $this->viewbag['reEvaReportFaxRefNo'] = $recordList['reEvaReportFaxRefNo'];
+                $this->viewbag['reEvaReportScore'] = $recordList['reEvaReportScore'];
+                $this->viewbag['reEvaReportBmsYesNo'] = $recordList['reEvaReportBmsYesNo'];
+                $this->viewbag['reEvaReportBmsServerCentralComputerYesNo'] = $recordList['reEvaReportBmsServerCentralComputerYesNo'];
+                $this->viewbag['reEvaReportBmsServerCentralComputerFinding'] = $recordList['reEvaReportBmsServerCentralComputerFinding'];
+                $this->viewbag['reEvaReportBmsServerCentralComputerRecommend'] = $recordList['reEvaReportBmsServerCentralComputerRecommend'];
+                $this->viewbag['reEvaReportBmsServerCentralComputerPass'] = $recordList['reEvaReportBmsServerCentralComputerPass'];
+                $this->viewbag['reEvaReportBmsDdcYesNo'] = $recordList['reEvaReportBmsDdcYesNo'];
+                $this->viewbag['reEvaReportBmsDdcFinding'] = $recordList['reEvaReportBmsDdcFinding'];
+                $this->viewbag['reEvaReportBmsDdcRecommend'] = $recordList['reEvaReportBmsDdcRecommend'];
+                $this->viewbag['reEvaReportBmsDdcPass'] = $recordList['reEvaReportBmsDdcPass'];
+                $this->viewbag['reEvaReportBmsSupplementYesNo'] = $recordList['reEvaReportBmsSupplementYesNo'];
+                $this->viewbag['reEvaReportBmsSupplement'] = $recordList['reEvaReportBmsSupplement'];
+                $this->viewbag['reEvaReportBmsSupplementPass'] = $recordList['reEvaReportBmsSupplementPass'];
+                $this->viewbag['reEvaReportChangeoverSchemeYesNo'] = $recordList['reEvaReportChangeoverSchemeYesNo'];
+                $this->viewbag['reEvaReportChangeoverSchemeControlYesNo'] = $recordList['reEvaReportChangeoverSchemeControlYesNo'];
+                $this->viewbag['reEvaReportChangeoverSchemeControlFinding'] = $recordList['reEvaReportChangeoverSchemeControlFinding'];
+                $this->viewbag['reEvaReportChangeoverSchemeControlRecommend'] = $recordList['reEvaReportChangeoverSchemeControlRecommend'];
+                $this->viewbag['reEvaReportChangeoverSchemeControlPass'] = $recordList['reEvaReportChangeoverSchemeControlPass'];
+                $this->viewbag['reEvaReportChangeoverSchemeUvYesNo'] = $recordList['reEvaReportChangeoverSchemeUvYesNo'];
+                $this->viewbag['reEvaReportChangeoverSchemeUvFinding'] = $recordList['reEvaReportChangeoverSchemeUvFinding'];
+                $this->viewbag['reEvaReportChangeoverSchemeUvRecommend'] = $recordList['reEvaReportChangeoverSchemeUvRecommend'];
+                $this->viewbag['reEvaReportChangeoverSchemeUvPass'] = $recordList['reEvaReportChangeoverSchemeUvPass'];
+                $this->viewbag['reEvaReportChangeoverSchemeSupplementYesNo'] = $recordList['reEvaReportChangeoverSchemeSupplementYesNo'];
+                $this->viewbag['reEvaReportChangeoverSchemeSupplement'] = $recordList['reEvaReportChangeoverSchemeSupplement'];
+                $this->viewbag['reEvaReportChangeoverSchemeSupplementPass'] = $recordList['reEvaReportChangeoverSchemeSupplementPass'];
+                $this->viewbag['reEvaReportChillerPlantYesNo'] = $recordList['reEvaReportChillerPlantYesNo'];
+                $this->viewbag['reEvaReportChillerPlantAhuChilledWaterYesNo'] = $recordList['reEvaReportChillerPlantAhuChilledWaterYesNo'];
+                $this->viewbag['reEvaReportChillerPlantAhuChilledWaterFinding'] = $recordList['reEvaReportChillerPlantAhuChilledWaterFinding'];
+                $this->viewbag['reEvaReportChillerPlantAhuChilledWaterRecommend'] = $recordList['reEvaReportChillerPlantAhuChilledWaterRecommend'];
+                $this->viewbag['reEvaReportChillerPlantAhuChilledWaterPass'] = $recordList['reEvaReportChillerPlantAhuChilledWaterPass'];
+                $this->viewbag['reEvaReportChillerPlantChillerYesNo'] = $recordList['reEvaReportChillerPlantChillerYesNo'];
+                $this->viewbag['reEvaReportChillerPlantChillerFinding'] = $recordList['reEvaReportChillerPlantChillerFinding'];
+                $this->viewbag['reEvaReportChillerPlantChillerRecommend'] = $recordList['reEvaReportChillerPlantChillerRecommend'];
+                $this->viewbag['reEvaReportChillerPlantChillerPass'] = $recordList['reEvaReportChillerPlantChillerPass'];
+                $this->viewbag['reEvaReportChillerPlantSupplementYesNo'] = $recordList['reEvaReportChillerPlantSupplementYesNo'];
+                $this->viewbag['reEvaReportChillerPlantSupplement'] = $recordList['reEvaReportChillerPlantSupplement'];
+                $this->viewbag['reEvaReportChillerPlantSupplementPass'] = $recordList['reEvaReportChillerPlantSupplementPass'];
+                $this->viewbag['reEvaReportEscalatorYesNo'] = $recordList['reEvaReportEscalatorYesNo'];
+                $this->viewbag['reEvaReportEscalatorBrakingSystemYesNo'] = $recordList['reEvaReportEscalatorBrakingSystemYesNo'];
+                $this->viewbag['reEvaReportEscalatorBrakingSystemFinding'] = $recordList['reEvaReportEscalatorBrakingSystemFinding'];
+                $this->viewbag['reEvaReportEscalatorBrakingSystemRecommend'] = $recordList['reEvaReportEscalatorBrakingSystemRecommend'];
+                $this->viewbag['reEvaReportEscalatorBrakingSystemPass'] = $recordList['reEvaReportEscalatorBrakingSystemPass'];
+                $this->viewbag['reEvaReportEscalatorControlYesNo'] = $recordList['reEvaReportEscalatorControlYesNo'];
+                $this->viewbag['reEvaReportEscalatorControlFinding'] = $recordList['reEvaReportEscalatorControlFinding'];
+                $this->viewbag['reEvaReportEscalatorControlRecommend'] = $recordList['reEvaReportEscalatorControlRecommend'];
+                $this->viewbag['reEvaReportEscalatorControlPass'] = $recordList['reEvaReportEscalatorControlPass'];
+                $this->viewbag['reEvaReportEscalatorSupplementYesNo'] = $recordList['reEvaReportEscalatorSupplementYesNo'];
+                $this->viewbag['reEvaReportEscalatorSupplement'] = $recordList['reEvaReportEscalatorSupplement'];
+                $this->viewbag['reEvaReportEscalatorSupplementPass'] = $recordList['reEvaReportEscalatorSupplementPass'];
+                $this->viewbag['reEvaReportLiftYesNo'] = $recordList['reEvaReportLiftYesNo'];
+                $this->viewbag['reEvaReportLiftOperationYesNo'] = $recordList['reEvaReportLiftOperationYesNo'];
+                $this->viewbag['reEvaReportLiftOperationFinding'] = $recordList['reEvaReportLiftOperationFinding'];
+                $this->viewbag['reEvaReportLiftOperationRecommend'] = $recordList['reEvaReportLiftOperationRecommend'];
+                $this->viewbag['reEvaReportLiftOperationPass'] = $recordList['reEvaReportLiftOperationPass'];
+                $this->viewbag['reEvaReportLiftMainSupplyYesNo'] = $recordList['reEvaReportLiftMainSupplyYesNo'];
+                $this->viewbag['reEvaReportLiftMainSupplyFinding'] = $recordList['reEvaReportLiftMainSupplyFinding'];
+                $this->viewbag['reEvaReportLiftMainSupplyRecommend'] = $recordList['reEvaReportLiftMainSupplyRecommend'];
+                $this->viewbag['reEvaReportLiftMainSupplyPass'] = $recordList['reEvaReportLiftMainSupplyPass'];
+                $this->viewbag['reEvaReportLiftSupplementYesNo'] = $recordList['reEvaReportLiftSupplementYesNo'];
+                $this->viewbag['reEvaReportLiftSupplement'] = $recordList['reEvaReportLiftSupplement'];
+                $this->viewbag['reEvaReportLiftSupplementPass'] = $recordList['reEvaReportLiftSupplementPass'];
+                $this->viewbag['reEvaReportHidLampYesNo'] = $recordList['reEvaReportHidLampYesNo'];
+                $this->viewbag['reEvaReportHidLampBallastYesNo'] = $recordList['reEvaReportHidLampBallastYesNo'];
+                $this->viewbag['reEvaReportHidLampBallastFinding'] = $recordList['reEvaReportHidLampBallastFinding'];
+                $this->viewbag['reEvaReportHidLampBallastRecommend'] = $recordList['reEvaReportHidLampBallastRecommend'];
+                $this->viewbag['reEvaReportHidLampBallastPass'] = $recordList['reEvaReportHidLampBallastPass'];
+                $this->viewbag['reEvaReportHidLampAddonProtectYesNo'] = $recordList['reEvaReportHidLampAddonProtectYesNo'];
+                $this->viewbag['reEvaReportHidLampAddonProtectFinding'] = $recordList['reEvaReportHidLampAddonProtectFinding'];
+                $this->viewbag['reEvaReportHidLampAddonProtectRecommend'] = $recordList['reEvaReportHidLampAddonProtectRecommend'];
+                $this->viewbag['reEvaReportHidLampAddonProtectPass'] = $recordList['reEvaReportHidLampAddonProtectPass'];
+                $this->viewbag['reEvaReportHidLampSupplementYesNo'] = $recordList['reEvaReportHidLampSupplementYesNo'];
+                $this->viewbag['reEvaReportHidLampSupplement'] = $recordList['reEvaReportHidLampSupplement'];
+                $this->viewbag['reEvaReportHidLampSupplementPass'] = $recordList['reEvaReportHidLampSupplementPass'];
+                $this->viewbag['reEvaReportSensitiveMachineYesNo'] = $recordList['reEvaReportSensitiveMachineYesNo'];
+                $this->viewbag['reEvaReportSensitiveMachineMedicalYesNo'] = $recordList['reEvaReportSensitiveMachineMedicalYesNo'];
+                $this->viewbag['reEvaReportSensitiveMachineMedicalFinding'] = $recordList['reEvaReportSensitiveMachineMedicalFinding'];
+                $this->viewbag['reEvaReportSensitiveMachineMedicalRecommend'] = $recordList['reEvaReportSensitiveMachineMedicalRecommend'];
+                $this->viewbag['reEvaReportSensitiveMachineMedicalPass'] = $recordList['reEvaReportSensitiveMachineMedicalPass'];
+                $this->viewbag['reEvaReportSensitiveMachineSupplementYesNo'] = $recordList['reEvaReportSensitiveMachineSupplementYesNo'];
+                $this->viewbag['reEvaReportSensitiveMachineSupplement'] = $recordList['reEvaReportSensitiveMachineSupplement'];
+                $this->viewbag['reEvaReportSensitiveMachineSupplementPass'] = $recordList['reEvaReportSensitiveMachineSupplementPass'];
+                $this->viewbag['reEvaReportTelecomMachineYesNo'] = $recordList['reEvaReportTelecomMachineYesNo'];
+                $this->viewbag['reEvaReportTelecomMachineServerOrComputerYesNo'] = $recordList['reEvaReportTelecomMachineServerOrComputerYesNo'];
+                $this->viewbag['reEvaReportTelecomMachineServerOrComputerFinding'] = $recordList['reEvaReportTelecomMachineServerOrComputerFinding'];
+                $this->viewbag['reEvaReportTelecomMachineServerOrComputerRecommend'] = $recordList['reEvaReportTelecomMachineServerOrComputerRecommend'];
+                $this->viewbag['reEvaReportTelecomMachineServerOrComputerPass'] = $recordList['reEvaReportTelecomMachineServerOrComputerPass'];
+                $this->viewbag['reEvaReportTelecomMachinePeripheralsYesNo'] = $recordList['reEvaReportTelecomMachinePeripheralsYesNo'];
+                $this->viewbag['reEvaReportTelecomMachinePeripheralsFinding'] = $recordList['reEvaReportTelecomMachinePeripheralsFinding'];
+                $this->viewbag['reEvaReportTelecomMachinePeripheralsRecommend'] = $recordList['reEvaReportTelecomMachinePeripheralsRecommend'];
+                $this->viewbag['reEvaReportTelecomMachinePeripheralsPass'] = $recordList['reEvaReportTelecomMachinePeripheralsPass'];
+                $this->viewbag['reEvaReportTelecomMachineHarmonicEmissionYesNo'] = $recordList['reEvaReportTelecomMachineHarmonicEmissionYesNo'];
+                $this->viewbag['reEvaReportTelecomMachineHarmonicEmissionFinding'] = $recordList['reEvaReportTelecomMachineHarmonicEmissionFinding'];
+                $this->viewbag['reEvaReportTelecomMachineHarmonicEmissionRecommend'] = $recordList['reEvaReportTelecomMachineHarmonicEmissionRecommend'];
+                $this->viewbag['reEvaReportTelecomMachineHarmonicEmissionPass'] = $recordList['reEvaReportTelecomMachineHarmonicEmissionPass'];
+                $this->viewbag['reEvaReportTelecomMachineSupplementYesNo'] = $recordList['reEvaReportTelecomMachineSupplementYesNo'];
+                $this->viewbag['reEvaReportTelecomMachineSupplement'] = $recordList['reEvaReportTelecomMachineSupplement'];
+                $this->viewbag['reEvaReportTelecomMachineSupplementPass'] = $recordList['reEvaReportTelecomMachineSupplementPass'];
+                $this->viewbag['reEvaReportAirConditionersYesNo'] = $recordList['reEvaReportAirConditionersYesNo'];
+                $this->viewbag['reEvaReportAirConditionersMicbYesNo'] = $recordList['reEvaReportAirConditionersMicbYesNo'];
+                $this->viewbag['reEvaReportAirConditionersMicbFinding'] = $recordList['reEvaReportAirConditionersMicbFinding'];
+                $this->viewbag['reEvaReportAirConditionersMicbRecommend'] = $recordList['reEvaReportAirConditionersMicbRecommend'];
+                $this->viewbag['reEvaReportAirConditionersMicbPass'] = $recordList['reEvaReportAirConditionersMicbPass'];
+                $this->viewbag['reEvaReportAirConditionersLoadForecastingYesNo'] = $recordList['reEvaReportAirConditionersLoadForecastingYesNo'];
+                $this->viewbag['reEvaReportAirConditionersLoadForecastingFinding'] = $recordList['reEvaReportAirConditionersLoadForecastingFinding'];
+                $this->viewbag['reEvaReportAirConditionersLoadForecastingRecommend'] = $recordList['reEvaReportAirConditionersLoadForecastingRecommend'];
+                $this->viewbag['reEvaReportAirConditionersLoadForecastingPass'] = $recordList['reEvaReportAirConditionersLoadForecastingPass'];
+                $this->viewbag['reEvaReportAirConditionersTypeYesNo'] = $recordList['reEvaReportAirConditionersTypeYesNo'];
+                $this->viewbag['reEvaReportAirConditionersTypeFinding'] = $recordList['reEvaReportAirConditionersTypeFinding'];
+                $this->viewbag['reEvaReportAirConditionersTypeRecommend'] = $recordList['reEvaReportAirConditionersTypeRecommend'];
+                $this->viewbag['reEvaReportAirConditionersTypePass'] = $recordList['reEvaReportAirConditionersTypePass'];
+                $this->viewbag['reEvaReportAirConditionersSupplementYesNo'] = $recordList['reEvaReportAirConditionersSupplementYesNo'];
+                $this->viewbag['reEvaReportAirConditionersSupplement'] = $recordList['reEvaReportAirConditionersSupplement'];
+                $this->viewbag['reEvaReportAirConditionersSupplementPass'] = $recordList['reEvaReportAirConditionersSupplementPass'];
+                $this->viewbag['reEvaReportNonLinearLoadYesNo'] = $recordList['reEvaReportNonLinearLoadYesNo'];
+                $this->viewbag['reEvaReportNonLinearLoadHarmonicEmissionYesNo'] = $recordList['reEvaReportNonLinearLoadHarmonicEmissionYesNo'];
+                $this->viewbag['reEvaReportNonLinearLoadHarmonicEmissionFinding'] = $recordList['reEvaReportNonLinearLoadHarmonicEmissionFinding'];
+                $this->viewbag['reEvaReportNonLinearLoadHarmonicEmissionRecommend'] = $recordList['reEvaReportNonLinearLoadHarmonicEmissionRecommend'];
+                $this->viewbag['reEvaReportNonLinearLoadHarmonicEmissionPass'] = $recordList['reEvaReportNonLinearLoadHarmonicEmissionPass'];
+                $this->viewbag['reEvaReportNonLinearLoadSupplementYesNo'] = $recordList['reEvaReportNonLinearLoadSupplementYesNo'];
+                $this->viewbag['reEvaReportNonLinearLoadSupplement'] = $recordList['reEvaReportNonLinearLoadSupplement'];
+                $this->viewbag['reEvaReportNonLinearLoadSupplementPass'] = $recordList['reEvaReportNonLinearLoadSupplementPass'];
+                $this->viewbag['reEvaReportRenewableEnergyYesNo'] = $recordList['reEvaReportRenewableEnergyYesNo'];
+                $this->viewbag['reEvaReportRenewableEnergyInverterAndControlsYesNo'] = $recordList['reEvaReportRenewableEnergyInverterAndControlsYesNo'];
+                $this->viewbag['reEvaReportRenewableEnergyInverterAndControlsFinding'] = $recordList['reEvaReportRenewableEnergyInverterAndControlsFinding'];
+                $this->viewbag['reEvaReportRenewableEnergyInverterAndControlsRecommend'] = $recordList['reEvaReportRenewableEnergyInverterAndControlsRecommend'];
+                $this->viewbag['reEvaReportRenewableEnergyInverterAndControlsPass'] = $recordList['reEvaReportRenewableEnergyInverterAndControlsPass'];
+                $this->viewbag['reEvaReportRenewableEnergyHarmonicEmissionYesNo'] = $recordList['reEvaReportRenewableEnergyHarmonicEmissionYesNo'];
+                $this->viewbag['reEvaReportRenewableEnergyHarmonicEmissionFinding'] = $recordList['reEvaReportRenewableEnergyHarmonicEmissionFinding'];
+                $this->viewbag['reEvaReportRenewableEnergyHarmonicEmissionRecommend'] = $recordList['reEvaReportRenewableEnergyHarmonicEmissionRecommend'];
+                $this->viewbag['reEvaReportRenewableEnergyHarmonicEmissionPass'] = $recordList['reEvaReportRenewableEnergyHarmonicEmissionPass'];
+                $this->viewbag['reEvaReportRenewableEnergySupplementYesNo'] = $recordList['reEvaReportRenewableEnergySupplementYesNo'];
+                $this->viewbag['reEvaReportRenewableEnergySupplement'] = $recordList['reEvaReportRenewableEnergySupplement'];
+                $this->viewbag['reEvaReportRenewableEnergySupplementPass'] = $recordList['reEvaReportRenewableEnergySupplementPass'];
+                $this->viewbag['reEvaReportEvChargerSystemYesNo'] = $recordList['reEvaReportEvChargerSystemYesNo'];
+                $this->viewbag['reEvaReportEvChargerSystemEvChargerYesNo'] = $recordList['reEvaReportEvChargerSystemEvChargerYesNo'];
+                $this->viewbag['reEvaReportEvChargerSystemEvChargerFinding'] = $recordList['reEvaReportEvChargerSystemEvChargerFinding'];
+                $this->viewbag['reEvaReportEvChargerSystemEvChargerRecommend'] = $recordList['reEvaReportEvChargerSystemEvChargerRecommend'];
+                $this->viewbag['reEvaReportEvChargerSystemEvChargerPass'] = $recordList['reEvaReportEvChargerSystemEvChargerPass'];
+                $this->viewbag['reEvaReportEvChargerSystemHarmonicEmissionYesNo'] = $recordList['reEvaReportEvChargerSystemHarmonicEmissionYesNo'];
+                $this->viewbag['reEvaReportEvChargerSystemHarmonicEmissionFinding'] = $recordList['reEvaReportEvChargerSystemHarmonicEmissionFinding'];
+                $this->viewbag['reEvaReportEvChargerSystemHarmonicEmissionRecommend'] = $recordList['reEvaReportEvChargerSystemHarmonicEmissionRecommend'];
+                $this->viewbag['reEvaReportEvChargerSystemHarmonicEmissionPass'] = $recordList['reEvaReportEvChargerSystemHarmonicEmissionPass'];
+                $this->viewbag['reEvaReportEvChargerSystemSupplementYesNo'] = $recordList['reEvaReportEvChargerSystemSupplementYesNo'];
+                $this->viewbag['reEvaReportEvChargerSystemSupplement'] = $recordList['reEvaReportEvChargerSystemSupplement'];
+                $this->viewbag['reEvaReportEvChargerSystemSupplementPass'] = $recordList['reEvaReportEvChargerSystemSupplementPass'];
                 $this->viewbag['state'] = $recordList['state'];
                 $this->viewbag['active'] = $recordList['active'];
                 $this->viewbag['createdBy'] = $recordList['createdBy'];
@@ -2461,6 +2611,157 @@ class PlanningAheadController extends Controller {
                 $txnEvaReportEvChargerSystemSupplement = $this->getPostParamString('evaReportEvChargerSystemSupplement');
                 $txnEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('evaReportEvChargerSystemSupplementPass');
 
+                $txnReEvaReportId = $this->getPostParamString('reEvaReportId');
+                $txnReEvaReportRemark = $this->getPostParamString('reEvaReportRemark');
+                $txnReEvaReportEdmsLink = $this->getPostParamString('reEvaReportEdmsLink');
+                $txnReEvaReportIssueDate = $this->getPostParamString('reEvaReportIssueDate');
+                $txnReEvaReportFaxRefNo = $this->getPostParamString('reEvaReportFaxRefNo');
+                $txnReEvaReportScore = $this->getPostParamString('reEvaReportScore');
+                $txnReEvaReportBmsYesNo = $this->getPostParamString('reEvaReportBmsYesNo');
+                $txnReEvaReportBmsServerCentralComputerYesNo = $this->getPostParamString('reEvaReportBmsServerCentralComputerYesNo');
+                $txnReEvaReportBmsServerCentralComputerFinding = $this->getPostParamString('reEvaReportBmsServerCentralComputerFinding');
+                $txnReEvaReportBmsServerCentralComputerRecommend = $this->getPostParamString('reEvaReportBmsServerCentralComputerRecommend');
+                $txnReEvaReportBmsServerCentralComputerPass = $this->getPostParamString('reEvaReportBmsServerCentralComputerPass');
+                $txnReEvaReportBmsDdcYesNo = $this->getPostParamString('reEvaReportBmsDdcYesNo');
+                $txnReEvaReportBmsDdcFinding = $this->getPostParamString('reEvaReportBmsDdcFinding');
+                $txnReEvaReportBmsDdcRecommend = $this->getPostParamString('reEvaReportBmsDdcRecommend');
+                $txnReEvaReportBmsDdcPass = $this->getPostParamString('reEvaReportBmsDdcPass');
+                $txnReEvaReportBmsSupplementYesNo = $this->getPostParamString('reEvaReportBmsSupplementYesNo');
+                $txnReEvaReportBmsSupplement = $this->getPostParamString('reEvaReportBmsSupplement');
+                $txnReEvaReportBmsSupplementPass = $this->getPostParamString('reEvaReportBmsSupplementPass');
+                $txnReEvaReportChangeoverSchemeYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeYesNo');
+                $txnReEvaReportChangeoverSchemeControlYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeControlYesNo');
+                $txnReEvaReportChangeoverSchemeControlFinding = $this->getPostParamString('reEvaReportChangeoverSchemeControlFinding');
+                $txnReEvaReportChangeoverSchemeControlRecommend = $this->getPostParamString('reEvaReportChangeoverSchemeControlRecommend');
+                $txnReEvaReportChangeoverSchemeControlPass = $this->getPostParamString('reEvaReportChangeoverSchemeControlPass');
+                $txnReEvaReportChangeoverSchemeUvYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeUvYesNo');
+                $txnReEvaReportChangeoverSchemeUvFinding = $this->getPostParamString('reEvaReportChangeoverSchemeUvFinding');
+                $txnReEvaReportChangeoverSchemeUvRecommend = $this->getPostParamString('reEvaReportChangeoverSchemeUvRecommend');
+                $txnReEvaReportChangeoverSchemeUvPass = $this->getPostParamString('reEvaReportChangeoverSchemeUvPass');
+                $txnReEvaReportChangeoverSchemeSupplementYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeSupplementYesNo');
+                $txnReEvaReportChangeoverSchemeSupplement = $this->getPostParamString('reEvaReportChangeoverSchemeSupplement');
+                $txnReEvaReportChangeoverSchemeSupplementPass = $this->getPostParamString('reEvaReportChangeoverSchemeSupplementPass');
+                $txnReEvaReportChillerPlantYesNo = $this->getPostParamString('reEvaReportChillerPlantYesNo');
+                $txnReEvaReportChillerPlantAhuChilledWaterYesNo = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterYesNo');
+                $txnReEvaReportChillerPlantAhuChilledWaterFinding = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterFinding');
+                $txnReEvaReportChillerPlantAhuChilledWaterRecommend = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterRecommend');
+                $txnReEvaReportChillerPlantAhuChilledWaterPass = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterPass');
+                $txnReEvaReportChillerPlantChillerYesNo = $this->getPostParamString('reEvaReportChillerPlantChillerYesNo');
+                $txnReEvaReportChillerPlantChillerFinding = $this->getPostParamString('reEvaReportChillerPlantChillerFinding');
+                $txnReEvaReportChillerPlantChillerRecommend = $this->getPostParamString('reEvaReportChillerPlantChillerRecommend');
+                $txnReEvaReportChillerPlantChillerPass = $this->getPostParamString('reEvaReportChillerPlantChillerPass');
+                $txnReEvaReportChillerPlantSupplementYesNo = $this->getPostParamString('reEvaReportChillerPlantSupplementYesNo');
+                $txnReEvaReportChillerPlantSupplement = $this->getPostParamString('reEvaReportChillerPlantSupplement');
+                $txnReEvaReportChillerPlantSupplementPass = $this->getPostParamString('reEvaReportChillerPlantSupplementPass');
+                $txnReEvaReportEscalatorYesNo = $this->getPostParamString('reEvaReportEscalatorYesNo');
+                $txnReEvaReportEscalatorBrakingSystemYesNo = $this->getPostParamString('reEvaReportEscalatorBrakingSystemYesNo');
+                $txnReEvaReportEscalatorBrakingSystemFinding = $this->getPostParamString('reEvaReportEscalatorBrakingSystemFinding');
+                $txnReEvaReportEscalatorBrakingSystemRecommend = $this->getPostParamString('reEvaReportEscalatorBrakingSystemRecommend');
+                $txnReEvaReportEscalatorBrakingSystemPass = $this->getPostParamString('reEvaReportEscalatorBrakingSystemPass');
+                $txnReEvaReportEscalatorControlYesNo = $this->getPostParamString('reEvaReportEscalatorControlYesNo');
+                $txnReEvaReportEscalatorControlFinding = $this->getPostParamString('reEvaReportEscalatorControlFinding');
+                $txnReEvaReportEscalatorControlRecommend = $this->getPostParamString('reEvaReportEscalatorControlRecommend');
+                $txnReEvaReportEscalatorControlPass = $this->getPostParamString('reEvaReportEscalatorControlPass');
+                $txnReEvaReportEscalatorSupplementYesNo = $this->getPostParamString('reEvaReportEscalatorSupplementYesNo');
+                $txnReEvaReportEscalatorSupplement = $this->getPostParamString('reEvaReportEscalatorSupplement');
+                $txnReEvaReportEscalatorSupplementPass = $this->getPostParamString('reEvaReportEscalatorSupplementPass');
+                $txnReEvaReportLiftYesNo = $this->getPostParamString('reEvaReportLiftYesNo');
+                $txnReEvaReportLiftOperationYesNo = $this->getPostParamString('reEvaReportLiftOperationYesNo');
+                $txnReEvaReportLiftOperationFinding = $this->getPostParamString('reEvaReportLiftOperationFinding');
+                $txnReEvaReportLiftOperationRecommend = $this->getPostParamString('reEvaReportLiftOperationRecommend');
+                $txnReEvaReportLiftOperationPass = $this->getPostParamString('reEvaReportLiftOperationPass');
+                $txnReEvaReportLiftMainSupplyYesNo = $this->getPostParamString('reEvaReportLiftMainSupplyYesNo');
+                $txnReEvaReportLiftMainSupplyFinding = $this->getPostParamString('reEvaReportLiftMainSupplyFinding');
+                $txnReEvaReportLiftMainSupplyRecommend = $this->getPostParamString('reEvaReportLiftMainSupplyRecommend');
+                $txnReEvaReportLiftMainSupplyPass = $this->getPostParamString('reEvaReportLiftMainSupplyPass');
+                $txnReEvaReportLiftSupplementYesNo = $this->getPostParamString('reEvaReportLiftSupplementYesNo');
+                $txnReEvaReportLiftSupplement = $this->getPostParamString('reEvaReportLiftSupplement');
+                $txnReEvaReportLiftSupplementPass = $this->getPostParamString('reEvaReportLiftSupplementPass');
+                $txnReEvaReportHidLampYesNo = $this->getPostParamString('reEvaReportHidLampYesNo');
+                $txnReEvaReportHidLampBallastYesNo = $this->getPostParamString('reEvaReportHidLampBallastYesNo');
+                $txnReEvaReportHidLampBallastFinding = $this->getPostParamString('reEvaReportHidLampBallastFinding');
+                $txnReEvaReportHidLampBallastRecommend = $this->getPostParamString('reEvaReportHidLampBallastRecommend');
+                $txnReEvaReportHidLampBallastPass = $this->getPostParamString('reEvaReportHidLampBallastPass');
+                $txnReEvaReportHidLampAddonProtectYesNo = $this->getPostParamString('reEvaReportHidLampAddonProtectYesNo');
+                $txnReEvaReportHidLampAddonProtectFinding = $this->getPostParamString('reEvaReportHidLampAddonProtectFinding');
+                $txnReEvaReportHidLampAddonProtectRecommend = $this->getPostParamString('reEvaReportHidLampAddonProtectRecommend');
+                $txnReEvaReportHidLampAddonProtectPass = $this->getPostParamString('reEvaReportHidLampAddonProtectPass');
+                $txnReEvaReportHidLampSupplementYesNo = $this->getPostParamString('reEvaReportHidLampSupplementYesNo');
+                $txnReEvaReportHidLampSupplement = $this->getPostParamString('reEvaReportHidLampSupplement');
+                $txnReEvaReportHidLampSupplementPass = $this->getPostParamString('reEvaReportHidLampSupplementPass');
+                $txnReEvaReportSensitiveMachineYesNo = $this->getPostParamString('reEvaReportSensitiveMachineYesNo');
+                $txnReEvaReportSensitiveMachineMedicalYesNo = $this->getPostParamString('reEvaReportSensitiveMachineMedicalYesNo');
+                $txnReEvaReportSensitiveMachineMedicalFinding = $this->getPostParamString('reEvaReportSensitiveMachineMedicalFinding');
+                $txnReEvaReportSensitiveMachineMedicalRecommend = $this->getPostParamString('reEvaReportSensitiveMachineMedicalRecommend');
+                $txnReEvaReportSensitiveMachineMedicalPass = $this->getPostParamString('reEvaReportSensitiveMachineMedicalPass');
+                $txnReEvaReportSensitiveMachineSupplementYesNo = $this->getPostParamString('reEvaReportSensitiveMachineSupplementYesNo');
+                $txnReEvaReportSensitiveMachineSupplement = $this->getPostParamString('reEvaReportSensitiveMachineSupplement');
+                $txnReEvaReportSensitiveMachineSupplementPass = $this->getPostParamString('reEvaReportSensitiveMachineSupplementPass');
+                $txnReEvaReportTelecomMachineYesNo = $this->getPostParamString('reEvaReportTelecomMachineYesNo');
+                $txnReEvaReportTelecomMachineServerOrComputerYesNo = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerYesNo');
+                $txnReEvaReportTelecomMachineServerOrComputerFinding = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerFinding');
+                $txnReEvaReportTelecomMachineServerOrComputerRecommend = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerRecommend');
+                $txnReEvaReportTelecomMachineServerOrComputerPass = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerPass');
+                $txnReEvaReportTelecomMachinePeripheralsYesNo = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsYesNo');
+                $txnReEvaReportTelecomMachinePeripheralsFinding = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsFinding');
+                $txnReEvaReportTelecomMachinePeripheralsRecommend = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsRecommend');
+                $txnReEvaReportTelecomMachinePeripheralsPass = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsPass');
+                $txnReEvaReportTelecomMachineHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionYesNo');
+                $txnReEvaReportTelecomMachineHarmonicEmissionFinding = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionFinding');
+                $txnReEvaReportTelecomMachineHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionRecommend');
+                $txnReEvaReportTelecomMachineHarmonicEmissionPass = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionPass');
+                $txnReEvaReportTelecomMachineSupplementYesNo = $this->getPostParamString('reEvaReportTelecomMachineSupplementYesNo');
+                $txnReEvaReportTelecomMachineSupplement = $this->getPostParamString('reEvaReportTelecomMachineSupplement');
+                $txnReEvaReportTelecomMachineSupplementPass = $this->getPostParamString('reEvaReportTelecomMachineSupplementPass');
+                $txnReEvaReportAirConditionersYesNo = $this->getPostParamString('reEvaReportAirConditionersYesNo');
+                $txnReEvaReportAirConditionersMicbYesNo = $this->getPostParamString('reEvaReportAirConditionersMicbYesNo');
+                $txnReEvaReportAirConditionersMicbFinding = $this->getPostParamString('reEvaReportAirConditionersMicbFinding');
+                $txnReEvaReportAirConditionersMicbRecommend = $this->getPostParamString('reEvaReportAirConditionersMicbRecommend');
+                $txnReEvaReportAirConditionersMicbPass = $this->getPostParamString('reEvaReportAirConditionersMicbPass');
+                $txnReEvaReportAirConditionersLoadForecastingYesNo = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingYesNo');
+                $txnReEvaReportAirConditionersLoadForecastingFinding = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingFinding');
+                $txnReEvaReportAirConditionersLoadForecastingRecommend = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingRecommend');
+                $txnReEvaReportAirConditionersLoadForecastingPass = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingPass');
+                $txnReEvaReportAirConditionersTypeYesNo = $this->getPostParamString('reEvaReportAirConditionersTypeYesNo');
+                $txnReEvaReportAirConditionersTypeFinding = $this->getPostParamString('reEvaReportAirConditionersTypeFinding');
+                $txnReEvaReportAirConditionersTypeRecommend = $this->getPostParamString('reEvaReportAirConditionersTypeRecommend');
+                $txnReEvaReportAirConditionersTypePass = $this->getPostParamString('reEvaReportAirConditionersTypePass');
+                $txnReEvaReportAirConditionersSupplementYesNo = $this->getPostParamString('reEvaReportAirConditionersSupplementYesNo');
+                $txnReEvaReportAirConditionersSupplement = $this->getPostParamString('reEvaReportAirConditionersSupplement');
+                $txnReEvaReportAirConditionersSupplementPass = $this->getPostParamString('reEvaReportAirConditionersSupplementPass');
+                $txnReEvaReportNonLinearLoadYesNo = $this->getPostParamString('reEvaReportNonLinearLoadYesNo');
+                $txnReEvaReportNonLinearLoadHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionYesNo');
+                $txnReEvaReportNonLinearLoadHarmonicEmissionFinding = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionFinding');
+                $txnReEvaReportNonLinearLoadHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionRecommend');
+                $txnReEvaReportNonLinearLoadHarmonicEmissionPass = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionPass');
+                $txnReEvaReportNonLinearLoadSupplementYesNo = $this->getPostParamString('reEvaReportNonLinearLoadSupplementYesNo');
+                $txnReEvaReportNonLinearLoadSupplement = $this->getPostParamString('reEvaReportNonLinearLoadSupplement');
+                $txnReEvaReportNonLinearLoadSupplementPass = $this->getPostParamString('reEvaReportNonLinearLoadSupplementPass');
+                $txnReEvaReportRenewableEnergyYesNo = $this->getPostParamString('reEvaReportRenewableEnergyYesNo');
+                $txnReEvaReportRenewableEnergyInverterAndControlsYesNo = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsYesNo');
+                $txnReEvaReportRenewableEnergyInverterAndControlsFinding = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsFinding');
+                $txnReEvaReportRenewableEnergyInverterAndControlsRecommend = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsRecommend');
+                $txnReEvaReportRenewableEnergyInverterAndControlsPass = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsPass');
+                $txnReEvaReportRenewableEnergyHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionYesNo');
+                $txnReEvaReportRenewableEnergyHarmonicEmissionFinding = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionFinding');
+                $txnReEvaReportRenewableEnergyHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionRecommend');
+                $txnReEvaReportRenewableEnergyHarmonicEmissionPass = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionPass');
+                $txnReEvaReportRenewableEnergySupplementYesNo = $this->getPostParamString('reEvaReportRenewableEnergySupplementYesNo');
+                $txnReEvaReportRenewableEnergySupplement = $this->getPostParamString('reEvaReportRenewableEnergySupplement');
+                $txnReEvaReportRenewableEnergySupplementPass = $this->getPostParamString('reEvaReportRenewableEnergySupplementPass');
+                $txnReEvaReportEvChargerSystemYesNo = $this->getPostParamString('reEvaReportEvChargerSystemYesNo');
+                $txnReEvaReportEvChargerSystemEvChargerYesNo = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerYesNo');
+                $txnReEvaReportEvChargerSystemEvChargerFinding = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerFinding');
+                $txnReEvaReportEvChargerSystemEvChargerRecommend = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerRecommend');
+                $txnReEvaReportEvChargerSystemEvChargerPass = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerPass');
+                $txnReEvaReportEvChargerSystemHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionYesNo');
+                $txnReEvaReportEvChargerSystemHarmonicEmissionFinding = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionFinding');
+                $txnReEvaReportEvChargerSystemHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionRecommend');
+                $txnReEvaReportEvChargerSystemHarmonicEmissionPass = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionPass');
+                $txnReEvaReportEvChargerSystemSupplementYesNo = $this->getPostParamString('reEvaReportEvChargerSystemSupplementYesNo');
+                $txnReEvaReportEvChargerSystemSupplement = $this->getPostParamString('reEvaReportEvChargerSystemSupplement');
+                $txnReEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('reEvaReportEvChargerSystemSupplementPass');
+
                 $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
                 $lastUpdatedTime = date("Y-m-d H:i");
 
@@ -2580,6 +2881,68 @@ class PlanningAheadController extends Controller {
                     $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
                     $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
                     $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                    $txnReEvaReportId,$txnReEvaReportRemark,$txnReEvaReportEdmsLink,$txnReEvaReportIssueDate,$txnReEvaReportFaxRefNo,
+                    $txnReEvaReportScore,$txnReEvaReportBmsYesNo,$txnReEvaReportBmsServerCentralComputerYesNo,
+                    $txnReEvaReportBmsServerCentralComputerFinding,$txnReEvaReportBmsServerCentralComputerRecommend,
+                    $txnReEvaReportBmsServerCentralComputerPass,$txnReEvaReportBmsDdcYesNo,$txnReEvaReportBmsDdcFinding,
+                    $txnReEvaReportBmsDdcRecommend,$txnReEvaReportBmsDdcPass,$txnReEvaReportBmsSupplementYesNo,
+                    $txnReEvaReportBmsSupplement,$txnReEvaReportBmsSupplementPass,$txnReEvaReportChangeoverSchemeYesNo,
+                    $txnReEvaReportChangeoverSchemeControlYesNo,$txnReEvaReportChangeoverSchemeControlFinding,
+                    $txnReEvaReportChangeoverSchemeControlRecommend,$txnReEvaReportChangeoverSchemeControlPass,
+                    $txnReEvaReportChangeoverSchemeUvYesNo,$txnReEvaReportChangeoverSchemeUvFinding,
+                    $txnReEvaReportChangeoverSchemeUvRecommend,$txnReEvaReportChangeoverSchemeUvPass,
+                    $txnReEvaReportChangeoverSchemeSupplementYesNo,$txnReEvaReportChangeoverSchemeSupplement,
+                    $txnReEvaReportChangeoverSchemeSupplementPass,$txnReEvaReportChillerPlantYesNo,
+                    $txnReEvaReportChillerPlantAhuChilledWaterYesNo,$txnReEvaReportChillerPlantAhuChilledWaterFinding,
+                    $txnReEvaReportChillerPlantAhuChilledWaterRecommend,$txnReEvaReportChillerPlantAhuChilledWaterPass,
+                    $txnReEvaReportChillerPlantChillerYesNo,$txnReEvaReportChillerPlantChillerFinding,
+                    $txnReEvaReportChillerPlantChillerRecommend,$txnReEvaReportChillerPlantChillerPass,
+                    $txnReEvaReportChillerPlantSupplementYesNo,$txnReEvaReportChillerPlantSupplement,
+                    $txnReEvaReportChillerPlantSupplementPass,$txnReEvaReportEscalatorYesNo,$txnReEvaReportEscalatorBrakingSystemYesNo,
+                    $txnReEvaReportEscalatorBrakingSystemFinding,$txnReEvaReportEscalatorBrakingSystemRecommend,
+                    $txnReEvaReportEscalatorBrakingSystemPass,$txnReEvaReportEscalatorControlYesNo,$txnReEvaReportEscalatorControlFinding,
+                    $txnReEvaReportEscalatorControlRecommend,$txnReEvaReportEscalatorControlPass,$txnReEvaReportEscalatorSupplementYesNo,
+                    $txnReEvaReportEscalatorSupplement,$txnReEvaReportEscalatorSupplementPass,$txnReEvaReportLiftYesNo,
+                    $txnReEvaReportLiftOperationYesNo,$txnReEvaReportLiftOperationFinding,$txnReEvaReportLiftOperationRecommend,
+                    $txnReEvaReportLiftOperationPass,$txnReEvaReportLiftMainSupplyYesNo,$txnReEvaReportLiftMainSupplyFinding,
+                    $txnReEvaReportLiftMainSupplyRecommend,$txnReEvaReportLiftMainSupplyPass,$txnReEvaReportLiftSupplementYesNo,
+                    $txnReEvaReportLiftSupplement,$txnReEvaReportLiftSupplementPass,$txnReEvaReportHidLampYesNo,
+                    $txnReEvaReportHidLampBallastYesNo,$txnReEvaReportHidLampBallastFinding,$txnReEvaReportHidLampBallastRecommend,
+                    $txnReEvaReportHidLampBallastPass,$txnReEvaReportHidLampAddonProtectYesNo,$txnReEvaReportHidLampAddonProtectFinding,
+                    $txnReEvaReportHidLampAddonProtectRecommend,$txnReEvaReportHidLampAddonProtectPass,
+                    $txnReEvaReportHidLampSupplementYesNo,$txnReEvaReportHidLampSupplement,$txnReEvaReportHidLampSupplementPass,
+                    $txnReEvaReportSensitiveMachineYesNo,$txnReEvaReportSensitiveMachineMedicalYesNo,
+                    $txnReEvaReportSensitiveMachineMedicalFinding,$txnReEvaReportSensitiveMachineMedicalRecommend,
+                    $txnReEvaReportSensitiveMachineMedicalPass,$txnReEvaReportSensitiveMachineSupplementYesNo,
+                    $txnReEvaReportSensitiveMachineSupplement,$txnReEvaReportSensitiveMachineSupplementPass,$txnReEvaReportTelecomMachineYesNo,
+                    $txnReEvaReportTelecomMachineServerOrComputerYesNo,$txnReEvaReportTelecomMachineServerOrComputerFinding,
+                    $txnReEvaReportTelecomMachineServerOrComputerRecommend,$txnReEvaReportTelecomMachineServerOrComputerPass,
+                    $txnReEvaReportTelecomMachinePeripheralsYesNo,$txnReEvaReportTelecomMachinePeripheralsFinding,
+                    $txnReEvaReportTelecomMachinePeripheralsRecommend,$txnReEvaReportTelecomMachinePeripheralsPass,
+                    $txnReEvaReportTelecomMachineHarmonicEmissionYesNo,$txnReEvaReportTelecomMachineHarmonicEmissionFinding,
+                    $txnReEvaReportTelecomMachineHarmonicEmissionRecommend,$txnReEvaReportTelecomMachineHarmonicEmissionPass,
+                    $txnReEvaReportTelecomMachineSupplementYesNo,$txnReEvaReportTelecomMachineSupplement,
+                    $txnReEvaReportTelecomMachineSupplementPass,$txnReEvaReportAirConditionersYesNo,$txnReEvaReportAirConditionersMicbYesNo,
+                    $txnReEvaReportAirConditionersMicbFinding,$txnReEvaReportAirConditionersMicbRecommend,$txnReEvaReportAirConditionersMicbPass,
+                    $txnReEvaReportAirConditionersLoadForecastingYesNo,$txnReEvaReportAirConditionersLoadForecastingFinding,
+                    $txnReEvaReportAirConditionersLoadForecastingRecommend,$txnReEvaReportAirConditionersLoadForecastingPass,
+                    $txnReEvaReportAirConditionersTypeYesNo,$txnReEvaReportAirConditionersTypeFinding,$txnReEvaReportAirConditionersTypeRecommend,
+                    $txnReEvaReportAirConditionersTypePass,$txnReEvaReportAirConditionersSupplementYesNo,$txnReEvaReportAirConditionersSupplement,
+                    $txnReEvaReportAirConditionersSupplementPass,$txnReEvaReportNonLinearLoadYesNo,$txnReEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                    $txnReEvaReportNonLinearLoadHarmonicEmissionFinding,$txnReEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                    $txnReEvaReportNonLinearLoadHarmonicEmissionPass,$txnReEvaReportNonLinearLoadSupplementYesNo,
+                    $txnReEvaReportNonLinearLoadSupplement,$txnReEvaReportNonLinearLoadSupplementPass,$txnReEvaReportRenewableEnergyYesNo,
+                    $txnReEvaReportRenewableEnergyInverterAndControlsYesNo,$txnReEvaReportRenewableEnergyInverterAndControlsFinding,
+                    $txnReEvaReportRenewableEnergyInverterAndControlsRecommend,$txnReEvaReportRenewableEnergyInverterAndControlsPass,
+                    $txnReEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnReEvaReportRenewableEnergyHarmonicEmissionFinding,
+                    $txnReEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnReEvaReportRenewableEnergyHarmonicEmissionPass,
+                    $txnReEvaReportRenewableEnergySupplementYesNo,$txnReEvaReportRenewableEnergySupplement,
+                    $txnReEvaReportRenewableEnergySupplementPass,$txnReEvaReportEvChargerSystemYesNo,$txnReEvaReportEvChargerSystemEvChargerYesNo,
+                    $txnReEvaReportEvChargerSystemEvChargerFinding,$txnReEvaReportEvChargerSystemEvChargerRecommend,
+                    $txnReEvaReportEvChargerSystemEvChargerPass,$txnReEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                    $txnReEvaReportEvChargerSystemHarmonicEmissionFinding,$txnReEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                    $txnReEvaReportEvChargerSystemHarmonicEmissionPass,$txnReEvaReportEvChargerSystemSupplementYesNo,
+                    $txnReEvaReportEvChargerSystemSupplement,$txnReEvaReportEvChargerSystemSupplementPass,
                     $txnState,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId);
 
                 $retJson['status'] = 'OK';
