@@ -444,6 +444,7 @@ class PlanningAheadController extends Controller {
                                 }
 
                                 if ($result['status'] == 'OK') {
+                                    $this->generateReplySlipTemplate($excelSchemeNo);
                                     $successCount++;
                                 } else {
                                     $failSchemeNo = $failSchemeNo . $excelSchemeNo . ",";
@@ -883,127 +884,7 @@ class PlanningAheadController extends Controller {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        $schemeNo = $param['schemeNo'];
-        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
-        $checkedBox='<w:sym w:font="Wingdings" w:char="F0FE"/>';
-        $unCheckedBox = '<w:sym w:font="Wingdings" w:char="F0A8"/>';
-
-        $replySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
-        $replySlipTemplateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplateFileName');
-
-        $templateProcessor = new TemplateProcessor($replySlipTemplatePath['configValue'] . $replySlipTemplateFileName['configValue']);
-
-        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
-        $templateProcessor->setValue('commissionDate', $recordList['commissionDate']);
-        if ($recordList['replySlipBmsYesNo'] == 'Y') {
-            $templateProcessor->setValue('BmsYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('BmsYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('BmsServerCentralComputer', $this->formatToWordTemplate($recordList['replySlipBmsServerCentralComputer']));
-        $templateProcessor->setValue('BmsDdc', $this->formatToWordTemplate($recordList['replySlipBmsDdc']));
-        if ($recordList['replySlipChangeoverSchemeYesNo'] == 'Y') {
-            $templateProcessor->setValue('ChangeoverSchemeYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('ChangeoverSchemeYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('ChangeoverSchemeControl', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeControl']));
-        $templateProcessor->setValue('ChangeoverSchemeUv', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeUv']));
-
-        if ($recordList['replySlipChillerPlantYesNo'] == 'Y') {
-            $templateProcessor->setValue('ChillerPlantYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('ChillerPlantYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('ChillerPlantAhuControl', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuControl']));
-        $templateProcessor->setValue('ChillerPlantAhuStartup', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuStartup']));
-        $templateProcessor->setValue('ChillerPlantVsd', $this->formatToWordTemplate($recordList['replySlipChillerPlantVsd']));
-        $templateProcessor->setValue('ChillerPlantAhuChilledWater', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuChilledWater']));
-        $templateProcessor->setValue('ChillerPlantStandbyAhu', $this->formatToWordTemplate($recordList['replySlipChillerPlantStandbyAhu']));
-        $templateProcessor->setValue('ChillerPlantChiller', $this->formatToWordTemplate($recordList['replySlipChillerPlantChiller']));
-        if ($recordList['replySlipEscalatorYesNo'] == 'Y') {
-            $templateProcessor->setValue('EscalatorYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('EscalatorYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('EscalatorMotorStartup', $this->formatToWordTemplate($recordList['replySlipEscalatorMotorStartup']));
-        $templateProcessor->setValue('EscalatorVsdMitigation', $this->formatToWordTemplate($recordList['replySlipEscalatorVsdMitigation']));
-        $templateProcessor->setValue('EscalatorBrakingSystem', $this->formatToWordTemplate($recordList['replySlipEscalatorBrakingSystem']));
-        $templateProcessor->setValue('EscalatorControl', $this->formatToWordTemplate($recordList['replySlipEscalatorControl']));
-        if ($recordList['replySlipHidLampYesNo'] == 'Y') {
-            $templateProcessor->setValue('HidLampYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('HidLampYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('HidLampMitigation', $this->formatToWordTemplate($recordList['replySlipHidLampMitigation']));
-        if ($recordList['replySlipLiftYesNo'] == 'Y') {
-            $templateProcessor->setValue('LiftYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('LiftYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('LiftOperation', $this->formatToWordTemplate($recordList['replySlipLiftOperation']));
-        if ($recordList['replySlipSensitiveMachineYesNo'] == 'Y') {
-            $templateProcessor->setValue('SensitiveMachineYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('SensitiveMachineYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('SensitiveMachineMitigation', $this->formatToWordTemplate($recordList['replySlipSensitiveMachineMitigation']));
-        if ($recordList['replySlipTelecomMachineYesNo'] == 'Y') {
-            $templateProcessor->setValue('TelecomMachineYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('TelecomMachineYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('TelecomMachineServerOrComputer', $this->formatToWordTemplate($recordList['replySlipTelecomMachineServerOrComputer']));
-        $templateProcessor->setValue('TelecomMachinePeripherals', $this->formatToWordTemplate($recordList['replySlipTelecomMachinePeripherals']));
-        $templateProcessor->setValue('TelecomMachineHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipTelecomMachineHarmonicEmission']));
-        if ($recordList['replySlipAirConditionersYesNo'] == 'Y') {
-            $templateProcessor->setValue('AirConditionersYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('AirConditionersYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('AirConditionersMicb', $this->formatToWordTemplate($recordList['replySlipAirConditionersMicb']));
-        $templateProcessor->setValue('AirConditionersLoadForecasting', $this->formatToWordTemplate($recordList['replySlipAirConditionersLoadForecasting']));
-        $templateProcessor->setValue('AirConditionersType', $this->formatToWordTemplate($recordList['replySlipAirConditionersType']));
-        if ($recordList['replySlipNonLinearLoadYesNo'] == 'Y') {
-            $templateProcessor->setValue('NonLinearLoadYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('NonLinearLoadYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('NonLinearLoadHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipNonLinearLoadHarmonicEmission']));
-        if ($recordList['replySlipRenewableEnergyYesNo'] == 'Y') {
-            $templateProcessor->setValue('RenewableEnergyYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('RenewableEnergyYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('RenewableEnergyInverterAndControls', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyInverterAndControls']));
-        $templateProcessor->setValue('RenewableEnergyHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyHarmonicEmission']));
-        if ($recordList['replySlipEvChargerSystemYesNo'] == 'Y') {
-            $templateProcessor->setValue('EvChargerSystemYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('EvChargerSystemYesNo', $unCheckedBox);
-        }
-        if ($recordList['replySlipEvControlYesNo'] == 'Y') {
-            $templateProcessor->setValue('EvControlYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('EvControlYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('EvChargerSystemEvCharger', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemEvCharger']));
-        if ($recordList['replySlipEvChargerSystemSmartYesNo'] == 'Y') {
-            $templateProcessor->setValue('EvChargerSystemSmartYesNo', $checkedBox);
-        } else {
-            $templateProcessor->setValue('EvChargerSystemSmartYesNo', $unCheckedBox);
-        }
-        $templateProcessor->setValue('EvChargerSystemSmartChargingSystem', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemSmartChargingSystem']));
-        $templateProcessor->setValue('EvChargerSystemHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemHarmonicEmission']));
-        $templateProcessor->setValue('ConsultantNameConfirmation', $this->formatToWordTemplate($recordList['replySlipConsultantNameConfirmation']));
-        $templateProcessor->setValue('ConsultantCompany', $this->formatToWordTemplate($recordList['replySlipConsultantCompany']));
-        $templateProcessor->setValue('ProjectOwnerNameConfirmation', $this->formatToWordTemplate($recordList['replySlipProjectOwnerNameConfirmation']));
-        $templateProcessor->setValue('ProjectOwnerCompany', $this->formatToWordTemplate($recordList['replySlipProjectOwnerCompany']));
-        $templateProcessor->setValue('replySlipSignedDate', $this->formatToWordTemplate($recordList['replySlipLastUploadTime']));
-
-        $pathToSave = $replySlipTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' . $replySlipTemplateFileName['configValue'];
-        $templateProcessor->saveAs($pathToSave);
-        chmod($pathToSave, 0644);
+        $pathToSave = $this->generateReplySlipTemplate($param['schemeNo']);
 
         header("Content-Description: File Transfer");
         header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
@@ -1017,10 +898,8 @@ class PlanningAheadController extends Controller {
 
         //Read the size of the file
         readfile($pathToSave);
-        unlink($pathToSave); // deletes the temporary file
 
         die();
-
     }
 
     public function actionGetPlanningAheadProjectDetailFirstInvitationLetterTemplate() {
@@ -1249,6 +1128,80 @@ class PlanningAheadController extends Controller {
 
         $pathToSave = $thirdInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $thirdInvitationLetterTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header('Content-Disposition: attachment; filename='. basename($pathToSave));
+        header('Content-Length: ' . filesize($pathToSave));
+        header('Pragma: public');
+
+        //Clear system output buffer
+        flush();
+
+        //Read the size of the file
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
+
+        die();
+
+    }
+
+    public function actionGetPlanningAheadProjectDetailForthInvitationLetterTemplate() {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        $forthInvitationLetterIssueDate = $param['forthInvitationLetterIssueDate'];
+        $forthInvitationLetterFaxRefNo = $param['forthInvitationLetterFaxRefNo'];
+        $schemeNo = $param['schemeNo'];
+        $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+        $lastUpdatedTime = date("Y-m-d H:i");
+
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+        $replySlip = Yii::app()->planningAheadDao->getReplySlip($recordList['meetingReplySlipId']);
+
+        // Update the issue date and fax ref no. to database first
+        Yii::app()->planningAheadDao->updateForthInvitationLetter($recordList['planningAheadId'],
+            $forthInvitationLetterIssueDate,$forthInvitationLetterFaxRefNo,$lastUpdatedBy,$lastUpdatedTime);
+
+        $forthInvitationLetterTemplatePath = Yii::app()->commonUtil->
+        getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+
+        $forthInvitationLetterTemplateFileName = Yii::app()->commonUtil->
+        getConfigValueByConfigName('planningAheadForthInvitationLetterTemplateFileName');
+
+        $forthInvitationLetterFaxYear = date("y", strtotime($forthInvitationLetterIssueDate));
+        $forthInvitationLetterFaxMonth = date("m", strtotime($forthInvitationLetterIssueDate));
+        $forthInvitationLetterIssueDateDay = date("j", strtotime($forthInvitationLetterIssueDate));
+        $forthInvitationLetterIssueDateMonth = date("M", strtotime($forthInvitationLetterIssueDate));
+        $forthInvitationLetterIssueDateYear = date("Y", strtotime($forthInvitationLetterIssueDate));
+
+        $templateProcessor = new TemplateProcessor($forthInvitationLetterTemplatePath['configValue'] .
+            $forthInvitationLetterTemplateFileName['configValue']);
+        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
+        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
+
+        if (isset($recordList['secondConsultantSurname'])) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+            $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        }
+
+        $templateProcessor->setValue('faxRefNo', $forthInvitationLetterFaxRefNo);
+        $templateProcessor->setValue('faxDate', $forthInvitationLetterFaxYear . "-" . $forthInvitationLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $forthInvitationLetterIssueDateDay . " " .
+            $forthInvitationLetterIssueDateMonth . " " .
+            $forthInvitationLetterIssueDateYear);
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+        $templateProcessor->setValue('replySlipReturnDate', $replySlip['replySlipLastUpdateTime']);
+
+        $pathToSave = $forthInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
+            $forthInvitationLetterTemplateFileName['configValue'];
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -2352,6 +2305,11 @@ class PlanningAheadController extends Controller {
                 $txnThirdInvitationLetterEdmsLink = $this->getPostParamString('thirdInvitationLetterEdmsLink');
                 $txnThirdInvitationLetterAccept = $this->getPostParamString('thirdInvitationLetterAccept');
                 $txnThirdInvitationLetterWalkDate = $this->getPostParamString('thirdInvitationLetterWalkDate');
+                $txnForthInvitationLetterIssueDate = $this->getPostParamString('forthInvitationLetterIssueDate');
+                $txnForthInvitationLetterFaxRefNo = $this->getPostParamString('forthInvitationLetterFaxRefNo');
+                $txnForthInvitationLetterEdmsLink = $this->getPostParamString('forthInvitationLetterEdmsLink');
+                $txnForthInvitationLetterAccept = $this->getPostParamString('forthInvitationLetterAccept');
+                $txnForthInvitationLetterWalkDate = $this->getPostParamString('forthInvitationLetterWalkDate');
                 $txnEvaReportId = $this->getPostParamString('evaReportId');
                 $txnEvaReportRemark = $this->getPostParamString('evaReportRemark');
                 $txnEvaReportEdmsLink = $this->getPostParamString('evaReportEdmsLink');
@@ -2557,6 +2515,9 @@ class PlanningAheadController extends Controller {
                     $txnThirdInvitationLetterIssueDate,
                     $txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
                     $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                    $txnForthInvitationLetterIssueDate,
+                    $txnForthInvitationLetterFaxRefNo,$txnForthInvitationLetterEdmsLink,
+                    $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
                     $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
                     $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
                     $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
@@ -2816,7 +2777,11 @@ class PlanningAheadController extends Controller {
             $txnThirdInvitationLetterEdmsLink = $this->getPostParamString('thirdInvitationLetterEdmsLink');
             $txnThirdInvitationLetterAccept = $this->getPostParamString('thirdInvitationLetterAccept');
             $txnThirdInvitationLetterWalkDate = $this->getPostParamString('thirdInvitationLetterWalkDate');
-
+            $txnForthInvitationLetterIssueDate = $this->getPostParamString('forthInvitationLetterIssueDate');
+            $txnForthInvitationLetterFaxRefNo = $this->getPostParamString('forthInvitationLetterFaxRefNo');
+            $txnForthInvitationLetterEdmsLink = $this->getPostParamString('forthInvitationLetterEdmsLink');
+            $txnForthInvitationLetterAccept = $this->getPostParamString('forthInvitationLetterAccept');
+            $txnForthInvitationLetterWalkDate = $this->getPostParamString('forthInvitationLetterWalkDate');
             $txnEvaReportId = $this->getPostParamString('evaReportId');
             $txnEvaReportRemark = $this->getPostParamString('evaReportRemark');
             $txnEvaReportEdmsLink = $this->getPostParamString('evaReportEdmsLink');
@@ -2971,162 +2936,303 @@ class PlanningAheadController extends Controller {
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
 
-            try {
+            $currState = Yii::app()->planningAheadDao->getPlanningAheadDetails($txnSchemeNo);
+            $txnNewState = $currState['state'];
 
-                $currState = Yii::app()->planningAheadDao->getPlanningAheadDetails($txnSchemeNo);
-                $txnNewState = $currState['state'];
+            if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "2")) {
+                $txnNewState = "WAITING_INITIAL_INFO_BY_REGION_STAFF";
+            } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "3")) {
+                $txnNewState = "WAITING_INITIAL_INFO_BY_PQ";
+            } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_REGION_STAFF") && ($txnRoleId == "3")) {
+                $txnNewState = "COMPLETED_INITIAL_INFO";
+            } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_PQ") && ($txnRoleId == "2")) {
+                $txnNewState = "COMPLETED_INITIAL_INFO";
+            } else if ($currState['state']=="WAITING_STANDARD_LETTER") {
+                $txnNewState = "COMPLETED_STANDARD_LETTER";
+            } else if ($currState['state']=="WAITING_CONSULTANT_MEETING_INFO") {
+                $txnNewState = "COMPLETED_ACTUAL_MEETING_DATE";
+            } else if ($currState['state']=="SENT_FIRST_INVITATION_LETTER") {
+                $txnNewState = "WAITING_PQ_SITE_WALK";
+            } else if ($currState['state']=="SENT_SECOND_INVITATION_LETTER") {
+                $txnNewState = "WAITING_PQ_SITE_WALK";
+            } else if ($currState['state']=="SENT_THIRD_INVITATION_LETTER") {
+                $txnNewState = "WAITING_PQ_SITE_WALK";
+            } else if (($currState['state']=="NOTIFIED_PQ_SITE_WALK") ||
+                    ($currState['state']=="COMPLETED_PQ_SITE_WALK_PASS") ||
+                    ($currState['state']=="COMPLETED_PQ_SITE_WALK_FAIL")) {
 
-                if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "2")) {
-                    $txnNewState = "WAITING_INITIAL_INFO_BY_REGION_STAFF";
-                } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "3")) {
-                    $txnNewState = "WAITING_INITIAL_INFO_BY_PQ";
-                } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_REGION_STAFF") && ($txnRoleId == "3")) {
-                    $txnNewState = "COMPLETED_INITIAL_INFO";
-                } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_PQ") && ($txnRoleId == "2")) {
-                    $txnNewState = "COMPLETED_INITIAL_INFO";
-                } else if ($currState['state']=="WAITING_STANDARD_LETTER") {
-                    $txnNewState = "COMPLETED_STANDARD_LETTER";
-                } else if ($currState['state']=="WAITING_CONSULTANT_MEETING_INFO") {
-                    $txnNewState = "COMPLETED_ACTUAL_MEETING_DATE";
-                } else if ($currState['state']=="SENT_FIRST_INVITATION_LETTER") {
-                    $txnNewState = "WAITING_PQ_SITE_WALK";
-                } else if ($currState['state']=="SENT_SECOND_INVITATION_LETTER") {
-                    $txnNewState = "WAITING_PQ_SITE_WALK";
-                } else if ($currState['state']=="SENT_THIRD_INVITATION_LETTER") {
-                    $txnNewState = "WAITING_PQ_SITE_WALK";
-                } else if ($currState['state']=="NOTIFIED_PQ_SITE_WALK") {
-                    $txnNewState = "COMPLETED_PQ_SITE_WALK";
-                }
-
-                $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,
-                    $txnSchemeNo,$txnRegion,
-                    $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
-                    $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
-                    $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
-                    $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
-                    $txnFirstConsultantTitle,$txnFirstConsultantSurname,$txnFirstConsultantOtherName,
-                    $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
-                    $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
-                    $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                    $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
-                    $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
-                    $txnFirstProjectOwnerTitle,$txnFirstProjectOwnerSurname,$txnFirstProjectOwnerOtherName,
-                    $txnFirstProjectOwnerCompany,$txnFirstProjectOwnerPhone,$txnFirstProjectOwnerEmail,
-                    $txnSecondProjectOwnerTitle,$txnSecondProjectOwnerSurname,$txnSecondProjectOwnerOtherName,
-                    $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
-                    $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
-                    $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
-                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
-                    $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
-                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,
-                    $txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
-                    $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
-                    $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
-                    $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
-                    $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
-                    $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
-                    $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
-                    $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
-                    $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
-                    $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
-                    $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
-                    $txnReplySlipAirConditionersYesNo,$txnReplySlipAirConditionersMicb,
-                    $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
-                    $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
-                    $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
-                    $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
-                    $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
-                    $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
-                    $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
-                    $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
-                    $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
-                    $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
-                    $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
-                    $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
-                    $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
-                    $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                    $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
-                    $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
-                    $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
-                    $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
-                    $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
-                    $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
-                    $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
-                    $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
-                    $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
-                    $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
-                    $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
-                    $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
-                    $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
-                    $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
-                    $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
-                    $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
-                    $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
-                    $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
-                    $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
-                    $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
-                    $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
-                    $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportLiftYesNo,
-                    $txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,$txnEvaReportLiftOperationRecommend,
-                    $txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,$txnEvaReportLiftMainSupplyFinding,
-                    $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,$txnEvaReportLiftSupplementYesNo,
-                    $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,$txnEvaReportHidLampYesNo,
-                    $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
-                    $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
-                    $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
-                    $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
-                    $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
-                    $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
-                    $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
-                    $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
-                    $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
-                    $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
-                    $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
-                    $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
-                    $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
-                    $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
-                    $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
-                    $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
-                    $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
-                    $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
-                    $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
-                    $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
-                    $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
-                    $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
-                    $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
-                    $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
-                    $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
-                    $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
-                    $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
-                    $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
-                    $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
-                    $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
-                    $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
-                    $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
-                    $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
-                    $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
-                    $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
-                    $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
-                    $currState,$txnNewState,$lastUpdatedBy,$lastUpdatedTime,
-                    $txnPlanningAheadId);
-
-            } catch (PDOException $e) {
-
-                //An exception has occured, which means that one of our database queries failed.
-                //Print out the error message.
-                $retJson['status'] = 'NOTOK';
-                $retJson['retMessage'] = $e->getMessage();
-                //Rollback the transaction.
-                //$pdo->rollBack();
-                $transaction->rollBack();
+                    if (floatval($txnEvaReportScore) >= 50.0) {
+                        $txnNewState = "COMPLETED_PQ_SITE_WALK_PASS";
+                    } else {
+                        $txnNewState = "COMPLETED_PQ_SITE_WALK_FAIL";
+                    }
+            } else if ($currState['state']=="SENT_FORTH_INVITATION_LETTER") {
+                $txnNewState = "WAITING_RE_PQ_SITE_WALK";
             }
+
+            $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,
+                $txnSchemeNo,$txnRegion,
+                $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
+                $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
+                $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
+                $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
+                $txnFirstConsultantTitle,$txnFirstConsultantSurname,$txnFirstConsultantOtherName,
+                $txnFirstConsultantCompany,$txnFirstConsultantPhone,$txnFirstConsultantEmail,
+                $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
+                $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
+                $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                $txnFirstProjectOwnerTitle,$txnFirstProjectOwnerSurname,$txnFirstProjectOwnerOtherName,
+                $txnFirstProjectOwnerCompany,$txnFirstProjectOwnerPhone,$txnFirstProjectOwnerEmail,
+                $txnSecondProjectOwnerTitle,$txnSecondProjectOwnerSurname,$txnSecondProjectOwnerOtherName,
+                $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
+                $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
+                $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
+                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
+                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
+                $txnMeetingConsentOwner,$txnMeetingReplySlipId,
+                $txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
+                $txnReplySlipBmsDdc,$txnReplySlipChangeoverSchemeYesNo,$txnReplySlipChangeoverSchemeControl,
+                $txnReplySlipChangeoverSchemeUv,$txnReplySlipChillerPlantYesNo,$txnReplySlipChillerPlantAhuControl,
+                $txnReplySlipChillerPlantAhuStartup,$txnReplySlipChillerPlantVsd,$txnReplySlipChillerPlantAhuChilledWater,
+                $txnReplySlipChillerPlantStandbyAhu,$txnReplySlipChillerPlantChiller,$txnReplySlipEscalatorYesNo,
+                $txnReplySlipEscalatorMotorStartup,$txnReplySlipEscalatorVsdMitigation,$txnReplySlipEscalatorBrakingSystem,
+                $txnReplySlipEscalatorControl,$txnReplySlipHidLampYesNo,$txnReplySlipHidLampMitigation,
+                $txnReplySlipLiftYesNo,$txnReplySlipLiftOperation,
+                $txnReplySlipSensitiveMachineYesNo,$txnReplySlipSensitiveMachineMitigation,
+                $txnReplySlipTelecomMachineYesNo,$txnReplySlipTelecomMachineServerOrComputer,
+                $txnReplySlipTelecomMachinePeripherals,$txnReplySlipTelecomMachineHarmonicEmission,
+                $txnReplySlipAirConditionersYesNo,$txnReplySlipAirConditionersMicb,
+                $txnReplySlipAirConditionersLoadForecasting,$txnReplySlipAirConditionersType,
+                $txnReplySlipNonLinearLoadYesNo,$txnReplySlipNonLinearLoadHarmonicEmission,
+                $txnReplySlipRenewableEnergyYesNo,$txnReplySlipRenewableEnergyInverterAndControls,
+                $txnReplySlipRenewableEnergyHarmonicEmission,$txnReplySlipEvChargerSystemYesNo,$txnReplySlipEvControlYesNo,
+                $txnReplySlipEvChargerSystemEvCharger,$txnReplySlipEvChargerSystemSmartYesNo,
+                $txnReplySlipEvChargerSystemSmartChargingSystem,$txnReplySlipEvChargerSystemHarmonicEmission,
+                $txnReplySlipConsultantNameConfirmation,$txnReplySlipConsultantCompany,
+                $txnReplySlipProjectOwnerNameConfirmation,$txnReplySlipProjectOwnerCompany,
+                $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,$txnFirstInvitationLetterEdmsLink,
+                $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,$txnSecondInvitationLetterEdmsLink,
+                $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
+                $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,$txnForthInvitationLetterEdmsLink,
+                $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
+                $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
+                $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
+                $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
+                $txnEvaReportBmsServerCentralComputerPass,$txnEvaReportBmsDdcYesNo,$txnEvaReportBmsDdcFinding,
+                $txnEvaReportBmsDdcRecommend,$txnEvaReportBmsDdcPass,$txnEvaReportBmsSupplementYesNo,
+                $txnEvaReportBmsSupplement,$txnEvaReportBmsSupplementPass,$txnEvaReportChangeoverSchemeYesNo,
+                $txnEvaReportChangeoverSchemeControlYesNo,$txnEvaReportChangeoverSchemeControlFinding,
+                $txnEvaReportChangeoverSchemeControlRecommend,$txnEvaReportChangeoverSchemeControlPass,
+                $txnEvaReportChangeoverSchemeUvYesNo,$txnEvaReportChangeoverSchemeUvFinding,
+                $txnEvaReportChangeoverSchemeUvRecommend,$txnEvaReportChangeoverSchemeUvPass,
+                $txnEvaReportChangeoverSchemeSupplementYesNo,$txnEvaReportChangeoverSchemeSupplement,
+                $txnEvaReportChangeoverSchemeSupplementPass,$txnEvaReportChillerPlantYesNo,
+                $txnEvaReportChillerPlantAhuChilledWaterYesNo,$txnEvaReportChillerPlantAhuChilledWaterFinding,
+                $txnEvaReportChillerPlantAhuChilledWaterRecommend,$txnEvaReportChillerPlantAhuChilledWaterPass,
+                $txnEvaReportChillerPlantChillerYesNo,$txnEvaReportChillerPlantChillerFinding,
+                $txnEvaReportChillerPlantChillerRecommend,$txnEvaReportChillerPlantChillerPass,
+                $txnEvaReportChillerPlantSupplementYesNo,$txnEvaReportChillerPlantSupplement,
+                $txnEvaReportChillerPlantSupplementPass,$txnEvaReportEscalatorYesNo,$txnEvaReportEscalatorBrakingSystemYesNo,
+                $txnEvaReportEscalatorBrakingSystemFinding,$txnEvaReportEscalatorBrakingSystemRecommend,
+                $txnEvaReportEscalatorBrakingSystemPass,$txnEvaReportEscalatorControlYesNo,$txnEvaReportEscalatorControlFinding,
+                $txnEvaReportEscalatorControlRecommend,$txnEvaReportEscalatorControlPass,$txnEvaReportEscalatorSupplementYesNo,
+                $txnEvaReportEscalatorSupplement,$txnEvaReportEscalatorSupplementPass,$txnEvaReportLiftYesNo,
+                $txnEvaReportLiftOperationYesNo,$txnEvaReportLiftOperationFinding,$txnEvaReportLiftOperationRecommend,
+                $txnEvaReportLiftOperationPass,$txnEvaReportLiftMainSupplyYesNo,$txnEvaReportLiftMainSupplyFinding,
+                $txnEvaReportLiftMainSupplyRecommend,$txnEvaReportLiftMainSupplyPass,$txnEvaReportLiftSupplementYesNo,
+                $txnEvaReportLiftSupplement,$txnEvaReportLiftSupplementPass,$txnEvaReportHidLampYesNo,
+                $txnEvaReportHidLampBallastYesNo,$txnEvaReportHidLampBallastFinding,$txnEvaReportHidLampBallastRecommend,
+                $txnEvaReportHidLampBallastPass,$txnEvaReportHidLampAddonProtectYesNo,$txnEvaReportHidLampAddonProtectFinding,
+                $txnEvaReportHidLampAddonProtectRecommend,$txnEvaReportHidLampAddonProtectPass,
+                $txnEvaReportHidLampSupplementYesNo,$txnEvaReportHidLampSupplement,$txnEvaReportHidLampSupplementPass,
+                $txnEvaReportSensitiveMachineYesNo,$txnEvaReportSensitiveMachineMedicalYesNo,
+                $txnEvaReportSensitiveMachineMedicalFinding,$txnEvaReportSensitiveMachineMedicalRecommend,
+                $txnEvaReportSensitiveMachineMedicalPass,$txnEvaReportSensitiveMachineSupplementYesNo,
+                $txnEvaReportSensitiveMachineSupplement,$txnEvaReportSensitiveMachineSupplementPass,$txnEvaReportTelecomMachineYesNo,
+                $txnEvaReportTelecomMachineServerOrComputerYesNo,$txnEvaReportTelecomMachineServerOrComputerFinding,
+                $txnEvaReportTelecomMachineServerOrComputerRecommend,$txnEvaReportTelecomMachineServerOrComputerPass,
+                $txnEvaReportTelecomMachinePeripheralsYesNo,$txnEvaReportTelecomMachinePeripheralsFinding,
+                $txnEvaReportTelecomMachinePeripheralsRecommend,$txnEvaReportTelecomMachinePeripheralsPass,
+                $txnEvaReportTelecomMachineHarmonicEmissionYesNo,$txnEvaReportTelecomMachineHarmonicEmissionFinding,
+                $txnEvaReportTelecomMachineHarmonicEmissionRecommend,$txnEvaReportTelecomMachineHarmonicEmissionPass,
+                $txnEvaReportTelecomMachineSupplementYesNo,$txnEvaReportTelecomMachineSupplement,
+                $txnEvaReportTelecomMachineSupplementPass,$txnEvaReportAirConditionersYesNo,$txnEvaReportAirConditionersMicbYesNo,
+                $txnEvaReportAirConditionersMicbFinding,$txnEvaReportAirConditionersMicbRecommend,$txnEvaReportAirConditionersMicbPass,
+                $txnEvaReportAirConditionersLoadForecastingYesNo,$txnEvaReportAirConditionersLoadForecastingFinding,
+                $txnEvaReportAirConditionersLoadForecastingRecommend,$txnEvaReportAirConditionersLoadForecastingPass,
+                $txnEvaReportAirConditionersTypeYesNo,$txnEvaReportAirConditionersTypeFinding,$txnEvaReportAirConditionersTypeRecommend,
+                $txnEvaReportAirConditionersTypePass,$txnEvaReportAirConditionersSupplementYesNo,$txnEvaReportAirConditionersSupplement,
+                $txnEvaReportAirConditionersSupplementPass,$txnEvaReportNonLinearLoadYesNo,$txnEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                $txnEvaReportNonLinearLoadHarmonicEmissionFinding,$txnEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                $txnEvaReportNonLinearLoadHarmonicEmissionPass,$txnEvaReportNonLinearLoadSupplementYesNo,
+                $txnEvaReportNonLinearLoadSupplement,$txnEvaReportNonLinearLoadSupplementPass,$txnEvaReportRenewableEnergyYesNo,
+                $txnEvaReportRenewableEnergyInverterAndControlsYesNo,$txnEvaReportRenewableEnergyInverterAndControlsFinding,
+                $txnEvaReportRenewableEnergyInverterAndControlsRecommend,$txnEvaReportRenewableEnergyInverterAndControlsPass,
+                $txnEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnEvaReportRenewableEnergyHarmonicEmissionFinding,
+                $txnEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnEvaReportRenewableEnergyHarmonicEmissionPass,
+                $txnEvaReportRenewableEnergySupplementYesNo,$txnEvaReportRenewableEnergySupplement,
+                $txnEvaReportRenewableEnergySupplementPass,$txnEvaReportEvChargerSystemYesNo,$txnEvaReportEvChargerSystemEvChargerYesNo,
+                $txnEvaReportEvChargerSystemEvChargerFinding,$txnEvaReportEvChargerSystemEvChargerRecommend,
+                $txnEvaReportEvChargerSystemEvChargerPass,$txnEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
+                $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                $currState['state'],$txnNewState,$lastUpdatedBy,$lastUpdatedTime,
+                $txnPlanningAheadId);
+
         } else {
             $retJson['status'] = 'NOTOK';
         }
 
         echo json_encode($retJson);
     }
+
+    // *************************************
+    // ***** Internal Utility function *****
+    // *************************************
+
+    // *******************************************
+    // Generate reply slip template and save to
+    // pre-defined path.
+    // *******************************************
+    private function generateReplySlipTemplate($schemeNo) {
+
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+
+        $checkedBox='<w:sym w:font="Wingdings" w:char="F0FE"/>';
+        $unCheckedBox = '<w:sym w:font="Wingdings" w:char="F0A8"/>';
+
+        $replySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+        $replySlipTemplateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplateFileName');
+
+        $templateProcessor = new TemplateProcessor($replySlipTemplatePath['configValue'] . $replySlipTemplateFileName['configValue']);
+
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+        $templateProcessor->setValue('commissionDate', $recordList['commissionDate']);
+        if ($recordList['replySlipBmsYesNo'] == 'Y') {
+            $templateProcessor->setValue('BmsYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('BmsYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('BmsServerCentralComputer', $this->formatToWordTemplate($recordList['replySlipBmsServerCentralComputer']));
+        $templateProcessor->setValue('BmsDdc', $this->formatToWordTemplate($recordList['replySlipBmsDdc']));
+        if ($recordList['replySlipChangeoverSchemeYesNo'] == 'Y') {
+            $templateProcessor->setValue('ChangeoverSchemeYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('ChangeoverSchemeYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('ChangeoverSchemeControl', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeControl']));
+        $templateProcessor->setValue('ChangeoverSchemeUv', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeUv']));
+
+        if ($recordList['replySlipChillerPlantYesNo'] == 'Y') {
+            $templateProcessor->setValue('ChillerPlantYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('ChillerPlantYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('ChillerPlantAhuControl', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuControl']));
+        $templateProcessor->setValue('ChillerPlantAhuStartup', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuStartup']));
+        $templateProcessor->setValue('ChillerPlantVsd', $this->formatToWordTemplate($recordList['replySlipChillerPlantVsd']));
+        $templateProcessor->setValue('ChillerPlantAhuChilledWater', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuChilledWater']));
+        $templateProcessor->setValue('ChillerPlantStandbyAhu', $this->formatToWordTemplate($recordList['replySlipChillerPlantStandbyAhu']));
+        $templateProcessor->setValue('ChillerPlantChiller', $this->formatToWordTemplate($recordList['replySlipChillerPlantChiller']));
+        if ($recordList['replySlipEscalatorYesNo'] == 'Y') {
+            $templateProcessor->setValue('EscalatorYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EscalatorYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('EscalatorMotorStartup', $this->formatToWordTemplate($recordList['replySlipEscalatorMotorStartup']));
+        $templateProcessor->setValue('EscalatorVsdMitigation', $this->formatToWordTemplate($recordList['replySlipEscalatorVsdMitigation']));
+        $templateProcessor->setValue('EscalatorBrakingSystem', $this->formatToWordTemplate($recordList['replySlipEscalatorBrakingSystem']));
+        $templateProcessor->setValue('EscalatorControl', $this->formatToWordTemplate($recordList['replySlipEscalatorControl']));
+        if ($recordList['replySlipHidLampYesNo'] == 'Y') {
+            $templateProcessor->setValue('HidLampYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('HidLampYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('HidLampMitigation', $this->formatToWordTemplate($recordList['replySlipHidLampMitigation']));
+        if ($recordList['replySlipLiftYesNo'] == 'Y') {
+            $templateProcessor->setValue('LiftYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('LiftYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('LiftOperation', $this->formatToWordTemplate($recordList['replySlipLiftOperation']));
+        if ($recordList['replySlipSensitiveMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('SensitiveMachineYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('SensitiveMachineYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('SensitiveMachineMitigation', $this->formatToWordTemplate($recordList['replySlipSensitiveMachineMitigation']));
+        if ($recordList['replySlipTelecomMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('TelecomMachineYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('TelecomMachineYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('TelecomMachineServerOrComputer', $this->formatToWordTemplate($recordList['replySlipTelecomMachineServerOrComputer']));
+        $templateProcessor->setValue('TelecomMachinePeripherals', $this->formatToWordTemplate($recordList['replySlipTelecomMachinePeripherals']));
+        $templateProcessor->setValue('TelecomMachineHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipTelecomMachineHarmonicEmission']));
+        if ($recordList['replySlipAirConditionersYesNo'] == 'Y') {
+            $templateProcessor->setValue('AirConditionersYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('AirConditionersYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('AirConditionersMicb', $this->formatToWordTemplate($recordList['replySlipAirConditionersMicb']));
+        $templateProcessor->setValue('AirConditionersLoadForecasting', $this->formatToWordTemplate($recordList['replySlipAirConditionersLoadForecasting']));
+        $templateProcessor->setValue('AirConditionersType', $this->formatToWordTemplate($recordList['replySlipAirConditionersType']));
+        if ($recordList['replySlipNonLinearLoadYesNo'] == 'Y') {
+            $templateProcessor->setValue('NonLinearLoadYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('NonLinearLoadYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('NonLinearLoadHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipNonLinearLoadHarmonicEmission']));
+        if ($recordList['replySlipRenewableEnergyYesNo'] == 'Y') {
+            $templateProcessor->setValue('RenewableEnergyYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('RenewableEnergyYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('RenewableEnergyInverterAndControls', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyInverterAndControls']));
+        $templateProcessor->setValue('RenewableEnergyHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyHarmonicEmission']));
+        if ($recordList['replySlipEvChargerSystemYesNo'] == 'Y') {
+            $templateProcessor->setValue('EvChargerSystemYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EvChargerSystemYesNo', $unCheckedBox);
+        }
+        if ($recordList['replySlipEvControlYesNo'] == 'Y') {
+            $templateProcessor->setValue('EvControlYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EvControlYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('EvChargerSystemEvCharger', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemEvCharger']));
+        if ($recordList['replySlipEvChargerSystemSmartYesNo'] == 'Y') {
+            $templateProcessor->setValue('EvChargerSystemSmartYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('EvChargerSystemSmartYesNo', $unCheckedBox);
+        }
+        $templateProcessor->setValue('EvChargerSystemSmartChargingSystem', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemSmartChargingSystem']));
+        $templateProcessor->setValue('EvChargerSystemHarmonicEmission', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemHarmonicEmission']));
+        $templateProcessor->setValue('ConsultantNameConfirmation', $this->formatToWordTemplate($recordList['replySlipConsultantNameConfirmation']));
+        $templateProcessor->setValue('ConsultantCompany', $this->formatToWordTemplate($recordList['replySlipConsultantCompany']));
+        $templateProcessor->setValue('ProjectOwnerNameConfirmation', $this->formatToWordTemplate($recordList['replySlipProjectOwnerNameConfirmation']));
+        $templateProcessor->setValue('ProjectOwnerCompany', $this->formatToWordTemplate($recordList['replySlipProjectOwnerCompany']));
+        $templateProcessor->setValue('replySlipSignedDate', $this->formatToWordTemplate($recordList['replySlipLastUploadTime']));
+
+        $pathToSave = $replySlipTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' . $replySlipTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+        chmod($pathToSave, 0644);
+
+        // save the generated file path to DB
+        $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+        $lastUpdatedTime = date("Y-m-d H:i");
+        Yii::app()->planningAheadDao->updateReplySlipGeneratedLocation($recordList['meetingReplySlipId'],$pathToSave,
+            $lastUpdatedBy, $lastUpdatedTime);
+
+        return $pathToSave;
+    }
+
 
     private function getPostParamString($param) {
         if (isset($_POST[$param]) && ($_POST[$param] != "")) {

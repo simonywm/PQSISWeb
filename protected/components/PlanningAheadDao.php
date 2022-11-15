@@ -944,6 +944,9 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnThirdInvitationLetterIssueDate,
                                                    $txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
                                                    $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                                                   $txnForthInvitationLetterIssueDate,
+                                                   $txnForthInvitationLetterFaxRefNo,$txnForthInvitationLetterEdmsLink,
+                                                   $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
                                                    $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
                                                    $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
                                                    $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
@@ -1008,7 +1011,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
                                                    $txnState,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId) {
 
-        if ($txnState == 'NOTIFIED_PQ_SITE_WALK') {
+        if (($txnState == 'NOTIFIED_PQ_SITE_WALK') || ($txnState == 'COMPLETED_PQ_SITE_WALK_PASS') || ($txnState == 'COMPLETED_PQ_SITE_WALK_FAIL')) {
             if ($txnEvaReportId == 0) {
                 $sql = "INSERT INTO public.tbl_evaluation_report(evaluation_report_remark, scheme_no, evaluation_report_edms_link, 
                                          evaluation_report_issue_date, evaluation_report_fax_ref_no, evaluation_report_score, 
@@ -1287,8 +1290,11 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"second_invitation_letter_walk_date"=?, ';
         $sql = $sql . '"third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"third_invitation_letter_edms_link"=?, "third_invitation_letter_accept"=?, ';
-        $sql = $sql . '"third_invitation_letter_walk_date"=?, "eva_report_id"=?, ';
-        $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
+        $sql = $sql . '"third_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"forth_invitation_letter_issue_date"=?, "forth_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"forth_invitation_letter_edms_link"=?, "forth_invitation_letter_accept"=?, ';
+        $sql = $sql . '"forth_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"eva_report_id"=?, "last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
         try {
@@ -1326,6 +1332,8 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnSecondInvitationLetterEdmsLink,$txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
                 $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
                 $txnThirdInvitationLetterEdmsLink,$txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
+                $txnForthInvitationLetterEdmsLink,$txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
                 $txnEvaReportId,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
 
             if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
@@ -1451,6 +1459,8 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
                                                      $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,$txnThirdInvitationLetterEdmsLink,
                                                      $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                                                     $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,$txnForthInvitationLetterEdmsLink,
+                                                     $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
                                                      $txnEvaReportId,$txnEvaReportRemark,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,$txnEvaReportFaxRefNo,
                                                      $txnEvaReportScore,$txnEvaReportBmsYesNo,$txnEvaReportBmsServerCentralComputerYesNo,
                                                      $txnEvaReportBmsServerCentralComputerFinding,$txnEvaReportBmsServerCentralComputerRecommend,
@@ -1516,8 +1526,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnState,$txnNewState, $lastUpdatedBy,$lastUpdatedTime,
                                                      $txnPlanningAheadId)
     {
-
-        if ($txnState == 'NOTIFIED_PQ_SITE_WALK') {
+        if (($txnState == 'NOTIFIED_PQ_SITE_WALK') || ($txnState == 'COMPLETED_PQ_SITE_WALK_PASS') || ($txnState == 'COMPLETED_PQ_SITE_WALK_FAIL')) {
             if ($txnEvaReportId == 0) {
                 $sql = "INSERT INTO public.tbl_evaluation_report(evaluation_report_remark, scheme_no, evaluation_report_edms_link, 
                                          evaluation_report_issue_date, evaluation_report_fax_ref_no, evaluation_report_score, 
@@ -1562,9 +1571,9 @@ class PlanningAheadDao extends CApplicationComponent {
                                          ev_charger_system_ev_charger_pass, ev_charger_system_harmonic_emission_yes_no, ev_charger_system_harmonic_emission_finding, 
                                          ev_charger_system_harmonic_emission_recommend, ev_charger_system_harmonic_emission_pass, ev_charger_system_supplement_yes_no, 
                                          ev_charger_system_supplement, ev_charger_system_supplement_pass, active, created_by, created_time, last_updated_by, last_updated_time)
-	VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-	        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-	        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
+                            ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
                 $stmt = Yii::app()->db->createCommand($sql);
                 $result = $stmt->execute(array($txnEvaReportRemark,$txnSchemeNo,$txnEvaReportEdmsLink,$txnEvaReportIssueDate,
@@ -1796,8 +1805,11 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"second_invitation_letter_walk_date"=?, ';
         $sql = $sql . '"third_invitation_letter_issue_date"=?, "third_invitation_letter_fax_ref_no"=?, ';
         $sql = $sql . '"third_invitation_letter_edms_link"=?, "third_invitation_letter_accept"=?, ';
-        $sql = $sql . '"third_invitation_letter_walk_date"=?, "eva_report_id"=?, ';
-        $sql = $sql . '"state"=?, "last_updated_by"=?, "last_updated_time"=? ';
+        $sql = $sql . '"third_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"forth_invitation_letter_issue_date"=?, "forth_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"forth_invitation_letter_edms_link"=?, "forth_invitation_letter_accept"=?, ';
+        $sql = $sql . '"forth_invitation_letter_walk_date"=?, ';
+        $sql = $sql . '"eva_report_id"=?, "state"=?, "last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
         try {
@@ -1834,6 +1846,8 @@ class PlanningAheadDao extends CApplicationComponent {
                 $txnSecondInvitationLetterEdmsLink, $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
                 $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
                 $txnThirdInvitationLetterEdmsLink, $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
+                $txnForthInvitationLetterEdmsLink, $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
                 $txnEvaReportId,
                 $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
                 $txnPlanningAheadId));
@@ -1900,7 +1914,6 @@ class PlanningAheadDao extends CApplicationComponent {
             $transaction->commit();
 
             $retJson['status'] = 'OK';
-
 
         } catch (PDOException $e) {
 
@@ -2059,6 +2072,40 @@ class PlanningAheadDao extends CApplicationComponent {
                 $secondInvitationLetterIssueDate,$secondInvitationLetterFaxRefNo,
                 $thirdInvitationLetterIssueDate,$thirdInvitationLetterFaxRefNo,
                 $lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+            $transaction->commit();
+
+            $retJson['status'] = 'OK';
+
+        } catch (PDOException $e) {
+
+            //An exception has occured, which means that one of our database queries failed.
+            //Print out the error message.
+            $retJson['status'] = 'NOTOK';
+            $retJson['retMessage'] = $e->getMessage();
+            //Rollback the transaction.
+            //$pdo->rollBack();
+            $transaction->rollBack();
+        }
+
+        return $retJson;
+
+    }
+
+    public function updateForthInvitationLetter($txnPlanningAheadId, $forthInvitationLetterIssueDate,
+                                                $forthInvitationLetterFaxRefNo, $lastUpdatedBy,$lastUpdatedTime) {
+
+        $sql = 'UPDATE "tbl_planning_ahead" SET "forth_invitation_letter_issue_date"=?, "forth_invitation_letter_fax_ref_no"=?, ';
+        $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
+        $sql = $sql . 'WHERE "planning_ahead_id"=?';
+
+        try {
+            //We start our transaction.
+            //$pdo->beginTransaction();
+            $transaction = Yii::app()->db->beginTransaction();
+            $stmt = Yii::app()->db->createCommand($sql);
+
+            $result = $stmt->execute(array($forthInvitationLetterIssueDate,$forthInvitationLetterFaxRefNo,
+                $lastUpdatedBy,$lastUpdatedTime, $txnPlanningAheadId));
             $transaction->commit();
 
             $retJson['status'] = 'OK';
@@ -2309,6 +2356,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                 "meeting_rej_reason"=?, "meeting_consent_consultant"=?, "meeting_consent_owner"=?,  
                                 "state"=?, "last_updated_by"=?, "last_updated_time"=?
                                 WHERE "scheme_no"=?';
+
             $stmt = Yii::app()->db->createCommand($sql);
             $result = $stmt->execute(array($replySlipId,$meetingFirstPreferMeetingDate,$meetingSecondPreferMeetingDate,
                 $meetingRejReason,$meetingConsentConsultant,$meetingConsentOwner,$newState,$lastUpdatedBy,
@@ -2317,6 +2365,32 @@ class PlanningAheadDao extends CApplicationComponent {
             $transaction->commit();
             $retJson['status'] = 'OK';
 
+        } catch (PDOException $e) {
+
+            //An exception has occured, which means that one of our database queries failed.
+            //Print out the error message.
+            $retJson['status'] = 'NOTOK';
+            $retJson['retMessage'] = $e->getMessage();
+            //Rollback the transaction.
+            //$pdo->rollBack();
+            $transaction->rollBack();
+        }
+
+        return $retJson;
+    }
+
+    public function updateReplySlipGeneratedLocation($replySlipId, $fileLocation, $lastUpdateBy, $lastUpdateTime) {
+        $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?,  
+                                "last_updated_by"=?, "last_updated_time"=?
+                                WHERE "reply_slip_id"=?';
+
+        try {
+            $transaction = Yii::app()->db->beginTransaction();
+            $stmt = Yii::app()->db->createCommand($sql);
+            $result = $stmt->execute(array($fileLocation, $lastUpdateBy, $lastUpdateTime, $replySlipId));
+
+            $transaction->commit();
+            $retJson['status'] = 'OK';
         } catch (PDOException $e) {
 
             //An exception has occured, which means that one of our database queries failed.
