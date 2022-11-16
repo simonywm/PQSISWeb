@@ -5045,6 +5045,12 @@
             }
         });
 
+        $("#commissionDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
         $("#detailForm").on("submit", function(e) {
 
             e.preventDefault();
@@ -5250,6 +5256,13 @@
                     ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
                     ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
                     ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
+
+        $("#standLetterIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
         $("#genStandLetterBtn").on("click", function() {
 
             let errorMessage = "";
@@ -5327,6 +5340,24 @@
         $('#replySlipProjectOwnerNameConfirmation').val("<?php echo $this->viewbag['replySlipProjectOwnerNameConfirmation']; ?>");
         $('#replySlipProjectOwnerCompany').val("<?php echo $this->viewbag['replySlipProjectOwnerCompany']; ?>");
 
+        $("#meetingFirstPreferMeetingDate").datetimepicker({
+            timepicker: true,
+            format: 'Y-m-d H:i',
+            scrollInput: false
+        });
+
+        $("#meetingSecondPreferMeetingDate").datetimepicker({
+            timepicker: true,
+            format: 'Y-m-d H:i',
+            scrollInput: false
+        });
+
+        $("#meetingActualMeetingDate").datetimepicker({
+            timepicker: true,
+            format: 'Y-m-d H:i',
+            scrollInput: false
+        });
+
         $("#showReplySlipDetailBtn").on("click", function() {
             if ($('#showReplySlipDetailBtn').val() == 'Show Reply Slip Detail') {
                 $('#accordionDetailofReplySlip').css ("display", "block");
@@ -5362,6 +5393,18 @@
         $('#firstInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['firstInvitationLetterFaxRefNo']; ?>");
         $('#firstInvitationLetterEdmsLink').val("<?php echo $this->viewbag['firstInvitationLetterEdmsLink']; ?>");
         $('#firstInvitationLetterWalkDate').val("<?php echo $this->viewbag['firstInvitationLetterWalkDate']; ?>");
+
+        $("#firstInvitationLetterIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
+        $("#firstInvitationLetterWalkDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
 
         $("#genFirstInvitationLetterBtn").on("click", function() {
             let errorMessage = "";
@@ -5407,6 +5450,18 @@
         $('#secondInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['secondInvitationLetterFaxRefNo']; ?>");
         $('#secondInvitationLetterEdmsLink').val("<?php echo $this->viewbag['secondInvitationLetterEdmsLink']; ?>");
         $('#secondInvitationLetterWalkDate').val("<?php echo $this->viewbag['secondInvitationLetterWalkDate']; ?>");
+
+        $("#secondInvitationLetterIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
+        $("#secondInvitationLetterWalkDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
 
         $("#genSecondInvitationLetterBtn").on("click", function() {
             let errorMessage = "";
@@ -5462,6 +5517,18 @@
         $('#thirdInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['thirdInvitationLetterFaxRefNo']; ?>");
         $('#thirdInvitationLetterEdmsLink').val("<?php echo $this->viewbag['thirdInvitationLetterEdmsLink']; ?>");
         $('#thirdInvitationLetterWalkDate').val("<?php echo $this->viewbag['thirdInvitationLetterWalkDate']; ?>");
+
+        $("#thirdInvitationLetterIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
+        $("#thirdInvitationLetterWalkDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
 
         $("#genThirdInvitationLetterBtn").on("click", function() {
             let errorMessage = "";
@@ -5523,6 +5590,18 @@
         $('#forthInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['forthInvitationLetterFaxRefNo']; ?>");
         $('#forthInvitationLetterEdmsLink').val("<?php echo $this->viewbag['forthInvitationLetterEdmsLink']; ?>");
         $('#forthInvitationLetterWalkDate').val("<?php echo $this->viewbag['forthInvitationLetterWalkDate']; ?>");
+
+        $("#forthInvitationLetterIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
+        $("#forthInvitationLetterWalkDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
 
         $("#genForthInvitationLetterBtn").on("click", function() {
             let errorMessage = "";
