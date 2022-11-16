@@ -814,7 +814,9 @@
             ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
             ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         <div id="accordionDetailofPQStandardLetter">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -897,7 +899,9 @@
             ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
             ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         <div id="accordionDetailofMeeting">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -1474,7 +1478,9 @@
             ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
             ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofFirstInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1594,7 +1600,9 @@
             ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
             ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofSecondInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1713,7 +1721,9 @@
             ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
             ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofThirdInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -1830,7 +1840,9 @@
             ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
             ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
             ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+            ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         <div id="accordionDetailOfEvaluationReport">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -3281,7 +3293,9 @@
 
         <?php if (($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofForthInvitation">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -3393,7 +3407,9 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailOfReEvaluationReport">
                 <div class="card">
                     <div class="card-header" style="background-color: #6f42c1">
@@ -4853,6 +4869,7 @@
         <input type="hidden" id="standLetterLetterLoc" name="standLetterLetterLoc" value="<?php echo $this->viewbag['standLetterLetterLoc']; ?>">
         <input type="hidden" id="meetingReplySlipId" name="meetingReplySlipId" value="<?php echo $this->viewbag['meetingReplySlipId']; ?>">
         <input type="hidden" id="evaReportId" name="evaReportId" value="<?php echo $this->viewbag['evaReportId']; ?>">
+        <input type="hidden" id="reEvaReportId" name="reEvaReportId" value="<?php echo $this->viewbag['reEvaReportId']; ?>">
         <input type="hidden" id="state" name="state" value="<?php echo $this->viewbag['state']; ?>">
         <input type="hidden" id="roleId" name="roleId" value="<?php echo Yii::app()->session['tblUserDo']['roleId']; ?>">
 
@@ -5230,7 +5247,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         $("#genStandLetterBtn").on("click", function() {
 
             let errorMessage = "";
@@ -5271,7 +5290,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         $('#replySlipBmsServerCentralComputer').val("<?php echo $this->viewbag['replySlipBmsServerCentralComputer']; ?>");
         $('#replySlipBmsDdc').val("<?php echo $this->viewbag['replySlipBmsDdc']; ?>");
         $('#replySlipChangeoverSchemeControl').val("<?php echo $this->viewbag['replySlipChangeoverSchemeControl']; ?>");
@@ -5334,7 +5355,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         $('#firstInvitationLetterIssueDate').val("<?php echo $this->viewbag['firstInvitationLetterIssueDate']; ?>");
         $('#firstInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['firstInvitationLetterFaxRefNo']; ?>");
         $('#firstInvitationLetterEdmsLink').val("<?php echo $this->viewbag['firstInvitationLetterEdmsLink']; ?>");
@@ -5377,7 +5400,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         $('#secondInvitationLetterIssueDate').val("<?php echo $this->viewbag['secondInvitationLetterIssueDate']; ?>");
         $('#secondInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['secondInvitationLetterFaxRefNo']; ?>");
         $('#secondInvitationLetterEdmsLink').val("<?php echo $this->viewbag['secondInvitationLetterEdmsLink']; ?>");
@@ -5430,7 +5455,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         $('#thirdInvitationLetterIssueDate').val("<?php echo $this->viewbag['thirdInvitationLetterIssueDate']; ?>");
         $('#thirdInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['thirdInvitationLetterFaxRefNo']; ?>");
         $('#thirdInvitationLetterEdmsLink').val("<?php echo $this->viewbag['thirdInvitationLetterEdmsLink']; ?>");
@@ -5489,7 +5516,9 @@
 
         <?php if (($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         $('#forthInvitationLetterIssueDate').val("<?php echo $this->viewbag['forthInvitationLetterIssueDate']; ?>");
         $('#forthInvitationLetterFaxRefNo').val("<?php echo $this->viewbag['forthInvitationLetterFaxRefNo']; ?>");
         $('#forthInvitationLetterEdmsLink').val("<?php echo $this->viewbag['forthInvitationLetterEdmsLink']; ?>");
@@ -5526,7 +5555,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         $('#evaReportRemark').val("<?php echo $this->viewbag['evaReportRemark']; ?>");
         $('#evaReportEdmsLink').val("<?php echo $this->viewbag['evaReportEdmsLink']; ?>");
@@ -5838,7 +5869,9 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+            ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         $('#reEvaReportRemark').val("<?php echo $this->viewbag['reEvaReportRemark']; ?>");
         $('#reEvaReportEdmsLink').val("<?php echo $this->viewbag['reEvaReportEdmsLink']; ?>");
@@ -6193,7 +6226,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#standLetterIssueDate", "Standard Letter", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6212,7 +6247,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateAndTimeFormat("#meetingFirstPreferMeetingDate", "1st Preferred Meeting Date & Time", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6234,7 +6271,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6252,7 +6291,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6269,7 +6310,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#thirdInvitationLetterIssueDate", "3rd Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6285,7 +6328,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#forthInvitationLetterIssueDate", "4th Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6300,7 +6345,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6312,7 +6359,9 @@
 
         <?php } ?>
 
-        <?php if ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")  ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#reEvaReportIssueDate", "Re-Site Walk Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6437,7 +6486,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateEmpty("#standLetterIssueDate", "Standard Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6471,7 +6522,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateEmpty("#meetingActualMeetingDate", "Actual Meeting Date & Time", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6582,7 +6635,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
                 ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() == "")) &&
             (($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() == null) ||
@@ -6698,7 +6753,9 @@
 
         <?php if (($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER")  ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         result = validateEmpty("#forthInvitationLetterIssueDate", "4th Invitation Letter Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
 
@@ -6726,7 +6783,9 @@
                     ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                     ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                     ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                    ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#evaReportIssueDate", "Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6744,7 +6803,9 @@
 
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+        <?php if (($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                    ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
 
         result = validateDateOnlyFormat("#reEvaReportIssueDate", "Re-Site Walk Evaluation Report Issue Date", errorMessage, i)
         errorMessage = result[0]; i = result[1];
@@ -6785,7 +6846,9 @@
                 ($this->viewbag['state']=="COMPLETED_PQ_SITE_WALK_FAIL") ||
                 ($this->viewbag['state']=="SENT_FORTH_INVITATION_LETTER") ||
                 ($this->viewbag['state']=="WAITING_RE_PQ_SITE_WALK") ||
-                ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK")) { ?>
+                ($this->viewbag['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
     function updateGenStandLetterButton() {
         let standLetterIssueDate = document.querySelector("#standLetterIssueDate");
         let standLetterFaxRefNo = document.querySelector("#standLetterFaxRefNo");

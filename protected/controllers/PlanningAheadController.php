@@ -1309,7 +1309,7 @@ class PlanningAheadController extends Controller {
         $lastUpdatedTime = date("Y-m-d H:i");
 
         $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
-        $replySlip = Yii::app()->planningAheadDao->getReplySlip($recordList['meetingReplySlipId']);
+
 
         // Update the issue date and fax ref no. to database first
         Yii::app()->planningAheadDao->updateForthInvitationLetter($recordList['planningAheadId'],
@@ -1329,17 +1329,17 @@ class PlanningAheadController extends Controller {
 
         $templateProcessor = new TemplateProcessor($forthInvitationLetterTemplatePath['configValue'] .
             $forthInvitationLetterTemplateFileName['configValue']);
-        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
-        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
-        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
-        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
+        $templateProcessor->setValue('firstProjectOwnerTitle', $recordList['firstProjectOwnerTitle']);
+        $templateProcessor->setValue('firstProjectOwnerSurname', $recordList['firstProjectOwnerSurname']);
+        $templateProcessor->setValue('firstProjectOwnerCompany', $this->formatToWordTemplate($recordList['firstProjectOwnerCompany']));
+        $templateProcessor->setValue('firstProjectOwnerEmail', $recordList['firstProjectOwnerEmail']);
 
-        if (isset($recordList['secondConsultantSurname'])) {
-            $templateProcessor->setValue('secondConsultantCc', "c.c.");
-            $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
-            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
-            $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
-            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        if (isset($recordList['secondProjectOwnerSurname'])) {
+            $templateProcessor->setValue('secondProjectOwnerCc', "c.c.");
+            $templateProcessor->setValue('secondProjectOwnerTitle', "(" . $recordList['secondProjectOwnerTitle'] . ")");
+            $templateProcessor->setValue('secondProjectOwnerSurname', $recordList['secondProjectOwnerSurname']);
+            $templateProcessor->setValue('secondProjectOwnerCompany', $this->formatToWordTemplate($recordList['secondProjectOwnerCompany']));
+            $templateProcessor->setValue('secondProjectOwnerEmail', "(Email: " . $recordList['secondProjectOwnerEmail'] . ")");
         }
 
         $templateProcessor->setValue('faxRefNo', $forthInvitationLetterFaxRefNo);
@@ -1348,7 +1348,20 @@ class PlanningAheadController extends Controller {
             $forthInvitationLetterIssueDateMonth . " " .
             $forthInvitationLetterIssueDateYear);
         $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
-        $templateProcessor->setValue('replySlipReturnDate', $replySlip['replySlipLastUpdateTime']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
+
+        if (isset($recordList['firstInvitationLetterWalkDate'])) {
+            $templateProcessor->setValue('pqSiteWalkDate', $this->formatToWordTemplate($recordList['firstInvitationLetterWalkDate']));
+        } else if (isset($recordList['secondInvitationLetterWalkDate'])) {
+            $templateProcessor->setValue('pqSiteWalkDate', $this->formatToWordTemplate($recordList['secondInvitationLetterWalkDate']));
+        } else if (isset($recordList['thirdInvitationLetterWalkDate'])) {
+            $templateProcessor->setValue('pqSiteWalkDate', $this->formatToWordTemplate($recordList['thirdInvitationLetterWalkDate']));
+        }
+        $templateProcessor->setValue('evaReportIssueDate', $this->formatToWordTemplate($recordList['evaReportIssueDate']));
+        $templateProcessor->setValue('evaReportFaxRefNo', $this->formatToWordTemplate($recordList['evaReportFaxRefNo']));
+        $evaReportFaxYear = date("y", strtotime($recordList['evaReportIssueDate']));
+        $evaReportFaxMonth = date("m", strtotime($recordList['evaReportIssueDate']));
+        $templateProcessor->setValue('evaReportFaxDate', $evaReportFaxYear . "-" . $evaReportFaxMonth);
 
         $pathToSave = $forthInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $forthInvitationLetterTemplateFileName['configValue'];
@@ -1555,11 +1568,19 @@ class PlanningAheadController extends Controller {
             $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
             $contentCount++;
         }
-        if (isset($recordList['evaReportChangeoverSchemeControlFinding']) && ($recordList['evaReportChangeoverSchemeControlFinding']!="") &&
-            isset($recordList['evaReportChangeoverSchemeUvFinding']) && ($recordList['evaReportChangeoverSchemeUvFinding']!="")) {
+
+        if ($changeoverFindingCount==1) {
+            $templateProcessor->setValue('changeoverSchemeFinding1', "Nil");
+            $templateProcessor->setValue('changeoverSchemeFinding2', "");
+        } else {
             for ($x=$changeoverFindingCount; $x<=$changeoverFindingMaxCount; $x++) {
                 $templateProcessor->setValue('changeoverSchemeFinding' . $x, "");
             }
+        }
+        if ($changeoverRecommendCount==1) {
+            $templateProcessor->setValue('changeoverSchemeRecommend1', "Nil");
+            $templateProcessor->setValue('changeoverSchemeRecommend2', "");
+        } else {
             for ($x=$changeoverRecommendCount; $x<=$changeoverRecommendMaxCount; $x++) {
                 $templateProcessor->setValue('changeoverSchemeRecommend' . $x, "");
             }
@@ -2256,6 +2277,894 @@ class PlanningAheadController extends Controller {
         die();
 
     }
+
+
+    public function actionGetPlanningAheadProjectDetailReEvaReportTemplate()
+    {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        $schemeNo = $param['schemeNo'];
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
+        $checkedBox = '<w:sym w:font="Wingdings" w:char="F0FE"/>';
+        $unCheckedBox = '<w:sym w:font="Wingdings" w:char="F0A8"/>';
+
+        $evaReportTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplatePath');
+        $evaReportTemplateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplateFileName');
+
+        $evaReportIssueDateDay = date("j", strtotime($recordList['reEvaReportIssueDate']));
+        $evaReportIssueDateMonth = date("M", strtotime($recordList['reEvaReportIssueDate']));
+        $evaReportIssueDateYear = date("Y", strtotime($recordList['reEvaReportIssueDate']));
+        $evaReportFaxDateMonth = date("m", strtotime($recordList['reEvaReportIssueDate']));
+        $evaReportFaxDateYear = date("y", strtotime($recordList['reEvaReportIssueDate']));
+        $commissionDateMonth = date("M", strtotime($recordList['commissionDate']));
+        $commissionDateYear = date("Y", strtotime($recordList['commissionDate']));
+        $replySlipReturnDateMonth = date("M", strtotime($recordList['replySlipLastUploadTime']));
+        $replySlipReturnDateYear = date("Y", strtotime($recordList['replySlipLastUploadTime']));
+
+        $templateProcessor = new TemplateProcessor($evaReportTemplatePath['configValue'] . $evaReportTemplateFileName['configValue']);
+
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+        $templateProcessor->setValue('issueDate', $evaReportIssueDateDay . " " . $evaReportIssueDateMonth . " " . $evaReportIssueDateYear);
+        $templateProcessor->setValue('commissionDate', $commissionDateMonth . " " . $commissionDateYear);
+        $templateProcessor->setValue('replySlipReturnDate', $replySlipReturnDateMonth . " " . $replySlipReturnDateYear);
+        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstProjectOwnerEmail']);
+        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstProjectOwnerTitle']);
+        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstProjectOwnerSurname']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstProjectOwnerCompany']));
+        $templateProcessor->setValue('faxRefNo', $this->formatToWordTemplate($recordList['reEvaReportFaxRefNo']));
+        $templateProcessor->setValue('faxDate', $evaReportFaxDateYear . "-" . $evaReportFaxDateMonth);
+        $templateProcessor->setValue('firstConsultantCompanyAdd1', $this->formatToWordTemplate($recordList['firstProjectOwnerCompany']));
+        $templateProcessor->setValue('firstConsultantCompanyAdd2', "");
+        $templateProcessor->setValue('firstConsultantCompanyAdd3', "");
+        $templateProcessor->setValue('firstConsultantCompanyAdd4', "");
+        if (isset($recordList['secondProjectOwnerSurname'])) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantCompany', "(" . $this->formatToWordTemplate($recordList['secondProjectOwnerCompany']) . ")");
+            $templateProcessor->setValue('secondConsultantTitle', $recordList['secondProjectOwnerTitle']);
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondProjectOwnerSurname']);
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondProjectOwnerEmail'] . ")");
+        }
+        if (isset($recordList['forthInvitationLetterWalkDate'])) {
+            $siteVisitDateDay = date("j", strtotime($recordList['forthInvitationLetterWalkDate']));
+            $siteVisitDateMonth = date("M", strtotime($recordList['forthInvitationLetterWalkDate']));
+            $siteVisitDateYear = date("Y", strtotime($recordList['forthInvitationLetterWalkDate']));
+            $templateProcessor->setValue('siteVisitDate', $siteVisitDateDay . " " . $siteVisitDateMonth . " " . $siteVisitDateYear);
+        }
+
+        $contentCount=1;
+
+        // check if BMS contains information
+        if ($recordList['reEvaReportBmsYesNo'] == 'Y') {
+            $templateProcessor->setValue('bmsYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('bmsYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportBmsServerCentralComputerYesNo'] == 'Y') {
+            $templateProcessor->setValue('bmsSCCYesNo', $checkedBox);
+        } else {
+            $templateProcessor->setValue('bmsSCCYesNo', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportBmsDdcYesNo'] == 'Y') {
+            $templateProcessor->setValue('bmsDdcYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('bmsDdcYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipBmsServerCentralComputer']) && ($recordList['replySlipBmsServerCentralComputer'] != "")) {
+            $templateProcessor->setValue('bmsSCC', $this->formatToWordTemplate($recordList['replySlipBmsServerCentralComputer']));
+        } else {
+            $templateProcessor->setValue('bmsSCC',"Nil");
+        }
+        if (isset($recordList['reEvaReportBmsServerCentralComputerFinding']) && ($recordList['reEvaReportBmsServerCentralComputerFinding']!="")) {
+            $content = $recordList['reEvaReportBmsServerCentralComputerFinding'];
+            $templateProcessor->setValue('bmsSCCFind', $this->formatToWordTemplate($recordList['reEvaReportBmsServerCentralComputerFinding']));
+            if (isset($recordList['reEvaReportBmsServerCentralComputerRecommend']) && (trim($recordList['reEvaReportBmsServerCentralComputerRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportBmsServerCentralComputerRecommend'];
+                $templateProcessor->setValue('bmsSCCRec', $this->formatToWordTemplate($recordList['reEvaReportBmsServerCentralComputerRecommend']));
+            } else {
+                $content = $content . " hence, their operations for controlling building facilities would be sustained under voltage dip incidents.";
+                $templateProcessor->setValue('bmsSCCRec', 'Nil');
+            }
+        } else {
+            $templateProcessor->setValue('bmsSCCFind', 'Nil');
+            $templateProcessor->setValue('bmsSCCRec', 'Nil');
+        }
+        if (isset($recordList['replySlipBmsDdc']) && ($recordList['replySlipBmsDdc'] != "")) {
+            $templateProcessor->setValue('bmsDdc', $this->formatToWordTemplate($recordList['replySlipBmsDdc']));
+        } else {
+            $templateProcessor->setValue('bmsDdc',"Nil");
+        }
+        if (isset($recordList['reEvaReportBmsDdcFinding']) && ($recordList['reEvaReportBmsDdcFinding']!="")) {
+            $content = $content . " " . $recordList['reEvaReportBmsDdcFinding'];
+            $templateProcessor->setValue('bmsDdcFind', $this->formatToWordTemplate($recordList['reEvaReportBmsDdcFinding']));
+            if (isset($recordList['reEvaReportBmsDdcRecommend']) && (trim($recordList['reEvaReportBmsDdcRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportBmsDdcRecommend'];
+                $templateProcessor->setValue('bmsDdcRec', $this->formatToWordTemplate($recordList['reEvaReportBmsDdcRecommend']));
+            } else {
+                $templateProcessor->setValue('bmsDdcRec', 'Nil');
+            }
+        } else {
+            $templateProcessor->setValue('bmsDdcFind', 'Nil');
+            $templateProcessor->setValue('bmsDdcRec', 'Nil');
+        }
+        if (isset($content) && (trim($content) != "")) {
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        }
+        if (isset($recordList['reEvaReportBmsSupplement']) && ($recordList['reEvaReportBmsSupplement']!="")) {
+            $content = $recordList['reEvaReportBmsSupplement'];
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $templateProcessor->setValue('bmsSupplement', $this->formatToWordTemplate($recordList['reEvaReportBmsSupplement']));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('bmsSupplement', "Nil");
+        }
+
+        // check if changeover contains information
+        $changeoverFindingCount=1; $changeoverFindingMaxCount=2;
+        $changeoverRecommendCount=1; $changeoverRecommendMaxCount=2;
+        if ($recordList['reEvaReportChangeoverSchemeYesNo'] == 'Y') {
+            $templateProcessor->setValue('chgSchYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chgSchYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportChangeoverSchemeControlYesNo'] == 'Y') {
+            $templateProcessor->setValue('chgSchCtlYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chgSchCtlYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportChangeoverSchemeYesNo'] == 'Y') {
+            $templateProcessor->setValue('chgSchUvYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chgSchUvYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipChangeoverSchemeControl']) && ($recordList['replySlipChangeoverSchemeControl'] != "")) {
+            $templateProcessor->setValue('chgSchCtl', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeControl']));
+        } else {
+            $templateProcessor->setValue('chgSchCtl',"Nil");
+        }
+        if (isset($recordList['reEvaReportChangeoverSchemeControlFinding']) && ($recordList['reEvaReportChangeoverSchemeControlFinding']!="")) {
+            $content = $recordList['reEvaReportChangeoverSchemeControlFinding'];
+            $templateProcessor->setComplexBlock('changeoverSchemeFinding' . $changeoverFindingCount, $this->getTableListItemRun($recordList['reEvaReportChangeoverSchemeControlFinding']));
+            $changeoverFindingCount++;
+            if (isset($recordList['reEvaReportChangeoverSchemeControlRecommend']) && (trim($recordList['reEvaReportChangeoverSchemeControlRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportChangeoverSchemeControlRecommend'];
+                $templateProcessor->setComplexBlock('changeoverSchemeRecommend' . $changeoverRecommendCount, $this->getTableListItemRun($recordList['reEvaReportChangeoverSchemeControlRecommend']));
+                $changeoverRecommendCount++;
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        }
+        if (isset($recordList['replySlipChangeoverSchemeUv']) && ($recordList['replySlipChangeoverSchemeUv'] != "")) {
+            $templateProcessor->setValue('chgSchUv', $this->formatToWordTemplate($recordList['replySlipChangeoverSchemeUv']));
+        } else {
+            $templateProcessor->setValue('chgSchUv',"Nil");
+        }
+        if (isset($recordList['reEvaReportChangeoverSchemeUvFinding']) && ($recordList['reEvaReportChangeoverSchemeUvFinding']!="")) {
+            $content = $recordList['reEvaReportChangeoverSchemeUvFinding'];
+            $templateProcessor->setComplexBlock('changeoverSchemeFinding' . $changeoverFindingCount, $this->getTableListItemRun($recordList['reEvaReportChangeoverSchemeUvFinding']));
+            $changeoverFindingCount++;
+            if (isset($recordList['reEvaReportChangeoverSchemeUvRecommend']) && (trim($recordList['reEvaReportChangeoverSchemeUvRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportChangeoverSchemeUvRecommend'];
+                $templateProcessor->setComplexBlock('changeoverSchemeRecommend' . $changeoverRecommendCount, $this->getTableListItemRun($recordList['reEvaReportChangeoverSchemeUvRecommend']));
+                $changeoverRecommendCount++;
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        }
+        if ($changeoverFindingCount==1) {
+            $templateProcessor->setValue('changeoverSchemeFinding1', "Nil");
+            $templateProcessor->setValue('changeoverSchemeFinding2', "");
+        } else {
+            for ($x=$changeoverFindingCount; $x<=$changeoverFindingMaxCount; $x++) {
+                $templateProcessor->setValue('changeoverSchemeFinding' . $x, "");
+            }
+        }
+
+        if ($changeoverRecommendCount==1) {
+            $templateProcessor->setValue('changeoverSchemeRecommend1', "Nil");
+            $templateProcessor->setValue('changeoverSchemeRecommend2', "");
+        } else {
+            for ($x=$changeoverRecommendCount; $x<=$changeoverRecommendMaxCount; $x++) {
+                $templateProcessor->setValue('changeoverSchemeRecommend' . $x, "");
+            }
+        }
+
+
+        if (isset($recordList['reEvaReportChangeoverSchemeSupplement']) && ($recordList['reEvaReportChangeoverSchemeSupplement']!="")) {
+            $content = $recordList['reEvaReportChangeoverSchemeSupplement'];
+            $templateProcessor->setValue('changeoverSchemeSupplement', $this->formatToWordTemplate($recordList['reEvaReportChangeoverSchemeSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('changeoverSchemeSupplement', "Nil");
+        }
+
+        // check if Chiller Plant contains information
+        if ($recordList['reEvaReportChillerPlantYesNo'] == 'Y') {
+            $templateProcessor->setValue('chilPltYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chilPltYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportChillerPlantAhuChilledWaterYesNo'] == 'Y') {
+            $templateProcessor->setValue('chilPltAhuYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chilPltAhuYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportChillerPlantChillerYesNo'] == 'Y') {
+            $templateProcessor->setValue('chilPltChilYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('chilPltChilYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipChillerPlantAhuChilledWater']) && ($recordList['replySlipChillerPlantAhuChilledWater'] != "")) {
+            $templateProcessor->setValue('chilPltAhu', $this->formatToWordTemplate($recordList['replySlipChillerPlantAhuChilledWater']));
+        } else {
+            $templateProcessor->setValue('chilPltAhu',"Nil");
+        }
+        if (isset($recordList['reEvaReportChillerPlantAhuChilledWaterFinding']) && ($recordList['reEvaReportChillerPlantAhuChilledWaterFinding']!="")) {
+            $content = $recordList['reEvaReportChillerPlantAhuChilledWaterFinding'];
+            $templateProcessor->setValue('chilPltAhuFind', $this->formatToWordTemplate($recordList['reEvaReportChillerPlantAhuChilledWaterFinding']));
+            if (isset($recordList['reEvaReportChillerPlantAhuChilledWaterRecommend']) && (trim($recordList['reEvaReportChillerPlantAhuChilledWaterRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportChillerPlantAhuChilledWaterRecommend'];
+                $templateProcessor->setValue('chilPltAhuRec', $this->formatToWordTemplate($recordList['reEvaReportChillerPlantAhuChilledWaterFinding']));
+            } else {
+                $templateProcessor->setValue('chilPltAhuRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('chilPltAhuFind', "Nil");
+            $templateProcessor->setValue('chilPltAhuRec', "Nil");
+        }
+        if (isset($recordList['replySlipChillerPlantChiller']) && ($recordList['replySlipChillerPlantChiller'] != "")) {
+            $templateProcessor->setValue('chilPltChil', $this->formatToWordTemplate($recordList['replySlipChillerPlantChiller']));
+        } else {
+            $templateProcessor->setValue('chilPltChil',"Nil");
+        }
+        if (isset($recordList['reEvaReportChillerPlantChillerFinding']) && ($recordList['reEvaReportChillerPlantChillerFinding']!="")) {
+            $content = $recordList['reEvaReportChillerPlantChillerFinding'];
+            $templateProcessor->setValue('chilPltChilFind', $this->formatToWordTemplate($recordList['reEvaReportChillerPlantChillerFinding']));
+            if (isset($recordList['reEvaReportChillerPlantChillerRecommend']) && (trim($recordList['reEvaReportChillerPlantChillerRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportChillerPlantChillerRecommend'];
+                $templateProcessor->setValue('chilPltChilRec', $this->formatToWordTemplate($recordList['reEvaReportChillerPlantChillerRecommend']));
+            } else {
+                $templateProcessor->setValue('chilPltChilRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('chilPltChilFind', "Nil");
+            $templateProcessor->setValue('chilPltChilRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportChillerPlantSupplement']) && ($recordList['reEvaReportChillerPlantSupplement']!="")) {
+            $content = $recordList['reEvaReportChillerPlantSupplement'];
+            $templateProcessor->setValue('chillerPlantSupplement', $this->formatToWordTemplate($recordList['reEvaReportChillerPlantSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun($content));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('chillerPlantSupplement', "Nil");
+        }
+
+        // check if escalator contains information
+        if ($recordList['reEvaReportEscalatorYesNo'] == 'Y') {
+            $templateProcessor->setValue('escYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('escYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportEscalatorBrakingSystemYesNo'] == 'Y') {
+            $templateProcessor->setValue('escBraSysYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('escBraSysYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportEscalatorControlYesNo'] == 'Y') {
+            $templateProcessor->setValue('escCtlYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('escCtlYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipEscalatorBrakingSystem']) && ($recordList['replySlipEscalatorBrakingSystem'] != "")) {
+            $templateProcessor->setValue('escBraSys', $this->formatToWordTemplate($recordList['replySlipEscalatorBrakingSystem']));
+        } else {
+            $templateProcessor->setValue('escBraSys',"Nil");
+        }
+        if (isset($recordList['reEvaReportEscalatorBrakingSystemFinding']) && ($recordList['reEvaReportEscalatorBrakingSystemFinding']!="")) {
+            $content = $recordList['reEvaReportEscalatorBrakingSystemFinding'];
+            $templateProcessor->setValue('escBraSysFind', $this->formatToWordTemplate($recordList['reEvaReportEscalatorBrakingSystemFinding']));
+            if (isset($recordList['reEvaReportEscalatorBrakingSystemRecommend']) && (trim($recordList['reEvaReportEscalatorBrakingSystemRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportEscalatorBrakingSystemRecommend'];
+                $templateProcessor->setValue('escBraSysRec', $this->formatToWordTemplate($recordList['reEvaReportEscalatorBrakingSystemRecommend']));
+            } else {
+                $templateProcessor->setValue('escBraSysRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('escBraSysFind', "Nil");
+            $templateProcessor->setValue('escBraSysRec', "Nil");
+        }
+        if (isset($recordList['replySlipEscalatorControl']) && ($recordList['replySlipEscalatorControl'] != "")) {
+            $templateProcessor->setValue('escCtl', $this->formatToWordTemplate($recordList['replySlipEscalatorControl']));
+        } else {
+            $templateProcessor->setValue('escCtl',"Nil");
+        }
+        if (isset($recordList['reEvaReportEscalatorControlFinding']) && ($recordList['reEvaReportEscalatorControlFinding']!="")) {
+            $content = $recordList['reEvaReportEscalatorControlFinding'];
+            $templateProcessor->setValue('escCtlFind', $this->formatToWordTemplate($recordList['reEvaReportEscalatorControlFinding']));
+            if (isset($recordList['reEvaReportEscalatorControlRecommend']) && (trim($recordList['reEvaReportEscalatorControlRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportEscalatorControlRecommend'];
+                $templateProcessor->setValue('escCtlRec', $this->formatToWordTemplate($recordList['reEvaReportEscalatorControlRecommend']));
+            } else {
+                $templateProcessor->setValue('escCtlRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('escCtlFind', "Nil");
+            $templateProcessor->setValue('escCtlRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportEscalatorSupplement']) && ($recordList['reEvaReportEscalatorSupplement']!="")) {
+            $content = $recordList['reEvaReportEscalatorSupplement'];
+            $templateProcessor->setValue('reEscalatorSupplement', $this->formatToWordTemplate($recordList['reEvaReportEscalatorSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('escalatorSupplement', "Nil");
+        }
+
+        // check if LED Lighting contains information
+        if ($recordList['reEvaReportHidLampYesNo'] == 'Y') {
+            $templateProcessor->setValue('hidYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('hidYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportHidLampBallastYesNo'] == 'Y') {
+            $templateProcessor->setValue('hidBallYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('hidBallYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportHidLampAddonProtectYesNo'] == 'Y') {
+            $templateProcessor->setValue('hidAddonYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('hidAddonYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipHidLampMitigation']) && ($recordList['replySlipHidLampMitigation'] != "")) {
+            $templateProcessor->setValue('hidMit', $this->formatToWordTemplate($recordList['replySlipHidLampMitigation']));
+        } else {
+            $templateProcessor->setValue('hidMit',"Nil");
+        }
+        if (isset($recordList['reEvaReportHidLampBallastFinding']) && ($recordList['reEvaReportHidLampBallastFinding']!="")) {
+            $content = $recordList['reEvaReportHidLampBallastFinding'];
+            $templateProcessor->setValue('hidBallFind', $this->formatToWordTemplate($recordList['reEvaReportHidLampBallastFinding']));
+            if (isset($recordList['reEvaReportHidLampBallastRecommend']) && (trim($recordList['reEvaReportHidLampBallastRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportHidLampBallastRecommend'];
+                $templateProcessor->setValue('hidBallRec', $this->formatToWordTemplate($recordList['reEvaReportHidLampBallastRecommend']));
+            } else {
+                $templateProcessor->setValue('hidBallRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('hidBallFind', "Nil");
+            $templateProcessor->setValue('hidBallRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportHidLampAddonProtectFinding']) && ($recordList['reEvaReportHidLampAddonProtectFinding']!="")) {
+            $content = $recordList['reEvaReportHidLampAddonProtectFinding'];
+            $templateProcessor->setValue('hidAddonFind', $this->formatToWordTemplate($recordList['reEvaReportHidLampAddonProtectFinding']));
+            if (isset($recordList['reEvaReportHidLampAddonProtectRecommend']) && (trim($recordList['reEvaReportHidLampAddonProtectRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportHidLampAddonProtectRecommend'];
+                $templateProcessor->setValue('hidAddonRec', $this->formatToWordTemplate($recordList['reEvaReportHidLampAddonProtectRecommend']));
+            } else {
+                $templateProcessor->setValue('hidAddonRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('hidAddonFind', "Nil");
+            $templateProcessor->setValue('hidAddonRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportHidLampSupplement']) && ($recordList['reEvaReportHidLampSupplement']!="")) {
+            $content = $recordList['reEvaReportHidLampSupplement'];
+            $templateProcessor->setValue('hidLampSupplement', $this->formatToWordTemplate($recordList['reEvaReportHidLampSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('hidLampSupplement', "Nil");
+        }
+
+        // check if Lift contains information
+        if ($recordList['reEvaReportLiftYesNo'] == 'Y') {
+            $templateProcessor->setValue('liftYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('liftYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportLiftOperationYesNo'] == 'Y') {
+            $templateProcessor->setValue('liftOptYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('liftOptYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportLiftMainSupplyYesNo'] == 'Y') {
+            $templateProcessor->setValue('liftMainYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('liftMainYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipLiftOperation']) && ($recordList['replySlipLiftOperation'] != "")) {
+            $templateProcessor->setValue('liftOpt', $this->formatToWordTemplate($recordList['replySlipLiftOperation']));
+        } else {
+            $templateProcessor->setValue('liftOpt',"Nil");
+        }
+        if (isset($recordList['reEvaReportLiftOperationFinding']) && ($recordList['reEvaReportLiftOperationFinding']!="")) {
+            $content = $recordList['reEvaReportLiftOperationFinding'];
+            $templateProcessor->setValue('liftOptFind', $this->formatToWordTemplate($recordList['reEvaReportLiftOperationFinding']));
+            if (isset($recordList['reEvaReportLiftOperationRecommend']) && (trim($recordList['reEvaReportLiftOperationRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportLiftOperationRecommend'];
+                $templateProcessor->setValue('liftOptRec', $this->formatToWordTemplate($recordList['reEvaReportLiftOperationRecommend']));
+            } else {
+                $templateProcessor->setValue('liftOptRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('liftOptFind', "Nil");
+            $templateProcessor->setValue('liftOptRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportLiftMainSupplyFinding']) && ($recordList['reEvaReportLiftMainSupplyFinding']!="")) {
+            $content = $recordList['reEvaReportLiftMainSupplyFinding'];
+            $templateProcessor->setValue('liftMainFind', $this->formatToWordTemplate($recordList['reEvaReportLiftMainSupplyFinding']));
+            if (isset($recordList['reEvaReportLiftMainSupplyRecommend']) && (trim($recordList['reEvaReportLiftMainSupplyRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportLiftMainSupplyRecommend'];
+                $templateProcessor->setValue('liftMainRec', $this->formatToWordTemplate($recordList['reEvaReportLiftMainSupplyRecommend']));
+            } else {
+                $templateProcessor->setValue('liftMainRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('liftMainFind', "Nil");
+            $templateProcessor->setValue('liftMainRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportLiftSupplement']) && ($recordList['reEvaReportLiftSupplement']!="")) {
+            $content = $recordList['reEvaReportLiftSupplement'];
+            $templateProcessor->setValue('liftSupplement', $this->formatToWordTemplate($recordList['reEvaReportLiftSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('liftSupplement', "Nil");
+        }
+
+        // check if Sensitive Machine contains information
+        if ($recordList['reEvaReportSensitiveMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('senYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('senYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportSensitiveMachineMedicalYesNo'] == 'Y') {
+            $templateProcessor->setValue('senMedYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('senMedYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipSensitiveMachineMitigation']) && ($recordList['replySlipSensitiveMachineMitigation'] != "")) {
+            $templateProcessor->setValue('senMedMit', $this->formatToWordTemplate($recordList['replySlipSensitiveMachineMitigation']));
+        } else {
+            $templateProcessor->setValue('senMedMit',"Nil");
+        }
+        if (isset($recordList['reEvaReportSensitiveMachineMedicalFinding']) && ($recordList['reEvaReportSensitiveMachineMedicalFinding']!="")) {
+            $content = $recordList['reEvaReportSensitiveMachineMedicalFinding'];
+            $templateProcessor->setValue('senMedMitFind', $this->formatToWordTemplate($recordList['reEvaReportSensitiveMachineMedicalFinding']));
+            if (isset($recordList['reEvaReportSensitiveMachineMedicalRecommend']) && (trim($recordList['reEvaReportSensitiveMachineMedicalRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportSensitiveMachineMedicalRecommend'];
+                $templateProcessor->setValue('senMedMitRec', $this->formatToWordTemplate($recordList['reEvaReportSensitiveMachineMedicalRecommend']));
+            } else {
+                $templateProcessor->setValue('senMedMitRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('senMedMitFind', "Nil");
+            $templateProcessor->setValue('senMedMitRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportSensitiveMachineSupplement']) && ($recordList['reEvaReportSensitiveMachineSupplement']!="")) {
+            $content = $recordList['reEvaReportSensitiveMachineSupplement'];
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $templateProcessor->setValue('sensitiveMachineSupplement', $this->formatToWordTemplate($recordList['reEvaReportSensitiveMachineSupplement']));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('sensitiveMachineSupplement', "Nil");
+        }
+
+        // check if Telecom contains information
+        if ($recordList['reEvaReportTelecomMachineYesNo'] == 'Y') {
+            $templateProcessor->setValue('telYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportTelecomMachineServerOrComputerYesNo'] == 'Y') {
+            $templateProcessor->setValue('telSCYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telSCYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportTelecomMachinePeripheralsYesNo'] == 'Y') {
+            $templateProcessor->setValue('telPerYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telPerYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportTelecomMachineHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('telHarYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('telHarYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipTelecomMachineServerOrComputer']) && ($recordList['replySlipTelecomMachineServerOrComputer'] != "")) {
+            $templateProcessor->setValue('telSC', $this->formatToWordTemplate($recordList['replySlipTelecomMachineServerOrComputer']));
+        } else {
+            $templateProcessor->setValue('telSC',"Nil");
+        }
+        if (isset($recordList['reEvaReportTelecomMachineServerOrComputerFinding']) && ($recordList['reEvaReportTelecomMachineServerOrComputerFinding']!="")) {
+            $content = $recordList['reEvaReportTelecomMachineServerOrComputerFinding'];
+            $templateProcessor->setValue('telSCFind', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachineServerOrComputerFinding']));
+            if (isset($recordList['reEvaReportTelecomMachineServerOrComputerRecommend']) && (trim($recordList['reEvaReportTelecomMachineServerOrComputerRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportTelecomMachineServerOrComputerRecommend'];
+                $templateProcessor->setValue('telSCRec', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachineServerOrComputerRecommend']));
+            } else {
+                $templateProcessor->setValue('telSCRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telSCFind', "Nil");
+            $templateProcessor->setValue('telSCRec', "Nil");
+        }
+        if (isset($recordList['replySlipTelecomMachinePeripherals']) && ($recordList['replySlipTelecomMachinePeripherals'] != "")) {
+            $templateProcessor->setValue('telPer', $this->formatToWordTemplate($recordList['replySlipTelecomMachinePeripherals']));
+        } else {
+            $templateProcessor->setValue('telPer',"Nil");
+        }
+        if (isset($recordList['reEvaReportTelecomMachinePeripheralsFinding']) && ($recordList['reEvaReportTelecomMachinePeripheralsFinding']!="")) {
+            $content = $recordList['reEvaReportTelecomMachinePeripheralsFinding'];
+            $templateProcessor->setValue('telPerFind', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachinePeripheralsFinding']));
+            if (isset($recordList['reEvaReportTelecomMachinePeripheralsRecommend']) && (trim($recordList['reEvaReportTelecomMachinePeripheralsRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportTelecomMachinePeripheralsRecommend'];
+                $templateProcessor->setValue('telPerRec', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachinePeripheralsRecommend']));
+            } else {
+                $templateProcessor->setValue('telPerRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telPerFind', "Nil");
+            $templateProcessor->setValue('telPerRec', "Nil");
+        }
+        if (isset($recordList['replySlipTelecomMachineHarmonicEmission']) && ($recordList['replySlipTelecomMachineHarmonicEmission'] != "")) {
+            $templateProcessor->setValue('telHar', $this->formatToWordTemplate($recordList['replySlipTelecomMachineHarmonicEmission']));
+        } else {
+            $templateProcessor->setValue('telHar',"Nil");
+        }
+        if (isset($recordList['reEvaReportTelecomMachineHarmonicEmissionFinding']) && ($recordList['reEvaReportTelecomMachineHarmonicEmissionFinding']!="")) {
+            $content = $recordList['reEvaReportTelecomMachineHarmonicEmissionFinding'];
+            $templateProcessor->setValue('telHarFind', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachineHarmonicEmissionFinding']));
+            if (isset($recordList['reEvaReportTelecomMachineHarmonicEmissionRecommend']) && (trim($recordList['reEvaReportTelecomMachineHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportTelecomMachineHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('telHarRec', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachineHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('telHarRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telHarFind', "Nil");
+            $templateProcessor->setValue('telHarRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportTelecomMachineSupplement']) && ($recordList['reEvaReportTelecomMachineSupplement']!="")) {
+            $content = $recordList['reEvaReportTelecomMachineSupplement'];
+            $templateProcessor->setValue('telecomMachineSupplement', $this->formatToWordTemplate($recordList['reEvaReportTelecomMachineSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('telecomMachineSupplement', "Nil");
+        }
+
+        // check if Air Conditioners contains information
+        if ($recordList['reEvaReportAirConditionersYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportAirConditionersMicbYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConMicbYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConMicbYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportAirConditionersLoadForecastingYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConForYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConForYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportAirConditionersTypeYesNo'] == 'Y') {
+            $templateProcessor->setValue('airConTypYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('airConTypYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipAirConditionersMicb']) && ($recordList['replySlipAirConditionersMicb'] != "")) {
+            $templateProcessor->setValue('airConMicb', $this->formatToWordTemplate($recordList['replySlipAirConditionersMicb']));
+        } else {
+            $templateProcessor->setValue('airConMicb',"Nil");
+        }
+        if (isset($recordList['reEvaReportAirConditionersMicbFinding']) && ($recordList['reEvaReportAirConditionersMicbFinding']!="")) {
+            $content = $recordList['reEvaReportAirConditionersMicbFinding'];
+            $templateProcessor->setValue('airConMicbFind', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersMicbFinding']));
+            if (isset($recordList['reEvaReportAirConditionersMicbRecommend']) && (trim($recordList['reEvaReportAirConditionersMicbRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportAirConditionersMicbRecommend'];
+                $templateProcessor->setValue('airConMicbRec', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersMicbRecommend']));
+            } else {
+                $templateProcessor->setValue('airConMicbRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConMicbFind', "Nil");
+            $templateProcessor->setValue('airConMicbRec', "Nil");
+        }
+        if (isset($recordList['replySlipAirConditionersLoadForecasting']) && ($recordList['replySlipAirConditionersLoadForecasting'] != "")) {
+            $templateProcessor->setValue('airConFor', $this->formatToWordTemplate($recordList['replySlipAirConditionersLoadForecasting']));
+        } else {
+            $templateProcessor->setValue('airConFor',"Nil");
+        }
+        if (isset($recordList['reEvaReportAirConditionersLoadForecastingFinding']) && ($recordList['reEvaReportAirConditionersLoadForecastingFinding']!="")) {
+            $content = $recordList['reEvaReportAirConditionersLoadForecastingFinding'];
+            $templateProcessor->setValue('airConForFind', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersLoadForecastingFinding']));
+            if (isset($recordList['reEvaReportAirConditionersLoadForecastingRecommend']) && (trim($recordList['reEvaReportAirConditionersLoadForecastingRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportAirConditionersLoadForecastingRecommend'];
+                $templateProcessor->setValue('airConForRec', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersLoadForecastingRecommend']));
+            } else {
+                $templateProcessor->setValue('airConForRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConForFind', "Nil");
+            $templateProcessor->setValue('airConForRec', "Nil");
+        }
+        if (isset($recordList['replySlipAirConditionersType']) && ($recordList['replySlipAirConditionersType'] != "")) {
+            $templateProcessor->setValue('airConTyp', $this->formatToWordTemplate($recordList['replySlipAirConditionersType']));
+        } else {
+            $templateProcessor->setValue('airConTyp',"Nil");
+        }
+        if (isset($recordList['reEvaReportAirConditionersTypeFinding']) && ($recordList['reEvaReportAirConditionersTypeFinding']!="")) {
+            $content = $recordList['reEvaReportAirConditionersTypeFinding'];
+            $templateProcessor->setValue('airConTypFind', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersTypeFinding']));
+            if (isset($recordList['reEvaReportAirConditionersTypeRecommend']) && (trim($recordList['reEvaReportAirConditionersTypeRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportAirConditionersTypeRecommend'];
+                $templateProcessor->setValue('airConTypRec', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersTypeRecommend']));
+            } else {
+                $templateProcessor->setValue('airConTypRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConTypFind', "Nil");
+            $templateProcessor->setValue('airConTypRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportAirConditionersSupplement']) && ($recordList['reEvaReportAirConditionersSupplement']!="")) {
+            $content = $recordList['reEvaReportAirConditionersSupplement'];
+            $templateProcessor->setValue('airConditionersSupplement', $this->formatToWordTemplate($recordList['reEvaReportAirConditionersSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('airConditionersSupplement', "Nil");
+        }
+
+        // check if Non-linear contains information
+        if ($recordList['reEvaReportNonLinearLoadYesNo'] == 'Y') {
+            $templateProcessor->setValue('nonYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('nonYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportNonLinearLoadHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('nonHarYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('nonHarYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipNonLinearLoadHarmonicEmission']) && ($recordList['replySlipNonLinearLoadHarmonicEmission'] != "")) {
+            $templateProcessor->setValue('nonHar', $this->formatToWordTemplate($recordList['replySlipNonLinearLoadHarmonicEmission']));
+        } else {
+            $templateProcessor->setValue('nonHar',"Nil");
+        }
+        if (isset($recordList['reEvaReportNonLinearLoadHarmonicEmissionFinding']) && ($recordList['reEvaReportNonLinearLoadHarmonicEmissionFinding']!="")) {
+            $content = $content . $recordList['reEvaReportNonLinearLoadHarmonicEmissionFinding'];
+            $templateProcessor->setValue('nonHarFind', $this->formatToWordTemplate($recordList['reEvaReportNonLinearLoadHarmonicEmissionFinding']));
+            if (isset($recordList['reEvaReportNonLinearLoadHarmonicEmissionRecommend']) && (trim($recordList['reEvaReportNonLinearLoadHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportNonLinearLoadHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('nonHarRec', $this->formatToWordTemplate($recordList['reEvaReportNonLinearLoadHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('nonHarRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('nonHarFind', "Nil");
+            $templateProcessor->setValue('nonHarRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportNonLinearLoadSupplement']) && ($recordList['reEvaReportNonLinearLoadSupplement']!="")) {
+            $content = $recordList['reEvaReportNonLinearLoadSupplement'];
+            $templateProcessor->setValue('nonLinearLoadSupplement', $this->formatToWordTemplate($recordList['reEvaReportNonLinearLoadSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('nonLinearLoadSupplement', "Nil");
+        }
+
+        // check if renewable energy contains information
+        if ($recordList['reEvaReportRenewableEnergyYesNo'] == 'Y') {
+            $templateProcessor->setValue('renewYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('renewYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportRenewableEnergyInverterAndControlsYesNo'] == 'Y') {
+            $templateProcessor->setValue('renewCtlYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('renewCtlYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportRenewableEnergyHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('renewHarYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('renewHarYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipRenewableEnergyInverterAndControls']) && ($recordList['replySlipRenewableEnergyInverterAndControls'] != "")) {
+            $templateProcessor->setValue('renewCtl', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyInverterAndControls']));
+        } else {
+            $templateProcessor->setValue('renewCtl',"Nil");
+        }
+        if (isset($recordList['reEvaReportRenewableEnergyInverterAndControlsFinding']) && ($recordList['reEvaReportRenewableEnergyInverterAndControlsFinding']!="")) {
+            $content = $recordList['reEvaReportRenewableEnergyInverterAndControlsFinding'];
+            $templateProcessor->setValue('renewCtlFind', $this->formatToWordTemplate($recordList['reEvaReportRenewableEnergyInverterAndControlsFinding']));
+            if (isset($recordList['reEvaReportRenewableEnergyInverterAndControlsRecommend']) && (trim($recordList['reEvaReportRenewableEnergyInverterAndControlsRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportRenewableEnergyInverterAndControlsRecommend'];
+                $templateProcessor->setValue('renewCtlRec', $this->formatToWordTemplate($recordList['reEvaReportRenewableEnergyInverterAndControlsRecommend']));
+            } else {
+                $templateProcessor->setValue('renewCtlRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('renewCtlFind', "Nil");
+            $templateProcessor->setValue('renewCtlRec', "Nil");
+        }
+        if (isset($recordList['replySlipRenewableEnergyHarmonicEmission']) && ($recordList['replySlipRenewableEnergyHarmonicEmission'] != "")) {
+            $templateProcessor->setValue('renewHar', $this->formatToWordTemplate($recordList['replySlipRenewableEnergyHarmonicEmission']));
+        } else {
+            $templateProcessor->setValue('renewHar',"Nil");
+        }
+        if (isset($recordList['reEvaReportRenewableEnergyHarmonicEmissionFinding']) && ($recordList['reEvaReportRenewableEnergyHarmonicEmissionFinding']!="")) {
+            $content = $recordList['reEvaReportRenewableEnergyHarmonicEmissionFinding'];
+            $templateProcessor->setValue('renewHarFind', $this->formatToWordTemplate($recordList['reEvaReportRenewableEnergyHarmonicEmissionFinding']));
+            if (isset($recordList['reEvaReportRenewableEnergyHarmonicEmissionRecommend']) && (trim($recordList['reEvaReportRenewableEnergyHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportRenewableEnergyHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('renewHarRec', $this->formatToWordTemplate($recordList['reEvaReportRenewableEnergyHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('renewHarRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('renewHarFind', "Nil");
+            $templateProcessor->setValue('renewHarRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportRenewableEnergySupplement']) && ($recordList['reEvaReportRenewableEnergySupplement']!="")) {
+            $content = $recordList['reEvaReportRenewableEnergySupplement'];
+            $templateProcessor->setValue('renewableEnergySupplement', $this->formatToWordTemplate($recordList['reEvaReportRenewableEnergySupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('renewableEnergySupplement', "Nil");
+        }
+
+        // check if EV charge contains information
+        if ($recordList['reEvaReportEvChargerSystemYesNo'] == 'Y') {
+            $templateProcessor->setValue('evYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('evYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportEvChargerSystemEvChargerYesNo'] == 'Y') {
+            $templateProcessor->setValue('evChgYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('evChgYN', $unCheckedBox);
+        }
+        if ($recordList['reEvaReportEvChargerSystemHarmonicEmissionYesNo'] == 'Y') {
+            $templateProcessor->setValue('evHarYN', $checkedBox);
+        } else {
+            $templateProcessor->setValue('evHarYN', $unCheckedBox);
+        }
+        if (isset($recordList['replySlipEvChargerSystemEvCharger']) && ($recordList['replySlipEvChargerSystemEvCharger'] != "")) {
+            $templateProcessor->setValue('evChg', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemEvCharger']));
+        } else {
+            $templateProcessor->setValue('evChg',"Nil");
+        }
+        if (isset($recordList['reEvaReportEvChargerSystemEvChargerFinding']) && ($recordList['reEvaReportEvChargerSystemEvChargerFinding']!="")) {
+            $content = $recordList['reEvaReportEvChargerSystemEvChargerFinding'];
+            $templateProcessor->setValue('evChgFind', $this->formatToWordTemplate($recordList['reEvaReportEvChargerSystemEvChargerFinding']));
+            if (isset($recordList['reEvaReportEvChargerSystemEvChargerRecommend']) && (trim($recordList['reEvaReportEvChargerSystemEvChargerRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportEvChargerSystemEvChargerRecommend'];
+                $templateProcessor->setValue('evChgRec', $this->formatToWordTemplate($recordList['reEvaReportEvChargerSystemEvChargerRecommend']));
+            } else {
+                $templateProcessor->setValue('evChgRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('evChgFind', "Nil");
+            $templateProcessor->setValue('evChgRec', "Nil");
+        }
+        if (isset($recordList['replySlipEvChargerSystemHarmonicEmission']) && ($recordList['replySlipEvChargerSystemHarmonicEmission'] != "")) {
+            $templateProcessor->setValue('evHar', $this->formatToWordTemplate($recordList['replySlipEvChargerSystemHarmonicEmission']));
+        } else {
+            $templateProcessor->setValue('evHar',"Nil");
+        }
+        if (isset($recordList['reEvaReportEvChargerSystemHarmonicEmissionFinding']) && ($recordList['reEvaReportEvChargerSystemHarmonicEmissionFinding']!="")) {
+            $content = $content . $recordList['reEvaReportEvChargerSystemHarmonicEmissionFinding'];
+            $templateProcessor->setValue('evHarFind', $this->formatToWordTemplate($recordList['reEvaReportEvChargerSystemHarmonicEmissionFinding']));
+            if (isset($recordList['reEvaReportEvChargerSystemHarmonicEmissionRecommend']) && (trim($recordList['reEvaReportEvChargerSystemHarmonicEmissionRecommend']) != "")) {
+                $content = $content . " " . $recordList['reEvaReportEvChargerSystemHarmonicEmissionRecommend'];
+                $templateProcessor->setValue('evHarRec', $this->formatToWordTemplate($recordList['reEvaReportEvChargerSystemHarmonicEmissionRecommend']));
+            } else {
+                $templateProcessor->setValue('evHarRec', "Nil");
+            }
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('evHarFind', "Nil");
+            $templateProcessor->setValue('evHarRec', "Nil");
+        }
+        if (isset($recordList['reEvaReportEvChargerSystemSupplement']) && ($recordList['reEvaReportEvChargerSystemSupplement']!="")) {
+            $content = $recordList['reEvaReportEvChargerSystemSupplement'];
+            $templateProcessor->setValue('reEvChargerSystemSupplement', $this->formatToWordTemplate($recordList['reEvaReportEvChargerSystemSupplement']));
+            $templateProcessor->setComplexBlock('content' . $contentCount, $this->getListItemRun(trim($content)));
+            $contentCount++;
+        } else {
+            $templateProcessor->setValue('evChargerSystemSupplement', "Nil");
+        }
+
+        // Display the footer messages
+        $footerTextRun = new \PhpOffice\PhpWord\Element\TextRun(array('align'=>'both'));
+        $footerTextRun->addText("We are committed in assisting our customers to resolve the potential PQ issues and it is our pleasure to have this chance to have a PQ site walk with you to share the mitigation solutions to alleviate the impacts on your critical equipment caused by PQ issues. We would be grateful to conduct further study with your team by carrying out voltage dip simulation tests or PQ measurement on the concerned equipment and devising possible cost-effective mitigation solutions to improve the performances of the concerned equipment caused by PQ issues.");
+        $footerTextRun->addTextBreak(2);
+        $footerTextRun->addText("Should you have any query, please feel free to contact our Mr. K.Y. Poon at 2678 6047 or Mr. K.W. Chan at 2678 7518 for assistance.");
+        $footerTextRun->addTextBreak(2);
+        $footerTextRun->addText("Yours sincerely,");
+        $footerTextRun->addTextBreak(1);
+        $footerTextRun->addText("CLP Power Hong Kong Limited");
+        $footerTextRun->addTextBreak(5);
+        $footerTextRun->addText("Edmond Chan");
+        $footerTextRun->addTextBreak(1);
+        $footerTextRun->addText("Principal Manager – Systems Engineering");
+        $footerTextRun->addTextBreak(1);
+        $footerTextRun->addText("4817", array('size'=>8));
+        $templateProcessor->setComplexBlock('content' . $contentCount, $footerTextRun);
+        $contentCount++;
+
+        $contentMaxCount = 36;
+        for ($x=$contentCount; $x<=$contentMaxCount; $x++) {
+            $templateProcessor->setValue('content' . $x, "");
+        }
+
+        $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
+            $evaReportTemplateFileName['configValue'];
+        $templateProcessor->saveAs($pathToSave);
+
+        header("Content-Description: File Transfer");
+        header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+        header('Content-Disposition: attachment; filename='. basename($pathToSave));
+        header('Content-Length: ' . filesize($pathToSave));
+        header('Pragma: public');
+
+        //Clear system output buffer
+        flush();
+
+        //Read the size of the file
+        readfile($pathToSave);
+        unlink($pathToSave); // deletes the temporary file
+
+        die();
+
+    }
+
 
     private function getListItemRun($content) {
         $listItemRun = new \PhpOffice\PhpWord\Element\ListItemRun(0,array(),array('align'=>'both'));
@@ -3295,6 +4204,156 @@ class PlanningAheadController extends Controller {
             $txnEvaReportEvChargerSystemSupplementYesNo = $this->getPostParamString('evaReportEvChargerSystemSupplementYesNo');
             $txnEvaReportEvChargerSystemSupplement = $this->getPostParamString('evaReportEvChargerSystemSupplement');
             $txnEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('evaReportEvChargerSystemSupplementPass');
+            $txnReEvaReportId = $this->getPostParamString('reEvaReportId');
+            $txnReEvaReportRemark = $this->getPostParamString('reEvaReportRemark');
+            $txnReEvaReportEdmsLink = $this->getPostParamString('reEvaReportEdmsLink');
+            $txnReEvaReportIssueDate = $this->getPostParamString('reEvaReportIssueDate');
+            $txnReEvaReportFaxRefNo = $this->getPostParamString('reEvaReportFaxRefNo');
+            $txnReEvaReportScore = $this->getPostParamString('reEvaReportScore');
+            $txnReEvaReportBmsYesNo = $this->getPostParamString('reEvaReportBmsYesNo');
+            $txnReEvaReportBmsServerCentralComputerYesNo = $this->getPostParamString('reEvaReportBmsServerCentralComputerYesNo');
+            $txnReEvaReportBmsServerCentralComputerFinding = $this->getPostParamString('reEvaReportBmsServerCentralComputerFinding');
+            $txnReEvaReportBmsServerCentralComputerRecommend = $this->getPostParamString('reEvaReportBmsServerCentralComputerRecommend');
+            $txnReEvaReportBmsServerCentralComputerPass = $this->getPostParamString('reEvaReportBmsServerCentralComputerPass');
+            $txnReEvaReportBmsDdcYesNo = $this->getPostParamString('reEvaReportBmsDdcYesNo');
+            $txnReEvaReportBmsDdcFinding = $this->getPostParamString('reEvaReportBmsDdcFinding');
+            $txnReEvaReportBmsDdcRecommend = $this->getPostParamString('reEvaReportBmsDdcRecommend');
+            $txnReEvaReportBmsDdcPass = $this->getPostParamString('reEvaReportBmsDdcPass');
+            $txnReEvaReportBmsSupplementYesNo = $this->getPostParamString('reEvaReportBmsSupplementYesNo');
+            $txnReEvaReportBmsSupplement = $this->getPostParamString('reEvaReportBmsSupplement');
+            $txnReEvaReportBmsSupplementPass = $this->getPostParamString('reEvaReportBmsSupplementPass');
+            $txnReEvaReportChangeoverSchemeYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeYesNo');
+            $txnReEvaReportChangeoverSchemeControlYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeControlYesNo');
+            $txnReEvaReportChangeoverSchemeControlFinding = $this->getPostParamString('reEvaReportChangeoverSchemeControlFinding');
+            $txnReEvaReportChangeoverSchemeControlRecommend = $this->getPostParamString('reEvaReportChangeoverSchemeControlRecommend');
+            $txnReEvaReportChangeoverSchemeControlPass = $this->getPostParamString('reEvaReportChangeoverSchemeControlPass');
+            $txnReEvaReportChangeoverSchemeUvYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeUvYesNo');
+            $txnReEvaReportChangeoverSchemeUvFinding = $this->getPostParamString('reEvaReportChangeoverSchemeUvFinding');
+            $txnReEvaReportChangeoverSchemeUvRecommend = $this->getPostParamString('reEvaReportChangeoverSchemeUvRecommend');
+            $txnReEvaReportChangeoverSchemeUvPass = $this->getPostParamString('reEvaReportChangeoverSchemeUvPass');
+            $txnReEvaReportChangeoverSchemeSupplementYesNo = $this->getPostParamString('reEvaReportChangeoverSchemeSupplementYesNo');
+            $txnReEvaReportChangeoverSchemeSupplement = $this->getPostParamString('reEvaReportChangeoverSchemeSupplement');
+            $txnReEvaReportChangeoverSchemeSupplementPass = $this->getPostParamString('reEvaReportChangeoverSchemeSupplementPass');
+            $txnReEvaReportChillerPlantYesNo = $this->getPostParamString('reEvaReportChillerPlantYesNo');
+            $txnReEvaReportChillerPlantAhuChilledWaterYesNo = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterYesNo');
+            $txnReEvaReportChillerPlantAhuChilledWaterFinding = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterFinding');
+            $txnReEvaReportChillerPlantAhuChilledWaterRecommend = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterRecommend');
+            $txnReEvaReportChillerPlantAhuChilledWaterPass = $this->getPostParamString('reEvaReportChillerPlantAhuChilledWaterPass');
+            $txnReEvaReportChillerPlantChillerYesNo = $this->getPostParamString('reEvaReportChillerPlantChillerYesNo');
+            $txnReEvaReportChillerPlantChillerFinding = $this->getPostParamString('reEvaReportChillerPlantChillerFinding');
+            $txnReEvaReportChillerPlantChillerRecommend = $this->getPostParamString('reEvaReportChillerPlantChillerRecommend');
+            $txnReEvaReportChillerPlantChillerPass = $this->getPostParamString('reEvaReportChillerPlantChillerPass');
+            $txnReEvaReportChillerPlantSupplementYesNo = $this->getPostParamString('reEvaReportChillerPlantSupplementYesNo');
+            $txnReEvaReportChillerPlantSupplement = $this->getPostParamString('reEvaReportChillerPlantSupplement');
+            $txnReEvaReportChillerPlantSupplementPass = $this->getPostParamString('reEvaReportChillerPlantSupplementPass');
+            $txnReEvaReportEscalatorYesNo = $this->getPostParamString('reEvaReportEscalatorYesNo');
+            $txnReEvaReportEscalatorBrakingSystemYesNo = $this->getPostParamString('reEvaReportEscalatorBrakingSystemYesNo');
+            $txnReEvaReportEscalatorBrakingSystemFinding = $this->getPostParamString('reEvaReportEscalatorBrakingSystemFinding');
+            $txnReEvaReportEscalatorBrakingSystemRecommend = $this->getPostParamString('reEvaReportEscalatorBrakingSystemRecommend');
+            $txnReEvaReportEscalatorBrakingSystemPass = $this->getPostParamString('reEvaReportEscalatorBrakingSystemPass');
+            $txnReEvaReportEscalatorControlYesNo = $this->getPostParamString('reEvaReportEscalatorControlYesNo');
+            $txnReEvaReportEscalatorControlFinding = $this->getPostParamString('reEvaReportEscalatorControlFinding');
+            $txnReEvaReportEscalatorControlRecommend = $this->getPostParamString('reEvaReportEscalatorControlRecommend');
+            $txnReEvaReportEscalatorControlPass = $this->getPostParamString('reEvaReportEscalatorControlPass');
+            $txnReEvaReportEscalatorSupplementYesNo = $this->getPostParamString('reEvaReportEscalatorSupplementYesNo');
+            $txnReEvaReportEscalatorSupplement = $this->getPostParamString('reEvaReportEscalatorSupplement');
+            $txnReEvaReportEscalatorSupplementPass = $this->getPostParamString('reEvaReportEscalatorSupplementPass');
+            $txnReEvaReportLiftYesNo = $this->getPostParamString('reEvaReportLiftYesNo');
+            $txnReEvaReportLiftOperationYesNo = $this->getPostParamString('reEvaReportLiftOperationYesNo');
+            $txnReEvaReportLiftOperationFinding = $this->getPostParamString('reEvaReportLiftOperationFinding');
+            $txnReEvaReportLiftOperationRecommend = $this->getPostParamString('reEvaReportLiftOperationRecommend');
+            $txnReEvaReportLiftOperationPass = $this->getPostParamString('reEvaReportLiftOperationPass');
+            $txnReEvaReportLiftMainSupplyYesNo = $this->getPostParamString('reEvaReportLiftMainSupplyYesNo');
+            $txnReEvaReportLiftMainSupplyFinding = $this->getPostParamString('reEvaReportLiftMainSupplyFinding');
+            $txnReEvaReportLiftMainSupplyRecommend = $this->getPostParamString('reEvaReportLiftMainSupplyRecommend');
+            $txnReEvaReportLiftMainSupplyPass = $this->getPostParamString('reEvaReportLiftMainSupplyPass');
+            $txnReEvaReportLiftSupplementYesNo = $this->getPostParamString('reEvaReportLiftSupplementYesNo');
+            $txnReEvaReportLiftSupplement = $this->getPostParamString('reEvaReportLiftSupplement');
+            $txnReEvaReportLiftSupplementPass = $this->getPostParamString('reEvaReportLiftSupplementPass');
+            $txnReEvaReportHidLampYesNo = $this->getPostParamString('reEvaReportHidLampYesNo');
+            $txnReEvaReportHidLampBallastYesNo = $this->getPostParamString('reEvaReportHidLampBallastYesNo');
+            $txnReEvaReportHidLampBallastFinding = $this->getPostParamString('reEvaReportHidLampBallastFinding');
+            $txnReEvaReportHidLampBallastRecommend = $this->getPostParamString('reEvaReportHidLampBallastRecommend');
+            $txnReEvaReportHidLampBallastPass = $this->getPostParamString('reEvaReportHidLampBallastPass');
+            $txnReEvaReportHidLampAddonProtectYesNo = $this->getPostParamString('reEvaReportHidLampAddonProtectYesNo');
+            $txnReEvaReportHidLampAddonProtectFinding = $this->getPostParamString('reEvaReportHidLampAddonProtectFinding');
+            $txnReEvaReportHidLampAddonProtectRecommend = $this->getPostParamString('reEvaReportHidLampAddonProtectRecommend');
+            $txnReEvaReportHidLampAddonProtectPass = $this->getPostParamString('reEvaReportHidLampAddonProtectPass');
+            $txnReEvaReportHidLampSupplementYesNo = $this->getPostParamString('reEvaReportHidLampSupplementYesNo');
+            $txnReEvaReportHidLampSupplement = $this->getPostParamString('reEvaReportHidLampSupplement');
+            $txnReEvaReportHidLampSupplementPass = $this->getPostParamString('reEvaReportHidLampSupplementPass');
+            $txnReEvaReportSensitiveMachineYesNo = $this->getPostParamString('reEvaReportSensitiveMachineYesNo');
+            $txnReEvaReportSensitiveMachineMedicalYesNo = $this->getPostParamString('reEvaReportSensitiveMachineMedicalYesNo');
+            $txnReEvaReportSensitiveMachineMedicalFinding = $this->getPostParamString('reEvaReportSensitiveMachineMedicalFinding');
+            $txnReEvaReportSensitiveMachineMedicalRecommend = $this->getPostParamString('reEvaReportSensitiveMachineMedicalRecommend');
+            $txnReEvaReportSensitiveMachineMedicalPass = $this->getPostParamString('reEvaReportSensitiveMachineMedicalPass');
+            $txnReEvaReportSensitiveMachineSupplementYesNo = $this->getPostParamString('reEvaReportSensitiveMachineSupplementYesNo');
+            $txnReEvaReportSensitiveMachineSupplement = $this->getPostParamString('reEvaReportSensitiveMachineSupplement');
+            $txnReEvaReportSensitiveMachineSupplementPass = $this->getPostParamString('reEvaReportSensitiveMachineSupplementPass');
+            $txnReEvaReportTelecomMachineYesNo = $this->getPostParamString('reEvaReportTelecomMachineYesNo');
+            $txnReEvaReportTelecomMachineServerOrComputerYesNo = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerYesNo');
+            $txnReEvaReportTelecomMachineServerOrComputerFinding = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerFinding');
+            $txnReEvaReportTelecomMachineServerOrComputerRecommend = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerRecommend');
+            $txnReEvaReportTelecomMachineServerOrComputerPass = $this->getPostParamString('reEvaReportTelecomMachineServerOrComputerPass');
+            $txnReEvaReportTelecomMachinePeripheralsYesNo = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsYesNo');
+            $txnReEvaReportTelecomMachinePeripheralsFinding = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsFinding');
+            $txnReEvaReportTelecomMachinePeripheralsRecommend = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsRecommend');
+            $txnReEvaReportTelecomMachinePeripheralsPass = $this->getPostParamString('reEvaReportTelecomMachinePeripheralsPass');
+            $txnReEvaReportTelecomMachineHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionYesNo');
+            $txnReEvaReportTelecomMachineHarmonicEmissionFinding = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionFinding');
+            $txnReEvaReportTelecomMachineHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionRecommend');
+            $txnReEvaReportTelecomMachineHarmonicEmissionPass = $this->getPostParamString('reEvaReportTelecomMachineHarmonicEmissionPass');
+            $txnReEvaReportTelecomMachineSupplementYesNo = $this->getPostParamString('reEvaReportTelecomMachineSupplementYesNo');
+            $txnReEvaReportTelecomMachineSupplement = $this->getPostParamString('reEvaReportTelecomMachineSupplement');
+            $txnReEvaReportTelecomMachineSupplementPass = $this->getPostParamString('reEvaReportTelecomMachineSupplementPass');
+            $txnReEvaReportAirConditionersYesNo = $this->getPostParamString('reEvaReportAirConditionersYesNo');
+            $txnReEvaReportAirConditionersMicbYesNo = $this->getPostParamString('reEvaReportAirConditionersMicbYesNo');
+            $txnReEvaReportAirConditionersMicbFinding = $this->getPostParamString('reEvaReportAirConditionersMicbFinding');
+            $txnReEvaReportAirConditionersMicbRecommend = $this->getPostParamString('reEvaReportAirConditionersMicbRecommend');
+            $txnReEvaReportAirConditionersMicbPass = $this->getPostParamString('reEvaReportAirConditionersMicbPass');
+            $txnReEvaReportAirConditionersLoadForecastingYesNo = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingYesNo');
+            $txnReEvaReportAirConditionersLoadForecastingFinding = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingFinding');
+            $txnReEvaReportAirConditionersLoadForecastingRecommend = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingRecommend');
+            $txnReEvaReportAirConditionersLoadForecastingPass = $this->getPostParamString('reEvaReportAirConditionersLoadForecastingPass');
+            $txnReEvaReportAirConditionersTypeYesNo = $this->getPostParamString('reEvaReportAirConditionersTypeYesNo');
+            $txnReEvaReportAirConditionersTypeFinding = $this->getPostParamString('reEvaReportAirConditionersTypeFinding');
+            $txnReEvaReportAirConditionersTypeRecommend = $this->getPostParamString('reEvaReportAirConditionersTypeRecommend');
+            $txnReEvaReportAirConditionersTypePass = $this->getPostParamString('reEvaReportAirConditionersTypePass');
+            $txnReEvaReportAirConditionersSupplementYesNo = $this->getPostParamString('reEvaReportAirConditionersSupplementYesNo');
+            $txnReEvaReportAirConditionersSupplement = $this->getPostParamString('reEvaReportAirConditionersSupplement');
+            $txnReEvaReportAirConditionersSupplementPass = $this->getPostParamString('reEvaReportAirConditionersSupplementPass');
+            $txnReEvaReportNonLinearLoadYesNo = $this->getPostParamString('reEvaReportNonLinearLoadYesNo');
+            $txnReEvaReportNonLinearLoadHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionYesNo');
+            $txnReEvaReportNonLinearLoadHarmonicEmissionFinding = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionFinding');
+            $txnReEvaReportNonLinearLoadHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionRecommend');
+            $txnReEvaReportNonLinearLoadHarmonicEmissionPass = $this->getPostParamString('reEvaReportNonLinearLoadHarmonicEmissionPass');
+            $txnReEvaReportNonLinearLoadSupplementYesNo = $this->getPostParamString('reEvaReportNonLinearLoadSupplementYesNo');
+            $txnReEvaReportNonLinearLoadSupplement = $this->getPostParamString('reEvaReportNonLinearLoadSupplement');
+            $txnReEvaReportNonLinearLoadSupplementPass = $this->getPostParamString('reEvaReportNonLinearLoadSupplementPass');
+            $txnReEvaReportRenewableEnergyYesNo = $this->getPostParamString('reEvaReportRenewableEnergyYesNo');
+            $txnReEvaReportRenewableEnergyInverterAndControlsYesNo = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsYesNo');
+            $txnReEvaReportRenewableEnergyInverterAndControlsFinding = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsFinding');
+            $txnReEvaReportRenewableEnergyInverterAndControlsRecommend = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsRecommend');
+            $txnReEvaReportRenewableEnergyInverterAndControlsPass = $this->getPostParamString('reEvaReportRenewableEnergyInverterAndControlsPass');
+            $txnReEvaReportRenewableEnergyHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionYesNo');
+            $txnReEvaReportRenewableEnergyHarmonicEmissionFinding = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionFinding');
+            $txnReEvaReportRenewableEnergyHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionRecommend');
+            $txnReEvaReportRenewableEnergyHarmonicEmissionPass = $this->getPostParamString('reEvaReportRenewableEnergyHarmonicEmissionPass');
+            $txnReEvaReportRenewableEnergySupplementYesNo = $this->getPostParamString('reEvaReportRenewableEnergySupplementYesNo');
+            $txnReEvaReportRenewableEnergySupplement = $this->getPostParamString('reEvaReportRenewableEnergySupplement');
+            $txnReEvaReportRenewableEnergySupplementPass = $this->getPostParamString('reEvaReportRenewableEnergySupplementPass');
+            $txnReEvaReportEvChargerSystemYesNo = $this->getPostParamString('reEvaReportEvChargerSystemYesNo');
+            $txnReEvaReportEvChargerSystemEvChargerYesNo = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerYesNo');
+            $txnReEvaReportEvChargerSystemEvChargerFinding = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerFinding');
+            $txnReEvaReportEvChargerSystemEvChargerRecommend = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerRecommend');
+            $txnReEvaReportEvChargerSystemEvChargerPass = $this->getPostParamString('reEvaReportEvChargerSystemEvChargerPass');
+            $txnReEvaReportEvChargerSystemHarmonicEmissionYesNo = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionYesNo');
+            $txnReEvaReportEvChargerSystemHarmonicEmissionFinding = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionFinding');
+            $txnReEvaReportEvChargerSystemHarmonicEmissionRecommend = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionRecommend');
+            $txnReEvaReportEvChargerSystemHarmonicEmissionPass = $this->getPostParamString('reEvaReportEvChargerSystemHarmonicEmissionPass');
+            $txnReEvaReportEvChargerSystemSupplementYesNo = $this->getPostParamString('reEvaReportEvChargerSystemSupplementYesNo');
+            $txnReEvaReportEvChargerSystemSupplement = $this->getPostParamString('reEvaReportEvChargerSystemSupplement');
+            $txnReEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('reEvaReportEvChargerSystemSupplementPass');
 
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
@@ -3331,6 +4390,15 @@ class PlanningAheadController extends Controller {
                     }
             } else if ($currState['state']=="SENT_FORTH_INVITATION_LETTER") {
                 $txnNewState = "WAITING_RE_PQ_SITE_WALK";
+            } else if (($currState['state']=="NOTIFIED_RE_PQ_SITE_WALK") ||
+                ($currState['state']=="COMPLETED_RE_PQ_SITE_WALK_PASS") ||
+                ($currState['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) {
+
+                if (floatval($txnReEvaReportScore) >= 50.0) {
+                    $txnNewState = "COMPLETED_RE_PQ_SITE_WALK_PASS";
+                } else {
+                    $txnNewState = "COMPLETED_RE_PQ_SITE_WALK_FAIL";
+                }
             }
 
             $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,
@@ -3445,6 +4513,68 @@ class PlanningAheadController extends Controller {
                 $txnEvaReportEvChargerSystemHarmonicEmissionFinding,$txnEvaReportEvChargerSystemHarmonicEmissionRecommend,
                 $txnEvaReportEvChargerSystemHarmonicEmissionPass,$txnEvaReportEvChargerSystemSupplementYesNo,
                 $txnEvaReportEvChargerSystemSupplement,$txnEvaReportEvChargerSystemSupplementPass,
+                $txnReEvaReportId,$txnReEvaReportRemark,$txnReEvaReportEdmsLink,$txnReEvaReportIssueDate,$txnReEvaReportFaxRefNo,
+                $txnReEvaReportScore,$txnReEvaReportBmsYesNo,$txnReEvaReportBmsServerCentralComputerYesNo,
+                $txnReEvaReportBmsServerCentralComputerFinding,$txnReEvaReportBmsServerCentralComputerRecommend,
+                $txnReEvaReportBmsServerCentralComputerPass,$txnReEvaReportBmsDdcYesNo,$txnReEvaReportBmsDdcFinding,
+                $txnReEvaReportBmsDdcRecommend,$txnReEvaReportBmsDdcPass,$txnReEvaReportBmsSupplementYesNo,
+                $txnReEvaReportBmsSupplement,$txnReEvaReportBmsSupplementPass,$txnReEvaReportChangeoverSchemeYesNo,
+                $txnReEvaReportChangeoverSchemeControlYesNo,$txnReEvaReportChangeoverSchemeControlFinding,
+                $txnReEvaReportChangeoverSchemeControlRecommend,$txnReEvaReportChangeoverSchemeControlPass,
+                $txnReEvaReportChangeoverSchemeUvYesNo,$txnReEvaReportChangeoverSchemeUvFinding,
+                $txnReEvaReportChangeoverSchemeUvRecommend,$txnReEvaReportChangeoverSchemeUvPass,
+                $txnReEvaReportChangeoverSchemeSupplementYesNo,$txnReEvaReportChangeoverSchemeSupplement,
+                $txnReEvaReportChangeoverSchemeSupplementPass,$txnReEvaReportChillerPlantYesNo,
+                $txnReEvaReportChillerPlantAhuChilledWaterYesNo,$txnReEvaReportChillerPlantAhuChilledWaterFinding,
+                $txnReEvaReportChillerPlantAhuChilledWaterRecommend,$txnReEvaReportChillerPlantAhuChilledWaterPass,
+                $txnReEvaReportChillerPlantChillerYesNo,$txnReEvaReportChillerPlantChillerFinding,
+                $txnReEvaReportChillerPlantChillerRecommend,$txnReEvaReportChillerPlantChillerPass,
+                $txnReEvaReportChillerPlantSupplementYesNo,$txnReEvaReportChillerPlantSupplement,
+                $txnReEvaReportChillerPlantSupplementPass,$txnReEvaReportEscalatorYesNo,$txnReEvaReportEscalatorBrakingSystemYesNo,
+                $txnReEvaReportEscalatorBrakingSystemFinding,$txnReEvaReportEscalatorBrakingSystemRecommend,
+                $txnReEvaReportEscalatorBrakingSystemPass,$txnReEvaReportEscalatorControlYesNo,$txnReEvaReportEscalatorControlFinding,
+                $txnReEvaReportEscalatorControlRecommend,$txnReEvaReportEscalatorControlPass,$txnReEvaReportEscalatorSupplementYesNo,
+                $txnReEvaReportEscalatorSupplement,$txnReEvaReportEscalatorSupplementPass,$txnReEvaReportLiftYesNo,
+                $txnReEvaReportLiftOperationYesNo,$txnReEvaReportLiftOperationFinding,$txnReEvaReportLiftOperationRecommend,
+                $txnReEvaReportLiftOperationPass,$txnReEvaReportLiftMainSupplyYesNo,$txnReEvaReportLiftMainSupplyFinding,
+                $txnReEvaReportLiftMainSupplyRecommend,$txnReEvaReportLiftMainSupplyPass,$txnReEvaReportLiftSupplementYesNo,
+                $txnReEvaReportLiftSupplement,$txnReEvaReportLiftSupplementPass,$txnReEvaReportHidLampYesNo,
+                $txnReEvaReportHidLampBallastYesNo,$txnReEvaReportHidLampBallastFinding,$txnReEvaReportHidLampBallastRecommend,
+                $txnReEvaReportHidLampBallastPass,$txnReEvaReportHidLampAddonProtectYesNo,$txnReEvaReportHidLampAddonProtectFinding,
+                $txnReEvaReportHidLampAddonProtectRecommend,$txnReEvaReportHidLampAddonProtectPass,
+                $txnReEvaReportHidLampSupplementYesNo,$txnReEvaReportHidLampSupplement,$txnReEvaReportHidLampSupplementPass,
+                $txnReEvaReportSensitiveMachineYesNo,$txnReEvaReportSensitiveMachineMedicalYesNo,
+                $txnReEvaReportSensitiveMachineMedicalFinding,$txnReEvaReportSensitiveMachineMedicalRecommend,
+                $txnReEvaReportSensitiveMachineMedicalPass,$txnReEvaReportSensitiveMachineSupplementYesNo,
+                $txnReEvaReportSensitiveMachineSupplement,$txnReEvaReportSensitiveMachineSupplementPass,$txnReEvaReportTelecomMachineYesNo,
+                $txnReEvaReportTelecomMachineServerOrComputerYesNo,$txnReEvaReportTelecomMachineServerOrComputerFinding,
+                $txnReEvaReportTelecomMachineServerOrComputerRecommend,$txnReEvaReportTelecomMachineServerOrComputerPass,
+                $txnReEvaReportTelecomMachinePeripheralsYesNo,$txnReEvaReportTelecomMachinePeripheralsFinding,
+                $txnReEvaReportTelecomMachinePeripheralsRecommend,$txnReEvaReportTelecomMachinePeripheralsPass,
+                $txnReEvaReportTelecomMachineHarmonicEmissionYesNo,$txnReEvaReportTelecomMachineHarmonicEmissionFinding,
+                $txnReEvaReportTelecomMachineHarmonicEmissionRecommend,$txnReEvaReportTelecomMachineHarmonicEmissionPass,
+                $txnReEvaReportTelecomMachineSupplementYesNo,$txnReEvaReportTelecomMachineSupplement,
+                $txnReEvaReportTelecomMachineSupplementPass,$txnReEvaReportAirConditionersYesNo,$txnReEvaReportAirConditionersMicbYesNo,
+                $txnReEvaReportAirConditionersMicbFinding,$txnReEvaReportAirConditionersMicbRecommend,$txnReEvaReportAirConditionersMicbPass,
+                $txnReEvaReportAirConditionersLoadForecastingYesNo,$txnReEvaReportAirConditionersLoadForecastingFinding,
+                $txnReEvaReportAirConditionersLoadForecastingRecommend,$txnReEvaReportAirConditionersLoadForecastingPass,
+                $txnReEvaReportAirConditionersTypeYesNo,$txnReEvaReportAirConditionersTypeFinding,$txnReEvaReportAirConditionersTypeRecommend,
+                $txnReEvaReportAirConditionersTypePass,$txnReEvaReportAirConditionersSupplementYesNo,$txnReEvaReportAirConditionersSupplement,
+                $txnReEvaReportAirConditionersSupplementPass,$txnReEvaReportNonLinearLoadYesNo,$txnReEvaReportNonLinearLoadHarmonicEmissionYesNo,
+                $txnReEvaReportNonLinearLoadHarmonicEmissionFinding,$txnReEvaReportNonLinearLoadHarmonicEmissionRecommend,
+                $txnReEvaReportNonLinearLoadHarmonicEmissionPass,$txnReEvaReportNonLinearLoadSupplementYesNo,
+                $txnReEvaReportNonLinearLoadSupplement,$txnReEvaReportNonLinearLoadSupplementPass,$txnReEvaReportRenewableEnergyYesNo,
+                $txnReEvaReportRenewableEnergyInverterAndControlsYesNo,$txnReEvaReportRenewableEnergyInverterAndControlsFinding,
+                $txnReEvaReportRenewableEnergyInverterAndControlsRecommend,$txnReEvaReportRenewableEnergyInverterAndControlsPass,
+                $txnReEvaReportRenewableEnergyHarmonicEmissionYesNo,$txnReEvaReportRenewableEnergyHarmonicEmissionFinding,
+                $txnReEvaReportRenewableEnergyHarmonicEmissionRecommend,$txnReEvaReportRenewableEnergyHarmonicEmissionPass,
+                $txnReEvaReportRenewableEnergySupplementYesNo,$txnReEvaReportRenewableEnergySupplement,
+                $txnReEvaReportRenewableEnergySupplementPass,$txnReEvaReportEvChargerSystemYesNo,$txnReEvaReportEvChargerSystemEvChargerYesNo,
+                $txnReEvaReportEvChargerSystemEvChargerFinding,$txnReEvaReportEvChargerSystemEvChargerRecommend,
+                $txnReEvaReportEvChargerSystemEvChargerPass,$txnReEvaReportEvChargerSystemHarmonicEmissionYesNo,
+                $txnReEvaReportEvChargerSystemHarmonicEmissionFinding,$txnReEvaReportEvChargerSystemHarmonicEmissionRecommend,
+                $txnReEvaReportEvChargerSystemHarmonicEmissionPass,$txnReEvaReportEvChargerSystemSupplementYesNo,
+                $txnReEvaReportEvChargerSystemSupplement,$txnReEvaReportEvChargerSystemSupplementPass,
                 $currState['state'],$txnNewState,$lastUpdatedBy,$lastUpdatedTime,
                 $txnPlanningAheadId);
 
