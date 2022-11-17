@@ -23,6 +23,23 @@ class PlanningAheadController extends Controller {
     // *************************************
 
     // *********************************************************************
+    // Load the information page for the Planning Ahead
+    // *********************************************************************
+    public function actionGetPlanningAheadInfoSearch() {
+        // Only allow PG Admin for this function
+        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to upload condition letter.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['projectTypeList'] = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeList();
+            $this->viewbag['searchProjectTypeId'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadInfoSearch");
+        }
+    }
+
+    // *********************************************************************
     // Load the upload form for allowing PG staff to upload Condition Letter
     // *********************************************************************
     public function actionGetUploadConditionLetterForm() {
@@ -3184,6 +3201,28 @@ class PlanningAheadController extends Controller {
     // *************************************
     // ***** Ajax function ******
     // *************************************
+
+    public function actionAjaxGetPlanningAheadTable() {
+        $param = json_decode(file_get_contents('php://input'), true);
+        $searchParam = json_decode($param['searchParam'], true);
+
+        $start = $param['start'];
+        $length = $param['length'];
+        $orderColumn = $param['order'][0]['column'];
+        $orderDir = $param['order'][0]['dir'];
+        $order = '"'.$param['columns'][$orderColumn]['data'] . '" ' . $orderDir;
+
+        $planningAheadList = Yii::app()->planningAheadDao->GetPlanningAheadSearchByPage($searchParam, $start, $length, $order);
+        $recordFiltered = Yii::app()->planningAheadDao->GetPlanningAheadSearchResultCount($searchParam);
+        $totalCount = Yii::app()->planningAheadDao->GetPlanningAheadRecordCount();
+
+        $result = array('draw' => $param['draw'],
+            'data' => $planningAheadList,
+            'recordsFiltered' => $recordFiltered,
+            'recordsTotal' => $totalCount);
+
+        echo json_encode($result);
+    }
 
     // *********************************************************************
     // Draft update for the project detail

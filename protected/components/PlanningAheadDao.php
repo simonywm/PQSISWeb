@@ -4,6 +4,150 @@ use \ForceUTF8\Encoding;
 
 class PlanningAheadDao extends CApplicationComponent {
 
+    public function GetPlanningAheadSearchByPage($searchParam, $start, $length, $orderByStr) {
+
+        $PlanningAheadList = array();
+
+        $sqlMid = 'SELECT pa.scheme_no, pa.project_title, pa.key_infra, pa.temp_project, TO_CHAR(pa.commission_date,\'dd/mm/yyyy\') as commission_date,pa."project_type_id", pt."project_type_name", rp."region_short_name" ';
+        $sqlBase = 'SELECT "planning_ahead_id" ';
+
+        $sql1 = 'FROM (("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) LEFT JOIN "tbl_region" rp on pa."region_id" = rp."region_id" ) WHERE 1=1 ';
+        $sql2 = 'FROM "tbl_planning_ahead"  WHERE 1=1 ';
+
+        $schemeNo = isset($searchParam['schemeNo']) ? $searchParam['schemeNo'] : '';
+        $projectTitle = isset($searchParam['projectTitle']) ? $searchParam['projectTitle'] : '';
+        $typeOfProject = isset($searchParam['typeOfProject']) ? $searchParam['typeOfProject'] : '';
+
+        if ($schemeNo != '') {
+            $sql1 = $sql1 . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo1) ';
+            $sql2 = $sql2 . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo2) ';
+        }
+        if ($projectTitle != '') {
+            $sql1 = $sql1 . 'AND UPPER("project_title") LIKE UPPER(:projectTitle1) ';
+            $sql2 = $sql2 . 'AND UPPER("project_title") LIKE UPPER(:projectTitle2) ';
+        }
+        if ($typeOfProject != '') {
+            $sql1 = $sql1 . 'AND pa."project_type_id"=:projectTypeId1 ';
+            $sql2 = $sql2 . 'AND pa."project_type_id"=:projectTypeId2 ';
+        }
+        if ($orderByStr != '') {
+            if ($orderByStr == '"project_type_name" asc' || $orderByStr =='"project_type_name" desc'){
+                $sql1 = $sql1 . " ORDER BY pt." . $orderByStr . ' ';
+                $sql2 = $sql2 . " ORDER BY " . $orderByStr . ' ';
+            } else if ($orderByStr == '"region_short_name" asc' || $orderByStr =='"region_short_name" desc'){
+                $sql1 = $sql1 . " ORDER BY rp." . $orderByStr . ' ';
+                $sql2 = $sql2 . " ORDER BY " . $orderByStr . ' ';
+            } else {
+                $sql1 = $sql1 . " ORDER BY pa." . $orderByStr . ' ';
+                $sql2 = $sql2 . " ORDER BY " . $orderByStr . ' ';
+            }
+        }
+        if ($start != 0) {
+            $sqlFinal = 'SELECT * FROM (' . $sqlMid . $sql1 . ' LIMIT ' . (int) ($length + $start) . ' ) AS A WHERE "planning_ahead_id" NOT IN ( ' . $sqlBase . $sql2 . ' LIMIT ' . (int) ($start) . ') ';
+        } else {
+            $sqlFinal = $sqlMid . $sql1 . ' LIMIT ' . (int) ($length + $start);
+        }
+
+        try {
+            $sth = Yii::app()->db->createCommand($sqlFinal);
+            if ($schemeNo != '') {
+                $schemeNo = "%" . $schemeNo . "%";
+                $sth->bindParam(':schemeNo1', $schemeNo);
+                if ($start != 0) {
+                    $sth->bindParam(':schemeNo2', $schemeNo);
+                }
+
+            }
+            if ($projectTitle != '') {
+                $projectTitle = "%" . $projectTitle . "%";
+                $sth->bindParam(':projectTitle1', $projectTitle);
+                if ($start != 0) {
+                    $sth->bindParam(':projectTitle2', $projectTitle);
+                }
+
+            }
+            if ($typeOfProject != '') {
+                $sth->bindParam(':projectTypeId1', $typeOfProject);
+                if ($start != 0) {
+                    $sth->bindParam(':projectTypeId2', $typeOfProject);
+                }
+            }
+
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+                $List = array();
+                $List['scheme_no'] =  Encoding::escapleAllCharacter($row['scheme_no']);
+                $List['project_title'] =  Encoding::escapleAllCharacter($row['project_title']);
+                $List['key_infra'] =  Encoding::escapleAllCharacter($row['key_infra']);
+                $List['temp_project'] =  Encoding::escapleAllCharacter($row['temp_project']);
+                $List['commission_date'] =  Encoding::escapleAllCharacter($row['commission_date']);
+                $List['project_type_name'] =  Encoding::escapleAllCharacter($row['project_type_name']);
+                $List['region_short_name'] =  Encoding::escapleAllCharacter($row['region_short_name']);
+                array_push($PlanningAheadList, $List);
+            }
+
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+        return $PlanningAheadList;
+    }
+
+    public function GetPlanningAheadSearchResultCount($searchParam) {
+
+        $schemeNo = isset($searchParam['$schemeNo']) ? $searchParam['$schemeNo'] : '';
+        $projectTitle = isset($searchParam['projectTitle']) ? $searchParam['projectTitle'] : '';
+        $typeOfProject = isset($searchParam['typeOfProject']) ? $searchParam['typeOfProject'] : '';
+
+        $sql = 'SELECT count(1) FROM "tbl_planning_ahead" WHERE 1=1 ';
+
+        if ($schemeNo != "") {
+            $sql = $sql . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo) ';
+        }
+        if ($projectTitle != "") {
+            $sql = $sql . 'AND UPPER("project_title") LIKE UPPER(:projectTitle) ';
+        }
+        if ($typeOfProject != "") {
+            $sql = $sql . 'AND "project_type_id" = :projectTypeId ';
+        }
+
+        $count=0;
+        try {
+            $sth = Yii::app()->db->createCommand($sql);
+            if ($schemeNo != '') {
+                $schemeNo = "%" . $schemeNo . "%";
+                $sth->bindParam(':schemeNo', $schemeNo);
+            }
+            if ($projectTitle != '') {
+                $projectTitle = "%" . $projectTitle . "%";
+                $sth->bindParam(':projectTitle', $projectTitle);
+            }
+            if ($typeOfProject != '') {
+                $sth->bindParam(':projectTypeId', $typeOfProject);
+            }
+
+            $result = $sth->queryRow();
+            $count = $result['count'];
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+        return $count;
+    }
+
+    public function GetPlanningAheadRecordCount()
+    {
+        $count=0;
+        try {
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead"';
+            $sth = Yii::app()->db->createCommand($sql);
+            $result = $sth->queryRow();
+            $count = $result['count'];
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+        return $count;
+    }
+
     public function getPlanningAheadDetails($schemeNo) {
 
         $record = array();
