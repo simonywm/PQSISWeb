@@ -4608,7 +4608,11 @@ public function GetConsultantCompanySearchByPage($searchParam, $start, $length, 
         //while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
         foreach($result as $row) { 
             $array['consultantCompanyId'] = $row['consultantCompanyId'];
-            $array['consultantCompanyName'] = Encoding::escapleAllCharacter($row['consultantCompanyName']);  
+            $array['consultantCompanyName'] = Encoding::escapleAllCharacter($row['consultantCompanyName']);
+            $array['addressLine1'] = Encoding::escapleAllCharacter($row['addressLine1']);
+            $array['addressLine2'] = Encoding::escapleAllCharacter($row['addressLine2']);
+            $array['addressLine3'] = Encoding::escapleAllCharacter($row['addressLine3']);
+            $array['addressLine4'] = Encoding::escapleAllCharacter($row['addressLine4']);
             $array['active'] = $row['active'];
             $array['createdBy'] = $row['createdBy'];
             $array['createdTime'] = $row['createdTime'];
@@ -4636,7 +4640,11 @@ public function getConsultantCompanyById($id)
         //while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         foreach($result as $row) { 
             $consultantCompany['consultantCompanyId'] = $row['consultantCompanyId'];
-            $consultantCompany['consultantCompanyName'] = Encoding::escapleAllCharacter($row['consultantCompanyName']);  
+            $consultantCompany['consultantCompanyName'] = Encoding::escapleAllCharacter($row['consultantCompanyName']);
+            $consultantCompany['addressLine1'] = Encoding::escapleAllCharacter($row['addressLine1']);
+            $consultantCompany['addressLine2'] = Encoding::escapleAllCharacter($row['addressLine2']);
+            $consultantCompany['addressLine3'] = Encoding::escapleAllCharacter($row['addressLine3']);
+            $consultantCompany['addressLine4'] = Encoding::escapleAllCharacter($row['addressLine4']);
             $consultantCompany['active'] = $row['active'];
 
         }

@@ -22,7 +22,7 @@
             <div class="input-group col-12">
                 <div class="input-group-prepend"><span class="input-group-text">Project Title: </span></div>
                 <input id="projectTitle" name="projectTitle" type="text" class="form-control"
-                       autocomplete="off">
+                       autocomplete="off" <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"readonly":""; ?>>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
             <div class="input-group col-6">
                 <div class="input-group-prepend"><span class="input-group-text">Scheme No.: </span></div>
                 <input id="schemeNo" name="schemeNo" type="text" class="form-control"
-                       autocomplete="off">
+                       autocomplete="off" <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"readonly":""; ?>>
             </div>
             <div class="input-group col-6">
                 <div class="input-group-prepend"><span class="input-group-text">Project Region: </span></div>
@@ -41,9 +41,11 @@
                                 <?php echo $regionList['regionShortName']?>
                             </option>
                         <?php } else { ?>
-                            <option value="<?php echo $regionList['regionId']?>">
-                                <?php echo $regionList['regionShortName']?>
-                            </option>
+                                <?php if (Yii::app()->session['tblUserDo']['roleId']==2) { ?>
+                                    <option value="<?php echo $regionList['regionId']?>">
+                                        <?php echo $regionList['regionShortName']?>
+                                    </option>
+                                <?php } ?>
                     <?php
                         }
                     } ?>
@@ -62,9 +64,11 @@
                                 <?php echo $projectTypeList['projectTypeName']?>
                             </option>
                         <?php } else { ?>
-                            <option value="<?php echo $projectTypeList['projectTypeId']?>">
-                                <?php echo $projectTypeList['projectTypeName']?>
-                            </option>
+                            <?php if (Yii::app()->session['tblUserDo']['roleId']==2) { ?>
+                                <option value="<?php echo $projectTypeList['projectTypeId']?>">
+                                    <?php echo $projectTypeList['projectTypeName']?>
+                                </option>
+                            <?php } ?>
                     <?php
                             }
                         } ?>
@@ -88,13 +92,15 @@
                     </div>
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
-                            <input type="radio" name="infraOpt" class="form-check-input" value="N">No
+                            <input type="radio" name="infraOpt" class="form-check-input" value="N"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php } else if ($this->viewbag['keyInfra'] == 'N') {?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
-                            <input type="radio" name="infraOpt" class="form-check-input" value="Y">Yes
+                            <input type="radio" name="infraOpt" class="form-check-input" value="Y"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
@@ -105,12 +111,14 @@
                 <?php } else { ?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
-                            <input type="radio" name="infraOpt" class="form-check-input" value="Y">Yes
+                            <input type="radio" name="infraOpt" class="form-check-input" value="Y"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
-                            <input type="radio" name="infraOpt" class="form-check-input" value="N">No
+                            <input type="radio" name="infraOpt" class="form-check-input" value="N"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php }?>
@@ -128,13 +136,15 @@
                     </div>
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
-                            <input type="radio" name="tempProjOpt" class="form-check-input" value="N">No
+                            <input type="radio" name="tempProjOpt" class="form-check-input" value="N"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php } else if ($this->viewbag['tempProject'] == 'N') {?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
-                            <input type="radio" name="tempProjOpt" class="form-check-input" value="Y">Yes
+                            <input type="radio" name="tempProjOpt" class="form-check-input" value="Y"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
@@ -145,12 +155,14 @@
                 <?php } else { ?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
-                            <input type="radio" name="tempProjOpt" class="form-check-input" value="Y">Yes
+                            <input type="radio" name="tempProjOpt" class="form-check-input" value="Y"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
-                            <input type="radio" name="tempProjOpt" class="form-check-input" value="N">No
+                            <input type="radio" name="tempProjOpt" class="form-check-input" value="N"
+                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php }?>
@@ -5714,6 +5726,12 @@
             }
         });
 
+        $("#evaReportIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
         $('input[name=evaReportBmsServerCentralComputerYesNo]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportBmsServerCentralComputerPass]', '#detailForm').on('click', updateEvaScore);
         $('input[name=evaReportBmsDdcYesNo]', '#detailForm').on('click', updateEvaScore);
@@ -5794,147 +5812,147 @@
             let itemsCount = 0.0;
             let passCount = 0.0;
 
-            let result = calReportScore('evaReportBmsServerCentralComputerYesNo', 'evaReportBmsServerCentralComputerPass');
+            let result = calReportScore('evaReportBmsServerCentralComputerYesNo', 'evaReportBmsServerCentralComputerPass', 'evaReportBmsYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportBmsDdcYesNo', 'evaReportBmsDdcPass');
+            result = calReportScore('evaReportBmsDdcYesNo', 'evaReportBmsDdcPass', 'evaReportBmsYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportBmsSupplementYesNo', 'evaReportBmsSupplementPass');
+            result = calReportScore('evaReportBmsSupplementYesNo', 'evaReportBmsSupplementPass', 'evaReportBmsYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportChangeoverSchemeControlYesNo', 'evaReportChangeoverSchemeControlPass');
+            result = calReportScore('evaReportChangeoverSchemeControlYesNo', 'evaReportChangeoverSchemeControlPass', 'evaReportChangeoverSchemeYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportChangeoverSchemeUvYesNo', 'evaReportChangeoverSchemeUvPass');
+            result = calReportScore('evaReportChangeoverSchemeUvYesNo', 'evaReportChangeoverSchemeUvPass', 'evaReportChangeoverSchemeYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportChangeoverSchemeSupplementYesNo', 'evaReportChangeoverSchemeSupplementPass');
+            result = calReportScore('evaReportChangeoverSchemeSupplementYesNo', 'evaReportChangeoverSchemeSupplementPass','evaReportChangeoverSchemeYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportChillerPlantAhuChilledWaterYesNo', 'evaReportChillerPlantAhuChilledWaterPass');
+            result = calReportScore('evaReportChillerPlantAhuChilledWaterYesNo', 'evaReportChillerPlantAhuChilledWaterPass', 'evaReportChillerPlantYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportChillerPlantChillerYesNo', 'evaReportChillerPlantChillerPass');
+            result = calReportScore('evaReportChillerPlantChillerYesNo', 'evaReportChillerPlantChillerPass', 'evaReportChillerPlantYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportChillerPlantSupplementYesNo', 'evaReportChillerPlantSupplementPass');
+            result = calReportScore('evaReportChillerPlantSupplementYesNo', 'evaReportChillerPlantSupplementPass', 'evaReportChillerPlantYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportEscalatorBrakingSystemYesNo', 'evaReportEscalatorBrakingSystemPass');
+            result = calReportScore('evaReportEscalatorBrakingSystemYesNo', 'evaReportEscalatorBrakingSystemPass', 'evaReportEscalatorYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportEscalatorControlYesNo', 'evaReportEscalatorControlPass');
+            result = calReportScore('evaReportEscalatorControlYesNo', 'evaReportEscalatorControlPass', 'evaReportEscalatorYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportEscalatorSupplementYesNo', 'evaReportEscalatorSupplementPass');
+            result = calReportScore('evaReportEscalatorSupplementYesNo', 'evaReportEscalatorSupplementPass', 'evaReportEscalatorYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportLiftOperationYesNo', 'evaReportLiftOperationPass');
+            result = calReportScore('evaReportLiftOperationYesNo', 'evaReportLiftOperationPass', 'evaReportLiftYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportLiftMainSupplyYesNo', 'evaReportLiftMainSupplyPass');
+            result = calReportScore('evaReportLiftMainSupplyYesNo', 'evaReportLiftMainSupplyPass', 'evaReportLiftYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportLiftSupplementYesNo', 'evaReportLiftSupplementPass');
+            result = calReportScore('evaReportLiftSupplementYesNo', 'evaReportLiftSupplementPass', 'evaReportLiftYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportHidLampBallastYesNo', 'evaReportHidLampBallastPass');
+            result = calReportScore('evaReportHidLampBallastYesNo', 'evaReportHidLampBallastPass', 'evaReportHidLampYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportHidLampAddonProtectYesNo', 'evaReportHidLampAddonProtectPass');
+            result = calReportScore('evaReportHidLampAddonProtectYesNo', 'evaReportHidLampAddonProtectPass', 'evaReportHidLampYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportHidLampSupplementYesNo', 'evaReportHidLampSupplementPass');
+            result = calReportScore('evaReportHidLampSupplementYesNo', 'evaReportHidLampSupplementPass', 'evaReportHidLampYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportSensitiveMachineMedicalYesNo', 'evaReportSensitiveMachineMedicalPass');
+            result = calReportScore('evaReportSensitiveMachineMedicalYesNo', 'evaReportSensitiveMachineMedicalPass', 'evaReportSensitiveMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportSensitiveMachineSupplementYesNo', 'evaReportSensitiveMachineSupplementPass');
+            result = calReportScore('evaReportSensitiveMachineSupplementYesNo', 'evaReportSensitiveMachineSupplementPass', 'evaReportSensitiveMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportTelecomMachineServerOrComputerYesNo', 'evaReportTelecomMachineServerOrComputerPass');
+            result = calReportScore('evaReportTelecomMachineServerOrComputerYesNo', 'evaReportTelecomMachineServerOrComputerPass', 'evaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportTelecomMachinePeripheralsYesNo', 'evaReportTelecomMachinePeripheralsPass');
+            result = calReportScore('evaReportTelecomMachinePeripheralsYesNo', 'evaReportTelecomMachinePeripheralsPass', 'evaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportTelecomMachineHarmonicEmissionYesNo', 'evaReportTelecomMachineHarmonicEmissionPass');
+            result = calReportScore('evaReportTelecomMachineHarmonicEmissionYesNo', 'evaReportTelecomMachineHarmonicEmissionPass', 'evaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportTelecomMachineSupplementYesNo', 'evaReportTelecomMachineSupplementPass');
+            result = calReportScore('evaReportTelecomMachineSupplementYesNo', 'evaReportTelecomMachineSupplementPass', 'evaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportAirConditionersMicbYesNo', 'evaReportAirConditionersMicbPass');
+            result = calReportScore('evaReportAirConditionersMicbYesNo', 'evaReportAirConditionersMicbPass', 'evaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportAirConditionersLoadForecastingYesNo', 'evaReportAirConditionersLoadForecastingPass');
+            result = calReportScore('evaReportAirConditionersLoadForecastingYesNo', 'evaReportAirConditionersLoadForecastingPass', 'evaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportAirConditionersTypeYesNo', 'evaReportAirConditionersTypePass');
+            result = calReportScore('evaReportAirConditionersTypeYesNo', 'evaReportAirConditionersTypePass', 'evaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportAirConditionersSupplementYesNo', 'evaReportAirConditionersSupplementPass');
+            result = calReportScore('evaReportAirConditionersSupplementYesNo', 'evaReportAirConditionersSupplementPass', 'evaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportNonLinearLoadHarmonicEmissionYesNo', 'evaReportNonLinearLoadHarmonicEmissionPass');
+            result = calReportScore('evaReportNonLinearLoadHarmonicEmissionYesNo', 'evaReportNonLinearLoadHarmonicEmissionPass', 'evaReportNonLinearLoadYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportNonLinearLoadSupplementYesNo', 'evaReportNonLinearLoadSupplementPass');
+            result = calReportScore('evaReportNonLinearLoadSupplementYesNo', 'evaReportNonLinearLoadSupplementPass', 'evaReportNonLinearLoadYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportRenewableEnergyInverterAndControlsYesNo', 'evaReportRenewableEnergyInverterAndControlsPass');
+            result = calReportScore('evaReportRenewableEnergyInverterAndControlsYesNo', 'evaReportRenewableEnergyInverterAndControlsPass', 'evaReportRenewableEnergyYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportRenewableEnergyHarmonicEmissionYesNo', 'evaReportRenewableEnergyHarmonicEmissionPass');
+            result = calReportScore('evaReportRenewableEnergyHarmonicEmissionYesNo', 'evaReportRenewableEnergyHarmonicEmissionPass', 'evaReportRenewableEnergyYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportRenewableEnergySupplementYesNo', 'evaReportRenewableEnergySupplementPass');
+            result = calReportScore('evaReportRenewableEnergySupplementYesNo', 'evaReportRenewableEnergySupplementPass', 'evaReportRenewableEnergyYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportEvChargerSystemEvChargerYesNo', 'evaReportEvChargerSystemEvChargerPass');
+            result = calReportScore('evaReportEvChargerSystemEvChargerYesNo', 'evaReportEvChargerSystemEvChargerPass', 'evaReportEvChargerSystemYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportEvChargerSystemHarmonicEmissionYesNo', 'evaReportEvChargerSystemHarmonicEmissionPass');
+            result = calReportScore('evaReportEvChargerSystemHarmonicEmissionYesNo', 'evaReportEvChargerSystemHarmonicEmissionPass', 'evaReportEvChargerSystemYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('evaReportEvChargerSystemSupplementYesNo', 'evaReportEvChargerSystemSupplementPass');
+            result = calReportScore('evaReportEvChargerSystemSupplementYesNo', 'evaReportEvChargerSystemSupplementPass', 'evaReportEvChargerSystemYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
@@ -6017,6 +6035,12 @@
         $('#reEvaReportEvChargerSystemHarmonicEmissionFinding').val("<?php echo $this->viewbag['reEvaReportEvChargerSystemHarmonicEmissionFinding']; ?>");
         $('#reEvaReportEvChargerSystemHarmonicEmissionRecommend').val("<?php echo $this->viewbag['reEvaReportEvChargerSystemHarmonicEmissionRecommend']; ?>");
         $('#reEvaReportEvChargerSystemSupplement').val("<?php echo $this->viewbag['reEvaReportEvChargerSystemSupplement']; ?>");
+
+        $("#reEvaReportIssueDate").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
 
         $("#showReEvaReportBtn").on("click", function() {
             if ($('#showReEvaReportBtn').val() == 'Show Evaluation Report Detail') {
@@ -6108,147 +6132,147 @@
             let itemsCount = 0.0;
             let passCount = 0.0;
 
-            let result = calReportScore('reEvaReportBmsServerCentralComputerYesNo', 'reEvaReportBmsServerCentralComputerPass');
+            let result = calReportScore('reEvaReportBmsServerCentralComputerYesNo', 'reEvaReportBmsServerCentralComputerPass', 'reEvaReportBmsYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportBmsDdcYesNo', 'reEvaReportBmsDdcPass');
+            result = calReportScore('reEvaReportBmsDdcYesNo', 'reEvaReportBmsDdcPass', 'reEvaReportBmsYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportBmsSupplementYesNo', 'reEvaReportBmsSupplementPass');
+            result = calReportScore('reEvaReportBmsSupplementYesNo', 'reEvaReportBmsSupplementPass', 'reEvaReportBmsYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportChangeoverSchemeControlYesNo', 'reEvaReportChangeoverSchemeControlPass');
+            result = calReportScore('reEvaReportChangeoverSchemeControlYesNo', 'reEvaReportChangeoverSchemeControlPass', 'reEvaReportChangeoverSchemeYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportChangeoverSchemeUvYesNo', 'reEvaReportChangeoverSchemeUvPass');
+            result = calReportScore('reEvaReportChangeoverSchemeUvYesNo', 'reEvaReportChangeoverSchemeUvPass', 'reEvaReportChangeoverSchemeYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportChangeoverSchemeSupplementYesNo', 'reEvaReportChangeoverSchemeSupplementPass');
+            result = calReportScore('reEvaReportChangeoverSchemeSupplementYesNo', 'reEvaReportChangeoverSchemeSupplementPass', 'reEvaReportChangeoverSchemeYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportChillerPlantAhuChilledWaterYesNo', 'reEvaReportChillerPlantAhuChilledWaterPass');
+            result = calReportScore('reEvaReportChillerPlantAhuChilledWaterYesNo', 'reEvaReportChillerPlantAhuChilledWaterPass', 'reEvaReportChillerPlantYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportChillerPlantChillerYesNo', 'reEvaReportChillerPlantChillerPass');
+            result = calReportScore('reEvaReportChillerPlantChillerYesNo', 'reEvaReportChillerPlantChillerPass', 'reEvaReportChillerPlantYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportChillerPlantSupplementYesNo', 'reEvaReportChillerPlantSupplementPass');
+            result = calReportScore('reEvaReportChillerPlantSupplementYesNo', 'reEvaReportChillerPlantSupplementPass', 'reEvaReportChillerPlantYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportEscalatorBrakingSystemYesNo', 'reEvaReportEscalatorBrakingSystemPass');
+            result = calReportScore('reEvaReportEscalatorBrakingSystemYesNo', 'reEvaReportEscalatorBrakingSystemPass', 'reEvaReportEscalatorYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportEscalatorControlYesNo', 'reEvaReportEscalatorControlPass');
+            result = calReportScore('reEvaReportEscalatorControlYesNo', 'reEvaReportEscalatorControlPass', 'reEvaReportEscalatorYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportEscalatorSupplementYesNo', 'reEvaReportEscalatorSupplementPass');
+            result = calReportScore('reEvaReportEscalatorSupplementYesNo', 'reEvaReportEscalatorSupplementPass', 'reEvaReportEscalatorYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportLiftOperationYesNo', 'reEvaReportLiftOperationPass');
+            result = calReportScore('reEvaReportLiftOperationYesNo', 'reEvaReportLiftOperationPass', 'reEvaReportLiftYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportLiftMainSupplyYesNo', 'reEvaReportLiftMainSupplyPass');
+            result = calReportScore('reEvaReportLiftMainSupplyYesNo', 'reEvaReportLiftMainSupplyPass', 'reEvaReportLiftYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportLiftSupplementYesNo', 'reEvaReportLiftSupplementPass');
+            result = calReportScore('reEvaReportLiftSupplementYesNo', 'reEvaReportLiftSupplementPass', 'reEvaReportLiftYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportHidLampBallastYesNo', 'reEvaReportHidLampBallastPass');
+            result = calReportScore('reEvaReportHidLampBallastYesNo', 'reEvaReportHidLampBallastPass', 'reEvaReportHidLampYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportHidLampAddonProtectYesNo', 'reEvaReportHidLampAddonProtectPass');
+            result = calReportScore('reEvaReportHidLampAddonProtectYesNo', 'reEvaReportHidLampAddonProtectPass', 'reEvaReportHidLampYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportHidLampSupplementYesNo', 'reEvaReportHidLampSupplementPass');
+            result = calReportScore('reEvaReportHidLampSupplementYesNo', 'reEvaReportHidLampSupplementPass', 'reEvaReportHidLampYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportSensitiveMachineMedicalYesNo', 'reEvaReportSensitiveMachineMedicalPass');
+            result = calReportScore('reEvaReportSensitiveMachineMedicalYesNo', 'reEvaReportSensitiveMachineMedicalPass', 'reEvaReportSensitiveMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportSensitiveMachineSupplementYesNo', 'reEvaReportSensitiveMachineSupplementPass');
+            result = calReportScore('reEvaReportSensitiveMachineSupplementYesNo', 'reEvaReportSensitiveMachineSupplementPass', 'reEvaReportSensitiveMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportTelecomMachineServerOrComputerYesNo', 'reEvaReportTelecomMachineServerOrComputerPass');
+            result = calReportScore('reEvaReportTelecomMachineServerOrComputerYesNo', 'reEvaReportTelecomMachineServerOrComputerPass', 'reEvaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportTelecomMachinePeripheralsYesNo', 'reEvaReportTelecomMachinePeripheralsPass');
+            result = calReportScore('reEvaReportTelecomMachinePeripheralsYesNo', 'reEvaReportTelecomMachinePeripheralsPass', 'reEvaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportTelecomMachineHarmonicEmissionYesNo', 'reEvaReportTelecomMachineHarmonicEmissionPass');
+            result = calReportScore('reEvaReportTelecomMachineHarmonicEmissionYesNo', 'reEvaReportTelecomMachineHarmonicEmissionPass', 'reEvaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportTelecomMachineSupplementYesNo', 'reEvaReportTelecomMachineSupplementPass');
+            result = calReportScore('reEvaReportTelecomMachineSupplementYesNo', 'reEvaReportTelecomMachineSupplementPass', 'reEvaReportTelecomMachineYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportAirConditionersMicbYesNo', 'reEvaReportAirConditionersMicbPass');
+            result = calReportScore('reEvaReportAirConditionersMicbYesNo', 'reEvaReportAirConditionersMicbPass', 'reEvaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportAirConditionersLoadForecastingYesNo', 'reEvaReportAirConditionersLoadForecastingPass');
+            result = calReportScore('reEvaReportAirConditionersLoadForecastingYesNo', 'reEvaReportAirConditionersLoadForecastingPass', 'reEvaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportAirConditionersTypeYesNo', 'reEvaReportAirConditionersTypePass');
+            result = calReportScore('reEvaReportAirConditionersTypeYesNo', 'reEvaReportAirConditionersTypePass', 'reEvaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportAirConditionersSupplementYesNo', 'reEvaReportAirConditionersSupplementPass');
+            result = calReportScore('reEvaReportAirConditionersSupplementYesNo', 'reEvaReportAirConditionersSupplementPass', 'reEvaReportAirConditionersYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportNonLinearLoadHarmonicEmissionYesNo', 'reEvaReportNonLinearLoadHarmonicEmissionPass');
+            result = calReportScore('reEvaReportNonLinearLoadHarmonicEmissionYesNo', 'reEvaReportNonLinearLoadHarmonicEmissionPass', 'reEvaReportNonLinearLoadYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportNonLinearLoadSupplementYesNo', 'reEvaReportNonLinearLoadSupplementPass');
+            result = calReportScore('reEvaReportNonLinearLoadSupplementYesNo', 'reEvaReportNonLinearLoadSupplementPass', 'reEvaReportNonLinearLoadYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportRenewableEnergyInverterAndControlsYesNo', 'reEvaReportRenewableEnergyInverterAndControlsPass');
+            result = calReportScore('reEvaReportRenewableEnergyInverterAndControlsYesNo', 'reEvaReportRenewableEnergyInverterAndControlsPass', 'reEvaReportRenewableEnergyYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportRenewableEnergyHarmonicEmissionYesNo', 'reEvaReportRenewableEnergyHarmonicEmissionPass');
+            result = calReportScore('reEvaReportRenewableEnergyHarmonicEmissionYesNo', 'reEvaReportRenewableEnergyHarmonicEmissionPass', 'reEvaReportRenewableEnergyYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportRenewableEnergySupplementYesNo', 'reEvaReportRenewableEnergySupplementPass');
+            result = calReportScore('reEvaReportRenewableEnergySupplementYesNo', 'reEvaReportRenewableEnergySupplementPass', 'reEvaReportRenewableEnergyYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportEvChargerSystemEvChargerYesNo', 'reEvaReportEvChargerSystemEvChargerPass');
+            result = calReportScore('reEvaReportEvChargerSystemEvChargerYesNo', 'reEvaReportEvChargerSystemEvChargerPass', 'reEvaReportEvChargerSystemYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportEvChargerSystemHarmonicEmissionYesNo', 'reEvaReportEvChargerSystemHarmonicEmissionPass');
+            result = calReportScore('reEvaReportEvChargerSystemHarmonicEmissionYesNo', 'reEvaReportEvChargerSystemHarmonicEmissionPass', 'reEvaReportEvChargerSystemYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
-            result = calReportScore('reEvaReportEvChargerSystemSupplementYesNo', 'reEvaReportEvChargerSystemSupplementPass');
+            result = calReportScore('reEvaReportEvChargerSystemSupplementYesNo', 'reEvaReportEvChargerSystemSupplementPass', 'reEvaReportEvChargerSystemYesNo', $(this).attr('name'));
             itemsCount = itemsCount + result[0];
             passCount = passCount + result[1];
 
@@ -6755,7 +6779,7 @@
             result = validateDateOnlyFormat("#firstInvitationLetterWalkDate", "1st Invitation Letter PQ Walk Date", errorMessage, i)
             errorMessage = result[0]; i = result[1];
 
-        } else if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() != null) ||
+        } else if ((($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() != null) &&
                 ($('input[name=firstInvitationLetterAccept]:checked', '#detailForm').val() != ""))) {
 
             result = validateEmpty("#firstInvitationLetterIssueDate", "1st Invitation Letter Issue Date", errorMessage, i)
@@ -6791,7 +6815,7 @@
             result = validateDateOnlyFormat("#secondInvitationLetterWalkDate", "2nd Invitation Letter PQ Walk Date", errorMessage, i)
             errorMessage = result[0]; i = result[1];
 
-        } else if ((($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() != null) ||
+        } else if ((($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() != null) &&
             ($('input[name=secondInvitationLetterAccept]:checked', '#detailForm').val() != ""))) {
 
             result = validateEmpty("#secondInvitationLetterIssueDate", "2nd Invitation Letter Issue Date", errorMessage, i)
@@ -7037,20 +7061,35 @@
         return [errorMsg, i];
     }
 
-    function calReportScore(yesNoId,passId) {
-
-        if (!($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == null) &&
-            !($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == "")) {
-
+    function calReportScore(yesNoId,passId,parentId,actionId) {
+        
+        if (passId == actionId) {
             if (!($('input[name=' + passId + ']:checked', '#detailForm').val() == null) &&
                 !($('input[name=' + passId + ']:checked', '#detailForm').val() == "")) {
-
-                return [1.0,1.0];
-            } else {
-                return [1.0,0.0];
+                $('#' + parentId).prop('checked', true);
+                $('#' + yesNoId).prop('checked', true);
             }
         }
-        return [0.0,0.0];
+
+        if (yesNoId == actionId) {
+            if (!($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == null) &&
+                !($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == "")) {
+                $('#' + parentId).prop('checked', true);
+            } else {
+                $('#' + passId).prop('checked', false);
+            }
+        }
+
+        if (!($('input[name=' + passId + ']:checked', '#detailForm').val() == null) &&
+            !($('input[name=' + passId + ']:checked', '#detailForm').val() == "")) {
+            return [1.0,1.0];
+        }
+        if (!($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == null) &&
+            !($('input[name=' + yesNoId + ']:checked', '#detailForm').val() == "")) {
+            return [1.0,0.0];
+        } else {
+            return [0.0,0.0];
+        }
     }
 
 </script>

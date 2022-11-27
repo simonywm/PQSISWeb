@@ -28,17 +28,19 @@
                 <input class="btn btn-primary" type="submit" name="submit" id="addBtn" value="Upload">
             </div>
         </div>
-
-        <?php
-            if (isset($this->viewbag['IsUploadSuccess']) && $this->viewbag['IsUploadSuccess']) {
-        ?>
-                <div class="pl-3 bg-success"><?php echo $this->viewbag['resultMsg']; ?></div>
-        <?php
-            } else if (isset($this->viewbag['IsUploadSuccess']) && !$this->viewbag['IsUploadSuccess']) {
-        ?>
-                <div class="pl-3 bg-warning"><?php echo $this->viewbag['resultMsg']; ?></div>
-        <?php } ?>
-
     </form>
 </div>
 
+<script>
+    $(document).ready(function(){
+    <?php
+    if (isset($this->viewbag['IsUploadSuccess']) && $this->viewbag['IsUploadSuccess']) {
+    ?>
+        showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "<?php echo $this->viewbag['resultMsg']; ?>");
+    <?php
+    } else if (isset($this->viewbag['IsUploadSuccess']) && !$this->viewbag['IsUploadSuccess']) {
+    ?>
+        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", "<?php echo $this->viewbag['resultMsg']; ?>");
+    <?php } ?>
+    });
+</script>

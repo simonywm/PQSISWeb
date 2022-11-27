@@ -4155,6 +4155,30 @@ public function actionAjaxInsertConsultantCompany()
         $consultantCompanyName = trim($_POST['consultantCompanyName']);
     }
 
+    if ($_POST['consultantCompanyAddr1'] == '') {
+        $consultantCompanyAddr1 = null;
+    } else {
+        $consultantCompanyAddr1 = trim($_POST['consultantCompanyAddr1']);
+    }
+
+    if ($_POST['consultantCompanyAddr2'] == '') {
+        $consultantCompanyAddr2 = null;
+    } else {
+        $consultantCompanyAddr2 = trim($_POST['consultantCompanyAddr2']);
+    }
+
+    if ($_POST['consultantCompanyAddr3'] == '') {
+        $consultantCompanyAddr3 = null;
+    } else {
+        $consultantCompanyAddr3 = trim($_POST['consultantCompanyAddr3']);
+    }
+
+    if ($_POST['consultantCompanyAddr4'] == '') {
+        $consultantCompanyAddr4 = null;
+    } else {
+        $consultantCompanyAddr4 = trim($_POST['consultantCompanyAddr4']);
+    }
+
     $active = isset($_POST['active']) ? trim($_POST['active']) : '';
     $createdBy = Yii::app()->session['tblUserDo']['username'];
     $createdTime = date("Y-m-d H:i");
@@ -4169,13 +4193,13 @@ public function actionAjaxInsertConsultantCompany()
         $transaction = Yii::app()->db->beginTransaction();
 
         //Query 1: Attempt to insert the payment record into our database.
-        $sql = 'INSERT INTO "TblConsultantCompany" ("consultantCompanyName","active","createdBy","createdTime","lastUpdatedBy","lastUpdatedTime")';
-        $sql = $sql . " VALUES (?,?,?,?,?,?)";
+        $sql = 'INSERT INTO "TblConsultantCompany" ("consultantCompanyName","addressLine1","addressLine2","addressLine3","addressLine4","active","createdBy","createdTime","lastUpdatedBy","lastUpdatedTime")';
+        $sql = $sql . " VALUES (?,?,?,?,?,?,?,?,?,?)";
         //$stmt = $pdo->prepare($sql);
         $stmt = Yii::app()->db->createCommand($sql);
 
         $result = $stmt->execute(array(
-            $consultantCompanyName, $active, $createdBy, $createdTime, $lastUpdatedBy, $lastUpdatedTime,
+            $consultantCompanyName, $consultantCompanyAddr1, $consultantCompanyAddr2, $consultantCompanyAddr3, $consultantCompanyAddr4, $active, $createdBy, $createdTime, $lastUpdatedBy, $lastUpdatedTime,
         ));
         if (!$result) {
             throw new Exception($stmt->errorInfo()[2],$stmt->errorInfo()[1]);
@@ -4219,6 +4243,30 @@ public function actionAjaxUpdateConsultantCompany()
         $consultantCompanyName = trim($_POST['consultantCompanyName']);
     }
 
+    if ($_POST['consultantCompanyAddr1'] == '') {
+        $consultantCompanyAddr1 = null;
+    } else {
+        $consultantCompanyAddr1 = trim($_POST['consultantCompanyAddr1']);
+    }
+
+    if ($_POST['consultantCompanyAddr2'] == '') {
+        $consultantCompanyAddr2 = null;
+    } else {
+        $consultantCompanyAddr2 = trim($_POST['consultantCompanyAddr2']);
+    }
+
+    if ($_POST['consultantCompanyAddr3'] == '') {
+        $consultantCompanyAddr3 = null;
+    } else {
+        $consultantCompanyAddr3 = trim($_POST['consultantCompanyAddr3']);
+    }
+
+    if ($_POST['consultantCompanyAddr4'] == '') {
+        $consultantCompanyAddr4 = null;
+    } else {
+        $consultantCompanyAddr4 = trim($_POST['consultantCompanyAddr4']);
+    }
+
     $active = isset($_POST['active']) ? trim($_POST['active']) : '';
     $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
     $lastUpdatedTime = date("Y-m-d H:i");
@@ -4232,13 +4280,14 @@ public function actionAjaxUpdateConsultantCompany()
         $transaction = Yii::app()->db->beginTransaction();
 
         //Query 1: Attempt to insert the payment record into our database.
-        $sql = 'UPDATE "TblConsultantCompany" SET "consultantCompanyName" =?  ,"active" =? ,"lastUpdatedBy"=?,"lastUpdatedTime"=? ';
+        $sql = 'UPDATE "TblConsultantCompany" SET "consultantCompanyName" =?,"addressLine1" =?,"addressLine2" =?,"addressLine3" =?,"addressLine4" =?,"active" =?,"lastUpdatedBy"=?,"lastUpdatedTime"=? ';
         $sql = $sql . ' WHERE "consultantCompanyId" = ?';
         //$stmt = $pdo->prepare($sql);
         $stmt = Yii::app()->db->createCommand($sql);
 
         $stmt->execute(array(
-            $consultantCompanyName, $active, $lastUpdatedBy, $lastUpdatedTime
+            $consultantCompanyName, $consultantCompanyAddr1, $consultantCompanyAddr2,
+            $consultantCompanyAddr3, $consultantCompanyAddr4, $active, $lastUpdatedBy, $lastUpdatedTime
             , $consultantCompanyId));
 
         $sql = 'UPDATE "TblEditRight" set "editRightLastEditTime" = ? ';

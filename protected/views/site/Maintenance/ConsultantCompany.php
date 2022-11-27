@@ -139,6 +139,50 @@ $this->pageTitle = Yii::app()->name;
                     </div>
                 </div>
                 <br />
+                <div class="row">
+                    <div class="col-md-5">
+                        <label> Consultant Company Address Line 1</label>
+
+                    </div>
+                    <div class="col-md-7">
+                        <input id="consultantCompanyAddr1" name="consultantCompanyAddr1" type="text" class="form-control"
+                               placeholder="" value="">
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">
+                        <label> Consultant Company Address Line 2</label>
+
+                    </div>
+                    <div class="col-md-7">
+                        <input id="consultantCompanyAddr2" name="consultantCompanyAddr2" type="text" class="form-control"
+                               placeholder="" value="">
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">
+                        <label> Consultant Company Address Line 3</label>
+
+                    </div>
+                    <div class="col-md-7">
+                        <input id="consultantCompanyAddr3" name="consultantCompanyAddr3" type="text" class="form-control"
+                               placeholder="" value="">
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-5">
+                        <label> Consultant Company Address Line 4</label>
+
+                    </div>
+                    <div class="col-md-7">
+                        <input id="consultantCompanyAddr4" name="consultantCompanyAddr4" type="text" class="form-control"
+                               placeholder="" value="">
+                    </div>
+                </div>
+                <br />
 
                 <div class="row">
                     <div class="col-lg-5" style="padding-right:0px"><label>Active? </label></div>
@@ -211,6 +255,10 @@ $(document).ready(function() {
     $("#consultantCompanyId").val("<?php echo $this->viewbag['consultantCompany']['consultantCompanyId']?>");
     $("#consultantCompanyName").val(
         "<?php echo $this->viewbag['consultantCompany']['consultantCompanyName']?>");
+    $("#consultantCompanyAddr1").val("<?php echo $this->viewbag['consultantCompany']['addressLine1']?>");
+    $("#consultantCompanyAddr2").val("<?php echo $this->viewbag['consultantCompany']['addressLine2']?>");
+    $("#consultantCompanyAddr3").val("<?php echo $this->viewbag['consultantCompany']['addressLine3']?>");
+    $("#consultantCompanyAddr4").val("<?php echo $this->viewbag['consultantCompany']['addressLine4']?>");
     $("#active").val("<?php echo $this->viewbag['consultantCompany']['active']?>");
 
 
