@@ -77,14 +77,14 @@ class PlanningAheadController extends Controller {
                 if (in_array($fileType, $allowTypes)){
                     // Upload the file to server
                     if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)){
-                        $this->viewbag['resultMsg'] = "The file [". $fileName . "] has been uploaded.";
+                        $this->viewbag['resultMsg'] = "The file <strong>[" . $fileName . "]</strong> has been uploaded.";
                         $this->viewbag['IsUploadSuccess'] = true;
                     }else{
-                        $this->viewbag['resultMsg']  = "Sorry, there was an error uploading your file!";
+                        $this->viewbag['resultMsg']  = "Sorry, there was an error when uploading your file!";
                         $this->viewbag['IsUploadSuccess'] = false;
                     }
                 } else {
-                    $this->viewbag['resultMsg'] = 'Please select the condition letter in PDF format!';
+                    $this->viewbag['resultMsg'] = "The file <strong>[" . $fileName . "]</strong> is not in <Strong>PDF format</strong>!";
                     $this->viewbag['IsUploadSuccess'] = false;
                 }
             } else {
@@ -251,8 +251,16 @@ class PlanningAheadController extends Controller {
                             }
 
                             $excelMeetingRejReason = $objWorksheet->getCellByColumnAndRow(4, $row)->getValue();
+
                             $excelMeetingFirstPreferMeetingDate = $objWorksheet->getCellByColumnAndRow(5, $row)->getValue();
+                            if (isset($excelMeetingFirstPreferMeetingDate) && ($excelMeetingFirstPreferMeetingDate != "")) {
+                                $excelMeetingFirstPreferMeetingDate = date($format = "Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($excelMeetingFirstPreferMeetingDate));
+                            }
+
                             $excelMeetingSecondPreferMeetingDate = $objWorksheet->getCellByColumnAndRow(6, $row)->getValue();
+                            if (isset($excelMeetingSecondPreferMeetingDate) && ($excelMeetingSecondPreferMeetingDate != "")) {
+                                $excelMeetingSecondPreferMeetingDate = date($format = "Y-m-d H:i", PHPExcel_Shared_Date::ExcelToPHP($excelMeetingSecondPreferMeetingDate));
+                            }
 
                             $excelBmsYesNo = $objWorksheet->getCellByColumnAndRow(7, $row)->getValue();
                             if (strtoupper($excelBmsYesNo) == 'YES') {
@@ -488,7 +496,7 @@ class PlanningAheadController extends Controller {
                         $this->viewbag['IsUploadSuccess'] = false;
                     }
                 } else {
-                    $this->viewbag['resultMsg'] = 'Please select the condition letter in PDF format!';
+                    $this->viewbag['resultMsg'] = 'Please select the reply slip in Excel format!';
                     $this->viewbag['IsUploadSuccess'] = false;
                 }
             } else {
@@ -500,28 +508,31 @@ class PlanningAheadController extends Controller {
         }
     }
 
-    // Load the form for Planning Ahead Project
+    // *********************************************************************
+    // Load the Planning Ahead Project Information
+    // *********************************************************************
     public function actionGetPlanningAheadProjectDetailForm() {
 
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        if (isset($param['SchemeNo'])) {
+        if (isset($param['SchemeNo']) && (trim($param['SchemeNo']) != "")) {
             $schemeNo = $param['SchemeNo'];
             $this->viewbag['schemeNo'] = $schemeNo;
 
             $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
 
+            // Only allow PG Admin & Region Staffs to access this function
             if (!isset($recordList) || $recordList == null) {
                 $this->viewbag['isError'] = true;
-                $this->viewbag['errorMsg'] = 'Unable to find the Scheme No. [' . $schemeNo . "] from our database.";
+                $this->viewbag['errorMsg'] = 'Unable to find the Scheme No. <strong>[' . $schemeNo . "]</strong> from our database.";
                 $this->render("//site/Form/PlanningAheadDetailError");
             } else if (($recordList['state'] != "WAITING_INITIAL_INFO") &&
                 ($recordList['state'] != "WAITING_INITIAL_INFO_BY_REGION_STAFF") &&
                 ($recordList['state'] != "WAITING_INITIAL_INFO_BY_PQ") &&
                 (Yii::app()->session['tblUserDo']['roleId']!=2)) {
                 $this->viewbag['isError'] = true;
-                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. [' . $schemeNo . "].";
+                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
                 $this->render("//site/Form/PlanningAheadDetailError");
             } else {
                 $this->viewbag['planningAheadId'] = $recordList['planningAheadId'];
@@ -1106,12 +1117,18 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
 
-        if (isset($recordList['secondConsultantSurname'])) {
+        if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondConsultantCc', "");
+            $templateProcessor->setValue('secondConsultantTitle', "");
+            $templateProcessor->setValue('secondConsultantSurname', "");
+            $templateProcessor->setValue('secondConsultantCompany', "");
+            $templateProcessor->setValue('secondConsultantEmail', "");
         }
 
         $templateProcessor->setValue('faxRefNo', $firstInvitationLetterFaxRefNo);
@@ -1185,12 +1202,18 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
 
-        if (isset($recordList['secondConsultantSurname'])) {
+        if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondConsultantCc', "");
+            $templateProcessor->setValue('secondConsultantTitle', "");
+            $templateProcessor->setValue('secondConsultantSurname', "");
+            $templateProcessor->setValue('secondConsultantCompany', "");
+            $templateProcessor->setValue('secondConsultantEmail', "");
         }
 
         $templateProcessor->setValue('faxRefNo', $secondInvitationLetterFaxRefNo);
@@ -1272,12 +1295,18 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
 
-        if (isset($recordList['secondConsultantSurname'])) {
+        if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondConsultantCc', "");
+            $templateProcessor->setValue('secondConsultantTitle', "");
+            $templateProcessor->setValue('secondConsultantSurname', "");
+            $templateProcessor->setValue('secondConsultantCompany', "");
+            $templateProcessor->setValue('secondConsultantEmail', "");
         }
 
         $templateProcessor->setValue('faxRefNo', $thirdInvitationLetterFaxRefNo);
@@ -1351,12 +1380,18 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('firstProjectOwnerCompany', $this->formatToWordTemplate($recordList['firstProjectOwnerCompany']));
         $templateProcessor->setValue('firstProjectOwnerEmail', $recordList['firstProjectOwnerEmail']);
 
-        if (isset($recordList['secondProjectOwnerSurname'])) {
+        if (isset($recordList['secondProjectOwnerSurname']) && (trim($recordList['secondProjectOwnerSurname']) != "")) {
             $templateProcessor->setValue('secondProjectOwnerCc', "c.c.");
             $templateProcessor->setValue('secondProjectOwnerTitle', "(" . $recordList['secondProjectOwnerTitle'] . ")");
             $templateProcessor->setValue('secondProjectOwnerSurname', $recordList['secondProjectOwnerSurname']);
             $templateProcessor->setValue('secondProjectOwnerCompany', $this->formatToWordTemplate($recordList['secondProjectOwnerCompany']));
             $templateProcessor->setValue('secondProjectOwnerEmail', "(Email: " . $recordList['secondProjectOwnerEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondProjectOwnerCc', "");
+            $templateProcessor->setValue('secondProjectOwnerTitle', "");
+            $templateProcessor->setValue('secondProjectOwnerSurname', "");
+            $templateProcessor->setValue('secondProjectOwnerCompany', "");
+            $templateProcessor->setValue('secondProjectOwnerEmail', "");
         }
 
         $templateProcessor->setValue('faxRefNo', $forthInvitationLetterFaxRefNo);
@@ -1441,12 +1476,18 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('firstConsultantCompanyAdd2', $this->formatToWordTemplate($recordList['firstConsultantCompanyAdd2']));
         $templateProcessor->setValue('firstConsultantCompanyAdd3', $this->formatToWordTemplate($recordList['firstConsultantCompanyAdd3']));
         $templateProcessor->setValue('firstConsultantCompanyAdd4', $this->formatToWordTemplate($recordList['firstConsultantCompanyAdd4']));
-        if (isset($recordList['secondConsultantSurname'])) {
+        if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantCompany', "(" . $this->formatToWordTemplate($recordList['secondConsultantCompany']) . ")");
             $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondConsultantCc', "");
+            $templateProcessor->setValue('secondConsultantCompany', "");
+            $templateProcessor->setValue('secondConsultantTitle', "");
+            $templateProcessor->setValue('secondConsultantSurname', "");
+            $templateProcessor->setValue('secondConsultantEmail', "");
         }
         if (isset($recordList['firstInvitationLetterWalkDate'])) {
             $siteVisitDateDay = date("j", strtotime($recordList['firstInvitationLetterWalkDate']));
@@ -2336,12 +2377,18 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('firstConsultantCompanyAdd2', "");
         $templateProcessor->setValue('firstConsultantCompanyAdd3', "");
         $templateProcessor->setValue('firstConsultantCompanyAdd4', "");
-        if (isset($recordList['secondProjectOwnerSurname'])) {
+        if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
-            $templateProcessor->setValue('secondConsultantCompany', "(" . $this->formatToWordTemplate($recordList['secondProjectOwnerCompany']) . ")");
-            $templateProcessor->setValue('secondConsultantTitle', $recordList['secondProjectOwnerTitle']);
-            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondProjectOwnerSurname']);
-            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondProjectOwnerEmail'] . ")");
+            $templateProcessor->setValue('secondConsultantCompany', "(" . $this->formatToWordTemplate($recordList['secondConsultantCompany']) . ")");
+            $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondConsultantCc', "");
+            $templateProcessor->setValue('secondConsultantCompany', "");
+            $templateProcessor->setValue('secondConsultantTitle', "");
+            $templateProcessor->setValue('secondConsultantSurname', "");
+            $templateProcessor->setValue('secondConsultantEmail', "");
         }
         if (isset($recordList['forthInvitationLetterWalkDate'])) {
             $siteVisitDateDay = date("j", strtotime($recordList['forthInvitationLetterWalkDate']));
@@ -4410,7 +4457,7 @@ class PlanningAheadController extends Controller {
                 $txnNewState = "COMPLETED_INITIAL_INFO";
             } else if ($currState['state']=="WAITING_STANDARD_LETTER") {
                 $txnNewState = "COMPLETED_STANDARD_LETTER";
-            } else if ($currState['state']=="WAITING_CONSULTANT_MEETING_INFO") {
+            } else if ($currState['state']=="COMPLETED_CONSULTANT_MEETING_INFO") {
                 $txnNewState = "COMPLETED_ACTUAL_MEETING_DATE";
             } else if ($currState['state']=="SENT_FIRST_INVITATION_LETTER") {
                 $txnNewState = "WAITING_PQ_SITE_WALK";
