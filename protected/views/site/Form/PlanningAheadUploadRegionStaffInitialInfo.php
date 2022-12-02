@@ -6,18 +6,18 @@ $this->pageTitle = Yii::app()->name;
 ?>
 
 <div id="consultantMeetingUploadForm" class="pt-2">
-    <div class="p-2" style="background-color: #2b669a; color: white"><b>Reply Slip File</b></div>
+    <div class="p-2" style="background-color: #2b669a; color: white"><b>Region Staff Project Initial Information File</b></div>
 
-    <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/PostUploadReplySlip" method="post" enctype="multipart/form-data" >
+    <form action="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/PostUploadRegionStaffInitialInfo" method="post" enctype="multipart/form-data" >
         <div class="form-group row px-3 pt-2">
             <div class="input-group">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">Reply Slip File: </span>
+                    <span class="input-group-text">Region Staff Project Initial Information File: </span>
                 </div>
                 <input id="replySlip" name="file" type="file"
-                       placeholder="Please upload the Reply Slip File"
+                       placeholder="Please upload the Region Staff Project Initial File"
                        class="form-control"
-                       oninvalid="this.setCustomValidity('Please select the Reply Slip File!')"
+                       oninvalid="this.setCustomValidity('Please select the Region Staff Project Initial File!')"
                        oninput="this.setCustomValidity('')"
                        required autocomplete="false">
             </div>

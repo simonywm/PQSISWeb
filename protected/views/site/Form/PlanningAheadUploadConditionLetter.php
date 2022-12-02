@@ -14,12 +14,12 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">Customer Condition Letter: </span>
                 </div>
-                <input id="conditionLetter" name="file" type="file"
+                <input id="conditionLetter" name="file[]" type="file"
                        placeholder="Please upload the condition letter"
                        class="form-control"
                        oninvalid="this.setCustomValidity('Please select the condition letter!')"
                        oninput="this.setCustomValidity('')"
-                       required autocomplete="false">
+                       required multiple autocomplete="false">
             </div>
         </div>
 

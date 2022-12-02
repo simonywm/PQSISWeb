@@ -112,6 +112,7 @@
                             <ul class="submenu dropdown-menu">
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadInfoSearch">Planning Ahead Information</a>
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadConditionLetterForm">Upload Condition Letter</a>
+                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadRegionStaffInitialInfo">Upload Region Staff Project Information</a>
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadReplySlipForm">Upload Reply Slip File</a>
                             </ul>
                         </li>
