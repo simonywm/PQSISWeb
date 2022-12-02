@@ -3194,9 +3194,69 @@ class PlanningAheadDao extends CApplicationComponent {
             $result = $stmt->execute(array($forthInvitationLetterIssueDate,$forthInvitationLetterFaxRefNo,
                 $lastUpdatedBy,$lastUpdatedTime, $txnPlanningAheadId));
             $transaction->commit();
-
             $retJson['status'] = 'OK';
 
+        } catch (PDOException $e) {
+            //An exception has occured, which means that one of our database queries failed.
+            //Print out the error message.
+            $retJson['status'] = 'NOTOK';
+            $retJson['retMessage'] = $e->getMessage();
+            //Rollback the transaction.
+            //$pdo->rollBack();
+            $transaction->rollBack();
+        }
+        return $retJson;
+    }
+
+    public function updateRegionStaffProjectInitInfo($txnPlannedCommissionDate, $txn1stConsultantTitle, $txn1stConsultantSurname,
+                                                     $txn1stConsultantOtherName, $txn1stConsultantCompany, $txn1stConsultantPhone,
+                                                     $txn1stConsultantEmail, $txn2ndConsultantTitle, $txn2ndConsultantSurname,
+                                                     $txn2ndConsultantOtherName, $txn2ndConsultantCompany, $txn2ndConsultantPhone,
+                                                     $txn2ndConsultantEmail, $txn3rdConsultantTitle, $txn3rdConsultantSurname,
+                                                     $txn3rdConsultantOtherName, $txn3rdConsultantCompany, $txn3rdConsultantPhone,
+                                                     $txn3rdConsultantEmail, $txn1stProjectOwnerTitle, $txn1stProjectOwnerSurname,
+                                                     $txn1stProjectOwnerOtherName, $txn1stProjectOwnerCompany, $txn1stProjectOwnerPhone,
+                                                     $txn1stProjectOwnerEmail, $txn2ndProjectOwnerTitle, $txn2ndProjectOwnerSurname,
+                                                     $txn2ndProjectOwnerOtherName, $txn2ndProjectOwnerCompany, $txn2ndProjectOwnerPhone,
+                                                     $txn2ndProjectOwnerEmail, $txn3rdProjectOwnerTitle, $txn3rdProjectOwnerSurname,
+                                                     $txn3rdProjectOwnerOtherName, $txn3rdProjectOwnerCompany, $txn3rdProjectOwnerPhone,
+                                                     $txn3rdProjectOwnerEmail, $txnSchemeNo, $txnNewState, $lastUpdateBy, $lastUpdateTime) {
+        $sql = 'UPDATE "tbl_planning_ahead" SET "commission_date"=?, "first_consultant_title"=?, "first_consultant_surname"=?, 
+                                "first_consultant_other_name"=?, "first_consultant_company"=?, "first_consultant_phone"=?, 
+                                "first_consultant_email"=?, "second_consultant_title"=?, "second_consultant_surname"=?, 
+                                "second_consultant_other_name"=?, "second_consultant_company"=?, "second_consultant_phone"=?, 
+                                "second_consultant_email"=?, "third_consultant_title"=?, "third_consultant_surname"=?, 
+                                "third_consultant_other_name"=?, "third_consultant_company"=?, "third_consultant_phone"=?, 
+                                "third_consultant_email"=?, "first_project_owner_title"=?, "first_project_owner_surname"=?, 
+                                "first_project_owner_other_name"=?, "first_project_owner_company"=?, "first_project_owner_phone"=?,
+                                "first_project_owner_email"=?, "second_project_owner_title"=?, "second_project_owner_surname"=?,
+                                "second_project_owner_other_name"=?, "second_project_owner_company"=?, "second_project_owner_phone"=?,
+                                "second_project_owner_email"=?, "third_project_owner_title"=?, "third_project_owner_surname"=?,
+                                "third_project_owner_other_name"=?, "third_project_owner_company"=?, "third_project_owner_phone"=?,
+                                "third_project_owner_email"=?, "state"=?, "last_updated_by"=?, "last_updated_time"=? WHERE "scheme_no"=?';
+
+        try {
+
+            //We start our transaction.
+            //$pdo->beginTransaction();
+            $transaction = Yii::app()->db->beginTransaction();
+            $stmt = Yii::app()->db->createCommand($sql);
+
+            $result = $stmt->execute(array($txnPlannedCommissionDate,$txn1stConsultantTitle,$txn1stConsultantSurname,
+                $txn1stConsultantOtherName,$txn1stConsultantCompany,$txn1stConsultantPhone,
+                $txn1stConsultantEmail, $txn2ndConsultantTitle, $txn2ndConsultantSurname,
+                $txn2ndConsultantOtherName, $txn2ndConsultantCompany, $txn2ndConsultantPhone,
+                $txn2ndConsultantEmail, $txn3rdConsultantTitle, $txn3rdConsultantSurname,
+                $txn3rdConsultantOtherName, $txn3rdConsultantCompany, $txn3rdConsultantPhone,
+                $txn3rdConsultantEmail, $txn1stProjectOwnerTitle, $txn1stProjectOwnerSurname,
+                $txn1stProjectOwnerOtherName, $txn1stProjectOwnerCompany, $txn1stProjectOwnerPhone,
+                $txn1stProjectOwnerEmail, $txn2ndProjectOwnerTitle, $txn2ndProjectOwnerSurname,
+                $txn2ndProjectOwnerOtherName, $txn2ndProjectOwnerCompany, $txn2ndProjectOwnerPhone,
+                $txn2ndProjectOwnerEmail, $txn3rdProjectOwnerTitle, $txn3rdProjectOwnerSurname,
+                $txn3rdProjectOwnerOtherName, $txn3rdProjectOwnerCompany, $txn3rdProjectOwnerPhone,
+                $txn3rdProjectOwnerEmail, $txnNewState, $lastUpdateBy, $lastUpdateTime, $txnSchemeNo));
+            $transaction->commit();
+            $retJson['status'] = 'OK';
         } catch (PDOException $e) {
 
             //An exception has occured, which means that one of our database queries failed.
@@ -3207,9 +3267,7 @@ class PlanningAheadDao extends CApplicationComponent {
             //$pdo->rollBack();
             $transaction->rollBack();
         }
-
         return $retJson;
-
     }
 
     public function updateConsultantMeetingInfo($schemeNo,$firstPreferredMeetingDate,$secondPreferredMeetingDate,
