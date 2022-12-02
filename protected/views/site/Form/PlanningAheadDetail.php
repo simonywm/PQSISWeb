@@ -169,6 +169,14 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <div class="input-group col-12">
+                <div class="input-group-prepend"><span class="input-group-text">State: </span></div>
+                <input id="projectState" name="projectState" type="text" class="form-control"
+                       autocomplete="off" disabled>
+            </div>
+        </div>
+
         <div id="accordionFirstRegionStaff">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -4960,6 +4968,7 @@
         $("#meetingActualMeetingDate").val("<?php echo $this->viewbag['meetingActualMeetingDate']; ?>");
         $("#meetingRejReason").val("<?php echo $this->viewbag['meetingRejReason']; ?>");
         $("#meetingRemark").val("<?php echo $this->viewbag['meetingRemark']; ?>");
+        $("#projectState").val("<?php echo $this->viewbag['state']; ?>");
 
         // Set the autocomplete for 1st consultant company name
         $('#firstConsultantCompany').autocomplete({
@@ -5109,36 +5118,76 @@
                     return;
                 }
 
-                $("#loading-modal").modal("show");
-                $("#saveDraftBtn").attr("disabled", true);
-                $("#saveProcessBtn").attr("disabled", true);
+                if ($('input[name="tempProjOpt"]:checked','#detailForm').val() == 'Y') {
+                    showConfirmation("<i class=\"fas fa-exclamation-circle\"></i> ", "Confirmation",
+                        "Set as Temp Project will close this project in PQSIS, are you sure?",
+                        function() {
+                            $("#loading-modal").modal("show");
+                            $("#saveDraftBtn").attr("disabled", true);
+                            $("#saveProcessBtn").attr("disabled", true);
 
-                $.ajax({
-                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailProcessUpdate",
-                    type: "POST",
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: new FormData(this),
-                    success: function(data) {
-                        let retJson = JSON.parse(data);
-                        if (retJson.status == "OK") {
-                            // display message
-                            showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
-                        } else {
-                            // error message
-                            showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                            const form = document.getElementById('detailForm');
+
+                            $.ajax({
+                                url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailProcessUpdate",
+                                type: "POST",
+                                cache: false,
+                                processData: false,
+                                contentType: false,
+                                data: new FormData(form),
+                                success: function(data) {
+                                    let retJson = JSON.parse(data);
+                                    if (retJson.status == "OK") {
+                                        // display message
+                                        showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
+                                    } else {
+                                        // error message
+                                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                                    }
+                                }
+                            }).fail(function(event, jqXHR, settings, thrownError) {
+                                if (event.status != 440) {
+                                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
+                                }
+                            }).always(function(data) {
+                                $("#loading-modal").modal("hide");
+                                $("#saveDraftBtn").attr("disabled", false);
+                                $("#saveProcessBtn").attr("disabled", false);
+                            });
+                        },
+                        function() {});
+                } else {
+                    $("#loading-modal").modal("show");
+                    $("#saveDraftBtn").attr("disabled", true);
+                    $("#saveProcessBtn").attr("disabled", true);
+
+                    $.ajax({
+                        url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailProcessUpdate",
+                        type: "POST",
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: new FormData(this),
+                        success: function(data) {
+                            let retJson = JSON.parse(data);
+                            if (retJson.status == "OK") {
+                                // display message
+                                showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
+                            } else {
+                                // error message
+                                showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                            }
                         }
-                    }
-                }).fail(function(event, jqXHR, settings, thrownError) {
-                    if (event.status != 440) {
-                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
-                    }
-                }).always(function(data) {
-                    $("#loading-modal").modal("hide");
-                    $("#saveDraftBtn").attr("disabled", false);
-                    $("#saveProcessBtn").attr("disabled", false);
-                });
+                    }).fail(function(event, jqXHR, settings, thrownError) {
+                        if (event.status != 440) {
+                            showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
+                        }
+                    }).always(function(data) {
+                        $("#loading-modal").modal("hide");
+                        $("#saveDraftBtn").attr("disabled", false);
+                        $("#saveProcessBtn").attr("disabled", false);
+                    });
+                }
             } else if ($(this).find("input[type=submit]:focus" ).val() == 'Generate Evaluation Report') {
 
                 $(this).attr("disabled", true);
