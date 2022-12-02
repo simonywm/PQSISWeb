@@ -66,26 +66,40 @@ class PlanningAheadController extends Controller {
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload condition letter.';
             $this->render("//site/Form/PlanningAheadDetailError");
         } else {
-            if (isset($_POST["submit"]) && !empty($_FILES["file"]["name"])) {
-                $fileName = basename($_FILES["file"]["name"]);
-                $planningAheadConditionLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadConditionLetterPath');
-                $targetFilePath = $planningAheadConditionLetterPath["configValue"] . $fileName;
-                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+            if (isset($_POST["submit"])) {
 
-                // Only allow PDF file format for the condition letter
-                $allowTypes = array('pdf');
-                if (in_array($fileType, $allowTypes)){
-                    // Upload the file to server
-                    if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)){
-                        $this->viewbag['resultMsg'] = "The file <strong>[" . $fileName . "]</strong> has been uploaded.";
-                        $this->viewbag['IsUploadSuccess'] = true;
-                    }else{
-                        $this->viewbag['resultMsg']  = "Sorry, there was an error when uploading your file!";
+                $successResultMsg = "Successfully upload the file(s) <strong>[";
+
+                for ($i=0; $i<count($_FILES["file"]["name"]); $i++) {
+                    $fileName = basename($_FILES["file"]["name"][$i]);
+                    $planningAheadConditionLetterPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadConditionLetterPath');
+                    $targetFilePath = $planningAheadConditionLetterPath["configValue"] . $fileName;
+                    $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+
+                    // Only allow PDF file format for the condition letter
+                    $allowTypes = array('pdf');
+                    if (in_array($fileType, $allowTypes)){
+                        // Upload the file to server
+                        if(move_uploaded_file($_FILES["file"]["tmp_name"][$i], $targetFilePath)){
+                            $successResultMsg = $successResultMsg . $fileName . "], [";
+                            $this->viewbag['IsUploadSuccess'] = true;
+                        }else{
+                            $failResultMsg = $failResultMsg . $fileName . "], [";
+                            $this->viewbag['resultMsg']  = "Sorry, there was an error when uploading your file [" . $fileName . "]";
+                            $this->viewbag['IsUploadSuccess'] = false;
+                            break;
+                        }
+                    } else {
+                        $this->viewbag['resultMsg'] = "The file <strong>[" . $fileName . "]</strong> is not in <Strong>PDF format</strong>!";
                         $this->viewbag['IsUploadSuccess'] = false;
+                        break;
                     }
-                } else {
-                    $this->viewbag['resultMsg'] = "The file <strong>[" . $fileName . "]</strong> is not in <Strong>PDF format</strong>!";
-                    $this->viewbag['IsUploadSuccess'] = false;
+                }
+
+                if ($this->viewbag['IsUploadSuccess']) {
+                    $successResultMsg = substr($successResultMsg, 0, strlen($successResultMsg)-3);
+                    $successResultMsg = $successResultMsg . ".";
+                    $this->viewbag['resultMsg'] = $successResultMsg;
                 }
             } else {
                 $this->viewbag['IsUploadSuccess'] = false;
@@ -94,6 +108,237 @@ class PlanningAheadController extends Controller {
 
             $this->render("//site/Form/PlanningAheadUploadConditionLetter");
         }
+    }
+
+    // *********************************************************************
+    // Load the upload form for allowing PG staff to upload Region Staffs
+    // Project initial information
+    // *********************************************************************
+    public function actionGetUploadRegionStaffInitialInfo() {
+
+        // Only allow PG Admin for this function
+        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to Region Staffs Project initial information.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->render("//site/Form/PlanningAheadUploadRegionStaffInitialInfo");
+        }
+    }
+
+    // *********************************************************************
+    // Process the upload of Region Staffs Project initial information
+    // *********************************************************************
+    public function actionPostUploadRegionStaffInitialInfo() {
+
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to upload consultant meeting information file.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            if (isset($_POST["submit"]) && !empty($_FILES["file"]["name"])) {
+                $fileName = basename($_FILES["file"]["name"]);
+                $planningAheadRegionStaffProjectInitPath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadRegionStaffProjectInitialPath');
+                $targetFilePath = $planningAheadRegionStaffProjectInitPath["configValue"] . date("Y_m_d_H_i_s_") . $fileName;
+                $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+
+                //allow certain file formats
+                $allowTypes = array('xlsx');
+
+                if (in_array($fileType, $allowTypes)){
+                    //upload file to server
+                    if(move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
+                        $objPHPExcel = new PHPExcel();
+                        $inputFileType = PHPExcel_IOFactory::identify($targetFilePath);
+                        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+                        $objReader->setReadDataOnly(true);
+
+                        $objPHPExcel = $objReader->load($targetFilePath);
+                        $objWorksheet = $objPHPExcel->setActiveSheetIndex(0);
+                        $highestRow = $objWorksheet->getHighestRow();
+
+                        $successCount = 0;
+                        $failCount = 0;
+                        $failSchemeNo = "";
+
+                        for ($row = 2; $row <= $highestRow; ++$row) {
+                            $excelSchemeNo = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
+
+                            if (!isset($excelSchemeNo)) {
+                                continue;
+                            }
+
+                            $projectDetail = Yii::app()->planningAheadDao->getPlanningAheadDetails($excelSchemeNo);
+                            if (isset($projectDetail)) {
+
+                                $excelPlannedCommissionDate = $objWorksheet->getCellByColumnAndRow(1, $row)->getValue();
+                                if (isset($excelPlannedCommissionDate) && ($excelPlannedCommissionDate != "")) {
+                                    $excelPlannedCommissionDate = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($excelPlannedCommissionDate));
+                                }
+
+                                $excel1stConsultantTitle = $objWorksheet->getCellByColumnAndRow(2, $row)->getValue();
+                                $excel1stConsultantSurname = $objWorksheet->getCellByColumnAndRow(3, $row)->getValue();
+                                $excel1stConsultantOtherName = $objWorksheet->getCellByColumnAndRow(4, $row)->getValue();
+                                $excel1stConsultantCompany = $objWorksheet->getCellByColumnAndRow(5, $row)->getValue();
+                                $excel1stConsultantPhone = $objWorksheet->getCellByColumnAndRow(6, $row)->getValue();
+                                $excel1stConsultantEmail = $objWorksheet->getCellByColumnAndRow(7, $row)->getValue();
+
+                                $excel2ndConsultantTitle = $objWorksheet->getCellByColumnAndRow(8, $row)->getValue();
+                                $excel2ndConsultantSurname = $objWorksheet->getCellByColumnAndRow(9, $row)->getValue();
+                                $excel2ndConsultantOtherName = $objWorksheet->getCellByColumnAndRow(10, $row)->getValue();
+                                $excel2ndConsultantCompany = $objWorksheet->getCellByColumnAndRow(11, $row)->getValue();
+                                $excel2ndConsultantPhone = $objWorksheet->getCellByColumnAndRow(12, $row)->getValue();
+                                $excel2ndConsultantEmail = $objWorksheet->getCellByColumnAndRow(13, $row)->getValue();
+
+                                $excel3rdConsultantTitle = $objWorksheet->getCellByColumnAndRow(14, $row)->getValue();
+                                $excel3rdConsultantSurname = $objWorksheet->getCellByColumnAndRow(15, $row)->getValue();
+                                $excel3rdConsultantOtherName = $objWorksheet->getCellByColumnAndRow(16, $row)->getValue();
+                                $excel3rdConsultantCompany = $objWorksheet->getCellByColumnAndRow(17, $row)->getValue();
+                                $excel3rdConsultantPhone = $objWorksheet->getCellByColumnAndRow(18, $row)->getValue();
+                                $excel3rdConsultantEmail = $objWorksheet->getCellByColumnAndRow(19, $row)->getValue();
+
+                                $excel1stProjectOwnerTitle = $objWorksheet->getCellByColumnAndRow(20, $row)->getValue();
+                                $excel1stProjectOwnerSurname = $objWorksheet->getCellByColumnAndRow(21, $row)->getValue();
+                                $excel1stProjectOwnerOtherName = $objWorksheet->getCellByColumnAndRow(22, $row)->getValue();
+                                $excel1stProjectOwnerCompany = $objWorksheet->getCellByColumnAndRow(23, $row)->getValue();
+                                $excel1stProjectOwnerPhone = $objWorksheet->getCellByColumnAndRow(24, $row)->getValue();
+                                $excel1stProjectOwnerEmail = $objWorksheet->getCellByColumnAndRow(25, $row)->getValue();
+
+                                $excel2ndProjectOwnerTitle = $objWorksheet->getCellByColumnAndRow(26, $row)->getValue();
+                                $excel2ndProjectOwnerSurname = $objWorksheet->getCellByColumnAndRow(27, $row)->getValue();
+                                $excel2ndProjectOwnerOtherName = $objWorksheet->getCellByColumnAndRow(28, $row)->getValue();
+                                $excel2ndProjectOwnerCompany = $objWorksheet->getCellByColumnAndRow(29, $row)->getValue();
+                                $excel2ndProjectOwnerPhone = $objWorksheet->getCellByColumnAndRow(30, $row)->getValue();
+                                $excel2ndProjectOwnerEmail = $objWorksheet->getCellByColumnAndRow(31, $row)->getValue();
+
+                                $excel3rdProjectOwnerTitle = $objWorksheet->getCellByColumnAndRow(32, $row)->getValue();
+                                $excel3rdProjectOwnerSurname = $objWorksheet->getCellByColumnAndRow(33, $row)->getValue();
+                                $excel3rdProjectOwnerOtherName = $objWorksheet->getCellByColumnAndRow(34, $row)->getValue();
+                                $excel3rdProjectOwnerCompany = $objWorksheet->getCellByColumnAndRow(35, $row)->getValue();
+                                $excel3rdProjectOwnerPhone = $objWorksheet->getCellByColumnAndRow(36, $row)->getValue();
+                                $excel3rdProjectOwnerEmail = $objWorksheet->getCellByColumnAndRow(37, $row)->getValue();
+
+                                $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+                                $lastUpdatedTime = date("Y-m-d H:i");
+
+                                $currState = $projectDetail['state'];
+                                $newState = $currState;
+                                $isCompleted = true;
+
+                                if (!isset($excelPlannedCommissionDate) || (trim($excelPlannedCommissionDate) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stConsultantTitle) || (trim($excel1stConsultantTitle) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stConsultantSurname) || (trim($excel1stConsultantSurname) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stConsultantOtherName) || (trim($excel1stConsultantOtherName) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stConsultantCompany) || (trim($excel1stConsultantCompany) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stConsultantPhone) || (trim($excel1stConsultantPhone) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stConsultantEmail) || (trim($excel1stConsultantEmail) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stProjectOwnerTitle) || (trim($excel1stProjectOwnerTitle) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stProjectOwnerSurname) || (trim($excel1stProjectOwnerSurname) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stProjectOwnerOtherName) || (trim($excel1stProjectOwnerOtherName) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stProjectOwnerCompany) || (trim($excel1stProjectOwnerCompany) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stProjectOwnerPhone) || (trim($excel1stProjectOwnerPhone) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if (!isset($excel1stProjectOwnerEmail) || (trim($excel1stProjectOwnerEmail) == "")) {
+                                    $isCompleted = false;
+                                }
+
+                                if ($isCompleted) {
+                                    if ($currState == "WAITING_INITIAL_INFO") {
+                                        $newState = "WAITING_INITIAL_INFO_BY_PQ";
+                                    } else if ("WAITING_INITIAL_INFO_BY_REGION_STAFF") {
+                                        $newState = "COMPLETED_INITIAL_INFO";
+                                    }
+                                }
+
+                                $result = Yii::app()->planningAheadDao->updateRegionStaffProjectInitInfo($excelPlannedCommissionDate,
+                                    $excel1stConsultantTitle,$excel1stConsultantSurname,$excel1stConsultantOtherName,$excel1stConsultantCompany,
+                                    $excel1stConsultantPhone,$excel1stConsultantEmail,$excel2ndConsultantTitle,$excel2ndConsultantSurname,
+                                    $excel2ndConsultantOtherName,$excel2ndConsultantCompany,$excel2ndConsultantPhone,$excel2ndConsultantEmail,
+                                    $excel3rdConsultantTitle,$excel3rdConsultantSurname,$excel3rdConsultantOtherName,$excel3rdConsultantCompany,
+                                    $excel3rdConsultantPhone,$excel3rdConsultantEmail,$excel1stProjectOwnerTitle,$excel1stProjectOwnerSurname,
+                                    $excel1stProjectOwnerOtherName,$excel1stProjectOwnerCompany,$excel1stProjectOwnerPhone,$excel1stProjectOwnerEmail,
+                                    $excel2ndProjectOwnerTitle,$excel2ndProjectOwnerSurname,$excel2ndProjectOwnerOtherName,$excel2ndProjectOwnerCompany,
+                                    $excel2ndProjectOwnerPhone,$excel2ndProjectOwnerEmail,$excel3rdProjectOwnerTitle,$excel3rdProjectOwnerSurname,
+                                    $excel3rdProjectOwnerOtherName,$excel3rdProjectOwnerCompany,$excel3rdProjectOwnerPhone,$excel3rdProjectOwnerEmail,
+                                    $excelSchemeNo,$newState,$lastUpdatedBy,$lastUpdatedTime);
+
+                                if ($result['status'] == 'OK') {
+                                    $successCount++;
+                                } else {
+                                    $failSchemeNo = $failSchemeNo . $excelSchemeNo . ",";
+                                    $failCount++;
+                                }
+
+                            } else {
+                                $failSchemeNo = $failSchemeNo . $excelSchemeNo . ",";
+                                $failCount++;
+                            }
+                        }
+
+                        if ($failCount > 0) {
+                            $this->viewbag['resultMsg'] = "The file [". $fileName . "] has been uploaded. Total [" .
+                                ($successCount + $failCount) . '], Success [' . $successCount . '], Failed [' . $failCount . ':' .
+                                substr($failSchemeNo,0,(strlen($failSchemeNo)-1)) . ']';
+                        } else {
+                            $this->viewbag['resultMsg'] = "The file [". $fileName . "] has been uploaded. Total [" .
+                                ($successCount + $failCount) . '], Success [' . $successCount . '], Failed [' . $failCount . ']' ;
+                        }
+
+                        $this->viewbag['IsUploadSuccess'] = true;
+
+                    } else {
+                        $this->viewbag['resultMsg']  = "Sorry, there was an error uploading your file!";
+                        $this->viewbag['IsUploadSuccess'] = false;
+                    }
+                } else {
+                    $this->viewbag['resultMsg'] = 'Please select the condition letter in Excel format!';
+                    $this->viewbag['IsUploadSuccess'] = false;
+                }
+            } else {
+                $this->viewbag['IsUploadSuccess'] = false;
+                $this->viewbag['resultMsg'] = 'Please select the region staff project initial information file to upload!';
+            }
+        }
+
+        $this->render("//site/Form/PlanningAheadUploadRegionStaffInitialInfo");
     }
 
     // process the uploaded consultant meeting information file and save its information to DB
@@ -4447,7 +4692,9 @@ class PlanningAheadController extends Controller {
             $currState = Yii::app()->planningAheadDao->getPlanningAheadDetails($txnSchemeNo);
             $txnNewState = $currState['state'];
 
-            if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "2")) {
+            if ($txnTempProj=="Y") {
+                $txnNewState = "CLOSED_AS_TEMP_PROJ";
+            } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "2")) {
                 $txnNewState = "WAITING_INITIAL_INFO_BY_REGION_STAFF";
             } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "3")) {
                 $txnNewState = "WAITING_INITIAL_INFO_BY_PQ";
