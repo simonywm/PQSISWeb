@@ -3033,11 +3033,11 @@ class PlanningAheadDao extends CApplicationComponent {
 
     }
 
-    public function updateStandardLetter($txnPlanningAheadId, $standLetterIssueDate, $standLetterFaxRefNo,
+    public function updateStandardLetter($txnPlanningAheadId, $standLetterIssueDate, $standLetterFaxRefNo, $projectTypeId,
                                          $lastUpdatedBy,$lastUpdatedTime) {
 
         $sql = 'UPDATE "tbl_planning_ahead" SET "stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, ';
-        $sql = $sql . '"last_updated_by"=?, "last_updated_time"=? ';
+        $sql = $sql . '"project_type_id"=?, "last_updated_by"=?, "last_updated_time"=? ';
         $sql = $sql . 'WHERE "planning_ahead_id"=?';
 
         try {
@@ -3045,8 +3045,8 @@ class PlanningAheadDao extends CApplicationComponent {
             //$pdo->beginTransaction();
             $transaction = Yii::app()->db->beginTransaction();
             $stmt = Yii::app()->db->createCommand($sql);
-            $result = $stmt->execute(array($standLetterIssueDate,$standLetterFaxRefNo,$lastUpdatedBy,$lastUpdatedTime,
-                $txnPlanningAheadId));
+            $result = $stmt->execute(array($standLetterIssueDate,$standLetterFaxRefNo,$projectTypeId,$lastUpdatedBy,
+                $lastUpdatedTime,$txnPlanningAheadId));
             $transaction->commit();
 
             $retJson['status'] = 'OK';
