@@ -907,7 +907,8 @@
         </div>
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+        <?php if (($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
+            ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
             ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
             ($this->viewbag['state']=="SENT_MEETING_ACK") ||
             ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
@@ -5140,6 +5141,7 @@
                                     if (retJson.status == "OK") {
                                         // display message
                                         showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
+                                        window.location.reload();
                                     } else {
                                         // error message
                                         showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
@@ -5173,6 +5175,7 @@
                             if (retJson.status == "OK") {
                                 // display message
                                 showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Project Detail updated successfully.");
+                                window.location.reload();
                             } else {
                                 // error message
                                 showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
@@ -5347,12 +5350,13 @@
             window.location.href =
                 "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadProjectDetailStandardLetterTemplate" +
                 "&standLetterIssueDate=" + $("#standLetterIssueDate").val() + "&standLetterFaxRefNo=" + $("#standLetterFaxRefNo").val() +
-                "&schemeNo=" + $("#schemeNo").val();
+                "&schemeNo=" + $("#schemeNo").val() + "&projectTypeId=" + $("#typeOfProject").val();
             $(this).attr("disabled", false);
         });
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+        <?php if (($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
@@ -6387,7 +6391,8 @@
 
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+        <?php if (($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
@@ -6573,8 +6578,8 @@
         <?php
             } else if(Yii::app()->session['tblUserDo']['roleId'] == 3) {?>
 
-        result = validateEmpty("#commissionDate", "Commission Date", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
+        //result = validateEmpty("#commissionDate", "Commission Date", errorMessage, i);
+        //errorMessage = result[0]; i = result[1];
 
         result = validateEmpty("#firstRegionStaffName", "First Region Staff Name", errorMessage, i);
         errorMessage = result[0]; i = result[1];
@@ -6662,7 +6667,8 @@
 
         <?php } ?>
 
-        <?php if (($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
+        <?php if (($this->viewbag['state']=="WAITING_CONSULTANT_MEETING_INFO") ||
+                    ($this->viewbag['state']=="COMPLETED_CONSULTANT_MEETING_INFO") ||
                     ($this->viewbag['state']=="COMPLETED_ACTUAL_MEETING_DATE") ||
                     ($this->viewbag['state']=="SENT_MEETING_ACK") ||
                     ($this->viewbag['state']=="SENT_FIRST_INVITATION_LETTER") ||
