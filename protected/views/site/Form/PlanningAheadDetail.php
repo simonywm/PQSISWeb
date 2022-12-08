@@ -4902,6 +4902,22 @@
 <script>
     $(document).ready(function(){
 
+        // set timer for keep alive
+        setInterval(function() {
+            if (validateDraftInput()) {
+                const form = document.getElementById('detailForm');
+                $.ajax({
+                    url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailDraftUpdate",
+                    type: "POST",
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    data: new FormData(form),
+                    success: function(data) {}
+                });
+            }
+        }, 300000);
+
         // Load information for the project detail
         let availableTagsForConsultantCompanyName = [
             <?php foreach ($this->viewbag['consultantCompanyList'] as $consultantCompany) {?> {
@@ -5487,7 +5503,7 @@
             if (errorMessage != "") {
                 showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
                 return;
-            }
+            }AjaxGetKeepAlive
 
             $(this).attr("disabled", true);
             window.location.href =
