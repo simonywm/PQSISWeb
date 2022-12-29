@@ -18,6 +18,7 @@ class PlanningAheadController extends Controller {
         );
     }
 
+
     // *************************************
     // ***** Web application function ******
     // *************************************
@@ -26,10 +27,10 @@ class PlanningAheadController extends Controller {
     // Load the information page for the Planning Ahead
     // *********************************************************************
     public function actionGetPlanningAheadInfoSearch() {
-        // Only allow PG Admin for this function
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        // Only allow PG Admin and region staff for this function
+        if ((Yii::app()->session['tblUserDo']['roleId']!=2) && ((Yii::app()->session['tblUserDo']['roleId']!=3))) {
             $this->viewbag['isError'] = true;
-            $this->viewbag['errorMsg'] = 'You do not have the privilege to upload condition letter.';
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to access Planning Ahead Information Search Page.';
             $this->render("//site/Form/PlanningAheadDetailError");
         } else {
             $this->viewbag['projectTypeList'] = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeList();
@@ -84,7 +85,6 @@ class PlanningAheadController extends Controller {
                             $successResultMsg = $successResultMsg . $fileName . "], [";
                             $this->viewbag['IsUploadSuccess'] = true;
                         }else{
-                            $failResultMsg = $failResultMsg . $fileName . "], [";
                             $this->viewbag['resultMsg']  = "Sorry, there was an error when uploading your file [" . $fileName . "]";
                             $this->viewbag['IsUploadSuccess'] = false;
                             break;
@@ -177,6 +177,8 @@ class PlanningAheadController extends Controller {
                                 $excelPlannedCommissionDate = $objWorksheet->getCellByColumnAndRow(1, $row)->getValue();
                                 if (isset($excelPlannedCommissionDate) && ($excelPlannedCommissionDate != "")) {
                                     $excelPlannedCommissionDate = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($excelPlannedCommissionDate));
+                                } else {
+                                    $excelPlannedCommissionDate = null;
                                 }
 
                                 $excel1stConsultantTitle = $objWorksheet->getCellByColumnAndRow(2, $row)->getValue();
@@ -228,10 +230,6 @@ class PlanningAheadController extends Controller {
                                 $newState = $currState;
                                 $isCompleted = true;
 
-                                if (!isset($excelPlannedCommissionDate) || (trim($excelPlannedCommissionDate) == "")) {
-                                    $isCompleted = false;
-                                }
-
                                 if (!isset($excel1stConsultantTitle) || (trim($excel1stConsultantTitle) == "")) {
                                     $isCompleted = false;
                                 }
@@ -256,57 +254,31 @@ class PlanningAheadController extends Controller {
                                     $isCompleted = false;
                                 }
 
-                                if (!isset($excel1stProjectOwnerTitle) || (trim($excel1stProjectOwnerTitle) == "")) {
-                                    $isCompleted = false;
-                                }
-
-                                if (!isset($excel1stProjectOwnerSurname) || (trim($excel1stProjectOwnerSurname) == "")) {
-                                    $isCompleted = false;
-                                }
-
-                                if (!isset($excel1stProjectOwnerOtherName) || (trim($excel1stProjectOwnerOtherName) == "")) {
-                                    $isCompleted = false;
-                                }
-
-                                if (!isset($excel1stProjectOwnerCompany) || (trim($excel1stProjectOwnerCompany) == "")) {
-                                    $isCompleted = false;
-                                }
-
-                                if (!isset($excel1stProjectOwnerPhone) || (trim($excel1stProjectOwnerPhone) == "")) {
-                                    $isCompleted = false;
-                                }
-
-                                if (!isset($excel1stProjectOwnerEmail) || (trim($excel1stProjectOwnerEmail) == "")) {
-                                    $isCompleted = false;
-                                }
-
                                 if ($isCompleted) {
-                                    if ($currState == "WAITING_INITIAL_INFO") {
-                                        $newState = "WAITING_INITIAL_INFO_BY_PQ";
-                                    } else if ("WAITING_INITIAL_INFO_BY_REGION_STAFF") {
-                                        $newState = "COMPLETED_INITIAL_INFO";
+                                    $newState = "COMPLETED_INITIAL_INFO";
+
+                                    $result = Yii::app()->planningAheadDao->updateRegionStaffProjectInitInfo($excelPlannedCommissionDate,
+                                        $excel1stConsultantTitle,$excel1stConsultantSurname,$excel1stConsultantOtherName,$excel1stConsultantCompany,
+                                        $excel1stConsultantPhone,$excel1stConsultantEmail,$excel2ndConsultantTitle,$excel2ndConsultantSurname,
+                                        $excel2ndConsultantOtherName,$excel2ndConsultantCompany,$excel2ndConsultantPhone,$excel2ndConsultantEmail,
+                                        $excel3rdConsultantTitle,$excel3rdConsultantSurname,$excel3rdConsultantOtherName,$excel3rdConsultantCompany,
+                                        $excel3rdConsultantPhone,$excel3rdConsultantEmail,$excel1stProjectOwnerTitle,$excel1stProjectOwnerSurname,
+                                        $excel1stProjectOwnerOtherName,$excel1stProjectOwnerCompany,$excel1stProjectOwnerPhone,$excel1stProjectOwnerEmail,
+                                        $excel2ndProjectOwnerTitle,$excel2ndProjectOwnerSurname,$excel2ndProjectOwnerOtherName,$excel2ndProjectOwnerCompany,
+                                        $excel2ndProjectOwnerPhone,$excel2ndProjectOwnerEmail,$excel3rdProjectOwnerTitle,$excel3rdProjectOwnerSurname,
+                                        $excel3rdProjectOwnerOtherName,$excel3rdProjectOwnerCompany,$excel3rdProjectOwnerPhone,$excel3rdProjectOwnerEmail,
+                                        $excelSchemeNo,$newState,$lastUpdatedBy,$lastUpdatedTime);
+
+                                    if ($result['status'] == 'OK') {
+                                        $successCount++;
+                                    } else {
+                                        $failSchemeNo = $failSchemeNo . $excelSchemeNo . ",";
+                                        $failCount++;
                                     }
-                                }
-
-                                $result = Yii::app()->planningAheadDao->updateRegionStaffProjectInitInfo($excelPlannedCommissionDate,
-                                    $excel1stConsultantTitle,$excel1stConsultantSurname,$excel1stConsultantOtherName,$excel1stConsultantCompany,
-                                    $excel1stConsultantPhone,$excel1stConsultantEmail,$excel2ndConsultantTitle,$excel2ndConsultantSurname,
-                                    $excel2ndConsultantOtherName,$excel2ndConsultantCompany,$excel2ndConsultantPhone,$excel2ndConsultantEmail,
-                                    $excel3rdConsultantTitle,$excel3rdConsultantSurname,$excel3rdConsultantOtherName,$excel3rdConsultantCompany,
-                                    $excel3rdConsultantPhone,$excel3rdConsultantEmail,$excel1stProjectOwnerTitle,$excel1stProjectOwnerSurname,
-                                    $excel1stProjectOwnerOtherName,$excel1stProjectOwnerCompany,$excel1stProjectOwnerPhone,$excel1stProjectOwnerEmail,
-                                    $excel2ndProjectOwnerTitle,$excel2ndProjectOwnerSurname,$excel2ndProjectOwnerOtherName,$excel2ndProjectOwnerCompany,
-                                    $excel2ndProjectOwnerPhone,$excel2ndProjectOwnerEmail,$excel3rdProjectOwnerTitle,$excel3rdProjectOwnerSurname,
-                                    $excel3rdProjectOwnerOtherName,$excel3rdProjectOwnerCompany,$excel3rdProjectOwnerPhone,$excel3rdProjectOwnerEmail,
-                                    $excelSchemeNo,$newState,$lastUpdatedBy,$lastUpdatedTime);
-
-                                if ($result['status'] == 'OK') {
-                                    $successCount++;
                                 } else {
                                     $failSchemeNo = $failSchemeNo . $excelSchemeNo . ",";
                                     $failCount++;
                                 }
-
                             } else {
                                 $failSchemeNo = $failSchemeNo . $excelSchemeNo . ",";
                                 $failCount++;
@@ -772,10 +744,18 @@ class PlanningAheadController extends Controller {
                 $this->viewbag['isError'] = true;
                 $this->viewbag['errorMsg'] = 'Unable to find the Scheme No. <strong>[' . $schemeNo . "]</strong> from our database.";
                 $this->render("//site/Form/PlanningAheadDetailError");
-            } else if (($recordList['state'] != "WAITING_INITIAL_INFO") &&
-                ($recordList['state'] != "WAITING_INITIAL_INFO_BY_REGION_STAFF") &&
-                ($recordList['state'] != "WAITING_INITIAL_INFO_BY_PQ") &&
-                (Yii::app()->session['tblUserDo']['roleId']!=2)) {
+            } else if ((($recordList['state'] == "WAITING_INITIAL_INFO") || ($recordList['state'] == "COMPLETED_INITIAL_INFO_BY_PQ")) && (Yii::app()->session['tblUserDo']['roleId']!=2)) {
+                $this->viewbag['isError'] = true;
+                $this->viewbag['errorTitle'] = 'The information of this project has not been provided by PG Admin or not yet ready for Region Staff to input.';
+                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
+                $this->render("//site/Form/PlanningAheadDetailError");
+            } else if (($recordList['state'] != "COMPLETED_INITIAL_INFO_BY_PQ") && ($recordList['state'] != "COMPLETED_INITIAL_INFO")
+                && ($recordList['state'] != "WAITING_INITIAL_INFO_BY_REGION_STAFF") && (Yii::app()->session['tblUserDo']['roleId']==3)) {
+                $this->viewbag['isError'] = true;
+                $this->viewbag['errorTitle'] = 'The information of this project has been filled in.';
+                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
+                $this->render("//site/Form/PlanningAheadDetailError");
+            } else if ((Yii::app()->session['tblUserDo']['roleId']!=2) && (Yii::app()->session['tblUserDo']['roleId']!=3)) {
                 $this->viewbag['isError'] = true;
                 $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
                 $this->render("//site/Form/PlanningAheadDetailError");
@@ -1251,51 +1231,61 @@ class PlanningAheadController extends Controller {
             $standLetterIssueDate = $param['standLetterIssueDate'];
             $standLetterFaxRefNo = $param['standLetterFaxRefNo'];
             $schemeNo = $param['schemeNo'];
+            $projectTypeId = $param['projectTypeId'];
             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
             $lastUpdatedTime = date("Y-m-d H:i");
 
             $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
 
-            // Update the issue date and fax ref no. to database first
-            Yii::app()->planningAheadDao->updateStandardLetter($recordList['planningAheadId'], $standLetterIssueDate,
-                $standLetterFaxRefNo,$lastUpdatedBy,$lastUpdatedTime);
+            if (isset($recordList)) {
+                // Update the issue date and fax ref no. to database first
+                Yii::app()->planningAheadDao->updateStandardLetter($recordList['planningAheadId'], $standLetterIssueDate,
+                    $standLetterFaxRefNo,$projectTypeId,$lastUpdatedBy,$lastUpdatedTime);
 
-            $projectType = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeById($recordList['projectTypeId']);
-            $standardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
+                $projectType = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeById($projectTypeId);
+                $standardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
 
-            $standLetterFaxYear = date("y", strtotime($standLetterIssueDate));
-            $standLetterFaxMonth = date("m", strtotime($standLetterIssueDate));
-            $standLetterIssueDay = date("j", strtotime($standLetterIssueDate));
-            $standLetterIssueMonth = date("M", strtotime($standLetterIssueDate));
-            $standLetterIssueYear = date("Y", strtotime($standLetterIssueDate));
+                $standLetterFaxYear = date("y", strtotime($standLetterIssueDate));
+                $standLetterFaxMonth = date("m", strtotime($standLetterIssueDate));
+                $standLetterIssueDay = date("j", strtotime($standLetterIssueDate));
+                $standLetterIssueMonth = date("M", strtotime($standLetterIssueDate));
+                $standLetterIssueYear = date("Y", strtotime($standLetterIssueDate));
 
-            $templateProcessor = new TemplateProcessor($standardLetterTemplatePath['configValue'] . $projectType[0]['projectTypeTemplateFileName']);
-            $templateProcessor->setValue('consultantTitle', $recordList['firstConsultantTitle']);
-            $templateProcessor->setValue('consultantSurname', $this->formatToWordTemplate($recordList['firstConsultantSurname']));
-            $templateProcessor->setValue('consultantCompanyName', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
-            $templateProcessor->setValue('consultantEmail', $this->formatToWordTemplate($recordList['firstConsultantEmail']));
-            $templateProcessor->setValue('faxRefNo', $standLetterFaxRefNo);
-            $templateProcessor->setValue('faxDate', $standLetterFaxYear . "-" . $standLetterFaxMonth);
-            $templateProcessor->setValue('issueDate', $standLetterIssueDay . " " . $standLetterIssueMonth . " " . $standLetterIssueYear);
-            $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+                $templateProcessor = new TemplateProcessor($standardLetterTemplatePath['configValue'] . $projectType[0]['projectTypeTemplateFileName']);
+                $templateProcessor->setValue('consultantTitle', $recordList['firstConsultantTitle']);
+                $templateProcessor->setValue('consultantOtherNames', $recordList['firstConsultantOtherName']);
+                $templateProcessor->setValue('consultantSurname', $this->formatToWordTemplate($recordList['firstConsultantSurname']));
+                $templateProcessor->setValue('consultantCompanyName', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
+                $templateProcessor->setValue('consultantEmail', $this->formatToWordTemplate($recordList['firstConsultantEmail']));
+                $templateProcessor->setValue('faxRefNo', $standLetterFaxRefNo);
+                $templateProcessor->setValue('faxDate', $standLetterFaxYear . "-" . $standLetterFaxMonth);
+                $templateProcessor->setValue('issueDate', $standLetterIssueDay . " " . $standLetterIssueMonth . " " . $standLetterIssueYear);
+                $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
 
-            $pathToSave = $standardLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') ' . $projectType[0]['projectTypeTemplateFileName'];
-            $templateProcessor->saveAs($pathToSave);
+                $pathToSave = $standardLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') ' . $projectType[0]['projectTypeTemplateFileName'];
+                $templateProcessor->saveAs($pathToSave);
 
-            header("Content-Description: File Transfer");
-            header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-            header('Content-Disposition: attachment; filename='. basename($pathToSave));
-            header('Content-Length: ' . filesize($pathToSave));
-            header('Pragma: public');
+                header("Content-Description: File Transfer");
+                header("Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 
-            //Clear system output buffer
-            flush();
+                $filename = $recordList['projectTitle'];
+                $filename = str_replace(",", " ", $filename);
+                $filename = str_replace(";", " ", $filename);
+                $filename = str_replace(":", " ", $filename);
 
-            //Read the size of the file
-            readfile($pathToSave);
-            unlink($pathToSave); // deletes the temporary file
+                header('Content-Disposition: attachment; filename='. "Invitation of Power Quality (PQ) Planning Ahead Meeting for the Project - " . $filename . ".docx");
+                header('Content-Length: ' . filesize($pathToSave));
+                header('Pragma: public');
 
-            die();
+                //Clear system output buffer
+                flush();
+
+                //Read the size of the file
+                readfile($pathToSave);
+                unlink($pathToSave); // deletes the temporary file
+
+                die();
+            }
         }
     }
 
@@ -1337,7 +1327,7 @@ class PlanningAheadController extends Controller {
         $lastUpdatedTime = date("Y-m-d H:i");
 
         $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
-        $replySlip = Yii::app()->planningAheadDao->getReplySlip($recordList['meetingReplySlipId']);
+
 
         // Update the issue date and fax ref no. to database first
         Yii::app()->planningAheadDao->updateFirstInvitationLetter($recordList['planningAheadId'],
@@ -1358,6 +1348,7 @@ class PlanningAheadController extends Controller {
         $templateProcessor = new TemplateProcessor($firstInvitationLetterTemplatePath['configValue'] .
             $firstInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantOtherNames', $recordList['firstConsultantOtherName']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
@@ -1365,6 +1356,7 @@ class PlanningAheadController extends Controller {
         if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantOtherNames', $recordList['secondConsultantOtherName']);
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
@@ -1382,7 +1374,19 @@ class PlanningAheadController extends Controller {
             $firstInvitationLetterIssueDateMonth . " " .
             $firstInvitationLetterIssueDateYear);
         $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
-        $templateProcessor->setValue('replySlipReturnDate', $replySlip['replySlipLastUpdateTime']);
+
+        if (isset($recordList['meetingReplySlipId']) && ($recordList['meetingReplySlipId']) > 0) {
+            $replySlip = Yii::app()->planningAheadDao->getReplySlip($recordList['meetingReplySlipId']);
+            $templateProcessor->setValue('replySlipReturnDate', " mentioned in your PQ reply slip, which was returned to us on " . $replySlip['replySlipLastUpdateTime']);
+        } else {
+            $templateProcessor->setValue('replySlipReturnDate', "");
+        }
+
+        if (isset($recordList['commissionDate']) && ($recordList['commissionDate'] != "")) {
+            $templateProcessor->setValue('commissionDate', "on " . $recordList['commissionDate']);
+        } else {
+            $templateProcessor->setValue('commissionDate', "soon");
+        }
 
         $pathToSave = $firstInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
             $firstInvitationLetterTemplateFileName['configValue'];
@@ -1443,6 +1447,7 @@ class PlanningAheadController extends Controller {
         $templateProcessor = new TemplateProcessor($secondInvitationLetterTemplatePath['configValue'] .
             $secondInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantOtherNames', $recordList['firstConsultantOtherName']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
@@ -1450,6 +1455,7 @@ class PlanningAheadController extends Controller {
         if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantOtherNames', $recordList['secondConsultantOtherName']);
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
@@ -1536,6 +1542,7 @@ class PlanningAheadController extends Controller {
         $templateProcessor = new TemplateProcessor($thirdInvitationLetterTemplatePath['configValue'] .
             $thirdInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantOtherNames', $recordList['firstConsultantOtherName']);
         $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
         $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
         $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
@@ -1543,6 +1550,7 @@ class PlanningAheadController extends Controller {
         if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
             $templateProcessor->setValue('secondConsultantCc', "c.c.");
             $templateProcessor->setValue('secondConsultantTitle', "(" . $recordList['secondConsultantTitle'] . ")");
+            $templateProcessor->setValue('secondConsultantOtherNames', $recordList['secondConsultantOtherName']);
             $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
             $templateProcessor->setValue('secondConsultantCompany', $this->formatToWordTemplate($recordList['secondConsultantCompany']));
             $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
@@ -1621,6 +1629,7 @@ class PlanningAheadController extends Controller {
         $templateProcessor = new TemplateProcessor($forthInvitationLetterTemplatePath['configValue'] .
             $forthInvitationLetterTemplateFileName['configValue']);
         $templateProcessor->setValue('firstProjectOwnerTitle', $recordList['firstProjectOwnerTitle']);
+        $templateProcessor->setValue('firstProjectOwnerOtherNames', $recordList['firstProjectOwnerOtherName']);
         $templateProcessor->setValue('firstProjectOwnerSurname', $recordList['firstProjectOwnerSurname']);
         $templateProcessor->setValue('firstProjectOwnerCompany', $this->formatToWordTemplate($recordList['firstProjectOwnerCompany']));
         $templateProcessor->setValue('firstProjectOwnerEmail', $recordList['firstProjectOwnerEmail']);
@@ -1628,7 +1637,7 @@ class PlanningAheadController extends Controller {
         if (isset($recordList['secondProjectOwnerSurname']) && (trim($recordList['secondProjectOwnerSurname']) != "")) {
             $templateProcessor->setValue('secondProjectOwnerCc', "c.c.");
             $templateProcessor->setValue('secondProjectOwnerTitle', "(" . $recordList['secondProjectOwnerTitle'] . ")");
-            $templateProcessor->setValue('secondProjectOwnerSurname', $recordList['secondProjectOwnerSurname']);
+            $templateProcessor->setValue('secondProjectOwnerSurname', $recordList['secondProjectOwnerOtherName'] . " " . $recordList['secondProjectOwnerSurname']);
             $templateProcessor->setValue('secondProjectOwnerCompany', $this->formatToWordTemplate($recordList['secondProjectOwnerCompany']));
             $templateProcessor->setValue('secondProjectOwnerEmail', "(Email: " . $recordList['secondProjectOwnerEmail'] . ")");
         } else {
@@ -3494,6 +3503,11 @@ class PlanningAheadController extends Controller {
     // ***** Ajax function ******
     // *************************************
 
+    public function actionAjaxGetKeepAlive() {
+        $result = array('keepAlive' => "ON");
+        echo json_encode($result);
+    }
+
     public function actionAjaxGetPlanningAheadTable() {
         $param = json_decode(file_get_contents('php://input'), true);
         $searchParam = json_decode($param['searchParam'], true);
@@ -3609,6 +3623,7 @@ class PlanningAheadController extends Controller {
             $txnStandLetterFaxRefNo = $this->getPostParamString('standLetterFaxRefNo');
             $txnStandLetterEdmsLink = $this->getPostParamString('standLetterEdmsLink');
             $txnStandLetterLetterLoc = $this->getPostParamString('standLetterLetterLoc');
+            $txnStandardLetterContent = "";
 
             if (!empty($_FILES["standSignedLetter"]["name"])) {
                 $fileName = basename($_FILES["standSignedLetter"]["name"]);
@@ -3621,6 +3636,9 @@ class PlanningAheadController extends Controller {
                     $retJson['status'] = 'NOTOK';
                     $retJson['retMessage'] = "Upload signed standard letter failed!";
                     $success = false;
+                } else {
+                    $signedFile = file_get_contents($targetFilePath);
+                    $txnStandardLetterContent = base64_encode($signedFile);
                 }
             }
 
@@ -4023,7 +4041,7 @@ class PlanningAheadController extends Controller {
                     $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
                     $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
                     $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
-                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,$txnStandardLetterContent,
                     $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                     $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                     $txnMeetingConsentOwner,$txnMeetingReplySlipId,
@@ -4294,6 +4312,7 @@ class PlanningAheadController extends Controller {
             $txnStandLetterFaxRefNo = $this->getPostParamString('standLetterFaxRefNo');
             $txnStandLetterEdmsLink = $this->getPostParamString('standLetterEdmsLink');
             $txnStandLetterLetterLoc = $this->getPostParamString('standLetterLetterLoc');
+            $txnStandardLetterContent = "";
 
             if ($success && !empty($_FILES["standSignedLetter"]["name"])) {
                 $fileName = basename($_FILES["standSignedLetter"]["name"]);
@@ -4307,6 +4326,9 @@ class PlanningAheadController extends Controller {
                     $retJson['status'] = 'NOTOK';
                     $retJson['retMessage'] = "Upload signed standard letter failed!";
                     $success = false;
+                } else {
+                    $signedFile = file_get_contents($targetFilePath);
+                    $txnStandardLetterContent = base64_encode($signedFile);
                 }
             }
 
@@ -4695,9 +4717,7 @@ class PlanningAheadController extends Controller {
             if ($txnTempProj=="Y") {
                 $txnNewState = "CLOSED_AS_TEMP_PROJ";
             } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "2")) {
-                $txnNewState = "WAITING_INITIAL_INFO_BY_REGION_STAFF";
-            } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "3")) {
-                $txnNewState = "WAITING_INITIAL_INFO_BY_PQ";
+                $txnNewState = "COMPLETED_INITIAL_INFO_BY_PQ";
             } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_REGION_STAFF") && ($txnRoleId == "3")) {
                 $txnNewState = "COMPLETED_INITIAL_INFO";
             } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_PQ") && ($txnRoleId == "2")) {
@@ -4752,7 +4772,7 @@ class PlanningAheadController extends Controller {
                 $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
                 $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
                 $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
-                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink, $txnStandardLetterContent,
                 $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                 $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                 $txnMeetingConsentOwner,$txnMeetingReplySlipId,
@@ -4918,6 +4938,26 @@ class PlanningAheadController extends Controller {
         echo json_encode($retJson);
     }
 
+    public function actionAjaxPostTestEmail() {
+
+        // Takes raw data from the request
+        $json = file_get_contents('php://input');
+
+        // Converts it into a PHP object
+        $data = json_decode($json);
+
+        /*
+        $fileContent = base64_decode($data->Attachments[0]->Content);
+        $fileName = $data->Attachments[0]->Filename;
+
+        $fileDir = "C:\\Simon\\Projects\\JKTech\\PQSIS\\04 Testing\\" . $fileName;
+        file_put_contents($fileDir, $fileContent); // save
+
+        */
+        echo 'OK';
+    }
+
+
     // *************************************
     // ***** Internal Utility function *****
     // *************************************
@@ -5053,7 +5093,12 @@ class PlanningAheadController extends Controller {
         // save the generated file path to DB
         $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
         $lastUpdatedTime = date("Y-m-d H:i");
-        Yii::app()->planningAheadDao->updateReplySlipGeneratedLocation($recordList['meetingReplySlipId'],$pathToSave,
+
+        // save the content for the generated reply slip template to DB
+        $fileContent = file_get_contents($pathToSave);
+        $bas64Content = base64_encode($fileContent);
+
+        Yii::app()->planningAheadDao->updateReplySlipGeneratedLocation($recordList['meetingReplySlipId'],$pathToSave,$bas64Content,
             $lastUpdatedBy, $lastUpdatedTime);
 
         return $pathToSave;
