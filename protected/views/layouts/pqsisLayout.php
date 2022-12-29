@@ -100,6 +100,8 @@
         <div class="collapse navbar-collapse" id="main_nav">
 
             <ul class="navbar-nav">
+            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
+                if(Yii::app()->session['tblUserDo']['roleId']!=3){ ?>
                 <li class="nav-item dropdown">
                     <a id="aMenuFormLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Form</a>
@@ -128,6 +130,22 @@
 
                     </ul>
                 </li>
+            <?php } } ?>
+            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
+                if(Yii::app()->session['tblUserDo']['roleId']==3){ ?>
+                    <li class="nav-item dropdown">
+                        <a id="aMenuFormLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Form</a>
+                        <ul class="dropdown-menu" aria-labelledby="aMenuFormLink">
+                            <li>
+                                <a id="aMenuFormLinkPH" class="dropdown-item" href="#">Planning Ahead &raquo </a>
+                                <ul class="submenu dropdown-menu">
+                                    <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadInfoSearch">Planning Ahead Information</a>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                <?php } } ?>
     <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
                 if(Yii::app()->session['tblUserDo']['roleId']==1){ ?>
                     
@@ -203,6 +221,8 @@
                     </ul>
                 </li>
         <?php } } ?>
+            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
+                if(Yii::app()->session['tblUserDo']['roleId']!=3){ ?>
                 <li class="nav-item dropdown">
                     <a id="aMenuReportLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Report</a>
@@ -219,10 +239,10 @@
                         <a id="aMenuFunctionLinkIRPM" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=Function/IncidentReportPdfSearch">Incident Report PDF Match</a>
                     </div>
                 </li>
+                <?php } } ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=Site/Logout">Logout</a>
                 </li>
-
             </ul>
 
         </div> <!-- navbar-collapse.// -->

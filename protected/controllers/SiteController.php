@@ -121,6 +121,7 @@ class SiteController extends Controller
 
                             $userModel["username"] = $username;
                             $userModel['token_hash'] = $tokenHash;
+                            $retJson['tblUserDo'] = $userModel['roleId'];
                             Yii::app()->session['tblUserDo'] = $userModel;
                         }
 

@@ -101,7 +101,11 @@ $this->pageTitle=Yii::app()->name;
 				
 				if (retJson.status == "OK")
 				{
-					window.location.href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch";
+                    if ((retJson.tblUserDo == "2") || (retJson.tblUserDo == "3")) {
+                        window.location.href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadInfoSearch";
+                    } else {
+                        window.location.href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch";
+                    }
 				}
 				else
 					$("#msgFont").html(retJson.retMessage);

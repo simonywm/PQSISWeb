@@ -323,7 +323,7 @@
 
         <div id="accordionFirstContactOfConsultant">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #6e5f1e">
                     <a class="card-link" data-toggle="collapse" href="#firstContactOfConsultant" onclick="cardSelected('firstContactOfConsultantIcon')">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">1<span style="vertical-align: super; font-size: 10px">st</span> Contact of Consultant</h5></div>
@@ -342,7 +342,7 @@
                                         <span class="input-group-text">Name: </span>
                                     </div>
                                     <select id="firstConsultantTitle" name="firstConsultantTitle" class="form-control">
-                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <option value="" selected>--- Title ---</option>
                                         <?php if ($this->viewbag['firstConsultantTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
@@ -364,11 +364,10 @@
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
-
-                                    <input id="firstConsultantSurname" name="firstConsultantSurname" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Surname">
                                     <input id="firstConsultantOtherName" name="firstConsultantOtherName" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s) (e.g. T.M.)">
+                                    <input id="firstConsultantSurname" name="firstConsultantSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname (e.g. Chan)">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -406,7 +405,7 @@
 
         <div id="accordionSecondContactOfConsultant">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #6e5f1e">
                     <a class="card-link" data-toggle="collapse" href="#secondContactOfConsultant" onclick="cardSelected('secondContactOfConsultantIcon')">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">2<span style="vertical-align: super; font-size: 10px">nd</span> Contact of Consultant</h5></div>
@@ -425,7 +424,7 @@
                                         <span class="input-group-text">Name: </span>
                                     </div>
                                     <select id="secondConsultantTitle" name="secondConsultantTitle" class="form-control">
-                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <option value="" selected>--- Title ---</option>
                                         <?php if ($this->viewbag['secondConsultantTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
@@ -447,11 +446,10 @@
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
-
-                                    <input id="secondConsultantSurname" name="secondConsultantSurname" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Surname">
                                     <input id="secondConsultantOtherName" name="secondConsultantOtherName" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s) (e.g. T.M.)">
+                                    <input id="secondConsultantSurname" name="secondConsultantSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname (e.g. Chan)">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -489,7 +487,7 @@
 
         <div id="accordionThirdContactOfConsultant">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #6e5f1e">
                     <a class="card-link" data-toggle="collapse" href="#thirdContactOfConsultant" onclick="cardSelected('thirdContactOfConsultantIcon')">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">3<span style="vertical-align: super; font-size: 10px">rd</span> Contact of Consultant</h5></div>
@@ -508,7 +506,7 @@
                                         <span class="input-group-text">Name: </span>
                                     </div>
                                     <select id="thirdConsultantTitle" name="thirdConsultantTitle" class="form-control">
-                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <option value="" selected>--- Title ---</option>
                                         <?php if ($this->viewbag['thirdConsultantTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
@@ -530,11 +528,11 @@
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
-
-                                    <input id="thirdConsultantSurname" name="thirdConsultantSurname" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Surname">
                                     <input id="thirdConsultantOtherName" name="thirdConsultantOtherName" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s) (e.g. T.M.)">
+                                    <input id="thirdConsultantSurname" name="thirdConsultantSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname (e.g. Chan)">
+
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -572,7 +570,7 @@
 
         <div id="accordionFirstContactOfProjectOwner">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #106222">
                     <a class="card-link" data-toggle="collapse" href="#firstContactOfProjectOwner" onclick="cardSelected('firstContactOfProjectOwnerIcon');">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">1<span style="vertical-align: super; font-size: 10px">st</span> Contact of Project Owner</h5></div>
@@ -591,7 +589,7 @@
                                         <span class="input-group-text">Name: </span>
                                     </div>
                                     <select id="firstProjectOwnerTitle" name="firstProjectOwnerTitle" class="form-control">
-                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <option value="" selected>--- Title ---</option>
                                         <?php if ($this->viewbag['firstProjectOwnerTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
@@ -613,11 +611,11 @@
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
-
-                                    <input id="firstProjectOwnerSurname" name="firstProjectOwnerSurname" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Surname">
                                     <input id="firstProjectOwnerOtherName" name="firstProjectOwnerOtherName" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s) (e.g. T.M.)">
+                                    <input id="firstProjectOwnerSurname" name="firstProjectOwnerSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname (e.g. Chan)">
+
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -655,7 +653,7 @@
 
         <div id="accordionSecondContactOfProjectOwner">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #106222">
                     <a class="card-link" data-toggle="collapse" href="#secondContactOfProjectOwner" onclick="cardSelected('secondContactOfProjectOwnerIcon');">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">2<span style="vertical-align: super; font-size: 10px">nd</span> Contact of Project Owner</h5></div>
@@ -674,7 +672,7 @@
                                         <span class="input-group-text">Name: </span>
                                     </div>
                                     <select id="secondProjectOwnerTitle" name="secondProjectOwnerTitle" class="form-control">
-                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <option value="" selected>--- Title ---</option>
                                         <?php if ($this->viewbag['secondProjectOwnerTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
@@ -696,11 +694,10 @@
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
-
-                                    <input id="secondProjectOwnerSurname" name="secondProjectOwnerSurname" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Surname">
                                     <input id="secondProjectOwnerOtherName" name="secondProjectOwnerOtherName" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s) (e.g. T.M.)">
+                                    <input id="secondProjectOwnerSurname" name="secondProjectOwnerSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname (e.g. Chan)">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -738,7 +735,7 @@
 
         <div id="accordionThirdContactOfProjectOwner">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #106222">
                     <a class="card-link" data-toggle="collapse" href="#thirdContactOfProjectOwner" onclick="cardSelected('thirdContactOfProjectOwnerIcon');">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">3<span style="vertical-align: super; font-size: 10px">rd</span> Contact of Project Owner</h5></div>
@@ -757,7 +754,7 @@
                                         <span class="input-group-text">Name: </span>
                                     </div>
                                     <select id="thirdProjectOwnerTitle" name="thirdProjectOwnerTitle" class="form-control">
-                                        <option value="0" selected disabled>--- Title ---</option>
+                                        <option value="" selected>--- Title ---</option>
                                         <?php if ($this->viewbag['thirdProjectOwnerTitle'] == "Mr.") { ?>
                                             <option value="Mr." selected>Mr.</option>
                                         <?php } else { ?>
@@ -779,11 +776,10 @@
                                             <option value="Miss">Miss</option>
                                         <?php } ?>
                                     </select>
-
-                                    <input id="thirdProjectOwnerSurname" name="thirdProjectOwnerSurname" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Surname">
                                     <input id="thirdProjectOwnerOtherName" name="thirdProjectOwnerOtherName" type="text"
-                                           class="form-control" autocomplete="off" placeholder="Other Name(s)">
+                                           class="form-control" autocomplete="off" placeholder="Other Name(s) (e.g. T.M.)">
+                                    <input id="thirdProjectOwnerSurname" name="thirdProjectOwnerSurname" type="text"
+                                           class="form-control" autocomplete="off" placeholder="Surname (e.g. Chan)">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -839,7 +835,7 @@
             ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         <div id="accordionDetailofPQStandardLetter">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #184a6c">
                     <a class="card-link" data-toggle="collapse" href="#detailofPQStandardLetter" onclick="cardSelected('standardLetterIcon');">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light">Details of PQ Standard Letter</h5></div>
@@ -925,7 +921,7 @@
             ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         <div id="accordionDetailofMeeting">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #412911">
                     <a class="card-link" data-toggle="collapse" href="#detailofMeeting"
                        onclick="cardSelected('detailofMeetingIcon');">
                         <div class="row">
@@ -1029,7 +1025,7 @@
 
         <div id="accordionDetailofReplySlip" style="display: none">
             <div class="card">
-                <div class="card-header" style="background-color: #e88d34">
+                <div class="card-header" style="background-color: #412911">
                     <a class="card-link" data-toggle="collapse" href="#detailofReplySlip" onclick="cardSelected('detailofReplySlipIcon');">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light pt-2">Reply Slip Detail</h5></div>
@@ -1504,7 +1500,7 @@
             ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofFirstInvitation">
                 <div class="card">
-                    <div class="card-header" style="background-color: #6f42c1">
+                    <div class="card-header" style="background-color: #123b1a">
                         <a class="card-link" data-toggle="collapse" href="#detailofFirstInvitation"
                            onclick="cardSelected('detailofFirstInvitationIcon');">
                             <div class="row">
@@ -1626,7 +1622,7 @@
             ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofSecondInvitation">
                 <div class="card">
-                    <div class="card-header" style="background-color: #6f42c1">
+                    <div class="card-header" style="background-color: #123b1a">
                         <a class="card-link" data-toggle="collapse" href="#detailofSecondInvitation"
                            onclick="cardSelected('detailofSecondInvitationIcon');">
                             <div class="row">
@@ -1747,7 +1743,7 @@
             ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofThirdInvitation">
                 <div class="card">
-                    <div class="card-header" style="background-color: #6f42c1">
+                    <div class="card-header" style="background-color: #123b1a">
                         <a class="card-link" data-toggle="collapse" href="#detailofThirdInvitation"
                            onclick="cardSelected('detailofThirdInvitationIcon');">
                             <div class="row">
@@ -1866,7 +1862,7 @@
             ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
         <div id="accordionDetailOfEvaluationReport">
             <div class="card">
-                <div class="card-header" style="background-color: #6f42c1">
+                <div class="card-header" style="background-color: #3a1b44">
                     <a class="card-link" data-toggle="collapse" href="#detailOfEvaluationReport"
                        onclick="cardSelected('detailOfEvaluationReportIcon');">
                         <div class="row">
@@ -1922,7 +1918,7 @@
 
         <div id="accordionDetailOfEvaluationReportDetail" style="display: none">
             <div class="card">
-                <div class="card-header" style="background-color: #e88d34">
+                <div class="card-header" style="background-color: #3a1b44">
                     <a class="card-link" data-toggle="collapse" href="#detailOfEvaluationReportDetail" onclick="cardSelected('detailOfEvaluationReportDetailIcon');">
                         <div class="row">
                             <div class="col-11"><h5 class="text-light pt-2">Evaluation Report Detail</h5></div>
@@ -3319,7 +3315,7 @@
                     ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailofForthInvitation">
                 <div class="card">
-                    <div class="card-header" style="background-color: #6f42c1">
+                    <div class="card-header" style="background-color: #5b3e25">
                         <a class="card-link" data-toggle="collapse" href="#detailofForthInvitation"
                            onclick="cardSelected('detailofForthInvitationIcon');">
                             <div class="row">
@@ -3433,7 +3429,7 @@
                     ($this->viewbag['state']=="COMPLETED_RE_PQ_SITE_WALK_FAIL")) { ?>
             <div id="accordionDetailOfReEvaluationReport">
                 <div class="card">
-                    <div class="card-header" style="background-color: #6f42c1">
+                    <div class="card-header" style="background-color: #1f4826">
                         <a class="card-link" data-toggle="collapse" href="#detailOfReEvaluationReport"
                            onclick="cardSelected('detailOfReEvaluationReportIcon');">
                             <div class="row">
@@ -3489,7 +3485,7 @@
 
             <div id="accordionDetailOfReEvaluationReportDetail" style="display: none">
                 <div class="card">
-                    <div class="card-header" style="background-color: #e88d34">
+                    <div class="card-header" style="background-color: #1f4826">
                         <a class="card-link" data-toggle="collapse" href="#detailOfReEvaluationReportDetail" onclick="cardSelected('detailOfReEvaluationReportDetailIcon');">
                             <div class="row">
                                 <div class="col-11"><h5 class="text-light pt-2">Evaluation Report Detail</h5></div>
@@ -4881,6 +4877,7 @@
 
         <div class="form-group row px-3 pt-2">
             <div>
+                <input class="btn btn-primary" type="submit" name="backBtn" id="backBtn" value="Back">
                 <input class="btn btn-primary" type="submit" name="saveDraftBtn" id="saveDraftBtn" value="Save as Draft">
                 <input class="btn btn-primary" type="submit" name="saveProcessBtn" id="saveProcessBtn" value="Save & Process">
             </div>
@@ -4904,6 +4901,8 @@
 
         // set timer for keep alive
         setInterval(function() {
+
+            /*
             if (validateDraftInput()) {
                 const form = document.getElementById('detailForm');
                 $.ajax({
@@ -4916,6 +4915,16 @@
                     success: function(data) {}
                 });
             }
+            */
+            $.ajax({
+                url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxGetKeepAlive",
+                type: "GET",
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {}
+            });
+
         }, 300000);
 
         // Load information for the project detail
@@ -5102,6 +5111,7 @@
                 $("#loading-modal").modal("show");
                 $("#saveDraftBtn").attr("disabled", true);
                 $("#saveProcessBtn").attr("disabled", true);
+                $("#backBtn").attr("disabled", true);
 
                 $.ajax({
                     url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailDraftUpdate",
@@ -5128,6 +5138,7 @@
                     $("#loading-modal").modal("hide");
                     $("#saveDraftBtn").attr("disabled", false);
                     $("#saveProcessBtn").attr("disabled", false);
+                    $("#backBtn").attr("disabled", false);
                 });
             } else if ($(this).find("input[type=submit]:focus" ).val() == 'Save & Process') {
 
@@ -5142,6 +5153,7 @@
                             $("#loading-modal").modal("show");
                             $("#saveDraftBtn").attr("disabled", true);
                             $("#saveProcessBtn").attr("disabled", true);
+                            $("#backBtn").attr("disabled", true);
 
                             const form = document.getElementById('detailForm');
 
@@ -5171,6 +5183,7 @@
                                 $("#loading-modal").modal("hide");
                                 $("#saveDraftBtn").attr("disabled", false);
                                 $("#saveProcessBtn").attr("disabled", false);
+                                $("#backBtn").attr("disabled", false);
                             });
                         },
                         function() {});
@@ -5315,6 +5328,13 @@
                 }).always(function(data) {
                     $("#loading-modal").modal("hide");
                 });
+            } else if ($(this).find("input[type=submit]:focus" ).val() == 'Back') {
+                showConfirmation("<i class=\"fas fa-exclamation-circle\"></i> ", "Confirmation",
+                    "Please save before leave",
+                    function() {
+                        window.history.back();
+                    },
+                    function() {});
             }
         });
 
@@ -5503,7 +5523,7 @@
             if (errorMessage != "") {
                 showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
                 return;
-            }AjaxGetKeepAlive
+            }
 
             $(this).attr("disabled", true);
             window.location.href =
@@ -6622,24 +6642,6 @@
         errorMessage = result[0]; i = result[1];
 
         result = validateEmpty("#firstConsultantEmail", "1st Consultant Email", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
-
-        result = validateSelected("#firstProjectOwnerTitle", "1st Project Owner Title", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
-
-        result = validateEmpty("#firstProjectOwnerSurname", "1st Project Owner Surname", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
-
-        result = validateEmpty("#firstProjectOwnerOtherName", "1st Project Owner Other Name", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
-
-        result = validateEmpty("#firstProjectOwnerCompany", "1st Project Owner Company", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
-
-        result = validateEmpty("#firstProjectOwnerPhone", "1st Project Owner Phone", errorMessage, i);
-        errorMessage = result[0]; i = result[1];
-
-        result = validateEmpty("#firstProjectOwnerEmail", "1st Project Owner Email", errorMessage, i);
         errorMessage = result[0]; i = result[1];
 
         <?php

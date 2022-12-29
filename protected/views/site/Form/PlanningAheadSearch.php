@@ -256,7 +256,6 @@ $this->pageTitle = Yii::app()->name;
             "filter": false,
             "sPaginationType": "full_numbers",
             "columns": [
-
                 {
                     "data": "planningAheadId",
                     render: function(data, type, row) {

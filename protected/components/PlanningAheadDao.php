@@ -8,7 +8,27 @@ class PlanningAheadDao extends CApplicationComponent {
 
         $PlanningAheadList = array();
 
-        $sqlMid = 'SELECT pa.scheme_no, pa.project_title, pa.key_infra, pa.temp_project, TO_CHAR(pa.commission_date,\'dd/mm/yyyy\') as commission_date,pa."project_type_id", pt."project_type_name", rp."region_short_name" ';
+        $sqlMid = 'SELECT pa.scheme_no, pa.project_title, pa.key_infra, pa.temp_project,' .
+            'TO_CHAR(pa.commission_date,\'dd/mm/yyyy\') as commission_date, pa.state, pa."project_type_id",' .
+            'concat(pa."first_consultant_title",\' \',pa."first_consultant_other_name",\' \',pa."first_consultant_surname") as first_consultant,' .
+            'pa."first_consultant_company" as first_consultant_company,' .
+            'pa."first_consultant_phone", pa."first_consultant_email",' .
+            'concat(pa."second_consultant_title",\' \',pa."second_consultant_other_name",\' \',pa."second_consultant_surname") as second_consultant,' .
+            'pa."second_consultant_company",' .
+            'pa."second_consultant_phone", pa."second_consultant_email",' .
+            'concat(pa."third_consultant_title",\' \',pa."third_consultant_other_name",\' \',pa."third_consultant_surname") as third_consultant,' .
+            'pa."third_consultant_company",' .
+            'pa."third_consultant_phone", pa."third_consultant_email",' .
+            'concat(pa."first_project_owner_title",\' \',pa."first_project_owner_other_name",\' \',pa."first_project_owner_surname") as first_project_owner,' .
+            'pa."first_project_owner_company",' .
+            'pa."first_project_owner_phone", pa."first_project_owner_email",' .
+            'concat(pa."second_project_owner_title",\' \',pa."second_project_owner_other_name",\' \',pa."second_project_owner_surname") as second_project_owner,' .
+            'pa."second_project_owner_company",' .
+            'pa."second_project_owner_phone", pa."second_project_owner_email",' .
+            'concat(pa."third_project_owner_title",\' \',pa."third_project_owner_other_name",\' \',pa."third_project_owner_surname") as third_project_owner,' .
+            'pa."third_project_owner_company",' .
+            'pa."third_project_owner_phone", pa."third_project_owner_email",' .
+            'pt."project_type_name", rp."region_short_name" ';
         $sqlBase = 'SELECT "planning_ahead_id" ';
 
         $sql1 = 'FROM (("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) LEFT JOIN "tbl_region" rp on pa."region_id" = rp."region_id" ) WHERE 1=1 ';
@@ -82,8 +102,33 @@ class PlanningAheadDao extends CApplicationComponent {
                 $List['key_infra'] =  Encoding::escapleAllCharacter($row['key_infra']);
                 $List['temp_project'] =  Encoding::escapleAllCharacter($row['temp_project']);
                 $List['commission_date'] =  Encoding::escapleAllCharacter($row['commission_date']);
+                $List['state'] =  Encoding::escapleAllCharacter($row['state']);
                 $List['project_type_name'] =  Encoding::escapleAllCharacter($row['project_type_name']);
                 $List['region_short_name'] =  Encoding::escapleAllCharacter($row['region_short_name']);
+                $List['first_consultant'] =  Encoding::escapleAllCharacter($row['first_consultant']);
+                $List['first_consultant_company'] =  Encoding::escapleAllCharacter($row['first_consultant_company']);
+                $List['first_consultant_phone'] =  Encoding::escapleAllCharacter($row['first_consultant_phone']);
+                $List['first_consultant_email'] =  Encoding::escapleAllCharacter($row['first_consultant_email']);
+                $List['second_consultant'] =  Encoding::escapleAllCharacter($row['second_consultant']);
+                $List['second_consultant_company'] =  Encoding::escapleAllCharacter($row['second_consultant_company']);
+                $List['second_consultant_phone'] =  Encoding::escapleAllCharacter($row['second_consultant_phone']);
+                $List['second_consultant_email'] =  Encoding::escapleAllCharacter($row['second_consultant_email']);
+                $List['third_consultant'] =  Encoding::escapleAllCharacter($row['third_consultant']);
+                $List['third_consultant_company'] =  Encoding::escapleAllCharacter($row['third_consultant_company']);
+                $List['third_consultant_phone'] =  Encoding::escapleAllCharacter($row['third_consultant_phone']);
+                $List['third_consultant_email'] =  Encoding::escapleAllCharacter($row['third_consultant_email']);
+                $List['first_project_owner'] =  Encoding::escapleAllCharacter($row['first_project_owner']);
+                $List['first_project_owner_company'] =  Encoding::escapleAllCharacter($row['first_project_owner_company']);
+                $List['first_project_owner_phone'] =  Encoding::escapleAllCharacter($row['first_project_owner_phone']);
+                $List['first_project_owner_email'] =  Encoding::escapleAllCharacter($row['first_project_owner_email']);
+                $List['second_project_owner'] =  Encoding::escapleAllCharacter($row['second_project_owner']);
+                $List['second_project_owner_company'] =  Encoding::escapleAllCharacter($row['second_project_owner_company']);
+                $List['second_project_owner_phone'] =  Encoding::escapleAllCharacter($row['second_project_owner_phone']);
+                $List['second_project_owner_email'] =  Encoding::escapleAllCharacter($row['second_project_owner_email']);
+                $List['third_project_owner'] =  Encoding::escapleAllCharacter($row['third_project_owner']);
+                $List['third_project_owner_company'] =  Encoding::escapleAllCharacter($row['third_project_owner_company']);
+                $List['third_project_owner_phone'] =  Encoding::escapleAllCharacter($row['third_project_owner_phone']);
+                $List['third_project_owner_email'] =  Encoding::escapleAllCharacter($row['third_project_owner_email']);
                 array_push($PlanningAheadList, $List);
             }
 
@@ -1375,7 +1420,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                                    $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
                                                    $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
                                                    $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
-                                                   $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                                                   $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,$txnStandardLetterContent,
                                                    $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                                                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                                                    $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
@@ -2054,6 +2099,9 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"third_project_owner_company"=?, "third_project_owner_phone"=?, "third_project_owner_email"=?, ';
         $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, "stand_letter_edms_link"=?, ';
         $sql = $sql . '"stand_letter_letter_loc"=?, ';
+        if (isset($txnStandardLetterContent) && ($txnStandardLetterContent !="")) {
+            $sql = $sql . '"signed_stand_letter_content"=?, ';
+        }
         $sql = $sql . '"meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?, ';
         $sql = $sql . '"meeting_actual_meeting_date"=?, "meeting_rej_reason"=?, ';
         $sql = $sql . '"meeting_consent_consultant"=?, "meeting_consent_owner"=?, "meeting_remark"=?, ';
@@ -2078,38 +2126,73 @@ class PlanningAheadDao extends CApplicationComponent {
             $transaction = Yii::app()->db->beginTransaction();
             $stmt = Yii::app()->db->createCommand($sql);
 
-            $result = $stmt->execute(array(
-                $txnProjectTitle, $txnSchemeNo, $txnRegion,
-                $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
-                $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
-                $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
-                $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
-                $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
-                $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
-                $txnSecondConsultantTitle, $txnSecondConsultantSurname, $txnSecondConsultantOtherName,
-                $txnSecondConsultantCompany, $txnSecondConsultantPhone, $txnSecondConsultantEmail,
-                $txnThirdConsultantTitle, $txnThirdConsultantSurname, $txnThirdConsultantOtherName,
-                $txnThirdConsultantCompany, $txnThirdConsultantPhone, $txnThirdConsultantEmail,
-                $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
-                $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
-                $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
-                $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
-                $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
-                $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
-                $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
-                $txnStandLetterLetterLoc,
-                $txnMeetingFirstPreferMeetingDate, $txnMeetingSecondPreferMeetingDate,
-                $txnMeetingActualMeetingDate, $txnMeetingRejReason, $txnMeetingConsentConsultant,
-                $txnMeetingConsentOwner, $txnMeetingRemark,
-                $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
-                $txnFirstInvitationLetterEdmsLink,$txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
-                $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
-                $txnSecondInvitationLetterEdmsLink,$txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
-                $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
-                $txnThirdInvitationLetterEdmsLink,$txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
-                $txnForthInvitationLetterEdmsLink,$txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
-                $txnEvaReportId,$txnReEvaReportId,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+            if (isset($txnStandardLetterContent) && ($txnStandardLetterContent !="")) {
+                $result = $stmt->execute(array(
+                    $txnProjectTitle, $txnSchemeNo, $txnRegion,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
+                    $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
+                    $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
+                    $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
+                    $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
+                    $txnSecondConsultantTitle, $txnSecondConsultantSurname, $txnSecondConsultantOtherName,
+                    $txnSecondConsultantCompany, $txnSecondConsultantPhone, $txnSecondConsultantEmail,
+                    $txnThirdConsultantTitle, $txnThirdConsultantSurname, $txnThirdConsultantOtherName,
+                    $txnThirdConsultantCompany, $txnThirdConsultantPhone, $txnThirdConsultantEmail,
+                    $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
+                    $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
+                    $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
+                    $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
+                    $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
+                    $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
+                    $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
+                    $txnStandLetterLetterLoc, $txnStandardLetterContent,
+                    $txnMeetingFirstPreferMeetingDate, $txnMeetingSecondPreferMeetingDate,
+                    $txnMeetingActualMeetingDate, $txnMeetingRejReason, $txnMeetingConsentConsultant,
+                    $txnMeetingConsentOwner, $txnMeetingRemark,
+                    $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
+                    $txnFirstInvitationLetterEdmsLink,$txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                    $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
+                    $txnSecondInvitationLetterEdmsLink,$txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                    $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
+                    $txnThirdInvitationLetterEdmsLink,$txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                    $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
+                    $txnForthInvitationLetterEdmsLink,$txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
+                    $txnEvaReportId,$txnReEvaReportId,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+            } else {
+                $result = $stmt->execute(array(
+                    $txnProjectTitle, $txnSchemeNo, $txnRegion,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
+                    $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
+                    $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
+                    $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
+                    $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
+                    $txnSecondConsultantTitle, $txnSecondConsultantSurname, $txnSecondConsultantOtherName,
+                    $txnSecondConsultantCompany, $txnSecondConsultantPhone, $txnSecondConsultantEmail,
+                    $txnThirdConsultantTitle, $txnThirdConsultantSurname, $txnThirdConsultantOtherName,
+                    $txnThirdConsultantCompany, $txnThirdConsultantPhone, $txnThirdConsultantEmail,
+                    $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
+                    $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
+                    $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
+                    $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
+                    $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
+                    $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
+                    $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
+                    $txnStandLetterLetterLoc,
+                    $txnMeetingFirstPreferMeetingDate, $txnMeetingSecondPreferMeetingDate,
+                    $txnMeetingActualMeetingDate, $txnMeetingRejReason, $txnMeetingConsentConsultant,
+                    $txnMeetingConsentOwner, $txnMeetingRemark,
+                    $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
+                    $txnFirstInvitationLetterEdmsLink,$txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                    $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
+                    $txnSecondInvitationLetterEdmsLink,$txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                    $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
+                    $txnThirdInvitationLetterEdmsLink,$txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                    $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
+                    $txnForthInvitationLetterEdmsLink,$txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
+                    $txnEvaReportId,$txnReEvaReportId,$lastUpdatedBy,$lastUpdatedTime,$txnPlanningAheadId));
+            }
 
             if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
                 $this->updateProjectOwnerCompanyByName($txnFirstProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
@@ -2205,7 +2288,7 @@ class PlanningAheadDao extends CApplicationComponent {
                                                      $txnSecondProjectOwnerCompany,$txnSecondProjectOwnerPhone,$txnSecondProjectOwnerEmail,
                                                      $txnThirdProjectOwnerTitle,$txnThirdProjectOwnerSurname,$txnThirdProjectOwnerOtherName,
                                                      $txnThirdProjectOwnerCompany,$txnThirdProjectOwnerPhone,$txnThirdProjectOwnerEmail,
-                                                     $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                                                     $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink, $txnStandardLetterContent,
                                                      $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
                                                      $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingRemark,
                                                      $txnMeetingConsentOwner,$txnMeetingReplySlipId,$txnReplySlipBmsYesNo,$txnReplySlipBmsServerCentralComputer,
@@ -2881,6 +2964,9 @@ class PlanningAheadDao extends CApplicationComponent {
         $sql = $sql . '"third_project_owner_company"=?, "third_project_owner_phone"=?, "third_project_owner_email"=?, ';
         $sql = $sql . '"stand_letter_issue_date"=?, "stand_letter_fax_ref_no"=?, "stand_letter_edms_link"=?, ';
         $sql = $sql . '"stand_letter_letter_loc"=?, ';
+        if (isset($txnStandardLetterContent) && ($txnStandardLetterContent !="")) {
+            $sql = $sql . '"signed_stand_letter_content"=?, ';
+        }
         $sql = $sql . '"meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?, ';
         $sql = $sql . '"meeting_actual_meeting_date"=?, "meeting_rej_reason"=?, ';
         $sql = $sql . '"meeting_consent_consultant"=?, "meeting_consent_owner"=?, "meeting_remark"=?, ';
@@ -2905,39 +2991,78 @@ class PlanningAheadDao extends CApplicationComponent {
             $transaction = Yii::app()->db->beginTransaction();
             $stmt = Yii::app()->db->createCommand($sql);
 
-            $result = $stmt->execute(array(
-                $txnProjectTitle, $txnSchemeNo, $txnRegion,
-                $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
-                $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
-                $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
-                $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
-                $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
-                $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
-                $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
-                $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
-                $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
-                $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
-                $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
-                $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
-                $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
-                $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
-                $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
-                $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
-                $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
-                $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
-                $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
-                $txnMeetingRemark,
-                $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
-                $txnFirstInvitationLetterEdmsLink, $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
-                $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
-                $txnSecondInvitationLetterEdmsLink, $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
-                $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
-                $txnThirdInvitationLetterEdmsLink, $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
-                $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
-                $txnForthInvitationLetterEdmsLink, $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
-                $txnEvaReportId, $txnReEvaReportId,
-                $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
-                $txnPlanningAheadId));
+            if (isset($txnStandardLetterContent) && ($txnStandardLetterContent !="")) {
+                $result = $stmt->execute(array(
+                    $txnProjectTitle, $txnSchemeNo, $txnRegion,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
+                    $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
+                    $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
+                    $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
+                    $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
+                    $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
+                    $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
+                    $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                    $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                    $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
+                    $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
+                    $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
+                    $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
+                    $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
+                    $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
+                    $txnStandLetterIssueDate, $txnStandLetterFaxRefNo, $txnStandLetterEdmsLink,
+                    $txnStandLetterLetterLoc, $txnStandardLetterContent,
+                    $txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
+                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
+                    $txnMeetingRemark,
+                    $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
+                    $txnFirstInvitationLetterEdmsLink, $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                    $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
+                    $txnSecondInvitationLetterEdmsLink, $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                    $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
+                    $txnThirdInvitationLetterEdmsLink, $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                    $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
+                    $txnForthInvitationLetterEdmsLink, $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
+                    $txnEvaReportId, $txnReEvaReportId,
+                    $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
+                    $txnPlanningAheadId));
+            } else {
+                $result = $stmt->execute(array(
+                    $txnProjectTitle, $txnSchemeNo, $txnRegion,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
+                    $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
+                    $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
+                    $txnFirstConsultantTitle, $txnFirstConsultantSurname, $txnFirstConsultantOtherName,
+                    $txnFirstConsultantCompany, $txnFirstConsultantPhone, $txnFirstConsultantEmail,
+                    $txnSecondConsultantTitle,$txnSecondConsultantSurname,$txnSecondConsultantOtherName,
+                    $txnSecondConsultantCompany,$txnSecondConsultantPhone,$txnSecondConsultantEmail,
+                    $txnThirdConsultantTitle,$txnThirdConsultantSurname,$txnThirdConsultantOtherName,
+                    $txnThirdConsultantCompany,$txnThirdConsultantPhone,$txnThirdConsultantEmail,
+                    $txnFirstProjectOwnerTitle, $txnFirstProjectOwnerSurname, $txnFirstProjectOwnerOtherName,
+                    $txnFirstProjectOwnerCompany, $txnFirstProjectOwnerPhone, $txnFirstProjectOwnerEmail,
+                    $txnSecondProjectOwnerTitle, $txnSecondProjectOwnerSurname, $txnSecondProjectOwnerOtherName,
+                    $txnSecondProjectOwnerCompany, $txnSecondProjectOwnerPhone, $txnSecondProjectOwnerEmail,
+                    $txnThirdProjectOwnerTitle, $txnThirdProjectOwnerSurname, $txnThirdProjectOwnerOtherName,
+                    $txnThirdProjectOwnerCompany, $txnThirdProjectOwnerPhone, $txnThirdProjectOwnerEmail,
+                    $txnStandLetterIssueDate,$txnStandLetterFaxRefNo,$txnStandLetterEdmsLink,
+                    $txnStandLetterLetterLoc,$txnMeetingFirstPreferMeetingDate,$txnMeetingSecondPreferMeetingDate,
+                    $txnMeetingActualMeetingDate,$txnMeetingRejReason,$txnMeetingConsentConsultant,$txnMeetingConsentOwner,
+                    $txnMeetingRemark,
+                    $txnFirstInvitationLetterIssueDate,$txnFirstInvitationLetterFaxRefNo,
+                    $txnFirstInvitationLetterEdmsLink, $txnFirstInvitationLetterAccept,$txnFirstInvitationLetterWalkDate,
+                    $txnSecondInvitationLetterIssueDate,$txnSecondInvitationLetterFaxRefNo,
+                    $txnSecondInvitationLetterEdmsLink, $txnSecondInvitationLetterAccept,$txnSecondInvitationLetterWalkDate,
+                    $txnThirdInvitationLetterIssueDate,$txnThirdInvitationLetterFaxRefNo,
+                    $txnThirdInvitationLetterEdmsLink, $txnThirdInvitationLetterAccept,$txnThirdInvitationLetterWalkDate,
+                    $txnForthInvitationLetterIssueDate,$txnForthInvitationLetterFaxRefNo,
+                    $txnForthInvitationLetterEdmsLink, $txnForthInvitationLetterAccept,$txnForthInvitationLetterWalkDate,
+                    $txnEvaReportId, $txnReEvaReportId,
+                    $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
+                    $txnPlanningAheadId));
+            }
+
+
 
             if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
                 $this->updateProjectOwnerCompanyByName($txnFirstProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
@@ -3524,15 +3649,15 @@ class PlanningAheadDao extends CApplicationComponent {
         return $retJson;
     }
 
-    public function updateReplySlipGeneratedLocation($replySlipId, $fileLocation, $lastUpdateBy, $lastUpdateTime) {
-        $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?,  
+    public function updateReplySlipGeneratedLocation($replySlipId, $fileLocation, $bas64Content, $lastUpdateBy, $lastUpdateTime) {
+        $sql = 'UPDATE "tbl_slip_reply" SET "reply_slip_loc"=?, "reply_slip_content"=?,  
                                 "last_updated_by"=?, "last_updated_time"=?
                                 WHERE "reply_slip_id"=?';
 
         try {
             $transaction = Yii::app()->db->beginTransaction();
             $stmt = Yii::app()->db->createCommand($sql);
-            $result = $stmt->execute(array($fileLocation, $lastUpdateBy, $lastUpdateTime, $replySlipId));
+            $result = $stmt->execute(array($fileLocation, $bas64Content, $lastUpdateBy, $lastUpdateTime, $replySlipId));
 
             $transaction->commit();
             $retJson['status'] = 'OK';
