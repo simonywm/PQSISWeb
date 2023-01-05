@@ -5191,6 +5191,7 @@
                     $("#loading-modal").modal("show");
                     $("#saveDraftBtn").attr("disabled", true);
                     $("#saveProcessBtn").attr("disabled", true);
+                    $("#backBtn").attr("disabled", true);
 
                     $.ajax({
                         url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxPostPlanningAheadProjectDetailProcessUpdate",
@@ -5218,6 +5219,7 @@
                         $("#loading-modal").modal("hide");
                         $("#saveDraftBtn").attr("disabled", false);
                         $("#saveProcessBtn").attr("disabled", false);
+                        $("#backBtn").attr("disabled", false);
                     });
                 }
             } else if ($(this).find("input[type=submit]:focus" ).val() == 'Generate Evaluation Report') {
@@ -5332,7 +5334,7 @@
                 showConfirmation("<i class=\"fas fa-exclamation-circle\"></i> ", "Confirmation",
                     "Please save before leave",
                     function() {
-                        window.history.back();
+                        window.location.href = "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadInfoSearch";
                     },
                     function() {});
             }

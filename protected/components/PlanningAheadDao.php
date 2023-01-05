@@ -337,7 +337,27 @@ class PlanningAheadDao extends CApplicationComponent {
 
                 $record['meetingRejReason'] = Encoding::escapleAllCharacter($result[0]['meeting_rej_reason']);
                 $record['meetingConsentConsultant'] = $result[0]['meeting_consent_consultant'];
+                $record['meetingConsentDateConsultant'] = $result[0]['meeting_consent_date_consultant'];
+                if (isset($result[0]['meeting_consent_date_consultant'])) {
+                    $meetingConsentDateConsultantYear = date("Y", strtotime($result[0]['meeting_consent_date_consultant']));
+                    $meetingConsentDateConsultantMonth = date("m", strtotime($result[0]['meeting_consent_date_consultant']));
+                    $meetingConsentDateConsultantDay = date("d", strtotime($result[0]['meeting_consent_date_consultant']));
+                    $record['meetingConsentDateConsultant'] = $meetingConsentDateConsultantYear . "-" .
+                        $meetingConsentDateConsultantMonth . "-" . $meetingConsentDateConsultantDay;
+                } else {
+                    $record['meetingConsentDateConsultant'] = null;
+                }
                 $record['meetingConsentOwner'] = $result[0]['meeting_consent_owner'];
+                $record['meetingConsentDateProjectOwner'] = $result[0]['meeting_consent_date_project_owner'];
+                if (isset($result[0]['meeting_consent_date_project_owner'])) {
+                    $meetingConsentDateProjectOwnerYear = date("Y", strtotime($result[0]['meeting_consent_date_project_owner']));
+                    $meetingConsentDateProjectOwnerMonth = date("m", strtotime($result[0]['meeting_consent_date_project_owner']));
+                    $meetingConsentDateProjectOwnerDay = date("d", strtotime($result[0]['meeting_consent_date_project_owner']));
+                    $record['meetingConsentDateProjectOwner'] = $meetingConsentDateProjectOwnerYear . "-" .
+                        $meetingConsentDateProjectOwnerMonth . "-" . $meetingConsentDateProjectOwnerDay;
+                } else {
+                    $record['meetingConsentDateProjectOwner'] = null;
+                }
                 $record['meetingRemark'] = $result[0]['meeting_remark'];
                 $record['meetingReplySlipId'] = $result[0]['meeting_reply_slip_id'];
 
@@ -3432,7 +3452,8 @@ class PlanningAheadDao extends CApplicationComponent {
     }
 
     public function addReplySlip($schemeNo,$state,$replySlipLoc,$meetingRejReason,$meetingFirstPreferMeetingDate,
-                                 $meetingSecondPreferMeetingDate,$meetingConsentConsultant,$meetingConsentOwner,
+                                 $meetingSecondPreferMeetingDate,$meetingConsentConsultant,$meetingConsentDateConsultant,
+                                 $meetingConsentOwner,$meetingConsentDateProjectOwner,
                                  $bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
                                  $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
                                  $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
@@ -3519,13 +3540,14 @@ class PlanningAheadDao extends CApplicationComponent {
 
                     $sql = 'UPDATE "tbl_planning_ahead" SET "meeting_reply_slip_id"=?,  
                                 "meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?,
-                                "meeting_rej_reason"=?, "meeting_consent_consultant"=?,
-                                "meeting_consent_owner"=?, "state"=?, "last_updated_by"=?, "last_updated_time"=?
+                                "meeting_rej_reason"=?, "meeting_consent_consultant"=?, "meeting_consent_date_consultant"=?,
+                                "meeting_consent_owner"=?, "meeting_consent_date_project_owner"=?, "state"=?, 
+                                "last_updated_by"=?, "last_updated_time"=?
                                 WHERE "scheme_no"=?';
                     $stmt = Yii::app()->db->createCommand($sql);
                     $result = $stmt->execute(array($replySlipId,$meetingFirstPreferMeetingDate,$meetingSecondPreferMeetingDate,
-                        $meetingRejReason,$meetingConsentConsultant,$meetingConsentOwner,$newState,$lastUpdatedBy,
-                        $lastUpdatedTime,$schemeNo));
+                        $meetingRejReason,$meetingConsentConsultant,$meetingConsentDateConsultant,$meetingConsentOwner,
+                        $meetingConsentDateProjectOwner,$newState,$lastUpdatedBy,$lastUpdatedTime,$schemeNo));
                 } else {
                     $retJson['status'] = 'NOTOK';
                     $retJson['retMessage'] = 'Error in processing Scheme No [' . $schemeNo . ']';
@@ -3550,7 +3572,8 @@ class PlanningAheadDao extends CApplicationComponent {
     }
 
     public function updateReplySlip($schemeNo,$state,$replySlipId,$replySlipLoc,$meetingRejReason,$meetingFirstPreferMeetingDate,
-                                    $meetingSecondPreferMeetingDate,$meetingConsentConsultant,$meetingConsentOwner,
+                                    $meetingSecondPreferMeetingDate,$meetingConsentConsultant,$meetingConsentDateConsultant,
+                                    $meetingConsentOwner,$meetingConsentDateProjectOwner,
                                     $bmsYesNo,$bmsServerCentralComputer,$bmsDdc,
                                     $changeoverSchemeYesNo,$changeoverSchemeControl,$changeoverSchemeUv,
                                     $chillerPlantYesNo,$chillerPlantAhuControl,$chillerPlantAhuStartup,
@@ -3623,14 +3646,15 @@ class PlanningAheadDao extends CApplicationComponent {
             }
             $sql = 'UPDATE "tbl_planning_ahead" SET "meeting_reply_slip_id"=?,  
                                 "meeting_first_prefer_meeting_date"=?, "meeting_second_prefer_meeting_date"=?,
-                                "meeting_rej_reason"=?, "meeting_consent_consultant"=?, "meeting_consent_owner"=?,  
+                                "meeting_rej_reason"=?, "meeting_consent_consultant"=?, "meeting_consent_date_consultant"=?,
+                                "meeting_consent_owner"=?, "meeting_consent_date_project_owner"=?,
                                 "state"=?, "last_updated_by"=?, "last_updated_time"=?
                                 WHERE "scheme_no"=?';
 
             $stmt = Yii::app()->db->createCommand($sql);
             $result = $stmt->execute(array($replySlipId,$meetingFirstPreferMeetingDate,$meetingSecondPreferMeetingDate,
-                $meetingRejReason,$meetingConsentConsultant,$meetingConsentOwner,$newState,$lastUpdatedBy,
-                $lastUpdatedTime,$schemeNo));
+                $meetingRejReason,$meetingConsentConsultant,$meetingConsentDateConsultant,$meetingConsentOwner,
+                $meetingConsentDateProjectOwner,$newState,$lastUpdatedBy,$lastUpdatedTime,$schemeNo));
 
             $transaction->commit();
             $retJson['status'] = 'OK';
