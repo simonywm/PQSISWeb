@@ -100,15 +100,13 @@
         <div class="collapse navbar-collapse" id="main_nav">
 
             <ul class="navbar-nav">
-            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
-                if(Yii::app()->session['tblUserDo']['roleId']!=3){ ?>
+            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) { ?>
                 <li class="nav-item dropdown">
                     <a id="aMenuFormLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Form</a>
                     <ul class="dropdown-menu" aria-labelledby="aMenuFormLink">
                         <li><a id="aMenuFormLinkCF" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch">All PQSIS Case</a></li>
                         <li><a id="aMenuFormLinkPHOld" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/PlanningAheadSearch">Planning Ahead (Old)</a></li>
-                        <?php if (Yii::app()->session['tblUserDo']['roleId']==2) { ?>
                         <li>
                             <a id="aMenuFormLinkPH" class="dropdown-item" href="#">Planning Ahead &raquo </a>
                             <ul class="submenu dropdown-menu">
@@ -118,7 +116,6 @@
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadReplySlipForm">Upload Reply Slip File</a>
                             </ul>
                         </li>
-                        <?php } ?>
                         <li><a id="aMenuFormLinkCFIS" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=InvestigationS">Investigation(S) </a></li>
                         <li><a id="aMenuFormLinkCFIL" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=InvestigationL">Investigation(L) </a></li>
                         <li><a id="aMenuFormLinkCFE" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=Enquiry">Enquiry </a></li>
@@ -130,9 +127,8 @@
 
                     </ul>
                 </li>
-            <?php } } ?>
-            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
-                if(Yii::app()->session['tblUserDo']['roleId']==3){ ?>
+            <?php } ?>
+            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {?>
                     <li class="nav-item dropdown">
                         <a id="aMenuFormLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Form</a>
@@ -145,7 +141,7 @@
                             </li>
                         </ul>
                     </li>
-                <?php } } ?>
+                <?php } ?>
     <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
                 if(Yii::app()->session['tblUserDo']['roleId']==1){ ?>
                     
@@ -221,8 +217,7 @@
                     </ul>
                 </li>
         <?php } } ?>
-            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {
-                if(Yii::app()->session['tblUserDo']['roleId']!=3){ ?>
+            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {?>
                 <li class="nav-item dropdown">
                     <a id="aMenuReportLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">Report</a>
@@ -239,16 +234,23 @@
                         <a id="aMenuFunctionLinkIRPM" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=Function/IncidentReportPdfSearch">Incident Report PDF Match</a>
                     </div>
                 </li>
-                <?php } } ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=Site/Logout">Logout</a>
                 </li>
+                <?php }?>
+
             </ul>
 
         </div> <!-- navbar-collapse.// -->
         <span class="text-info" style="text-align:right;">
-            ID: <?php echo Yii::app()->session['tblUserDo']['username']; ?><br>
-            Editable: <?php echo isset(Yii::app()->session['tblUserDo']['editRight'])?(Yii::app()->session['tblUserDo']['editRight']=='1'?'True':'False'):''?>
+            <?php
+                if (isset(Yii::app()->session['tblUserDo']['username'])) {
+            ?>
+                    ID: <?php echo Yii::app()->session['tblUserDo']['username']; ?><br>
+                    Editable: <?php echo isset(Yii::app()->session['tblUserDo']['editRight'])?(Yii::app()->session['tblUserDo']['editRight']=='1'?'True':'False'):''?>
+            <?php
+                }
+            ?>
         </span>
 
 

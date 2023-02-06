@@ -22,7 +22,7 @@
             <div class="input-group col-12">
                 <div class="input-group-prepend"><span class="input-group-text">Project Title: </span></div>
                 <input id="projectTitle" name="projectTitle" type="text" class="form-control"
-                       autocomplete="off" <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"readonly":""; ?>>
+                       autocomplete="off" <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"readonly":""; ?>>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
             <div class="input-group col-6">
                 <div class="input-group-prepend"><span class="input-group-text">Scheme No.: </span></div>
                 <input id="schemeNo" name="schemeNo" type="text" class="form-control"
-                       autocomplete="off" <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"readonly":""; ?>>
+                       autocomplete="off" <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"readonly":""; ?>>
             </div>
             <div class="input-group col-6">
                 <div class="input-group-prepend"><span class="input-group-text">Project Region: </span></div>
@@ -41,7 +41,7 @@
                                 <?php echo $regionList['regionShortName']?>
                             </option>
                         <?php } else { ?>
-                                <?php if (Yii::app()->session['tblUserDo']['roleId']==2) { ?>
+                                <?php if (isset(Yii::app()->session['tblUserDo']['roleId'])) { ?>
                                     <option value="<?php echo $regionList['regionId']?>">
                                         <?php echo $regionList['regionShortName']?>
                                     </option>
@@ -64,7 +64,7 @@
                                 <?php echo $projectTypeList['projectTypeName']?>
                             </option>
                         <?php } else { ?>
-                            <?php if (Yii::app()->session['tblUserDo']['roleId']==2) { ?>
+                            <?php if (isset(Yii::app()->session['tblUserDo']['roleId'])) { ?>
                                 <option value="<?php echo $projectTypeList['projectTypeId']?>">
                                     <?php echo $projectTypeList['projectTypeName']?>
                                 </option>
@@ -93,14 +93,14 @@
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
                             <input type="radio" name="infraOpt" class="form-check-input" value="N"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php } else if ($this->viewbag['keyInfra'] == 'N') {?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
                             <input type="radio" name="infraOpt" class="form-check-input" value="Y"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
@@ -112,13 +112,13 @@
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
                             <input type="radio" name="infraOpt" class="form-check-input" value="Y"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
                             <input type="radio" name="infraOpt" class="form-check-input" value="N"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php }?>
@@ -137,14 +137,14 @@
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
                             <input type="radio" name="tempProjOpt" class="form-check-input" value="N"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php } else if ($this->viewbag['tempProject'] == 'N') {?>
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
                             <input type="radio" name="tempProjOpt" class="form-check-input" value="Y"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
@@ -156,13 +156,13 @@
                     <div class="form-check-inline pl-4">
                         <label class="form-check-label">
                             <input type="radio" name="tempProjOpt" class="form-check-input" value="Y"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>Yes
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>Yes
                         </label>
                     </div>
                     <div class="form-check-inline pl-2">
                         <label class="form-check-label">
                             <input type="radio" name="tempProjOpt" class="form-check-input" value="N"
-                                <?php echo (Yii::app()->session['tblUserDo']['roleId']!=2)?"disabled":""; ?>>No
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>No
                         </label>
                     </div>
                 <?php }?>
@@ -4889,7 +4889,13 @@
         <input type="hidden" id="evaReportId" name="evaReportId" value="<?php echo $this->viewbag['evaReportId']; ?>">
         <input type="hidden" id="reEvaReportId" name="reEvaReportId" value="<?php echo $this->viewbag['reEvaReportId']; ?>">
         <input type="hidden" id="state" name="state" value="<?php echo $this->viewbag['state']; ?>">
+        <?php
+            if ((isset(Yii::app()->session['tblUserDo']['roleId']))) {
+        ?>
         <input type="hidden" id="roleId" name="roleId" value="<?php echo Yii::app()->session['tblUserDo']['roleId']; ?>">
+        <?php
+            }
+        ?>
 
     </form>
 
@@ -6602,7 +6608,7 @@
         errorMessage = result[0]; i = result[1];
 
         <?php
-            if(Yii::app()->session['tblUserDo']['roleId'] == 2) { ?>
+            if (isset(Yii::app()->session['tblUserDo']['roleId'])) { ?>
 
         result = validateSelected("#typeOfProject", "Type of Project", errorMessage, i);
         errorMessage = result[0]; i = result[1];
@@ -6614,7 +6620,7 @@
         errorMessage = result[0]; i = result[1];
 
         <?php
-            } else if(Yii::app()->session['tblUserDo']['roleId'] == 3) {?>
+            } else {?>
 
         //result = validateEmpty("#commissionDate", "Commission Date", errorMessage, i);
         //errorMessage = result[0]; i = result[1];
