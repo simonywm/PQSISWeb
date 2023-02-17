@@ -1,6 +1,6 @@
 <?php
 
-    /* @var $this FirstFormController */
+    /* @var $this PlanningAheadController */
 
     $this->pageTitle = Yii::app()->name;
 ?>

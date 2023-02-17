@@ -114,6 +114,7 @@
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadConditionLetterForm">Upload Condition Letter</a>
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadRegionStaffInitialInfo">Upload Region Staff Project Information</a>
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadReplySlipForm">Upload Reply Slip File</a>
+                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetTemplates">Templates Management</a>
                             </ul>
                         </li>
                         <li><a id="aMenuFormLinkCFIS" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=InvestigationS">Investigation(S) </a></li>

@@ -177,6 +177,37 @@
             </div>
         </div>
 
+        <div class="form-group row">
+            <div class="input-group col-12">
+                <div class="input-group-prepend"><span class="input-group-text">Active: </span></div>
+                <?php if ($this->viewbag['active'] == 'Y') { ?>
+                    <div class="form-check-inline pl-4">
+                        <label class="form-check-label">
+                            <input type="radio" name="activeOpt" class="form-check-input" value="Y" checked>Yes
+                        </label>
+                    </div>
+                    <div class="form-check-inline pl-2">
+                        <label class="form-check-label">
+                            <input type="radio" name="activeOpt" class="form-check-input" value="N"
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>No
+                        </label>
+                    </div>
+                <?php } else {?>
+                    <div class="form-check-inline pl-4">
+                        <label class="form-check-label">
+                            <input type="radio" name="activeOpt" class="form-check-input" value="Y"
+                                <?php echo (!isset(Yii::app()->session['tblUserDo']['roleId']))?"disabled":""; ?>>Yes
+                        </label>
+                    </div>
+                    <div class="form-check-inline pl-2">
+                        <label class="form-check-label">
+                            <input type="radio" name="activeOpt" class="form-check-input" value="N" checked>No
+                        </label>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
+
         <div id="accordionFirstRegionStaff">
             <div class="card">
                 <div class="card-header" style="background-color: #6f42c1">
@@ -7007,7 +7038,7 @@
 
         <?php } ?>
 
-        if (errorMessage === "") {
+        if ((errorMessage === "") || $('input[name="activeOpt"]:checked','#detailForm').val() == 'N') {
             return true;
         } else {
             showError("<i class=\"fas fa-times-circle\"></i> ", "Error", errorMessage);
