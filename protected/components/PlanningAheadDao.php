@@ -8,7 +8,7 @@ class PlanningAheadDao extends CApplicationComponent {
 
         $PlanningAheadList = array();
 
-        $sqlMid = 'SELECT pa.scheme_no, pa.project_title, pa.key_infra, pa.temp_project,' .
+        $sqlMid = 'SELECT pa.planning_ahead_id, pa.scheme_no, pa.project_title, pa.key_infra, pa.temp_project,' .
             'TO_CHAR(pa.commission_date,\'dd/mm/yyyy\') as commission_date, pa.state, pa."project_type_id",' .
             'concat(pa."first_consultant_title",\' \',pa."first_consultant_other_name",\' \',pa."first_consultant_surname") as first_consultant,' .
             'pa."first_consultant_company" as first_consultant_company,' .
@@ -32,11 +32,17 @@ class PlanningAheadDao extends CApplicationComponent {
         $sqlBase = 'SELECT "planning_ahead_id" ';
 
         $sql1 = 'FROM (("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) LEFT JOIN "tbl_region" rp on pa."region_id" = rp."region_id" ) WHERE 1=1 ';
-        $sql2 = 'FROM "tbl_planning_ahead"  WHERE 1=1 ';
+        $sql2 = 'FROM ("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) WHERE 1=1 ';
 
         $schemeNo = isset($searchParam['schemeNo']) ? $searchParam['schemeNo'] : '';
         $projectTitle = isset($searchParam['projectTitle']) ? $searchParam['projectTitle'] : '';
         $typeOfProject = isset($searchParam['typeOfProject']) ? $searchParam['typeOfProject'] : '';
+        $mainTypeOfProject = isset($searchParam['mainTypeOfProject']) ? $searchParam['mainTypeOfProject'] : '';
+        $consultantName = isset($searchParam['consultantName']) ? $searchParam['consultantName'] : '';
+        $consultantPhone = isset($searchParam['consultantPhone']) ? $searchParam['consultantPhone'] : '';
+        $ownerName = isset($searchParam['ownerName']) ? $searchParam['ownerName'] : '';
+        $ownerPhone = isset($searchParam['ownerPhone']) ? $searchParam['ownerPhone'] : '';
+        $state = isset($searchParam['state']) ? $searchParam['state'] : '';
 
         if ($schemeNo != '') {
             $sql1 = $sql1 . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo1) ';
@@ -46,9 +52,61 @@ class PlanningAheadDao extends CApplicationComponent {
             $sql1 = $sql1 . 'AND UPPER("project_title") LIKE UPPER(:projectTitle1) ';
             $sql2 = $sql2 . 'AND UPPER("project_title") LIKE UPPER(:projectTitle2) ';
         }
+        if ($mainTypeOfProject != '') {
+            $sql1 = $sql1 . 'AND pt."project_type_class"=:projectTypeClass1 ';
+            $sql2 = $sql2 . 'AND pt."project_type_class"=:projectTypeClass2 ';
+        }
         if ($typeOfProject != '') {
             $sql1 = $sql1 . 'AND pa."project_type_id"=:projectTypeId1 ';
             $sql2 = $sql2 . 'AND pa."project_type_id"=:projectTypeId2 ';
+        }
+        if ($consultantName != '') {
+            $sql1 = $sql1 . 'AND (((UPPER(pa.first_consultant_other_name) || \' \' || UPPER(pa.first_consultant_surname)) LIKE UPPER(:consultantName1)) OR ' .
+                '((UPPER(pa.first_consultant_surname) || \' \' || UPPER(pa.first_consultant_other_name)) LIKE UPPER(:consultantName1)) OR ' .
+                '((UPPER(pa.second_consultant_other_name) || \' \' || UPPER(pa.second_consultant_surname)) LIKE UPPER(:consultantName1)) OR ' .
+                '((UPPER(pa.second_consultant_surname) || \' \' || UPPER(pa.second_consultant_other_name)) LIKE UPPER(:consultantName1)) OR ' .
+                '((UPPER(pa.third_consultant_other_name) || \' \' || UPPER(pa.third_consultant_surname)) LIKE UPPER(:consultantName1)) OR ' .
+                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName1)))';
+            $sql2 = $sql2 . 'AND (((UPPER(pa.first_consultant_other_name) || \' \' || UPPER(pa.first_consultant_surname)) LIKE UPPER(:consultantName2)) OR ' .
+                '((UPPER(pa.first_consultant_surname) || \' \' || UPPER(pa.first_consultant_other_name)) LIKE UPPER(:consultantName2)) OR ' .
+                '((UPPER(pa.second_consultant_other_name) || \' \' || UPPER(pa.second_consultant_surname)) LIKE UPPER(:consultantName2)) OR ' .
+                '((UPPER(pa.second_consultant_surname) || \' \' || UPPER(pa.second_consultant_other_name)) LIKE UPPER(:consultantName2)) OR ' .
+                '((UPPER(pa.third_consultant_other_name) || \' \' || UPPER(pa.third_consultant_surname)) LIKE UPPER(:consultantName2)) OR ' .
+                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName2)))';
+        }
+        if ($consultantPhone != '') {
+            $sql1 = $sql1 . 'AND ((UPPER(pa.first_consultant_phone) LIKE UPPER(:consultantPhone1)) OR ' .
+                '(UPPER(pa.second_consultant_phone) LIKE UPPER(:consultantPhone1)) OR ' .
+                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone1)))';
+            $sql2 = $sql2 . 'AND ((UPPER(pa.first_consultant_phone) LIKE UPPER(:consultantPhone2)) OR ' .
+                '(UPPER(pa.second_consultant_phone) LIKE UPPER(:consultantPhone2)) OR ' .
+                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone2)))';
+        }
+        if ($ownerName != '') {
+            $sql1 = $sql1 . 'AND (((UPPER(pa.first_project_owner_other_name) || \' \' || UPPER(pa.first_project_owner_surname)) LIKE UPPER(:ownerName1)) OR ' .
+                '((UPPER(pa.first_project_owner_surname) || \' \' || UPPER(pa.first_project_owner_other_name)) LIKE UPPER(:ownerName1)) OR ' .
+                '((UPPER(pa.second_project_owner_other_name) || \' \' || UPPER(pa.second_project_owner_surname)) LIKE UPPER(:ownerName1)) OR ' .
+                '((UPPER(pa.second_project_owner_surname) || \' \' || UPPER(pa.second_project_owner_other_name)) LIKE UPPER(:ownerName1)) OR ' .
+                '((UPPER(pa.third_project_owner_other_name) || \' \' || UPPER(pa.third_project_owner_surname)) LIKE UPPER(:ownerName1)) OR ' .
+                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName1)))';
+            $sql2 = $sql2 . 'AND (((UPPER(pa.first_project_owner_other_name) || \' \' || UPPER(pa.first_project_owner_surname)) LIKE UPPER(:ownerName2)) OR ' .
+                '((UPPER(pa.first_project_owner_surname) || \' \' || UPPER(pa.first_project_owner_other_name)) LIKE UPPER(:ownerName2)) OR ' .
+                '((UPPER(pa.second_project_owner_other_name) || \' \' || UPPER(pa.second_project_owner_surname)) LIKE UPPER(:ownerName2)) OR ' .
+                '((UPPER(pa.second_project_owner_surname) || \' \' || UPPER(pa.second_project_owner_other_name)) LIKE UPPER(:ownerName2)) OR ' .
+                '((UPPER(pa.third_project_owner_other_name) || \' \' || UPPER(pa.third_project_owner_surname)) LIKE UPPER(:ownerName2)) OR ' .
+                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName2)))';
+        }
+        if ($ownerPhone != '') {
+            $sql1 = $sql1 . 'AND ((UPPER(pa.first_project_owner_phone) LIKE UPPER(:ownerPhone1)) OR ' .
+                '(UPPER(pa.second_project_owner_phone) LIKE UPPER(:ownerPhone1)) OR ' .
+                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone1)))';
+            $sql2 = $sql2 . 'AND ((UPPER(pa.first_project_owner_phone) LIKE UPPER(:ownerPhone2)) OR ' .
+                '(UPPER(pa.second_project_owner_phone) LIKE UPPER(:ownerPhone2)) OR ' .
+                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone2)))';
+        }
+        if ($state != '') {
+            $sql1 = $sql1 . 'AND pa."state"=:state1 ';
+            $sql2 = $sql2 . 'AND pa."state"=:state2 ';
         }
         if ($orderByStr != '') {
             if ($orderByStr == '"project_type_name" asc' || $orderByStr =='"project_type_name" desc'){
@@ -90,6 +148,47 @@ class PlanningAheadDao extends CApplicationComponent {
                 $sth->bindParam(':projectTypeId1', $typeOfProject);
                 if ($start != 0) {
                     $sth->bindParam(':projectTypeId2', $typeOfProject);
+                }
+            }
+            if ($mainTypeOfProject != '') {
+                $sth->bindParam(':projectTypeClass1', $mainTypeOfProject);
+                if ($start != 0) {
+                    $sth->bindParam(':projectTypeClass2', $mainTypeOfProject);
+                }
+            }
+            if ($consultantName != '') {
+                $consultantName = "%" . $consultantName . "%";
+                $sth->bindParam(':consultantName1', $consultantName);
+                if ($start != 0) {
+                    $sth->bindParam(':consultantName2', $consultantName);
+                }
+            }
+            if ($consultantPhone != '') {
+                $consultantPhone = "%" . $consultantPhone . "%";
+                $sth->bindParam(':consultantPhone1', $consultantPhone);
+                if ($start != 0) {
+                    $sth->bindParam(':consultantPhone2', $consultantPhone);
+                }
+
+            }
+            if ($ownerName != '') {
+                $ownerName = "%" . $ownerName . "%";
+                $sth->bindParam(':ownerName1', $ownerName);
+                if ($start != 0) {
+                    $sth->bindParam(':ownerName2', $ownerName);
+                }
+            }
+            if ($ownerPhone != '') {
+                $ownerPhone = "%" . $ownerPhone . "%";
+                $sth->bindParam(':ownerPhone1', $ownerPhone);
+                if ($start != 0) {
+                    $sth->bindParam(':ownerPhone2', $ownerPhone);
+                }
+            }
+            if ($state != '') {
+                $sth->bindParam(':state1', $state);
+                if ($start != 0) {
+                    $sth->bindParam(':state2', $state);
                 }
             }
 
@@ -143,8 +242,14 @@ class PlanningAheadDao extends CApplicationComponent {
         $schemeNo = isset($searchParam['$schemeNo']) ? $searchParam['$schemeNo'] : '';
         $projectTitle = isset($searchParam['projectTitle']) ? $searchParam['projectTitle'] : '';
         $typeOfProject = isset($searchParam['typeOfProject']) ? $searchParam['typeOfProject'] : '';
+        $mainTypeOfProject = isset($searchParam['mainTypeOfProject']) ? $searchParam['mainTypeOfProject'] : '';
+        $consultantName = isset($searchParam['consultantName']) ? $searchParam['consultantName'] : '';
+        $consultantPhone = isset($searchParam['consultantPhone']) ? $searchParam['consultantPhone'] : '';
+        $ownerName = isset($searchParam['ownerName']) ? $searchParam['ownerName'] : '';
+        $ownerPhone = isset($searchParam['ownerPhone']) ? $searchParam['ownerPhone'] : '';
+        $state = isset($searchParam['state']) ? $searchParam['state'] : '';
 
-        $sql = 'SELECT count(1) FROM "tbl_planning_ahead" WHERE 1=1 ';
+        $sql = 'SELECT count(1) FROM ("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) WHERE 1=1  ';
 
         if ($schemeNo != "") {
             $sql = $sql . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo) ';
@@ -152,8 +257,40 @@ class PlanningAheadDao extends CApplicationComponent {
         if ($projectTitle != "") {
             $sql = $sql . 'AND UPPER("project_title") LIKE UPPER(:projectTitle) ';
         }
-        if ($typeOfProject != "") {
-            $sql = $sql . 'AND "project_type_id" = :projectTypeId ';
+        if ($mainTypeOfProject != '') {
+            $sql = $sql . 'AND pt."project_type_class"=:projectTypeClass ';
+        }
+        if ($typeOfProject != '') {
+            $sql = $sql . 'AND pa."project_type_id"=:projectTypeId ';
+        }
+        if ($consultantName != '') {
+            $sql = $sql . 'AND (((UPPER(pa.first_consultant_other_name) || \' \' || UPPER(pa.first_consultant_surname)) LIKE UPPER(:consultantName)) OR ' .
+                '((UPPER(pa.first_consultant_surname) || \' \' || UPPER(pa.first_consultant_other_name)) LIKE UPPER(:consultantName)) OR ' .
+                '((UPPER(pa.second_consultant_other_name) || \' \' || UPPER(pa.second_consultant_surname)) LIKE UPPER(:consultantName)) OR ' .
+                '((UPPER(pa.second_consultant_surname) || \' \' || UPPER(pa.second_consultant_other_name)) LIKE UPPER(:consultantName)) OR ' .
+                '((UPPER(pa.third_consultant_other_name) || \' \' || UPPER(pa.third_consultant_surname)) LIKE UPPER(:consultantName)) OR ' .
+                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName)))';
+        }
+        if ($consultantPhone != '') {
+            $sql = $sql . 'AND ((UPPER(pa.first_consultant_phone) LIKE UPPER(:consultantPhone)) OR ' .
+                '(UPPER(pa.second_consultant_phone) LIKE UPPER(:consultantPhone)) OR ' .
+                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone)))';
+        }
+        if ($ownerName != '') {
+            $sql = $sql . 'AND (((UPPER(pa.first_project_owner_other_name) || \' \' || UPPER(pa.first_project_owner_surname)) LIKE UPPER(:ownerName)) OR ' .
+                '((UPPER(pa.first_project_owner_surname) || \' \' || UPPER(pa.first_project_owner_other_name)) LIKE UPPER(:ownerName)) OR ' .
+                '((UPPER(pa.second_project_owner_other_name) || \' \' || UPPER(pa.second_project_owner_surname)) LIKE UPPER(:ownerName)) OR ' .
+                '((UPPER(pa.second_project_owner_surname) || \' \' || UPPER(pa.second_project_owner_other_name)) LIKE UPPER(:ownerName)) OR ' .
+                '((UPPER(pa.third_project_owner_other_name) || \' \' || UPPER(pa.third_project_owner_surname)) LIKE UPPER(:ownerName)) OR ' .
+                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName)))';
+        }
+        if ($ownerPhone != '') {
+            $sql = $sql . 'AND ((UPPER(pa.first_project_owner_phone) LIKE UPPER(:ownerPhone)) OR ' .
+                '(UPPER(pa.second_project_owner_phone) LIKE UPPER(:ownerPhone)) OR ' .
+                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone)))';
+        }
+        if ($state != '') {
+            $sql = $sql . 'AND pa."state"=:state ';
         }
 
         $count=0;
@@ -169,6 +306,28 @@ class PlanningAheadDao extends CApplicationComponent {
             }
             if ($typeOfProject != '') {
                 $sth->bindParam(':projectTypeId', $typeOfProject);
+            }
+            if ($mainTypeOfProject != '') {
+                $sth->bindParam(':projectTypeClass', $mainTypeOfProject);
+            }
+            if ($consultantName != '') {
+                $consultantName = "%" . $consultantName . "%";
+                $sth->bindParam(':consultantName', $consultantName);
+            }
+            if ($consultantPhone != '') {
+                $consultantPhone = "%" . $consultantPhone . "%";
+                $sth->bindParam(':consultantPhone', $consultantPhone);
+            }
+            if ($ownerName != '') {
+                $ownerName = "%" . $ownerName . "%";
+                $sth->bindParam(':ownerName', $ownerName);
+            }
+            if ($ownerPhone != '') {
+                $ownerPhone = "%" . $ownerPhone . "%";
+                $sth->bindParam(':ownerPhone', $ownerPhone);
+            }
+            if ($state != '') {
+                $sth->bindParam(':state', $state);
             }
 
             $result = $sth->queryRow();
@@ -197,7 +356,36 @@ class PlanningAheadDao extends CApplicationComponent {
 
         $record = array();
         try {
-            $sql = 'SELECT * FROM "tbl_planning_ahead" a 
+            $sql = 'SELECT a.planning_ahead_id, a.project_title, a.scheme_no, a.region_id, b.region_short_name,
+                            a.condition_letter_filename, a.project_type_id, a.commission_date, a.key_infra, a.temp_project,
+                            a.first_region_staff_name, a.first_region_staff_phone, a.first_region_staff_email,
+                            a.second_region_staff_name, a.second_region_staff_phone, a.second_region_staff_email,
+                            a.third_region_staff_name, a.third_region_staff_phone, a.third_region_staff_email, 
+                            a.first_consultant_title, a.first_consultant_surname, a.first_consultant_other_name, 
+                            a.first_consultant_company, a.first_consultant_phone, a.first_consultant_email, 
+                            a.second_consultant_title, a.second_consultant_surname, a.second_consultant_other_name,
+                            a.second_consultant_company, a.second_consultant_phone, a.second_consultant_email,
+                            a.third_consultant_title, a.third_consultant_surname, a.third_consultant_other_name,
+                            a.third_consultant_company, a.third_consultant_phone, a.third_consultant_email,
+                            a.first_project_owner_title, a.first_project_owner_surname, a.first_project_owner_other_name,
+                            a.first_project_owner_company, a.first_project_owner_phone, a.first_project_owner_email,
+                            a.second_project_owner_title, a.second_project_owner_surname, a.second_project_owner_other_name,
+                            a.second_project_owner_company, a.second_project_owner_phone, a.second_project_owner_email,
+                            a.third_project_owner_title, a.third_project_owner_surname, a.third_project_owner_other_name,
+                            a.third_project_owner_company, a.third_project_owner_phone, a.third_project_owner_email,
+                            a.stand_letter_issue_date, a.stand_letter_fax_ref_no, a.stand_letter_edms_link, a.stand_letter_letter_loc,
+                            a.meeting_first_prefer_meeting_date, a.meeting_second_prefer_meeting_date, a.meeting_actual_meeting_date,
+                            a.meeting_rej_reason, a.meeting_consent_consultant, a.meeting_consent_date_consultant, 
+                            a.meeting_consent_owner, a.meeting_consent_date_project_owner, a.meeting_remark, a.meeting_reply_slip_id,
+                            a.first_invitation_letter_issue_date, a.first_invitation_letter_fax_ref_no, a.first_invitation_letter_edms_link,
+                            a.first_invitation_letter_accept, a.first_invitation_letter_walk_date, a.second_invitation_letter_issue_date,
+                            a.second_invitation_letter_fax_ref_no, a.second_invitation_letter_edms_link, a.second_invitation_letter_accept,
+                            a.second_invitation_letter_walk_date, a.third_invitation_letter_issue_date, a.third_invitation_letter_fax_ref_no,
+                            a.third_invitation_letter_edms_link, a.third_invitation_letter_accept, a.third_invitation_letter_walk_date,
+                            a.forth_invitation_letter_issue_date, a.forth_invitation_letter_fax_ref_no, a.forth_invitation_letter_edms_link,
+                            a.forth_invitation_letter_accept, a.forth_invitation_letter_walk_date, a.eva_report_id, a.re_eva_report_id, 
+                            a.state, a.active, a.created_by, a.created_time, a.last_updated_by, a.last_updated_time
+                        FROM "tbl_planning_ahead" a 
                         LEFT JOIN "tbl_region" b on a."region_id" = b."region_id"  
                         WHERE "scheme_no"::text = :schemeNo';
             $sth = Yii::app()->db->createCommand($sql);
@@ -1310,6 +1498,7 @@ class PlanningAheadDao extends CApplicationComponent {
             foreach($result as $row) {
                 $item['projectTypeId'] = $row['project_type_id'];
                 $item['projectTypeName'] = $row['project_type_name'];
+                $item['projectTypeClass'] = $row['project_type_class'];
                 $record[] = $item;
             }
 
@@ -1319,6 +1508,30 @@ class PlanningAheadDao extends CApplicationComponent {
 
         return $record;
     }
+
+    public function getPlanningAheadProjectMainTypeList() {
+
+        $record = array();
+        $item = array();
+
+        try {
+            $sql = "SELECT DISTINCT project_type_class FROM \"tbl_project_type\" WHERE \"active\"='Y' ORDER BY project_type_class";
+            $sth = Yii::app()->db->createCommand($sql);
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+                $item['projectTypeClass'] = $row['project_type_class'];
+                $record[] = $item;
+            }
+
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $record;
+    }
+
+
 
     public function getPlanningAheadProjectTypeById($projectTypeId) {
 
@@ -1424,7 +1637,7 @@ class PlanningAheadDao extends CApplicationComponent {
     }
 
     public function updatePlanningAheadDetailDraft($txnProjectTitle,$txnSchemeNo,$txnRegion,
-                                                   $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
+                                                   $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,$txnActive,
                                                    $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
                                                    $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
                                                    $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
@@ -2101,7 +2314,7 @@ class PlanningAheadDao extends CApplicationComponent {
         }
 
         $sql = 'UPDATE "tbl_planning_ahead" SET "project_title"=?, "scheme_no"=?, "region_id"=?, ';
-        $sql = $sql . '"project_type_id"=?, "commission_date"=?, "key_infra"=?, "temp_project"=?, ';
+        $sql = $sql . '"project_type_id"=?, "commission_date"=?, "key_infra"=?, "temp_project"=?, "active"=?, ';
         $sql = $sql . '"first_region_staff_name"=?, "first_region_staff_phone"=?, "first_region_staff_email"=?, ';
         $sql = $sql . '"second_region_staff_name"=?, "second_region_staff_phone"=?, "second_region_staff_email"=?, ';
         $sql = $sql . '"third_region_staff_name"=?, "third_region_staff_phone"=?, "third_region_staff_email"=?, ';
@@ -2149,7 +2362,7 @@ class PlanningAheadDao extends CApplicationComponent {
             if (isset($txnStandardLetterContent) && ($txnStandardLetterContent !="")) {
                 $result = $stmt->execute(array(
                     $txnProjectTitle, $txnSchemeNo, $txnRegion,
-                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj, $txnActive,
                     $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
                     $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
                     $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
@@ -2182,7 +2395,7 @@ class PlanningAheadDao extends CApplicationComponent {
             } else {
                 $result = $stmt->execute(array(
                     $txnProjectTitle, $txnSchemeNo, $txnRegion,
-                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj, $txnActive,
                     $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
                     $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
                     $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
@@ -2292,7 +2505,7 @@ class PlanningAheadDao extends CApplicationComponent {
     }
 
     public function updatePlanningAheadDetailProcess($txnProjectTitle,$txnSchemeNo,$txnRegion,
-                                                     $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
+                                                     $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj, $txnActive,
                                                      $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
                                                      $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
                                                      $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
@@ -2966,7 +3179,7 @@ class PlanningAheadDao extends CApplicationComponent {
         }
 
         $sql = 'UPDATE "tbl_planning_ahead" SET "project_title"=?, "scheme_no"=?, "region_id"=?, ';
-        $sql = $sql . '"project_type_id"=?, "commission_date"=?, "key_infra"=?, "temp_project"=?, ';
+        $sql = $sql . '"project_type_id"=?, "commission_date"=?, "key_infra"=?, "temp_project"=?, "active"=?, ';
         $sql = $sql . '"first_region_staff_name"=?, "first_region_staff_phone"=?, "first_region_staff_email"=?, ';
         $sql = $sql . '"second_region_staff_name"=?, "second_region_staff_phone"=?, "second_region_staff_email"=?, ';
         $sql = $sql . '"third_region_staff_name"=?, "third_region_staff_phone"=?, "third_region_staff_email"=?, ';
@@ -3014,7 +3227,7 @@ class PlanningAheadDao extends CApplicationComponent {
             if (isset($txnStandardLetterContent) && ($txnStandardLetterContent !="")) {
                 $result = $stmt->execute(array(
                     $txnProjectTitle, $txnSchemeNo, $txnRegion,
-                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj, $txnActive,
                     $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
                     $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
                     $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
@@ -3049,7 +3262,7 @@ class PlanningAheadDao extends CApplicationComponent {
             } else {
                 $result = $stmt->execute(array(
                     $txnProjectTitle, $txnSchemeNo, $txnRegion,
-                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj,
+                    $txnTypeOfProject, $txnCommissionDate, $txnKeyInfra, $txnTempProj, $txnActive,
                     $txnFirstRegionStaffName, $txnFirstRegionStaffPhone, $txnFirstRegionStaffEmail,
                     $txnSecondRegionStaffName, $txnSecondRegionStaffPhone, $txnSecondRegionStaffEmail,
                     $txnThirdRegionStaffName, $txnThirdRegionStaffPhone, $txnThirdRegionStaffEmail,
@@ -3081,8 +3294,6 @@ class PlanningAheadDao extends CApplicationComponent {
                     $txnNewState, $lastUpdatedBy, $lastUpdatedTime,
                     $txnPlanningAheadId));
             }
-
-
 
             if (isset($txnFirstProjectOwnerCompany) && (trim($txnFirstProjectOwnerCompany) != "")) {
                 $this->updateProjectOwnerCompanyByName($txnFirstProjectOwnerCompany,$lastUpdatedBy,$lastUpdatedTime);
