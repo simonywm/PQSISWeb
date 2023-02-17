@@ -13,7 +13,7 @@ class PlanningAheadController extends Controller {
     {
         return array(
             array(
-                'application.filters.AccessControlFilter',
+                'application.filters.PlanningAheadAccessControlFilter',
             ),
         );
     }
@@ -28,7 +28,7 @@ class PlanningAheadController extends Controller {
     // *********************************************************************
     public function actionGetPlanningAheadInfoSearch() {
         // Only allow PG Admin and region staff for this function
-        if ((Yii::app()->session['tblUserDo']['roleId']!=2) && ((Yii::app()->session['tblUserDo']['roleId']!=3))) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to access Planning Ahead Information Search Page.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -46,7 +46,7 @@ class PlanningAheadController extends Controller {
     public function actionGetUploadConditionLetterForm() {
 
         // Only allow PG Admin for this function
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload condition letter.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -62,7 +62,7 @@ class PlanningAheadController extends Controller {
     public function actionPostUploadConditionLetter() {
 
         // Only allow PG Admin for this function
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload condition letter.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -117,7 +117,7 @@ class PlanningAheadController extends Controller {
     public function actionGetUploadRegionStaffInitialInfo() {
 
         // Only allow PG Admin for this function
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to Region Staffs Project initial information.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -134,7 +134,7 @@ class PlanningAheadController extends Controller {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload consultant meeting information file.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -318,7 +318,7 @@ class PlanningAheadController extends Controller {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload consultant meeting information file.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -411,7 +411,7 @@ class PlanningAheadController extends Controller {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload reply slip file.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -428,7 +428,7 @@ class PlanningAheadController extends Controller {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to upload reply slip file.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -465,6 +465,11 @@ class PlanningAheadController extends Controller {
 
                             if (!isset($excelSchemeNo)) {
                                 continue;
+                            }
+
+                            $excelReplySlipSubmittedDate = $objWorksheet->getCellByColumnAndRow(0, $row)->getValue();
+                            if (isset($excelReplySlipSubmittedDate) && ($excelReplySlipSubmittedDate != "")) {
+                                $excelReplySlipSubmittedDate = date($format = "Y-m-d", PHPExcel_Shared_Date::ExcelToPHP($excelReplySlipSubmittedDate));
                             }
 
                             $excelMeetingRejReason = $objWorksheet->getCellByColumnAndRow(4, $row)->getValue();
@@ -603,9 +608,10 @@ class PlanningAheadController extends Controller {
                             $createdTime = date("Y-m-d H:i");
                             $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
                             $lastUpdatedTime = date("Y-m-d H:i");
-                            $lastUploadTime = null;
-                            $consetFromConsultant = "N";
-                            $consetFromProjectOwner = "N";
+                            $consentFromConsultant = "N";
+                            $consentDateFromConsultant = null;
+                            $consentFromProjectOwner = "N";
+                            $consentDateFromProjectOwner = null;
 
                             $projectDetail = Yii::app()->planningAheadDao->getPlanningAheadDetails($excelSchemeNo);
                             if (isset($projectDetail)) {
@@ -613,21 +619,28 @@ class PlanningAheadController extends Controller {
                                 if ($projectDetail['meetingReplySlipId'] == 0) {
 
                                     if (isset($excelConsultantNameConfirmation) && (trim($excelConsultantNameConfirmation))!="") {
-                                        $consetFromConsultant = 'Y';
+                                        $consentFromConsultant = 'Y';
+                                        if (isset($projectDetail['meetingConsentDateConsultant']) && ($projectDetail['meetingConsentDateConsultant'] != "")) {
+                                            $consentDateFromConsultant = $projectDetail['meetingConsentDateConsultant'];
+                                        } else {
+                                            $consentDateFromConsultant = $excelReplySlipSubmittedDate;
+                                        }
                                     }
 
                                     if ((isset($excelProjectOwnerNameConfirmation) && (trim($excelProjectOwnerNameConfirmation))!="") ||
                                         (isset($excelProjectOwnerCompany) && (trim($excelProjectOwnerCompany))!="")){
-                                        $consetFromProjectOwner = 'Y';
-                                    }
+                                        $consentFromProjectOwner = 'Y';
 
-                                    if (($consetFromConsultant=='Y') && ($consetFromProjectOwner=='Y')) {
-                                        $lastUploadTime = date("Y-m-d H:i");
+                                        if (isset($projectDetail['meetingConsentDateProjectOwner']) && ($projectDetail['meetingConsentDateProjectOwner'] != "")) {
+                                            $consentDateFromProjectOwner = $projectDetail['meetingConsentDateProjectOwner'];
+                                        } else {
+                                            $consentDateFromProjectOwner = $excelReplySlipSubmittedDate;
+                                        }
                                     }
 
                                     $result = Yii::app()->planningAheadDao->addReplySlip($excelSchemeNo,$projectDetail['state'],$targetFilePath,
                                         $excelMeetingRejReason,$excelMeetingFirstPreferMeetingDate,$excelMeetingSecondPreferMeetingDate,
-                                        $consetFromConsultant,$consetFromProjectOwner,
+                                        $consentFromConsultant,$consentDateFromConsultant,$consentFromProjectOwner,$consentDateFromProjectOwner,
                                         $excelBmsYesNo,$excelBmsServerCentralComputer,$excelBmsDdc,
                                         $excelChangeoverSchemeYesNo,$excelChangeoverSchemeControl,$excelChangeoverSchemeUv,
                                         $excelChillerPlantYesNo,$excelChillerPlantAhuControl,$excelChillerPlantAhuStartup,$excelChillerPlantVsd,
@@ -645,26 +658,32 @@ class PlanningAheadController extends Controller {
                                         $excelEvChargerSystemSmartChargingSystem,$excelEvChargerSystemHarmonicEmission,
                                         $excelConsultantNameConfirmation,$excelConsultantCompany,
                                         $excelProjectOwnerNameConfirmation,$excelProjectOwnerCompany,
-                                        $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime,$lastUploadTime);
+                                        $createdBy,$createdTime,$lastUpdatedBy,$lastUpdatedTime,$excelReplySlipSubmittedDate);
 
                                 } else {
                                     if (isset($excelConsultantNameConfirmation) && (trim($excelConsultantNameConfirmation))!="") {
-                                        $consetFromConsultant = 'Y';
+                                        $consentFromConsultant = 'Y';
+                                        if (isset($projectDetail['meetingConsentDateConsultant']) && ($projectDetail['meetingConsentDateConsultant'] != "")) {
+                                            $consentDateFromConsultant = $projectDetail['meetingConsentDateConsultant'];
+                                        } else {
+                                            $consentDateFromConsultant = $excelReplySlipSubmittedDate;
+                                        }
                                     }
 
                                     if ((isset($excelProjectOwnerNameConfirmation) && (trim($excelProjectOwnerNameConfirmation))!="") ||
                                         (isset($excelProjectOwnerCompany) && (trim($excelProjectOwnerCompany))!="")){
-                                        $consetFromProjectOwner = 'Y';
-                                    }
-
-                                    if (($consetFromConsultant=='Y') && ($consetFromProjectOwner=='Y')) {
-                                        $lastUploadTime = date("Y-m-d H:i");
+                                        $consentFromProjectOwner = 'Y';
+                                        if (isset($projectDetail['meetingConsentDateProjectOwner']) && ($projectDetail['meetingConsentDateProjectOwner'] != "")) {
+                                            $consentDateFromProjectOwner = $projectDetail['meetingConsentDateProjectOwner'];
+                                        } else {
+                                            $consentDateFromProjectOwner = $excelReplySlipSubmittedDate;
+                                        }
                                     }
 
                                     $result = Yii::app()->planningAheadDao->updateReplySlip($excelSchemeNo,$projectDetail['state'],
                                         $projectDetail['meetingReplySlipId'],
                                         $targetFilePath,$excelMeetingRejReason,$excelMeetingFirstPreferMeetingDate,$excelMeetingSecondPreferMeetingDate,
-                                        $consetFromConsultant,$consetFromProjectOwner,
+                                        $consentFromConsultant,$consentDateFromConsultant,$consentFromProjectOwner,$consentDateFromProjectOwner,
                                         $excelBmsYesNo,$excelBmsServerCentralComputer,$excelBmsDdc,
                                         $excelChangeoverSchemeYesNo,$excelChangeoverSchemeControl,$excelChangeoverSchemeUv,
                                         $excelChillerPlantYesNo,$excelChillerPlantAhuControl,$excelChillerPlantAhuStartup,$excelChillerPlantVsd,
@@ -682,7 +701,7 @@ class PlanningAheadController extends Controller {
                                         $excelEvChargerSystemSmartChargingSystem,$excelEvChargerSystemHarmonicEmission,
                                         $excelConsultantNameConfirmation,$excelConsultantCompany,
                                         $excelProjectOwnerNameConfirmation,$excelProjectOwnerCompany,
-                                        $lastUpdatedBy,$lastUpdatedTime,$lastUploadTime);
+                                        $lastUpdatedBy,$lastUpdatedTime,$excelReplySlipSubmittedDate);
                                 }
 
                                 if ($result['status'] == 'OK') {
@@ -739,25 +758,14 @@ class PlanningAheadController extends Controller {
 
             $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($schemeNo);
 
-            // Only allow PG Admin & Region Staffs to access this function
             if (!isset($recordList) || $recordList == null) {
                 $this->viewbag['isError'] = true;
                 $this->viewbag['errorMsg'] = 'Unable to find the Scheme No. <strong>[' . $schemeNo . "]</strong> from our database.";
                 $this->render("//site/Form/PlanningAheadDetailError");
-            } else if ((($recordList['state'] == "WAITING_INITIAL_INFO") || ($recordList['state'] == "COMPLETED_INITIAL_INFO_BY_PQ")) && (Yii::app()->session['tblUserDo']['roleId']!=2)) {
+            } else if (($recordList['state'] != "WAITING_INITIAL_INFO_BY_REGION_STAFF") && (!isset(Yii::app()->session['tblUserDo']['roleId']))) {
                 $this->viewbag['isError'] = true;
-                $this->viewbag['errorTitle'] = 'The information of this project has not been provided by PG Admin or not yet ready for Region Staff to input.';
-                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
-                $this->render("//site/Form/PlanningAheadDetailError");
-            } else if (($recordList['state'] != "COMPLETED_INITIAL_INFO_BY_PQ") && ($recordList['state'] != "COMPLETED_INITIAL_INFO")
-                && ($recordList['state'] != "WAITING_INITIAL_INFO_BY_REGION_STAFF") && (Yii::app()->session['tblUserDo']['roleId']==3)) {
-                $this->viewbag['isError'] = true;
-                $this->viewbag['errorTitle'] = 'The information of this project has been filled in.';
-                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
-                $this->render("//site/Form/PlanningAheadDetailError");
-            } else if ((Yii::app()->session['tblUserDo']['roleId']!=2) && (Yii::app()->session['tblUserDo']['roleId']!=3)) {
-                $this->viewbag['isError'] = true;
-                $this->viewbag['errorMsg'] = 'You do not have the privilege to view Scheme No. <strong>[' . $schemeNo . "]</strong>.";
+                $this->viewbag['errorTitle'] = 'The information of this project must be viewed after login.';
+                $this->viewbag['errorMsg'] = 'Fail to view the Scheme No. <strong>[' . $schemeNo . "]</strong>.";
                 $this->render("//site/Form/PlanningAheadDetailError");
             } else {
                 $this->viewbag['planningAheadId'] = $recordList['planningAheadId'];
@@ -1223,7 +1231,7 @@ class PlanningAheadController extends Controller {
         $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
         parse_str(parse_url($url, PHP_URL_QUERY), $param);
 
-        if (Yii::app()->session['tblUserDo']['roleId']!=2) {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
             $this->viewbag['isError'] = true;
             $this->viewbag['errorMsg'] = 'You do not have the privilege to generate standard letter template.';
             $this->render("//site/Form/PlanningAheadDetailError");
@@ -1388,8 +1396,9 @@ class PlanningAheadController extends Controller {
             $templateProcessor->setValue('commissionDate', "soon");
         }
 
-        $pathToSave = $firstInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $firstInvitationLetterTemplateFileName['configValue'];
+        $pathToSave = $firstInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') 1st Invitation Letter for the Project - ' .
+            $recordList['projectTitle'] . '.docx';
+
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -1475,8 +1484,8 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
         $templateProcessor->setValue('firstLetterSendDate', $firstInvitationLetterIssueDate);
 
-        $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $secondInvitationLetterTemplateFileName['configValue'];
+        $pathToSave = $secondInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') 2nd Invitation Letter for the Project - ' .
+            $recordList['projectTitle'] . '.docx';
 
         $templateProcessor->saveAs($pathToSave);
 
@@ -1575,8 +1584,9 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('secondLetterFaxRefNo', $secondInvitationLetterFaxRefNo);
         $templateProcessor->setValue('secondFaxDate', $secondInvitationLetterFaxYear . "-" . $secondInvitationLetterFaxMonth);
 
-        $pathToSave = $thirdInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $thirdInvitationLetterTemplateFileName['configValue'];
+        $pathToSave = $thirdInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') 3rd Invitation Letter for the Project - ' .
+            $recordList['projectTitle'] . '.docx';
+
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -1669,8 +1679,8 @@ class PlanningAheadController extends Controller {
         $evaReportFaxMonth = date("m", strtotime($recordList['evaReportIssueDate']));
         $templateProcessor->setValue('evaReportFaxDate', $evaReportFaxYear . "-" . $evaReportFaxMonth);
 
-        $pathToSave = $forthInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $forthInvitationLetterTemplateFileName['configValue'];
+        $pathToSave = $forthInvitationLetterTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') 4th Invitation Letter for the Project - ' .
+            $recordList['projectTitle'] . '.docx';
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -1711,8 +1721,14 @@ class PlanningAheadController extends Controller {
         $evaReportFaxDateYear = date("y", strtotime($recordList['evaReportIssueDate']));
         $commissionDateMonth = date("M", strtotime($recordList['commissionDate']));
         $commissionDateYear = date("Y", strtotime($recordList['commissionDate']));
-        $replySlipReturnDateMonth = date("M", strtotime($recordList['replySlipLastUploadTime']));
-        $replySlipReturnDateYear = date("Y", strtotime($recordList['replySlipLastUploadTime']));
+
+        if (isset($recordList['replySlipLastUploadTime']) && trim($recordList['replySlipLastUploadTime']) != "") {
+            $replySlipReturnDateMonth = date("M", strtotime($recordList['replySlipLastUploadTime']));
+            $replySlipReturnDateYear = date("Y", strtotime($recordList['replySlipLastUploadTime']));
+        } else {
+            $replySlipReturnDateMonth = "";
+            $replySlipReturnDateYear = "";
+        }
 
         $templateProcessor = new TemplateProcessor($evaReportTemplatePath['configValue'] . $evaReportTemplateFileName['configValue']);
 
@@ -2393,7 +2409,7 @@ class PlanningAheadController extends Controller {
             $templateProcessor->setValue('nonHar',"Nil");
         }
         if (isset($recordList['evaReportNonLinearLoadHarmonicEmissionFinding']) && ($recordList['evaReportNonLinearLoadHarmonicEmissionFinding']!="")) {
-            $content = $content . $recordList['evaReportNonLinearLoadHarmonicEmissionFinding'];
+            $content = $recordList['evaReportNonLinearLoadHarmonicEmissionFinding'];
             $templateProcessor->setValue('nonHarFind', $this->formatToWordTemplate($recordList['evaReportNonLinearLoadHarmonicEmissionFinding']));
             if (isset($recordList['evaReportNonLinearLoadHarmonicEmissionRecommend']) && (trim($recordList['evaReportNonLinearLoadHarmonicEmissionRecommend']) != "")) {
                 $content = $content . " " . $recordList['evaReportNonLinearLoadHarmonicEmissionRecommend'];
@@ -2569,8 +2585,8 @@ class PlanningAheadController extends Controller {
             $templateProcessor->setValue('content' . $x, "");
         }
 
-        $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $evaReportTemplateFileName['configValue'];
+        $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') Evaluation Report for the Project - ' . $recordList['projectTitle'] . '.docx';
+
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -2612,8 +2628,14 @@ class PlanningAheadController extends Controller {
         $evaReportFaxDateYear = date("y", strtotime($recordList['reEvaReportIssueDate']));
         $commissionDateMonth = date("M", strtotime($recordList['commissionDate']));
         $commissionDateYear = date("Y", strtotime($recordList['commissionDate']));
-        $replySlipReturnDateMonth = date("M", strtotime($recordList['replySlipLastUploadTime']));
-        $replySlipReturnDateYear = date("Y", strtotime($recordList['replySlipLastUploadTime']));
+
+        if (isset($recordList['replySlipLastUploadTime']) && trim($recordList['replySlipLastUploadTime']) != "") {
+            $replySlipReturnDateMonth = date("M", strtotime($recordList['replySlipLastUploadTime']));
+            $replySlipReturnDateYear = date("Y", strtotime($recordList['replySlipLastUploadTime']));
+        } else {
+            $replySlipReturnDateMonth = "";
+            $replySlipReturnDateYear = "";
+        }
 
         $templateProcessor = new TemplateProcessor($evaReportTemplatePath['configValue'] . $evaReportTemplateFileName['configValue']);
 
@@ -3462,8 +3484,7 @@ class PlanningAheadController extends Controller {
             $templateProcessor->setValue('content' . $x, "");
         }
 
-        $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' .
-            $evaReportTemplateFileName['configValue'];
+        $pathToSave = $evaReportTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') Re-Site Walk Evaluation Report for the Project - ' . $recordList['projectTitle'] . '.docx';
         $templateProcessor->saveAs($pathToSave);
 
         header("Content-Description: File Transfer");
@@ -4020,7 +4041,12 @@ class PlanningAheadController extends Controller {
                 $txnReEvaReportEvChargerSystemSupplement = $this->getPostParamString('reEvaReportEvChargerSystemSupplement');
                 $txnReEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('reEvaReportEvChargerSystemSupplementPass');
 
-                $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+                if (isset(Yii::app()->session['tblUserDo']['username'])) {
+                    $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+                } else {
+                    $lastUpdatedBy = 'REGION_STAFF';
+                }
+
                 $lastUpdatedTime = date("Y-m-d H:i");
 
                 $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailDraft(
@@ -4223,13 +4249,6 @@ class PlanningAheadController extends Controller {
             $txnPlanningAheadId = trim($_POST['planningAheadId']);
         }
 
-        if ($success && (!isset($_POST['roleId']) || ($_POST['roleId'] == ""))) {
-            $retJson['retMessage'] = "Role Id is required!";
-            $success = false;
-        } else {
-            $txnRoleId = trim($_POST['roleId']);
-        }
-
         if ($success && (!isset($_POST['state']) || ($_POST['state'] == ""))) {
             $retJson['retMessage'] = "State is required!";
             $success = false;
@@ -4259,6 +4278,11 @@ class PlanningAheadController extends Controller {
         }
 
         if ($success) {
+            if (!isset($_POST['roleId']) || ($_POST['roleId'] == "")) {
+                $txnRoleId = 3;
+            } else {
+                $txnRoleId = trim($_POST['roleId']);
+            }
             $txnTypeOfProject = $this->getPostParamInteger('typeOfProject');
             $txnCommissionDate = $this->getPostParamString('commissionDate');
             $txnKeyInfra = $this->getPostParamString('infraOpt');
@@ -4708,7 +4732,12 @@ class PlanningAheadController extends Controller {
             $txnReEvaReportEvChargerSystemSupplement = $this->getPostParamString('reEvaReportEvChargerSystemSupplement');
             $txnReEvaReportEvChargerSystemSupplementPass = $this->getPostParamString('reEvaReportEvChargerSystemSupplementPass');
 
-            $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+            if (isset(Yii::app()->session['tblUserDo']['username'])) {
+                $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+            } else {
+                $lastUpdatedBy = 'REGION_STAFF';
+            }
+
             $lastUpdatedTime = date("Y-m-d H:i");
 
             $currState = Yii::app()->planningAheadDao->getPlanningAheadDetails($txnSchemeNo);
@@ -5084,9 +5113,19 @@ class PlanningAheadController extends Controller {
         $templateProcessor->setValue('ConsultantCompany', $this->formatToWordTemplate($recordList['replySlipConsultantCompany']));
         $templateProcessor->setValue('ProjectOwnerNameConfirmation', $this->formatToWordTemplate($recordList['replySlipProjectOwnerNameConfirmation']));
         $templateProcessor->setValue('ProjectOwnerCompany', $this->formatToWordTemplate($recordList['replySlipProjectOwnerCompany']));
-        $templateProcessor->setValue('replySlipSignedDate', $this->formatToWordTemplate($recordList['replySlipLastUploadTime']));
+        if (isset($recordList['meetingConsentDateConsultant']) && ($recordList['meetingConsentDateConsultant'] != "")) {
+            $templateProcessor->setValue('ConsultantConfirmedDate', $this->formatToWordTemplate($recordList['meetingConsentDateConsultant']));
+        } else {
+            $templateProcessor->setValue('ConsultantConfirmedDate', $this->formatToWordTemplate(""));
+        }
 
-        $pathToSave = $replySlipTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ')' . $replySlipTemplateFileName['configValue'];
+        if (isset($recordList['meetingConsentDateProjectOwner']) && ($recordList['meetingConsentDateProjectOwner'] != "")) {
+            $templateProcessor->setValue('ProjectOwnerConfirmedDate', $this->formatToWordTemplate($recordList['meetingConsentDateProjectOwner']));
+        } else {
+            $templateProcessor->setValue('ProjectOwnerConfirmedDate', $this->formatToWordTemplate(""));
+        }
+
+        $pathToSave = $replySlipTemplatePath['configValue'] . 'temp\\(' . $schemeNo . ') Reply Slip for the Project - ' . $recordList['projectTitle'] . '.docx';
         $templateProcessor->saveAs($pathToSave);
         chmod($pathToSave, 0644);
 
