@@ -28,12 +28,23 @@ class PlanningAheadDao extends CApplicationComponent {
             'concat(pa."third_project_owner_title",\' \',pa."third_project_owner_other_name",\' \',pa."third_project_owner_surname") as third_project_owner,' .
             'pa."third_project_owner_company",' .
             'pa."third_project_owner_phone", pa."third_project_owner_email",' .
+            'pa."stand_letter_edms_link", pa."first_invitation_letter_edms_link",' .
+            'pa."second_invitation_letter_edms_link", pa."third_invitation_letter_edms_link",' .
+            'TO_CHAR(pa.meeting_actual_meeting_date,\'dd/mm/yyyy\') as meeting_actual_meeting_date, TO_CHAR(pa.meeting_consent_date_consultant,\'dd/mm/yyyy\') as meeting_consent_date_consultant,' .
+            'TO_CHAR(pa.first_invitation_letter_walk_date,\'dd/mm/yyyy\') as first_invitation_letter_walk_date, TO_CHAR(pa.second_invitation_letter_walk_date,\'dd/mm/yyyy\') as second_invitation_letter_walk_date, TO_CHAR(pa.third_invitation_letter_walk_date,\'dd/mm/yyyy\') as third_invitation_letter_walk_date,' .
+            'TO_CHAR(pa."last_email_notification_time",\'dd/mm/yyyy hh24:mi:ss\') as last_email_notification_time,' .
+            'ep."evaluation_report_edms_link", ep."evaluation_report_score",' .
+            'TO_CHAR(pa."created_time",\'dd/mm/yyyy\') as created_time, TO_CHAR(pa."first_invitation_letter_issue_date",\'dd/mm/yyyy\') as first_invitation_letter_issue_date,' .
             'pt."project_type_name", rp."region_short_name" ';
         $sqlBase = 'SELECT "planning_ahead_id" ';
 
-        $sql1 = 'FROM (("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) LEFT JOIN "tbl_region" rp on pa."region_id" = rp."region_id" ) WHERE 1=1 ';
+        $sql1 = 'FROM ((("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) LEFT JOIN "tbl_region" rp on pa."region_id" = rp."region_id" ) LEFT JOIN "tbl_evaluation_report" ep on pa."eva_report_id" = ep."evaluation_report_id" ) WHERE 1=1 ';
         $sql2 = 'FROM ("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) WHERE 1=1 ';
 
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+        $commissionDateFrom = isset($searchParam['commissionDateFrom']) ? $searchParam['commissionDateFrom'] : '';
+        $commissionDateTo = isset($searchParam['commissionDateTo']) ? $searchParam['commissionDateTo'] : '';
         $schemeNo = isset($searchParam['schemeNo']) ? $searchParam['schemeNo'] : '';
         $projectTitle = isset($searchParam['projectTitle']) ? $searchParam['projectTitle'] : '';
         $typeOfProject = isset($searchParam['typeOfProject']) ? $searchParam['typeOfProject'] : '';
@@ -44,6 +55,14 @@ class PlanningAheadDao extends CApplicationComponent {
         $ownerPhone = isset($searchParam['ownerPhone']) ? $searchParam['ownerPhone'] : '';
         $state = isset($searchParam['state']) ? $searchParam['state'] : '';
 
+        if (($creationDateFrom != "") && ($creationDateTo != "")) {
+            $sql1 = $sql1 . 'AND ((pa."created_time" >= :creationDateFrom1) AND  (pa."created_time" <= :creationDateTo1)) ';
+            $sql2 = $sql2 . 'AND ((pa."created_time" >= :creationDateFrom2) AND  (pa."created_time" <= :creationDateTo2)) ';
+        }
+        if (($commissionDateFrom != "") && ($commissionDateTo != "")) {
+            $sql1 = $sql1 . 'AND ((pa."commission_date" >= :commissionDateFrom1) AND  (pa."commission_date" <= :commissionDateTo1)) ';
+            $sql2 = $sql2 . 'AND ((pa."commission_date" >= :commissionDateFrom2) AND  (pa."commission_date" <= :commissionDateTo2)) ';
+        }
         if ($schemeNo != '') {
             $sql1 = $sql1 . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo1) ';
             $sql2 = $sql2 . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo2) ';
@@ -66,21 +85,21 @@ class PlanningAheadDao extends CApplicationComponent {
                 '((UPPER(pa.second_consultant_other_name) || \' \' || UPPER(pa.second_consultant_surname)) LIKE UPPER(:consultantName1)) OR ' .
                 '((UPPER(pa.second_consultant_surname) || \' \' || UPPER(pa.second_consultant_other_name)) LIKE UPPER(:consultantName1)) OR ' .
                 '((UPPER(pa.third_consultant_other_name) || \' \' || UPPER(pa.third_consultant_surname)) LIKE UPPER(:consultantName1)) OR ' .
-                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName1)))';
+                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName1))) ';
             $sql2 = $sql2 . 'AND (((UPPER(pa.first_consultant_other_name) || \' \' || UPPER(pa.first_consultant_surname)) LIKE UPPER(:consultantName2)) OR ' .
                 '((UPPER(pa.first_consultant_surname) || \' \' || UPPER(pa.first_consultant_other_name)) LIKE UPPER(:consultantName2)) OR ' .
                 '((UPPER(pa.second_consultant_other_name) || \' \' || UPPER(pa.second_consultant_surname)) LIKE UPPER(:consultantName2)) OR ' .
                 '((UPPER(pa.second_consultant_surname) || \' \' || UPPER(pa.second_consultant_other_name)) LIKE UPPER(:consultantName2)) OR ' .
                 '((UPPER(pa.third_consultant_other_name) || \' \' || UPPER(pa.third_consultant_surname)) LIKE UPPER(:consultantName2)) OR ' .
-                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName2)))';
+                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName2))) ';
         }
         if ($consultantPhone != '') {
             $sql1 = $sql1 . 'AND ((UPPER(pa.first_consultant_phone) LIKE UPPER(:consultantPhone1)) OR ' .
                 '(UPPER(pa.second_consultant_phone) LIKE UPPER(:consultantPhone1)) OR ' .
-                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone1)))';
+                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone1))) ';
             $sql2 = $sql2 . 'AND ((UPPER(pa.first_consultant_phone) LIKE UPPER(:consultantPhone2)) OR ' .
                 '(UPPER(pa.second_consultant_phone) LIKE UPPER(:consultantPhone2)) OR ' .
-                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone2)))';
+                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone2))) ';
         }
         if ($ownerName != '') {
             $sql1 = $sql1 . 'AND (((UPPER(pa.first_project_owner_other_name) || \' \' || UPPER(pa.first_project_owner_surname)) LIKE UPPER(:ownerName1)) OR ' .
@@ -88,21 +107,21 @@ class PlanningAheadDao extends CApplicationComponent {
                 '((UPPER(pa.second_project_owner_other_name) || \' \' || UPPER(pa.second_project_owner_surname)) LIKE UPPER(:ownerName1)) OR ' .
                 '((UPPER(pa.second_project_owner_surname) || \' \' || UPPER(pa.second_project_owner_other_name)) LIKE UPPER(:ownerName1)) OR ' .
                 '((UPPER(pa.third_project_owner_other_name) || \' \' || UPPER(pa.third_project_owner_surname)) LIKE UPPER(:ownerName1)) OR ' .
-                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName1)))';
+                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName1))) ';
             $sql2 = $sql2 . 'AND (((UPPER(pa.first_project_owner_other_name) || \' \' || UPPER(pa.first_project_owner_surname)) LIKE UPPER(:ownerName2)) OR ' .
                 '((UPPER(pa.first_project_owner_surname) || \' \' || UPPER(pa.first_project_owner_other_name)) LIKE UPPER(:ownerName2)) OR ' .
                 '((UPPER(pa.second_project_owner_other_name) || \' \' || UPPER(pa.second_project_owner_surname)) LIKE UPPER(:ownerName2)) OR ' .
                 '((UPPER(pa.second_project_owner_surname) || \' \' || UPPER(pa.second_project_owner_other_name)) LIKE UPPER(:ownerName2)) OR ' .
                 '((UPPER(pa.third_project_owner_other_name) || \' \' || UPPER(pa.third_project_owner_surname)) LIKE UPPER(:ownerName2)) OR ' .
-                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName2)))';
+                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName2))) ';
         }
         if ($ownerPhone != '') {
             $sql1 = $sql1 . 'AND ((UPPER(pa.first_project_owner_phone) LIKE UPPER(:ownerPhone1)) OR ' .
                 '(UPPER(pa.second_project_owner_phone) LIKE UPPER(:ownerPhone1)) OR ' .
-                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone1)))';
+                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone1))) ';
             $sql2 = $sql2 . 'AND ((UPPER(pa.first_project_owner_phone) LIKE UPPER(:ownerPhone2)) OR ' .
                 '(UPPER(pa.second_project_owner_phone) LIKE UPPER(:ownerPhone2)) OR ' .
-                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone2)))';
+                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone2))) ';
         }
         if ($state != '') {
             $sql1 = $sql1 . 'AND pa."state"=:state1 ';
@@ -111,23 +130,43 @@ class PlanningAheadDao extends CApplicationComponent {
         if ($orderByStr != '') {
             if ($orderByStr == '"project_type_name" asc' || $orderByStr =='"project_type_name" desc'){
                 $sql1 = $sql1 . " ORDER BY pt." . $orderByStr . ' ';
-                $sql2 = $sql2 . " ORDER BY " . $orderByStr . ' ';
+                $sql2 = $sql2 . " ORDER BY pt." . $orderByStr . ' ';
             } else if ($orderByStr == '"region_short_name" asc' || $orderByStr =='"region_short_name" desc'){
                 $sql1 = $sql1 . " ORDER BY rp." . $orderByStr . ' ';
-                $sql2 = $sql2 . " ORDER BY " . $orderByStr . ' ';
+                $sql2 = $sql2 . " ORDER BY rp." . $orderByStr . ' ';
             } else {
                 $sql1 = $sql1 . " ORDER BY pa." . $orderByStr . ' ';
-                $sql2 = $sql2 . " ORDER BY " . $orderByStr . ' ';
+                $sql2 = $sql2 . " ORDER BY pa." . $orderByStr . ' ';
             }
         }
         if ($start != 0) {
             $sqlFinal = 'SELECT * FROM (' . $sqlMid . $sql1 . ' LIMIT ' . (int) ($length + $start) . ' ) AS A WHERE "planning_ahead_id" NOT IN ( ' . $sqlBase . $sql2 . ' LIMIT ' . (int) ($start) . ') ';
         } else {
-            $sqlFinal = $sqlMid . $sql1 . ' LIMIT ' . (int) ($length + $start);
+            if (($length + $start) >= 0) {
+                $sqlFinal = $sqlMid . $sql1 . ' LIMIT ' . (int) ($length + $start);
+            } else {
+                $sqlFinal = $sqlMid . $sql1;
+            }
         }
 
         try {
             $sth = Yii::app()->db->createCommand($sqlFinal);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom1', $creationDateFrom);
+                $sth->bindParam(':creationDateTo1', $creationDateTo);
+                if ($start != 0) {
+                    $sth->bindParam(':creationDateFrom2', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo2', $creationDateTo);
+                }
+            }
+            if (($commissionDateFrom != "") && ($commissionDateTo != "")) {
+                $sth->bindParam(':commissionDateFrom1', $commissionDateFrom);
+                $sth->bindParam(':commissionDateTo1', $commissionDateTo);
+                if ($start != 0) {
+                    $sth->bindParam(':commissionDateFrom2', $commissionDateFrom);
+                    $sth->bindParam(':commissionDateTo2', $commissionDateTo);
+                }
+            }
             if ($schemeNo != '') {
                 $schemeNo = "%" . $schemeNo . "%";
                 $sth->bindParam(':schemeNo1', $schemeNo);
@@ -228,6 +267,47 @@ class PlanningAheadDao extends CApplicationComponent {
                 $List['third_project_owner_company'] =  Encoding::escapleAllCharacter($row['third_project_owner_company']);
                 $List['third_project_owner_phone'] =  Encoding::escapleAllCharacter($row['third_project_owner_phone']);
                 $List['third_project_owner_email'] =  Encoding::escapleAllCharacter($row['third_project_owner_email']);
+                $List['stand_letter_edms_link'] =  Encoding::escapleAllCharacter($row['stand_letter_edms_link']);
+                $List['first_invitation_letter_edms_link'] =  Encoding::escapleAllCharacter($row['first_invitation_letter_edms_link']);
+                $List['second_invitation_letter_edms_link'] =  Encoding::escapleAllCharacter($row['second_invitation_letter_edms_link']);
+                $List['third_invitation_letter_edms_link'] =  Encoding::escapleAllCharacter($row['third_invitation_letter_edms_link']);
+                $List['meeting_actual_meeting_date'] =  Encoding::escapleAllCharacter($row['meeting_actual_meeting_date']);
+                $List['meeting_consent_date_consultant'] =  Encoding::escapleAllCharacter($row['meeting_consent_date_consultant']);
+                $List['last_email_notification_time'] =  Encoding::escapleAllCharacter($row['last_email_notification_time']);
+                $List['evaluation_report_edms_link'] =  Encoding::escapleAllCharacter($row['evaluation_report_edms_link']);
+                $List['evaluation_report_score'] =  Encoding::escapleAllCharacter($row['evaluation_report_score']);
+                $List['created_time'] =  Encoding::escapleAllCharacter($row['created_time']);
+
+                if (isset($List['meeting_consent_date_consultant']) && ($List['meeting_consent_date_consultant'] != "")) {
+                    $List['is_reply_slip_submitted'] = 'Y';
+                } else {
+                    $List['is_reply_slip_submitted'] = 'N';
+                }
+
+                if (isset($List['meeting_actual_meeting_date']) && ($List['meeting_actual_meeting_date'] != "")) {
+                    $List['meeting_attended'] = 'Y';
+                } else {
+                    $List['meeting_attended'] = 'N';
+                }
+
+                if (isset($List['first_invitation_letter_issue_date']) && ($List['first_invitation_letter_issue_date'] != "")) {
+                    $List['pq_invitation_sent'] = 'Y';
+                } else {
+                    $List['pq_invitation_sent'] = 'N';
+                }
+
+                if (isset($row['first_invitation_letter_walk_date']) && ($row['first_invitation_letter_walk_date'] != "")) {
+                    $List['pq_site_walk_date'] =  Encoding::escapleAllCharacter($row['first_invitation_letter_walk_date']);
+                } else if (isset($row['second_invitation_letter_walk_date']) && ($row['second_invitation_letter_walk_date'] != "")) {
+                    $List['pq_site_walk_date'] =  Encoding::escapleAllCharacter($row['second_invitation_letter_walk_date']);
+                } else if (isset($row['third_invitation_letter_walk_date']) && ($row['third_invitation_letter_walk_date'] != "")) {
+                    $List['pq_site_walk_date'] =  Encoding::escapleAllCharacter($row['third_invitation_letter_walk_date']);
+                } else {
+                    $List['pq_site_walk_date'] = "";
+                }
+                $List['searchCreationFrom'] = $creationDateFrom;
+                $List['searchCreationTo'] = $creationDateTo;
+
                 array_push($PlanningAheadList, $List);
             }
 
@@ -239,7 +319,11 @@ class PlanningAheadDao extends CApplicationComponent {
 
     public function GetPlanningAheadSearchResultCount($searchParam) {
 
-        $schemeNo = isset($searchParam['$schemeNo']) ? $searchParam['$schemeNo'] : '';
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+        $commissionDateFrom = isset($searchParam['commissionDateFrom']) ? $searchParam['commissionDateFrom'] : '';
+        $commissionDateTo = isset($searchParam['commissionDateTo']) ? $searchParam['commissionDateTo'] : '';
+        $schemeNo = isset($searchParam['schemeNo']) ? $searchParam['schemeNo'] : '';
         $projectTitle = isset($searchParam['projectTitle']) ? $searchParam['projectTitle'] : '';
         $typeOfProject = isset($searchParam['typeOfProject']) ? $searchParam['typeOfProject'] : '';
         $mainTypeOfProject = isset($searchParam['mainTypeOfProject']) ? $searchParam['mainTypeOfProject'] : '';
@@ -251,6 +335,12 @@ class PlanningAheadDao extends CApplicationComponent {
 
         $sql = 'SELECT count(1) FROM ("tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ) WHERE 1=1  ';
 
+        if (($creationDateFrom != "") && ($creationDateTo != "")) {
+            $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND  (pa."created_time" <= :creationDateTo)) ';
+        }
+        if (($commissionDateFrom != "") && ($commissionDateTo != "")) {
+            $sql = $sql . 'AND ((pa."commission_date" >= :commissionDateFrom) AND  (pa."commission_date" <= :commissionDateTo)) ';
+        }
         if ($schemeNo != "") {
             $sql = $sql . 'AND UPPER("scheme_no") LIKE UPPER(:schemeNo) ';
         }
@@ -269,12 +359,12 @@ class PlanningAheadDao extends CApplicationComponent {
                 '((UPPER(pa.second_consultant_other_name) || \' \' || UPPER(pa.second_consultant_surname)) LIKE UPPER(:consultantName)) OR ' .
                 '((UPPER(pa.second_consultant_surname) || \' \' || UPPER(pa.second_consultant_other_name)) LIKE UPPER(:consultantName)) OR ' .
                 '((UPPER(pa.third_consultant_other_name) || \' \' || UPPER(pa.third_consultant_surname)) LIKE UPPER(:consultantName)) OR ' .
-                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName)))';
+                '((UPPER(pa.third_consultant_surname) || \' \' || UPPER(pa.third_consultant_other_name)) LIKE UPPER(:consultantName))) ';
         }
         if ($consultantPhone != '') {
             $sql = $sql . 'AND ((UPPER(pa.first_consultant_phone) LIKE UPPER(:consultantPhone)) OR ' .
                 '(UPPER(pa.second_consultant_phone) LIKE UPPER(:consultantPhone)) OR ' .
-                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone)))';
+                '(UPPER(pa.third_consultant_phone) LIKE UPPER(:consultantPhone))) ';
         }
         if ($ownerName != '') {
             $sql = $sql . 'AND (((UPPER(pa.first_project_owner_other_name) || \' \' || UPPER(pa.first_project_owner_surname)) LIKE UPPER(:ownerName)) OR ' .
@@ -282,12 +372,12 @@ class PlanningAheadDao extends CApplicationComponent {
                 '((UPPER(pa.second_project_owner_other_name) || \' \' || UPPER(pa.second_project_owner_surname)) LIKE UPPER(:ownerName)) OR ' .
                 '((UPPER(pa.second_project_owner_surname) || \' \' || UPPER(pa.second_project_owner_other_name)) LIKE UPPER(:ownerName)) OR ' .
                 '((UPPER(pa.third_project_owner_other_name) || \' \' || UPPER(pa.third_project_owner_surname)) LIKE UPPER(:ownerName)) OR ' .
-                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName)))';
+                '((UPPER(pa.third_project_owner_surname) || \' \' || UPPER(pa.third_project_owner_other_name)) LIKE UPPER(:ownerName))) ';
         }
         if ($ownerPhone != '') {
             $sql = $sql . 'AND ((UPPER(pa.first_project_owner_phone) LIKE UPPER(:ownerPhone)) OR ' .
                 '(UPPER(pa.second_project_owner_phone) LIKE UPPER(:ownerPhone)) OR ' .
-                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone)))';
+                '(UPPER(pa.third_project_owner_phone) LIKE UPPER(:ownerPhone))) ';
         }
         if ($state != '') {
             $sql = $sql . 'AND pa."state"=:state ';
@@ -296,6 +386,14 @@ class PlanningAheadDao extends CApplicationComponent {
         $count=0;
         try {
             $sth = Yii::app()->db->createCommand($sql);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            if (($commissionDateFrom != "") && ($commissionDateTo != "")) {
+                $sth->bindParam(':commissionDateFrom', $commissionDateFrom);
+                $sth->bindParam(':commissionDateTo', $commissionDateTo);
+            }
             if ($schemeNo != '') {
                 $schemeNo = "%" . $schemeNo . "%";
                 $sth->bindParam(':schemeNo', $schemeNo);
@@ -350,6 +448,659 @@ class PlanningAheadDao extends CApplicationComponent {
             echo "Exception " . $e->getMessage();
         }
         return $count;
+    }
+
+    public function getPlanningAheadProjectSummaryByProjectMainType($projectTypeClass, $isKeyInfra, $searchParam) {
+
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+
+        $finalResult = array();
+
+        try {
+            // Get the new application count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ';
+            $sql = $sql . 'WHERE pa."key_infra"=:keyInfra AND pt."project_type_class"=:projectTypeClass ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+
+            $sth = Yii::app()->db->createCommand($sql);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':projectTypeClass', $projectTypeClass);
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['newAppCount'] = $result['count'];
+
+            // Gat the meeting attending count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ';
+            $sql = $sql . 'WHERE pa."key_infra" = :keyInfra AND pt."project_type_class" = :projectTypeClass ';
+            $sql = $sql . 'AND pa."meeting_actual_meeting_date" is not null ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':projectTypeClass', $projectTypeClass);
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['meetingAttendedCount'] = $result['count'];
+
+
+            // Gat the PQ walk invitation sent count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ';
+            $sql = $sql . 'WHERE pa."key_infra" = :keyInfra AND pt."project_type_class" = :projectTypeClass ';
+            $sql = $sql . 'AND pa."first_invitation_letter_issue_date" is not null ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':projectTypeClass', $projectTypeClass);
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['pqWalkInvitationSentCount'] = $result['count'];
+
+            // Gat the PQ site walk count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa LEFT JOIN "tbl_project_type" pt on pa."project_type_id" = pt."project_type_id" ';
+            $sql = $sql . 'WHERE pa."key_infra" = :keyInfra AND pt."project_type_class" = :projectTypeClass ';
+            $sql = $sql . 'AND ((pa."first_invitation_letter_walk_date" is not null) OR ';
+            $sql = $sql . '(pa."second_invitation_letter_walk_date" is not null) OR ';
+            $sql = $sql . '(pa."third_invitation_letter_walk_date" is not null)) ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':projectTypeClass', $projectTypeClass);
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['pqSiteWalkConductedCount'] = $result['count'];
+
+            // Gat the PQ commissioned without submitting PQ reply slip/pq meeting count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa ';
+            $sql = $sql . 'WHERE (pa."commission_date" <= LOCALTIMESTAMP AND pa."meeting_reply_slip_id" = 0 AND ';
+            $sql = $sql . 'pa."meeting_actual_meeting_date" is null) AND pa."key_infra" = :keyInfra ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['pqCommissionWithoutReplySlipCount'] = $result['count'];
+
+            // Gat the PQ commissioned with submitting PQ reply slip/pq meeting count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa ';
+            $sql = $sql . 'WHERE pa."commission_date" <= LOCALTIMESTAMP AND (pa."meeting_reply_slip_id" > 0 OR ';
+            $sql = $sql . 'pa."meeting_actual_meeting_date" is not null) AND pa."key_infra" = :keyInfra ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['pqCommissionWithReplySlipCount'] = $result['count'];
+
+            // Gat the PQ evaluation report pass count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa LEFT JOIN "tbl_evaluation_report" pt on pa."eva_report_id" = pt."evaluation_report_id" ';
+            $sql = $sql . 'WHERE pa."eva_report_id" > 0 AND pa."key_infra" = :keyInfra AND pt."evaluation_report_score" >= 50 ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['pqpqSiteWalkPassCount'] = $result['count'];
+
+            // Gat the PQ evaluation report failed count
+            $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa LEFT JOIN "tbl_evaluation_report" pt on pa."eva_report_id" = pt."evaluation_report_id" ';
+            $sql = $sql . 'WHERE pa."eva_report_id" > 0 AND pa."key_infra" = :keyInfra AND pt."evaluation_report_score" < 50 ';
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+            $sth->bindParam(':keyInfra', $isKeyInfra);
+            $result = $sth->queryRow();
+            $finalResult['pqpqSiteWalkFailCount'] = $result['count'];
+
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $finalResult;
+    }
+
+    public function getExportResponseRateFromConsultant($searchParam) {
+
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+
+        $finalResult = array();
+
+        try {
+
+            // Get the consultant company list
+            $sql = 'SELECT DISTINCT(pa."first_consultant_company") as company_list FROM "tbl_planning_ahead" pa WHERE pa."first_consultant_company" is not NULL ';
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+
+                // Get the number for reply slip response
+                $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa WHERE pa."first_consultant_company"=:companyName ';
+                $sql = $sql . 'AND pa."meeting_reply_slip_id" > 0 ';
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+                }
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':companyName', $row['company_list']);
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo', $creationDateTo);
+                }
+                $result = $sth->queryRow();
+                $replySlipResponseCount = $result['count'];
+
+                // Get the number for meeting response
+                $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa WHERE pa."first_consultant_company"=:companyName ';
+                $sql = $sql . 'AND pa."meeting_actual_meeting_date" is not null ';
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+                }
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':companyName', $row['company_list']);
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo', $creationDateTo);
+                }
+                $result = $sth->queryRow();
+                $meetingCount = $result['count'];
+
+                // Get the number for the total number of company's project
+                $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa WHERE pa."first_consultant_company"=:companyName ';
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+                }
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':companyName', $row['company_list']);
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo', $creationDateTo);
+                }
+                $result = $sth->queryRow();
+                $totalProjectCount = $result['count'];
+
+                $tempList = array();
+                $tempList['created_time'] = $creationDateFrom . ' -> ' . $creationDateTo;
+                $tempList['consultant_company'] = $row['company_list'];
+                $tempList['response_rate_on_reply_slip'] = (round(($replySlipResponseCount / $totalProjectCount) * 100)) . "%";
+                $tempList['response_rate_on_meeting'] = (round(($meetingCount / $totalProjectCount) * 100)) . '%';
+                array_push($finalResult, $tempList);
+
+            }
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $finalResult;
+
+    }
+
+    public function getExportResponseRateFromProjectOwner($searchParam) {
+
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+
+        $finalResult = array();
+
+        try {
+
+            // Get the consultant company list
+            $sql = 'SELECT DISTINCT(pa."first_project_owner_company") as company_list FROM "tbl_planning_ahead" pa WHERE pa."first_project_owner_company" is not NULL ';
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+
+                // Get the number for reply slip response
+                $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa WHERE pa."first_project_owner_company"=:companyName ';
+                $sql = $sql . 'AND pa."meeting_reply_slip_id" > 0 ';
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+                }
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':companyName', $row['company_list']);
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo', $creationDateTo);
+                }
+                $result = $sth->queryRow();
+                $replySlipResponseCount = $result['count'];
+
+                // Get the number for meeting response
+                $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa WHERE pa."first_project_owner_company"=:companyName ';
+                $sql = $sql . 'AND pa."meeting_actual_meeting_date" is not null ';
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+                }
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':companyName', $row['company_list']);
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo', $creationDateTo);
+                }
+                $result = $sth->queryRow();
+                $meetingCount = $result['count'];
+
+                // Get the number for the total number of company's project
+                $sql = 'SELECT count(1) FROM "tbl_planning_ahead" pa WHERE pa."first_project_owner_company"=:companyName ';
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+                }
+                $sth = Yii::app()->db->createCommand($sql);
+                $sth->bindParam(':companyName', $row['company_list']);
+                if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                    $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                    $sth->bindParam(':creationDateTo', $creationDateTo);
+                }
+                $result = $sth->queryRow();
+                $totalProjectCount = $result['count'];
+
+                $tempList = array();
+                $tempList['created_time'] = $creationDateFrom . ' -> ' . $creationDateTo;
+                $tempList['project_owner_company'] = $row['company_list'];
+                $tempList['response_rate_on_reply_slip'] = (round(($replySlipResponseCount / $totalProjectCount) * 100)) . "%";
+                $tempList['response_rate_on_meeting'] = (round(($meetingCount / $totalProjectCount) * 100)) . '%';
+                array_push($finalResult, $tempList);
+
+            }
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $finalResult;
+
+    }
+
+    public function getExportRawDataFromPlanningAheadTable($searchParam) {
+
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+
+        $finalResult = array();
+
+        try {
+
+            // Get the consultant company list
+            $sql = 'SELECT * FROM "tbl_planning_ahead" pa WHERE 1=1 ';
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+
+                $tempList = array();
+                $tempList['planning_ahead_id'] = $row['planning_ahead_id'];
+                $tempList['project_title'] = $row['project_title'];
+                $tempList['scheme_no'] = $row['scheme_no'];
+                $tempList['region_id'] = $row['region_id'];
+                $tempList['condition_letter_filename'] = $row['condition_letter_filename'];
+                $tempList['project_type_id'] = $row['project_type_id'];
+                $tempList['commission_date'] = $row['commission_date'];
+                $tempList['key_infra'] = $row['key_infra'];
+                $tempList['temp_project'] = $row['temp_project'];
+                $tempList['first_region_staff_name'] = $row['first_region_staff_name'];
+                $tempList['first_region_staff_phone'] = $row['first_region_staff_phone'];
+                $tempList['first_region_staff_email'] = $row['first_region_staff_email'];
+                $tempList['second_region_staff_name'] = $row['second_region_staff_name'];
+                $tempList['second_region_staff_phone'] = $row['second_region_staff_phone'];
+                $tempList['second_region_staff_email'] = $row['second_region_staff_email'];
+                $tempList['third_region_staff_name'] = $row['third_region_staff_name'];
+                $tempList['third_region_staff_phone'] = $row['third_region_staff_phone'];
+                $tempList['third_region_staff_email'] = $row['third_region_staff_email'];
+                $tempList['first_consultant_title'] = $row['first_consultant_title'];
+                $tempList['first_consultant_surname'] = $row['first_consultant_surname'];
+                $tempList['first_consultant_other_name'] = $row['first_consultant_other_name'];
+                $tempList['first_consultant_company'] = $row['first_consultant_company'];
+                $tempList['first_consultant_phone'] = $row['first_consultant_phone'];
+                $tempList['first_consultant_email'] = $row['first_consultant_email'];
+                $tempList['second_consultant_title'] = $row['second_consultant_title'];
+                $tempList['second_consultant_surname'] = $row['second_consultant_surname'];
+                $tempList['second_consultant_other_name'] = $row['second_consultant_other_name'];
+                $tempList['second_consultant_company'] = $row['second_consultant_company'];
+                $tempList['second_consultant_phone'] = $row['second_consultant_phone'];
+                $tempList['third_consultant_title'] = $row['third_consultant_title'];
+                $tempList['third_consultant_surname'] = $row['third_consultant_surname'];
+                $tempList['third_consultant_other_name'] = $row['third_consultant_other_name'];
+                $tempList['third_consultant_company'] = $row['third_consultant_company'];
+                $tempList['third_consultant_phone'] = $row['third_consultant_phone'];
+                $tempList['third_consultant_email'] = $row['third_consultant_email'];
+                $tempList['first_project_owner_title'] = $row['first_project_owner_title'];
+                $tempList['first_project_owner_surname'] = $row['first_project_owner_surname'];
+                $tempList['first_project_owner_other_name'] = $row['first_project_owner_other_name'];
+                $tempList['first_project_owner_company'] = $row['first_project_owner_company'];
+                $tempList['first_project_owner_phone'] = $row['first_project_owner_phone'];
+                $tempList['first_project_owner_email'] = $row['first_project_owner_email'];
+                $tempList['second_project_owner_title'] = $row['second_project_owner_title'];
+                $tempList['second_project_owner_surname'] = $row['second_project_owner_surname'];
+                $tempList['second_project_owner_other_name'] = $row['second_project_owner_other_name'];
+                $tempList['second_project_owner_company'] = $row['second_project_owner_company'];
+                $tempList['second_project_owner_phone'] = $row['second_project_owner_phone'];
+                $tempList['second_project_owner_email'] = $row['second_project_owner_email'];
+                $tempList['third_project_owner_title'] = $row['third_project_owner_title'];
+                $tempList['third_project_owner_surname'] = $row['third_project_owner_surname'];
+                $tempList['third_project_owner_other_name'] = $row['third_project_owner_other_name'];
+                $tempList['third_project_owner_company'] = $row['third_project_owner_company'];
+                $tempList['third_project_owner_phone'] = $row['third_project_owner_phone'];
+                $tempList['third_project_owner_email'] = $row['third_project_owner_email'];
+                $tempList['stand_letter_issue_date'] = $row['stand_letter_issue_date'];
+                $tempList['stand_letter_fax_ref_no'] = $row['stand_letter_fax_ref_no'];
+                $tempList['stand_letter_edms_link'] = $row['stand_letter_edms_link'];
+                $tempList['stand_letter_letter_loc'] = $row['stand_letter_letter_loc'];
+                $tempList['meeting_first_prefer_meeting_date'] = $row['meeting_first_prefer_meeting_date'];
+                $tempList['meeting_second_prefer_meeting_date'] = $row['meeting_second_prefer_meeting_date'];
+                $tempList['meeting_actual_meeting_date'] = $row['meeting_actual_meeting_date'];
+                $tempList['meeting_rej_reason'] = $row['meeting_rej_reason'];
+                $tempList['meeting_consent_consultant'] = $row['meeting_consent_consultant'];
+                $tempList['meeting_remark'] = $row['meeting_remark'];
+                $tempList['meeting_reply_slip_id'] = $row['meeting_reply_slip_id'];
+                $tempList['first_invitation_letter_issue_date'] = $row['first_invitation_letter_issue_date'];
+                $tempList['first_invitation_letter_fax_ref_no'] = $row['first_invitation_letter_fax_ref_no'];
+                $tempList['first_invitation_letter_edms_link'] = $row['first_invitation_letter_edms_link'];
+                $tempList['first_invitation_letter_accept'] = $row['first_invitation_letter_accept'];
+                $tempList['first_invitation_letter_walk_date'] = $row['first_invitation_letter_walk_date'];
+                $tempList['second_invitation_letter_issue_date'] = $row['second_invitation_letter_issue_date'];
+                $tempList['second_invitation_letter_fax_ref_no'] = $row['second_invitation_letter_fax_ref_no'];
+                $tempList['second_invitation_letter_edms_link'] = $row['second_invitation_letter_edms_link'];
+                $tempList['second_invitation_letter_accept'] = $row['second_invitation_letter_accept'];
+                $tempList['second_invitation_letter_walk_date'] = $row['second_invitation_letter_walk_date'];
+                $tempList['third_invitation_letter_issue_date'] = $row['third_invitation_letter_issue_date'];
+                $tempList['third_invitation_letter_fax_ref_no'] = $row['third_invitation_letter_fax_ref_no'];
+                $tempList['third_invitation_letter_edms_link'] = $row['third_invitation_letter_edms_link'];
+                $tempList['third_invitation_letter_accept'] = $row['third_invitation_letter_accept'];
+                $tempList['third_invitation_letter_walk_date'] = $row['third_invitation_letter_walk_date'];
+                $tempList['forth_invitation_letter_issue_date'] = $row['forth_invitation_letter_issue_date'];
+                $tempList['forth_invitation_letter_fax_ref_no'] = $row['forth_invitation_letter_fax_ref_no'];
+                $tempList['forth_invitation_letter_edms_link'] = $row['forth_invitation_letter_edms_link'];
+                $tempList['forth_invitation_letter_accept'] = $row['forth_invitation_letter_accept'];
+                $tempList['forth_invitation_letter_walk_date'] = $row['forth_invitation_letter_walk_date'];
+                $tempList['eva_report_id'] = $row['eva_report_id'];
+                $tempList['re_eva_report_id'] = $row['re_eva_report_id'];
+                $tempList['state'] = $row['state'];
+                $tempList['active'] = $row['active'];
+                $tempList['last_email_notification_time'] = $row['last_email_notification_time'];
+                $tempList['created_by'] = $row['created_by'];
+                $tempList['created_time'] = $row['created_time'];
+                $tempList['last_updated_by'] = $row['last_updated_by'];
+                $tempList['last_updated_time'] = $row['last_updated_time'];
+                $tempList['meeting_consent_date_consultant'] = $row['meeting_consent_date_consultant'];
+                $tempList['meeting_consent_date_project_owner'] = $row['meeting_consent_date_project_owner'];
+
+                array_push($finalResult, $tempList);
+
+            }
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $finalResult;
+    }
+
+    public function getExportRawDataFromEvaluationReportTable($searchParam) {
+
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+
+        $finalResult = array();
+
+        try {
+
+            // Get the consultant company list
+            $sql = 'SELECT * FROM "tbl_evaluation_report" pa WHERE 1=1 ';
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sql = $sql . 'AND ((pa."created_time" >= :creationDateFrom) AND (pa."created_time" <= :creationDateTo)) ';
+            }
+            $sth = Yii::app()->db->createCommand($sql);
+            if (($creationDateFrom != "") && ($creationDateTo != "")) {
+                $sth->bindParam(':creationDateFrom', $creationDateFrom);
+                $sth->bindParam(':creationDateTo', $creationDateTo);
+            }
+
+            $result = $sth->queryAll();
+
+            foreach($result as $row) {
+
+                $tempList = array();
+                $tempList['evaluation_report_id'] = $row['evaluation_report_id'];
+                $tempList['scheme_no'] = $row['scheme_no'];
+                $tempList['evaluation_report_remark'] = $row['evaluation_report_remark'];
+                $tempList['evaluation_report_edms_link'] = $row['evaluation_report_edms_link'];
+                $tempList['evaluation_report_issue_date'] = $row['evaluation_report_issue_date'];
+                $tempList['evaluation_report_fax_ref_no'] = $row['evaluation_report_fax_ref_no'];
+                $tempList['evaluation_report_score'] = $row['evaluation_report_score'];
+                $tempList['bms_yes_no'] = $row['bms_yes_no'];
+                $tempList['bms_server_central_computer_yes_no'] = $row['bms_server_central_computer_yes_no'];
+                $tempList['bms_server_central_computer_finding'] = $row['bms_server_central_computer_finding'];
+                $tempList['bms_server_central_computer_recommend'] = $row['bms_server_central_computer_recommend'];
+                $tempList['bms_server_central_computer_pass'] = $row['bms_server_central_computer_pass'];
+                $tempList['bms_ddc_yes_no'] = $row['bms_ddc_yes_no'];
+                $tempList['bms_ddc_finding'] = $row['bms_ddc_finding'];
+                $tempList['bms_ddc_recommend'] = $row['bms_ddc_recommend'];
+                $tempList['bms_ddc_pass'] = $row['bms_ddc_pass'];
+                $tempList['bms_supplement_yes_no'] = $row['bms_supplement_yes_no'];
+                $tempList['bms_supplement'] = $row['bms_supplement'];
+                $tempList['bms_supplement_pass'] = $row['bms_supplement_pass'];
+                $tempList['changeover_scheme_yes_no'] = $row['changeover_scheme_yes_no'];
+                $tempList['changeover_scheme_control_yes_no'] = $row['changeover_scheme_control_yes_no'];
+                $tempList['changeover_scheme_control_finding'] = $row['changeover_scheme_control_finding'];
+                $tempList['changeover_scheme_control_recommend'] = $row['changeover_scheme_control_recommend'];
+                $tempList['changeover_scheme_control_pass'] = $row['changeover_scheme_control_pass'];
+                $tempList['changeover_scheme_uv_yes_no'] = $row['changeover_scheme_uv_yes_no'];
+                $tempList['changeover_scheme_uv_finding'] = $row['changeover_scheme_uv_finding'];
+                $tempList['changeover_scheme_uv_recommend'] = $row['changeover_scheme_uv_recommend'];
+                $tempList['changeover_scheme_uv_pass'] = $row['changeover_scheme_uv_pass'];
+                $tempList['changeover_scheme_supplement_yes_no'] = $row['changeover_scheme_supplement_yes_no'];
+                $tempList['changeover_scheme_supplement'] = $row['changeover_scheme_supplement'];
+                $tempList['changeover_scheme_supplement_pass'] = $row['changeover_scheme_supplement_pass'];
+                $tempList['chiller_plant_yes_no'] = $row['chiller_plant_yes_no'];
+                $tempList['chiller_plant_ahu_chilled_water_yes_no'] = $row['chiller_plant_ahu_chilled_water_yes_no'];
+                $tempList['chiller_plant_ahu_chilled_water_finding'] = $row['chiller_plant_ahu_chilled_water_finding'];
+                $tempList['chiller_plant_ahu_chilled_water_recommend'] = $row['chiller_plant_ahu_chilled_water_recommend'];
+                $tempList['chiller_plant_ahu_chilled_water_pass'] = $row['chiller_plant_ahu_chilled_water_pass'];
+                $tempList['chiller_plant_chiller_yes_no'] = $row['chiller_plant_chiller_yes_no'];
+                $tempList['chiller_plant_chiller_finding'] = $row['chiller_plant_chiller_finding'];
+                $tempList['chiller_plant_chiller_recommend'] = $row['chiller_plant_chiller_recommend'];
+                $tempList['chiller_plant_chiller_pass'] = $row['chiller_plant_chiller_pass'];
+                $tempList['chiller_plant_supplement_yes_no'] = $row['chiller_plant_supplement_yes_no'];
+                $tempList['chiller_plant_supplement'] = $row['chiller_plant_supplement'];
+                $tempList['chiller_plant_supplement_pass'] = $row['chiller_plant_supplement_pass'];
+                $tempList['escalator_yes_no'] = $row['escalator_yes_no'];
+                $tempList['escalator_braking_system_yes_no'] = $row['escalator_braking_system_yes_no'];
+                $tempList['escalator_braking_system_finding'] = $row['escalator_braking_system_finding'];
+                $tempList['escalator_braking_system_recommend'] = $row['escalator_braking_system_recommend'];
+                $tempList['escalator_braking_system_pass'] = $row['escalator_braking_system_pass'];
+                $tempList['escalator_control_yes_no'] = $row['escalator_control_yes_no'];
+                $tempList['escalator_control_finding'] = $row['escalator_control_finding'];
+                $tempList['escalator_control_recommend'] = $row['escalator_control_recommend'];
+                $tempList['escalator_control_pass'] = $row['escalator_control_pass'];
+                $tempList['escalator_supplement_yes_no'] = $row['escalator_supplement_yes_no'];
+                $tempList['escalator_supplement'] = $row['escalator_supplement'];
+                $tempList['escalator_supplement_pass'] = $row['escalator_supplement_pass'];
+                $tempList['hid_lamp_yes_no'] = $row['hid_lamp_yes_no'];
+                $tempList['hid_lamp_ballast_yes_no'] = $row['hid_lamp_ballast_yes_no'];
+                $tempList['hid_lamp_ballast_finding'] = $row['hid_lamp_ballast_finding'];
+                $tempList['hid_lamp_ballast_recommend'] = $row['hid_lamp_ballast_recommend'];
+                $tempList['hid_lamp_ballast_pass'] = $row['hid_lamp_ballast_pass'];
+                $tempList['hid_lamp_addon_protect_yes_no'] = $row['hid_lamp_addon_protect_yes_no'];
+                $tempList['hid_lamp_addon_protect_finding'] = $row['hid_lamp_addon_protect_finding'];
+                $tempList['hid_lamp_addon_protect_recommend'] = $row['hid_lamp_addon_protect_recommend'];
+                $tempList['hid_lamp_addon_protect_pass'] = $row['hid_lamp_addon_protect_pass'];
+                $tempList['hid_lamp_supplement_yes_no'] = $row['hid_lamp_supplement_yes_no'];
+                $tempList['hid_lamp_supplement'] = $row['hid_lamp_supplement'];
+                $tempList['hid_lamp_supplement_pass'] = $row['hid_lamp_supplement_pass'];
+                $tempList['lift_yes_no'] = $row['lift_yes_no'];
+                $tempList['lift_operation_yes_no'] = $row['lift_operation_yes_no'];
+                $tempList['lift_operation_finding'] = $row['lift_operation_finding'];
+                $tempList['lift_operation_recommend'] = $row['lift_operation_recommend'];
+                $tempList['lift_operation_pass'] = $row['lift_operation_pass'];
+                $tempList['lift_main_supply_yes_no'] = $row['lift_main_supply_yes_no'];
+                $tempList['lift_main_supply_finding'] = $row['lift_main_supply_finding'];
+                $tempList['lift_main_supply_recommend'] = $row['lift_main_supply_recommend'];
+                $tempList['lift_main_supply_pass'] = $row['lift_main_supply_pass'];
+                $tempList['lift_supplement_yes_no'] = $row['lift_supplement_yes_no'];
+                $tempList['lift_supplement'] = $row['lift_supplement'];
+                $tempList['lift_supplement_pass'] = $row['lift_supplement_pass'];
+                $tempList['sensitive_machine_yes_no'] = $row['sensitive_machine_yes_no'];
+                $tempList['sensitive_machine_medical_yes_no'] = $row['sensitive_machine_medical_yes_no'];
+                $tempList['sensitive_machine_medical_finding'] = $row['sensitive_machine_medical_finding'];
+                $tempList['sensitive_machine_medical_recommend'] = $row['sensitive_machine_medical_recommend'];
+                $tempList['sensitive_machine_medical_pass'] = $row['sensitive_machine_medical_pass'];
+                $tempList['sensitive_machine_supplement_yes_no'] = $row['sensitive_machine_supplement_yes_no'];
+                $tempList['sensitive_machine_supplement'] = $row['sensitive_machine_supplement'];
+                $tempList['sensitive_machine_supplement_pass'] = $row['sensitive_machine_supplement_pass'];
+                $tempList['telecom_machine_yes_no'] = $row['telecom_machine_yes_no'];
+                $tempList['telecom_machine_server_or_computer_yes_no'] = $row['telecom_machine_server_or_computer_yes_no'];
+                $tempList['telecom_machine_server_or_computer_finding'] = $row['telecom_machine_server_or_computer_finding'];
+                $tempList['telecom_machine_server_or_computer_recommend'] = $row['telecom_machine_server_or_computer_recommend'];
+                $tempList['telecom_machine_server_or_computer_pass'] = $row['telecom_machine_server_or_computer_pass'];
+                $tempList['telecom_machine_peripherals_yes_no'] = $row['telecom_machine_peripherals_yes_no'];
+                $tempList['telecom_machine_peripherals_finding'] = $row['telecom_machine_peripherals_finding'];
+                $tempList['telecom_machine_peripherals_recommend'] = $row['telecom_machine_peripherals_recommend'];
+                $tempList['telecom_machine_peripherals_pass'] = $row['telecom_machine_peripherals_pass'];
+                $tempList['telecom_machine_harmonic_emission_yes_no'] = $row['telecom_machine_harmonic_emission_yes_no'];
+                $tempList['telecom_machine_harmonic_emission_finding'] = $row['telecom_machine_harmonic_emission_finding'];
+                $tempList['telecom_machine_harmonic_emission_recommend'] = $row['telecom_machine_harmonic_emission_recommend'];
+                $tempList['telecom_machine_harmonic_emission_pass'] = $row['telecom_machine_harmonic_emission_pass'];
+                $tempList['telecom_machine_supplement_yes_no'] = $row['telecom_machine_supplement_yes_no'];
+                $tempList['telecom_machine_supplement'] = $row['telecom_machine_supplement'];
+                $tempList['telecom_machine_supplement_pass'] = $row['telecom_machine_supplement_pass'];
+                $tempList['air_conditioners_yes_no'] = $row['air_conditioners_yes_no'];
+                $tempList['air_conditioners_micb_yes_no'] = $row['air_conditioners_micb_yes_no'];
+                $tempList['air_conditioners_micb_finding'] = $row['air_conditioners_micb_finding'];
+                $tempList['air_conditioners_micb_recommend'] = $row['air_conditioners_micb_recommend'];
+                $tempList['air_conditioners_micb_pass'] = $row['air_conditioners_micb_pass'];
+                $tempList['air_conditioners_load_forecasting_yes_no'] = $row['air_conditioners_load_forecasting_yes_no'];
+                $tempList['air_conditioners_load_forecasting_finding'] = $row['air_conditioners_load_forecasting_finding'];
+                $tempList['air_conditioners_load_forecasting_recommend'] = $row['air_conditioners_load_forecasting_recommend'];
+                $tempList['air_conditioners_load_forecasting_pass'] = $row['air_conditioners_load_forecasting_pass'];
+                $tempList['air_conditioners_type_yes_no'] = $row['air_conditioners_type_yes_no'];
+                $tempList['air_conditioners_type_finding'] = $row['air_conditioners_type_finding'];
+                $tempList['air_conditioners_type_recommend'] = $row['air_conditioners_type_recommend'];
+                $tempList['air_conditioners_type_pass'] = $row['air_conditioners_type_pass'];
+                $tempList['air_conditioners_supplement_yes_no'] = $row['air_conditioners_supplement_yes_no'];
+                $tempList['air_conditioners_supplement'] = $row['air_conditioners_supplement'];
+                $tempList['air_conditioners_supplement_pass'] = $row['air_conditioners_supplement_pass'];
+                $tempList['non_linear_load_yes_no'] = $row['non_linear_load_yes_no'];
+                $tempList['non_linear_load_harmonic_emission_yes_no'] = $row['non_linear_load_harmonic_emission_yes_no'];
+                $tempList['non_linear_load_harmonic_emission_finding'] = $row['non_linear_load_harmonic_emission_finding'];
+                $tempList['non_linear_load_harmonic_emission_recommend'] = $row['non_linear_load_harmonic_emission_recommend'];
+                $tempList['non_linear_load_harmonic_emission_pass'] = $row['non_linear_load_harmonic_emission_pass'];
+                $tempList['non_linear_load_supplement_yes_no'] = $row['non_linear_load_supplement_yes_no'];
+                $tempList['non_linear_load_supplement'] = $row['non_linear_load_supplement'];
+                $tempList['non_linear_load_supplement_pass'] = $row['non_linear_load_supplement_pass'];
+                $tempList['renewable_energy_yes_no'] = $row['renewable_energy_yes_no'];
+                $tempList['renewable_energy_inverter_and_controls_yes_no'] = $row['renewable_energy_inverter_and_controls_yes_no'];
+                $tempList['renewable_energy_inverter_and_controls_finding'] = $row['renewable_energy_inverter_and_controls_finding'];
+                $tempList['renewable_energy_inverter_and_controls_recommend'] = $row['renewable_energy_inverter_and_controls_recommend'];
+                $tempList['renewable_energy_inverter_and_controls_pass'] = $row['renewable_energy_inverter_and_controls_pass'];
+                $tempList['renewable_energy_harmonic_emission_yes_no'] = $row['renewable_energy_harmonic_emission_yes_no'];
+                $tempList['renewable_energy_harmonic_emission_finding'] = $row['renewable_energy_harmonic_emission_finding'];
+                $tempList['renewable_energy_harmonic_emission_recommend'] = $row['renewable_energy_harmonic_emission_recommend'];
+                $tempList['renewable_energy_harmonic_emission_pass'] = $row['renewable_energy_harmonic_emission_pass'];
+                $tempList['renewable_energy_supplement_yes_no'] = $row['renewable_energy_supplement_yes_no'];
+                $tempList['renewable_energy_supplement_pass'] = $row['renewable_energy_supplement_pass'];
+                $tempList['ev_charger_system_yes_no'] = $row['ev_charger_system_yes_no'];
+                $tempList['ev_charger_system_ev_charger_yes_no'] = $row['ev_charger_system_ev_charger_yes_no'];
+                $tempList['ev_charger_system_ev_charger_finding'] = $row['ev_charger_system_ev_charger_finding'];
+                $tempList['ev_charger_system_ev_charger_recommend'] = $row['ev_charger_system_ev_charger_recommend'];
+                $tempList['ev_charger_system_ev_charger_pass'] = $row['ev_charger_system_ev_charger_pass'];
+                $tempList['ev_charger_system_harmonic_emission_yes_no'] = $row['ev_charger_system_harmonic_emission_yes_no'];
+                $tempList['ev_charger_system_harmonic_emission_finding'] = $row['ev_charger_system_harmonic_emission_finding'];
+                $tempList['ev_charger_system_harmonic_emission_recommend'] = $row['ev_charger_system_harmonic_emission_recommend'];
+                $tempList['ev_charger_system_harmonic_emission_pass'] = $row['ev_charger_system_harmonic_emission_pass'];
+                $tempList['ev_charger_system_supplement_yes_no'] = $row['ev_charger_system_supplement_yes_no'];
+                $tempList['ev_charger_system_supplement'] = $row['ev_charger_system_supplement'];
+                $tempList['ev_charger_system_supplement_pass'] = $row['ev_charger_system_supplement_pass'];
+                $tempList['active'] = $row['active'];
+                $tempList['created_by'] = $row['created_by'];
+                $tempList['created_time'] = $row['created_time'];
+                $tempList['last_updated_by'] = $row['last_updated_by'];
+                $tempList['last_updated_time'] = $row['last_updated_time'];
+
+                array_push($finalResult, $tempList);
+
+            }
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+        }
+
+        return $finalResult;
     }
 
     public function getPlanningAheadDetails($schemeNo) {
