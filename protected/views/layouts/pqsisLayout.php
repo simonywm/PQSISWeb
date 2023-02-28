@@ -111,10 +111,16 @@
                             <a id="aMenuFormLinkPH" class="dropdown-item" href="#">Planning Ahead &raquo </a>
                             <ul class="submenu dropdown-menu">
                                 <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetPlanningAheadInfoSearch">Planning Ahead Information</a>
-                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadConditionLetterForm">Upload Condition Letter</a>
-                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadRegionStaffInitialInfo">Upload Region Staff Project Information</a>
-                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadReplySlipForm">Upload Reply Slip File</a>
-                                <a id="aMenuFormLinkPHConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetTemplates">Templates Management</a>
+                                <a id="aMenuFormLinkPHUploadConditionLetter" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadConditionLetterForm">Upload Condition Letter</a>
+                                <a id="aMenuFormLinkPHUploadRegionStaff" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadRegionStaffInitialInfo">Upload Region Staff Project Information</a>
+                                <a id="aMenuFormLinkPHUploadReplySlip" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetUploadReplySlipForm">Upload Reply Slip File</a>
+                                <a id="aMenuFormLinkPHWordsEmailTemplateMgt" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetTemplates">Words and Email Templates Management</a>
+                                <a id="aMenuFormLinkPHExportRawDataFromPlanningAheadTable" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetExportRawDataFromPlanningAheadTable">Export Raw Data from Planning Ahead Table</a>
+                                <a id="aMenuFormLinkPHExportRawDataFromEvaRptTable" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetExportRawDataFromEvaRptTable">Export Raw Data from Evaluation Report Table</a>
+                                <a id="aMenuFormLinkPHExportProjectDetail" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetExportProjectDetail">Export Project Detail by Creation Date</a>
+                                <a id="aMenuFormLinkPHExportProjectByMainProjType" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetExportProjectSummaryByMainProjectType">Export Project Summary by Main Project Type</a>
+                                <a id="aMenuFormLinkPHExportResponseRateFromConsultant" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetExportResponseRateFromConsultant">Export Response Rate from Consultant</a>
+                                <a id="aMenuFormLinkPHExportResponseRateFromProjectOwner" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/GetExportResponseRateFromProjectOwner">Export Response Rate from Project Owner</a>
                             </ul>
                         </li>
                         <li><a id="aMenuFormLinkCFIS" class="dropdown-item" href="<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=FirstForm/CaseFormSearch&mode=InvestigationS">Investigation(S) </a></li>
@@ -129,7 +135,7 @@
                     </ul>
                 </li>
             <?php } ?>
-            <?php if(isset(Yii::app()->session['tblUserDo']['roleId'])) {?>
+            <?php if(!isset(Yii::app()->session['tblUserDo']['roleId'])) {?>
                     <li class="nav-item dropdown">
                         <a id="aMenuFormLink" class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Form</a>

@@ -35,12 +35,24 @@ $this->pageTitle = Yii::app()->name;
             <div class="form-group row">
                 <div class="input-group col-6">
                     <div class="input-group-prepend"><span class="input-group-text">Creation Date (From): </span></div>
-                    <input id="creationDateFrom" name="creationDateFrom" type="text" placeholder="YYYY-mm-dd"
+                    <input id="searchCreationDateFrom" name="searchCreationDateFrom" type="text" placeholder="YYYY-mm-dd"
                            class="form-control" autocomplete="off">
                 </div>
                 <div class="input-group col-6">
                     <div class="input-group-prepend"><span class="input-group-text">Creation Date (To): </span></div>
-                    <input id="creationDateTo" name="creationDateTo" type="text" placeholder="YYYY-mm-dd"
+                    <input id="searchCreationDateTo" name="searchCreationDateTo" type="text" placeholder="YYYY-mm-dd"
+                           class="form-control" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="input-group col-6">
+                    <div class="input-group-prepend"><span class="input-group-text">Commission Date (From): </span></div>
+                    <input id="searchCommissionDateFrom" name="searchCommissionDateFrom" type="text" placeholder="YYYY-mm-dd"
+                           class="form-control" autocomplete="off">
+                </div>
+                <div class="input-group col-6">
+                    <div class="input-group-prepend"><span class="input-group-text">Commission Date (To): </span></div>
+                    <input id="searchCommissionDateTo" name="searchCommissionDateTo" type="text" placeholder="YYYY-mm-dd"
                            class="form-control" autocomplete="off">
                 </div>
             </div>
@@ -176,6 +188,17 @@ $this->pageTitle = Yii::app()->name;
                         <td>3<span style="vertical-align: super; font-size: 10px">rd</span> Project Owner Company</td>
                         <td>3<span style="vertical-align: super; font-size: 10px">rd</span> Project Owner Phone</td>
                         <td>3<span style="vertical-align: super; font-size: 10px">rd</span> Project Owner Email</td>
+                        <td>Plan-ahead meeting Invitation Link</td>
+                        <td>First Invitation Letter Link</td>
+                        <td>Second Invitation Letter Link</td>
+                        <td>Third Invitation Letter Link</td>
+                        <td>Actual Meeting Date</td>
+                        <td>Reply Slip Submitted</td>
+                        <td>Reply Slip Submission Date</td>
+                        <td>PQ Site Walk Date</td>
+                        <td>PQ Site Walk Report Link</td>
+                        <td>PQ Site Walk Report Score</td>
+                        <td>Last Email Notified Time</td>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -187,13 +210,25 @@ $this->pageTitle = Yii::app()->name;
 <script>
     $(document).ready(function(){
 
-        $("#creationDateFrom").datetimepicker({
+        $("#searchCreationDateFrom").datetimepicker({
             timepicker: false,
             format: 'Y-m-d',
             scrollInput: false
         });
 
-        $("#creationDateTo").datetimepicker({
+        $("#searchCreationDateTo").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
+        $("#searchCommissionDateFrom").datetimepicker({
+            timepicker: false,
+            format: 'Y-m-d',
+            scrollInput: false
+        });
+
+        $("#searchCommissionDateTo").datetimepicker({
             timepicker: false,
             format: 'Y-m-d',
             scrollInput: false
@@ -210,8 +245,7 @@ $this->pageTitle = Yii::app()->name;
             buttons: [{
                 extend: 'excelHtml5',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-                    //columns:[0,2,4,3,16,1,7,17,18,19,4,20,5,21,6,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,15,7,49,50,51]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42],
                     format: {
                         body: function(data, row, column, node) {
                             if (column != 0)
@@ -235,8 +269,8 @@ $this->pageTitle = Yii::app()->name;
                 [0, "desc"]
             ],
             "lengthMenu": [
-                [5, 100, 200, 500, 9000000],
-                [5, 100, 200, 500, "All"]
+                [50, 100, 200, 500, 9000000],
+                [50, 100, 200, 500, "All"]
             ],
             "filter": false,
             "sPaginationType": "full_numbers",
@@ -375,6 +409,50 @@ $this->pageTitle = Yii::app()->name;
                     "data": "third_project_owner_email",
                     "width": "20%"
                 },
+                {
+                    "data": "stand_letter_edms_link",
+                    "width": "30%"
+                },
+                {
+                    "data": "first_invitation_letter_edms_link",
+                    "width": "30%"
+                },
+                {
+                    "data": "second_invitation_letter_edms_link",
+                    "width": "30%"
+                },
+                {
+                    "data": "third_invitation_letter_edms_link",
+                    "width": "30%"
+                },
+                {
+                    "data": "meeting_actual_meeting_date",
+                    "width": "20%"
+                },
+                {
+                    "data": "is_reply_slip_submitted",
+                    "width": "15%"
+                },
+                {
+                    "data": "meeting_consent_date_consultant",
+                    "width": "20%"
+                },
+                {
+                    "data": "pq_site_walk_date",
+                    "width": "20%"
+                },
+                {
+                    "data": "evaluation_report_edms_link",
+                    "width": "30%"
+                },
+                {
+                    "data": "evaluation_report_score",
+                    "width": "20%"
+                },
+                {
+                    "data": "last_email_notification_time",
+                    "width": "25%"
+                },
             ],
             "drawCallback": function(settings) {
                 // bind all button
@@ -387,11 +465,62 @@ $this->pageTitle = Yii::app()->name;
         });
 
         $("#searchBtn").unbind().bind("click", function() {
+
+            let searchCreationDateFromStr = document.getElementById('searchCreationDateFrom').value;
+            let searchCreationDateToStr = document.getElementById('searchCreationDateTo').value;
+            let searchCommissionDateFromStr = document.getElementById('searchCommissionDateFrom').value;
+            let searchCommissionDateToStr = document.getElementById('searchCommissionDateTo').value;
+
+            if ((searchCreationDateFromStr != null) && (searchCreationDateToStr != null)) {
+                let searchCreationDateFromDt = Date.parse(searchCreationDateFromStr);
+                let searchCreationDateToDt = Date.parse(searchCreationDateToStr);
+
+                if (searchCreationDateToDt < searchCreationDateFromDt) {
+                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", "Creation Date (From) must be earlier that Creation From (To)!");
+                    return;
+                }
+            }
+
+            if ((searchCommissionDateFromStr != null) && (searchCommissionDateToStr != null)) {
+                let searchCommissionDateFromDt = Date.parse(searchCommissionDateFromStr);
+                let searchCommissionDateToDt = Date.parse(searchCommissionDateToStr);
+
+                if (searchCommissionDateToDt < searchCommissionDateFromDt) {
+                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", "Commission Date (From) must be earlier that Commission From (To)!");
+                    return;
+                }
+            }
+
             table.ajax.reload(null, false);
         });
 
         function constructPostParam(d) {
             let searchParamStr = "{";
+            if (($("#searchCreationDateFrom").val() != null) && ($("#searchCreationDateFrom").val().trim() != "")) {
+                searchParamStr += "\"creationDateFrom\":" + "\"" + $("#searchCreationDateFrom").val() + "\"" + ",";
+            } else {
+                searchParamStr += "\"creationDateFrom\":" + "\"" + "1970-01-01" + "\"" + ",";
+            }
+            if (($("#searchCreationDateTo").val() != null) && ($("#searchCreationDateTo").val().trim() != "")) {
+                searchParamStr += "\"creationDateTo\":" + "\"" + $("#searchCreationDateTo").val() + "\"" + ",";
+            } else {
+                searchParamStr += "\"creationDateTo\":" + "\"" + "2099-12-31" + "\"" + ",";
+            }
+
+            if (!((($("#searchCommissionDateFrom").val() == null) || ($("#searchCommissionDateFrom").val().trim() == "")) &&
+                (($("#searchCommissionDateTo").val() == null) || ($("#searchCommissionDateTo").val().trim() == "")))) {
+                if (($("#searchCommissionDateFrom").val() != null) && ($("#searchCommissionDateFrom").val().trim() != "")) {
+                    searchParamStr += "\"commissionDateFrom\":" + "\"" + $("#searchCommissionDateFrom").val() + "\"" + ",";
+                } else {
+                    searchParamStr += "\"commissionDateFrom\":" + "\"" + "1970-01-01" + "\"" + ",";
+                }
+                if (($("#searchCommissionDateTo").val() != null) && ($("#searchCommissionDateTo").val().trim() != "")) {
+                    searchParamStr += "\"commissionDateTo\":" + "\"" + $("#searchCommissionDateTo").val() + "\"" + ",";
+                } else {
+                    searchParamStr += "\"commissionDateTo\":" + "\"" + "2099-12-31" + "\"" + ",";
+                }
+            }
+
             if (($("#searchSchemeNo").val() != null) && ($("#searchSchemeNo").val().trim() != "")) {
                 searchParamStr += "\"schemeNo\":" + "\"" + $("#searchSchemeNo").val() + "\"" + ",";
             }
