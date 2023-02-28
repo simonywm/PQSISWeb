@@ -1118,6 +1118,96 @@ class PlanningAheadController extends Controller {
     }
 
     // *********************************************************************
+    // Load the search form for exporting the project detail by creation time
+    // *********************************************************************
+    public function actionGetExportProjectDetail() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to export project detail. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['searchState'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadExportProjectDetail");
+        }
+    }
+
+    // *********************************************************************
+    // Load the search form for exporting the project summary by project type
+    // *********************************************************************
+    public function actionGetExportProjectSummaryByMainProjectType() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to export project summary by project type. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['searchState'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadExportProjectSummaryByMainProjectType");
+        }
+    }
+
+    // *********************************************************************
+    // Load the search form for exporting Raw Project Detail Table
+    // *********************************************************************
+    public function actionGetExportRawDataFromPlanningAheadTable() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to export raw data from Planning Ahead Table. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['searchState'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadExportRawDataFromPlanningAheadTable");
+        }
+    }
+
+    // *********************************************************************
+    // Load the search form for exporting Raw Evaluation Report
+    // *********************************************************************
+    public function actionGetExportRawDataFromEvaRptTable() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to export raw data from Evaluation Report Table. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['searchState'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadExportRawDataFromEvaluationReportTable");
+        }
+    }
+
+    // *********************************************************************
+    // Load the search form for exporting the response rate from Consultant
+    // *********************************************************************
+    public function actionGetExportResponseRateFromConsultant() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to export response rate from consultant. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['searchState'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadExportResponseRateFromConsultant");
+        }
+    }
+
+    // *********************************************************************
+    // Load the search form for exporting the response rate from Project Owner
+    // *********************************************************************
+    public function actionGetExportResponseRateFromProjectOwner() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to export response rate from project owner. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $this->viewbag['searchState'] = "";
+            $this->viewbag['isError'] = false;
+            $this->render("//site/Form/PlanningAheadExportResponseRateFromProjectOwner");
+        }
+    }
+
+    // *********************************************************************
     // Retrieve the Planning Ahead Standard Letter Templates File
     // *********************************************************************
     public function actionGetStandardLetterTemplate() {
@@ -4010,6 +4100,9 @@ class PlanningAheadController extends Controller {
         echo json_encode($result);
     }
 
+    // *********************************************************************
+    // Load the planning ahead table from search page and export page
+    // *********************************************************************
     public function actionAjaxGetPlanningAheadTable() {
         $param = json_decode(file_get_contents('php://input'), true);
         $searchParam = json_decode($param['searchParam'], true);
@@ -4033,6 +4126,141 @@ class PlanningAheadController extends Controller {
     }
 
     // *********************************************************************
+    // Load the planning ahead project summary by main project type
+    // *********************************************************************
+    public function actionAjaxGetExportProjectSummaryByMainProjectType() {
+
+        $param = json_decode(file_get_contents('php://input'), true);
+        $searchParam = json_decode($param['searchParam'], true);
+
+        $creationDateFrom = isset($searchParam['creationDateFrom']) ? $searchParam['creationDateFrom'] : '';
+        $creationDateTo = isset($searchParam['creationDateTo']) ? $searchParam['creationDateTo'] : '';
+
+        $planningAheadList = array();
+        $totalCount = 0;
+
+        $planningAheadProjectMainType = Yii::app()->planningAheadDao->getPlanningAheadProjectMainTypeList();
+        foreach ($planningAheadProjectMainType as $projectTypeClass) {
+
+            $tempList = array();
+            $countInfra = Yii::app()->planningAheadDao->getPlanningAheadProjectSummaryByProjectMainType(
+                $projectTypeClass['projectTypeClass'], 'Y', $searchParam
+            );
+            $tempList['created_time'] = $creationDateFrom . ' -> ' . $creationDateTo;
+            $tempList['project_type_name'] = $projectTypeClass['projectTypeClass'];
+            $tempList['key_infra'] = 'Y';
+            $tempList['new_application_count'] = $countInfra['newAppCount'];
+            $tempList['meeting_attended_count'] = $countInfra['meetingAttendedCount'];
+            $tempList['pq_walk_invitation_sent_count'] = $countInfra['pqWalkInvitationSentCount'];
+            $tempList['pq_site_walk_conducted_count'] = $countInfra['pqSiteWalkConductedCount'];
+            $tempList['pq_commission_without_reply_slip_count'] = $countInfra['pqCommissionWithoutReplySlipCount'];
+            $tempList['pq_commission_with_reply_slip_count'] = $countInfra['pqCommissionWithReplySlipCount'];
+            $tempList['pq_site_walk_pass_count'] = $countInfra['pqpqSiteWalkPassCount'];
+            $tempList['pq_site_walk_fail_count'] = $countInfra['pqpqSiteWalkFailCount'];
+            array_push($planningAheadList, $tempList);
+
+            $tempList = array();
+            $countNonInfra = Yii::app()->planningAheadDao->getPlanningAheadProjectSummaryByProjectMainType(
+                $projectTypeClass['projectTypeClass'], 'N', $searchParam
+            );
+            $tempList['created_time'] = $creationDateFrom . ' -> ' . $creationDateTo;
+            $tempList['project_type_name'] = $projectTypeClass['projectTypeClass'];
+            $tempList['key_infra'] = 'N';
+            $tempList['new_application_count'] = $countNonInfra['newAppCount'];
+            $tempList['meeting_attended_count'] = $countNonInfra['meetingAttendedCount'];
+            $tempList['pq_walk_invitation_sent_count'] = $countNonInfra['pqWalkInvitationSentCount'];
+            $tempList['pq_site_walk_conducted_count'] = $countNonInfra['pqSiteWalkConductedCount'];
+            $tempList['pq_commission_without_reply_slip_count'] = $countNonInfra['pqCommissionWithoutReplySlipCount'];
+            $tempList['pq_commission_with_reply_slip_count'] = $countNonInfra['pqCommissionWithReplySlipCount'];
+            $tempList['pq_site_walk_pass_count'] = $countNonInfra['pqpqSiteWalkPassCount'];
+            $tempList['pq_site_walk_fail_count'] = $countNonInfra['pqpqSiteWalkFailCount'];
+            array_push($planningAheadList, $tempList);
+
+            $totalCount = $totalCount + 2;
+
+        }
+
+        $result = array('draw' => $param['draw'],
+            'data' => $planningAheadList,
+            'recordsFiltered' => $totalCount,
+            'recordsTotal' => $totalCount);
+
+        echo json_encode($result);
+    }
+
+    // *********************************************************************
+    // Load the planning ahead response rate from Consultant
+    // *********************************************************************
+    public function actionAjaxGetExportResponseRateFromConsultant() {
+
+        $param = json_decode(file_get_contents('php://input'), true);
+        $searchParam = json_decode($param['searchParam'], true);
+
+        $planningAheadList = Yii::app()->planningAheadDao->getExportResponseRateFromConsultant($searchParam);
+        $result = array('draw' => $param['draw'],
+            'data' => $planningAheadList,
+            'recordsFiltered' => count($planningAheadList),
+            'recordsTotal' => count($planningAheadList));
+
+        echo json_encode($result);
+
+    }
+
+    // *********************************************************************
+    // Load the planning ahead project table raw data
+    // *********************************************************************
+    public function actionAjaxGetExportRawDataFromPlanningAheadTable() {
+
+        $param = json_decode(file_get_contents('php://input'), true);
+        $searchParam = json_decode($param['searchParam'], true);
+
+        $planningAheadList = Yii::app()->planningAheadDao->getExportRawDataFromPlanningAheadTable($searchParam);
+        $result = array('draw' => $param['draw'],
+            'data' => $planningAheadList,
+            'recordsFiltered' => count($planningAheadList),
+            'recordsTotal' => count($planningAheadList));
+
+        echo json_encode($result);
+
+    }
+
+    // *********************************************************************
+    // Load the planning ahead evaluation report table raw data
+    // *********************************************************************
+    public function actionAjaxGetExportRawDataFromEvaluationReportTable() {
+
+        $param = json_decode(file_get_contents('php://input'), true);
+        $searchParam = json_decode($param['searchParam'], true);
+
+        $planningAheadList = Yii::app()->planningAheadDao->getExportRawDataFromEvaluationReportTable($searchParam);
+        $result = array('draw' => $param['draw'],
+            'data' => $planningAheadList,
+            'recordsFiltered' => count($planningAheadList),
+            'recordsTotal' => count($planningAheadList));
+
+        echo json_encode($result);
+
+    }
+
+    // *********************************************************************
+    // Load the planning ahead response rate from Project Owner
+    // *********************************************************************
+    public function actionAjaxGetExportResponseRateFromProjectOwner() {
+
+        $param = json_decode(file_get_contents('php://input'), true);
+        $searchParam = json_decode($param['searchParam'], true);
+
+        $planningAheadList = Yii::app()->planningAheadDao->getExportResponseRateFromProjectOwner($searchParam);
+        $result = array('draw' => $param['draw'],
+            'data' => $planningAheadList,
+            'recordsFiltered' => count($planningAheadList),
+            'recordsTotal' => count($planningAheadList));
+
+        echo json_encode($result);
+
+    }
+
+        // *********************************************************************
     // Draft update for the project detail
     // *********************************************************************
     public function actionAjaxPostPlanningAheadProjectDetailDraftUpdate() {
