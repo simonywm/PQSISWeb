@@ -34,7 +34,9 @@ class PlanningAheadController extends Controller {
             $this->render("//site/Form/PlanningAheadDetailError");
         } else {
             $this->viewbag['projectTypeList'] = Yii::app()->planningAheadDao->getPlanningAheadProjectTypeList();
+            $this->viewbag['projectMainTypeList'] = Yii::app()->planningAheadDao->getPlanningAheadProjectMainTypeList();
             $this->viewbag['searchProjectTypeId'] = "";
+            $this->viewbag['searchState'] = "";
             $this->viewbag['isError'] = false;
             $this->render("//site/Form/PlanningAheadInfoSearch");
         }
@@ -741,6 +743,485 @@ class PlanningAheadController extends Controller {
             }
 
             $this->render("//site/Form/PlanningAheadUploadReplySlip");
+        }
+    }
+
+    // *********************************************************************
+    // Load the Planning Ahead Templates Information
+    // *********************************************************************
+    public function actionGetTemplates() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to view Planning Ahead Templates Management Page. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            $planningAheadEmailTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEmailTemplatePath');
+            $planningAheadStandardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
+            $planningAheadInvitationLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+            $planningAheadReplySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+            $planningAheadEvaReportTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplatePath');
+
+            $emailTemplateFileList = array();
+            $standardLetterTemplateFileList = array();
+            $invitationLetterTemplateFileList = array();
+            $replySlipTemplateFileList = array();
+            $evaReportTemplateFileList = array();
+
+            $files = scandir($planningAheadEmailTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".txt") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadEmailTemplatePath['configValue'] . $filename));
+                    $emailTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadStandardLetterTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadStandardLetterTemplatePath['configValue'] . $filename));
+                    $standardLetterTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadInvitationLetterTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadInvitationLetterTemplatePath['configValue'] . $filename));
+                    $invitationLetterTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadReplySlipTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadReplySlipTemplatePath['configValue'] . $filename));
+                    $replySlipTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadEvaReportTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadEvaReportTemplatePath['configValue'] . $filename));
+                    $evaReportTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $this->viewbag['emailTemplateFiles'] = $emailTemplateFileList;
+            $this->viewbag['standardLetterTemplateFiles'] = $standardLetterTemplateFileList;
+            $this->viewbag['invitationLetterTemplateFiles'] = $invitationLetterTemplateFileList;
+            $this->viewbag['replySlipTemplateFiles'] = $replySlipTemplateFileList;
+            $this->viewbag['evaReportTemplateFiles'] = $evaReportTemplateFileList;
+
+            $this->render("//site/Form/PlanningAheadTemplatesManagement");
+
+        }
+    }
+
+    // *********************************************************************
+    // Retrieve the Planning Ahead Email Templates File
+    // *********************************************************************
+    public function actionGetEmailTemplate() {
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        if (isset($param['FileName']) && (trim($param['FileName']) != "")) {
+
+            $planningAheadEmailTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEmailTemplatePath');
+
+            header("Content-Description: File Transfer");
+            header("Content-Type: text/plain");
+            header('Content-Disposition: attachment; filename='. $param['FileName']);
+            header('Content-Length: ' . filesize($planningAheadEmailTemplatePath['configValue'] . $param['FileName']));
+            header('Pragma: public');
+
+            //Clear system output buffer
+            flush();
+
+            //Read the size of the file
+            readfile($planningAheadEmailTemplatePath['configValue'] . $param['FileName']);
+
+            die();
+        }
+    }
+
+    // *********************************************************************
+    // Upload the Planning Ahead Email Templates File
+    // *********************************************************************
+    public function actionPostEmailTemplates() {
+
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to upload email templates. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            if (!empty($_FILES["file"]["name"])) {
+                $planningAheadEmailTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEmailTemplatePath');
+                $allowedFiles = scandir($planningAheadEmailTemplatePath['configValue']);
+                $successList = "";
+                $failedList = "";
+
+                for ($i=0; $i<count($_FILES["file"]["name"]); $i++) {
+                    $fileName = basename($_FILES["file"]["name"][$i]);
+                    $targetFilePath = $planningAheadEmailTemplatePath["configValue"] . $fileName;
+
+                    if (in_array($fileName, $allowedFiles)) {
+                        if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $targetFilePath)) {
+                            if ($successList != "") {
+                                $successList = $successList . ", <strong>" . $fileName . "</strong>";
+                            } else {
+                                $successList = "<strong>" . $fileName . "</strong>";
+                            }
+
+                        } else {
+                            if ($failedList != "") {
+                                $failedList = $failedList . ", <strong>" . $fileName . "</strong>";
+                            } else {
+                                $failedList = "<strong>" . $fileName . "</strong>";
+                            }
+                        }
+                    } else {
+                        if ($failedList != "") {
+                            $failedList = $failedList . ", <strong>" . $fileName . "</strong>";
+                        } else {
+                            $failedList = "<strong>" . $fileName . "</strong>";
+                        }
+                    }
+                }
+                if (($successList != "") && ($failedList != "")) {
+                    $this->viewbag['resultMsg'] = "Success file(s): [" . $successList . "]<br>Failed file(s): [" . $failedList . "]";
+                    $this->viewbag['IsUploadSuccess'] = true;
+                } else if (($successList == "") && ($failedList != "")) {
+                    $this->viewbag['resultMsg'] = "Failed file(s): [" . $failedList . "]";
+                    $this->viewbag['IsUploadSuccess'] = false;
+                } else if (($successList != "") && ($failedList == "")) {
+                    $this->viewbag['resultMsg'] = "Success file(s): [" . $successList . "]";
+                    $this->viewbag['IsUploadSuccess'] = true;
+                }
+
+            } else {
+                $this->viewbag['resultMsg'] = "Please select the file(s)";
+                $this->viewbag['IsUploadSuccess'] = false;
+            }
+
+            $planningAheadEmailTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEmailTemplatePath');
+            $planningAheadStandardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
+            $planningAheadInvitationLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+            $planningAheadReplySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+            $planningAheadEvaReportTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplatePath');
+
+            $emailTemplateFileList = array();
+            $standardLetterTemplateFileList = array();
+            $invitationLetterTemplateFileList = array();
+            $replySlipTemplateFileList = array();
+            $evaReportTemplateFileList = array();
+
+            $files = scandir($planningAheadEmailTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".txt") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadEmailTemplatePath['configValue'] . $filename));
+                    $emailTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadStandardLetterTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadStandardLetterTemplatePath['configValue'] . $filename));
+                    $standardLetterTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadInvitationLetterTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadInvitationLetterTemplatePath['configValue'] . $filename));
+                    $invitationLetterTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadReplySlipTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadReplySlipTemplatePath['configValue'] . $filename));
+                    $replySlipTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $files = scandir($planningAheadEvaReportTemplatePath['configValue']);
+            foreach($files as $filename) {
+                if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                    $fileDetail['fileName'] = $filename;
+                    $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadEvaReportTemplatePath['configValue'] . $filename));
+                    $evaReportTemplateFileList[] = $fileDetail;
+                }
+            }
+
+            $this->viewbag['emailTemplateFiles'] = $emailTemplateFileList;
+            $this->viewbag['standardLetterTemplateFiles'] = $standardLetterTemplateFileList;
+            $this->viewbag['invitationLetterTemplateFiles'] = $invitationLetterTemplateFileList;
+            $this->viewbag['replySlipTemplateFiles'] = $replySlipTemplateFileList;
+            $this->viewbag['evaReportTemplateFiles'] = $evaReportTemplateFileList;
+
+            $this->render("//site/Form/PlanningAheadTemplatesManagement");
+        }
+    }
+
+    // *********************************************************************
+    // Upload the Planning Ahead Words Templates File
+    // *********************************************************************
+    public function actionPostWordsTemplates() {
+        if (!isset(Yii::app()->session['tblUserDo']['roleId'])) {
+            $this->viewbag['isError'] = true;
+            $this->viewbag['errorMsg'] = 'You do not have the privilege to upload words templates. Please login.';
+            $this->render("//site/Form/PlanningAheadDetailError");
+        } else {
+            if (!empty($_FILES["file"]["name"])) {
+                $planningAheadEmailTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEmailTemplatePath');
+                $planningAheadStandardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
+                $planningAheadInvitationLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+                $planningAheadReplySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+                $planningAheadEvaReportTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplatePath');
+
+                $standardLetterAllowedList = array();
+                $invitationLetterAllowedList = array();
+                $replySlipAllowedList = array();
+                $evaReportAllowedList = array();
+
+                $emailTemplateFileList = array();
+                $standardLetterTemplateFileList = array();
+                $invitationLetterTemplateFileList = array();
+                $replySlipTemplateFileList = array();
+                $evaReportTemplateFileList = array();
+
+                $emailFiles = scandir($planningAheadEmailTemplatePath['configValue']);
+                foreach($emailFiles as $filename) {
+                    if ($this->endsWith($filename, ".txt") && !$this->startsWith($filename, "~")) {
+                        $fileDetail['fileName'] = $filename;
+                        $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadEmailTemplatePath['configValue'] . $filename));
+                        $emailTemplateFileList[] = $fileDetail;
+                    }
+                }
+
+                $standardLetterFiles = scandir($planningAheadStandardLetterTemplatePath['configValue']);
+                foreach($standardLetterFiles as $filename) {
+                    if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                        $standardLetterAllowedList[] = $filename;
+                        $fileDetail['fileName'] = $filename;
+                        $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadStandardLetterTemplatePath['configValue'] . $filename));
+                        $standardLetterTemplateFileList[] = $fileDetail;
+                    }
+                }
+
+                $invitationLetterFiles = scandir($planningAheadInvitationLetterTemplatePath['configValue']);
+                foreach($invitationLetterFiles as $filename) {
+                    if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                        $invitationLetterAllowedList[] = $filename;
+                        $fileDetail['fileName'] = $filename;
+                        $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadInvitationLetterTemplatePath['configValue'] . $filename));
+                        $invitationLetterTemplateFileList[] = $fileDetail;
+                    }
+                }
+
+                $replySlipFiles = scandir($planningAheadReplySlipTemplatePath['configValue']);
+                foreach($replySlipFiles as $filename) {
+                    if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                        $replySlipAllowedList[] = $filename;
+                        $fileDetail['fileName'] = $filename;
+                        $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadReplySlipTemplatePath['configValue'] . $filename));
+                        $replySlipTemplateFileList[] = $fileDetail;
+                    }
+                }
+
+                $evaReportFiles = scandir($planningAheadEvaReportTemplatePath['configValue']);
+                foreach($evaReportFiles as $filename) {
+                    if ($this->endsWith($filename, ".docx") && !$this->startsWith($filename, "~")) {
+                        $evaReportAllowedList[] = $filename;
+                        $fileDetail['fileName'] = $filename;
+                        $fileDetail['lastModifiedTime'] = date("F d Y H:i:s", filemtime($planningAheadEvaReportTemplatePath['configValue'] . $filename));
+                        $evaReportTemplateFileList[] = $fileDetail;
+                    }
+                }
+
+                $successList = "";
+                $failedList = "";
+
+                for ($i=0; $i<count($_FILES["file"]["name"]); $i++) {
+                    $fileName = basename($_FILES["file"]["name"][$i]);
+                    $targetFilePath = "";
+
+                    if (in_array($fileName, $standardLetterAllowedList)) {
+                        $targetFilePath = $planningAheadStandardLetterTemplatePath["configValue"] . $fileName;
+                    } else if (in_array($fileName, $invitationLetterAllowedList)) {
+                        $targetFilePath = $planningAheadInvitationLetterTemplatePath["configValue"] . $fileName;
+                    } else if (in_array($fileName, $replySlipAllowedList)) {
+                        $targetFilePath = $planningAheadReplySlipTemplatePath["configValue"] . $fileName;
+                    } else if (in_array($fileName, $evaReportAllowedList)) {
+                        $targetFilePath = $planningAheadEvaReportTemplatePath["configValue"] . $fileName;
+                    } else {
+                        if ($failedList != "") {
+                            $failedList = $failedList . ", <strong>" . $fileName . "</strong>";
+                        } else {
+                            $failedList = "<strong>" . $fileName . "</strong>";
+                        }
+                        continue;
+                    }
+
+                    if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $targetFilePath)) {
+                        if ($successList != "") {
+                            $successList = $successList . ", <strong>" . $fileName . "</strong>";
+                        } else {
+                            $successList = "<strong>" . $fileName . "</strong>";
+                        }
+                    } else {
+                        if ($failedList != "") {
+                            $failedList = $failedList . ", <strong>" . $fileName . "</strong>";
+                        } else {
+                            $failedList = "<strong>" . $fileName . "</strong>";
+                        }
+                    }
+                }
+
+                if (($successList != "") && ($failedList != "")) {
+                    $this->viewbag['resultMsg'] = "Success file(s): [" . $successList . "]<br>Failed file(s): [" . $failedList . "]";
+                    $this->viewbag['IsUploadSuccess'] = true;
+                } else if (($successList == "") && ($failedList != "")) {
+                    $this->viewbag['resultMsg'] = "Failed file(s): [" . $failedList . "]";
+                    $this->viewbag['IsUploadSuccess'] = false;
+                } else if (($successList != "") && ($failedList == "")) {
+                    $this->viewbag['resultMsg'] = "Success file(s): [" . $successList . "]";
+                    $this->viewbag['IsUploadSuccess'] = true;
+                }
+
+            } else {
+                $this->viewbag['resultMsg'] = "Please select the file(s)";
+                $this->viewbag['IsUploadSuccess'] = false;
+            }
+
+            $this->viewbag['emailTemplateFiles'] = $emailTemplateFileList;
+            $this->viewbag['standardLetterTemplateFiles'] = $standardLetterTemplateFileList;
+            $this->viewbag['invitationLetterTemplateFiles'] = $invitationLetterTemplateFileList;
+            $this->viewbag['replySlipTemplateFiles'] = $replySlipTemplateFileList;
+            $this->viewbag['evaReportTemplateFiles'] = $evaReportTemplateFileList;
+
+            $this->render("//site/Form/PlanningAheadTemplatesManagement");
+        }
+    }
+
+    // *********************************************************************
+    // Retrieve the Planning Ahead Standard Letter Templates File
+    // *********************************************************************
+    public function actionGetStandardLetterTemplate() {
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        if (isset($param['FileName']) && (trim($param['FileName']) != "")) {
+
+            $planningAheadStandardLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadStandardLetterTemplatePath');
+
+            header("Content-Description: File Transfer");
+            header("Content-Type: text/plain");
+            header('Content-Disposition: attachment; filename='. $param['FileName']);
+            header('Content-Length: ' . filesize($planningAheadStandardLetterTemplatePath['configValue'] . $param['FileName']));
+            header('Pragma: public');
+
+            //Clear system output buffer
+            flush();
+
+            //Read the size of the file
+            readfile($planningAheadStandardLetterTemplatePath['configValue'] . $param['FileName']);
+
+            die();
+        }
+    }
+
+    // *********************************************************************
+    // Retrieve the Planning Ahead Invitation Letter Templates File
+    // *********************************************************************
+    public function actionGetInvitationLetterTemplate() {
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        if (isset($param['FileName']) && (trim($param['FileName']) != "")) {
+
+            $planningAheadInvitationLetterTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadInvitationLetterTemplatePath');
+
+            header("Content-Description: File Transfer");
+            header("Content-Type: text/plain");
+            header('Content-Disposition: attachment; filename='. $param['FileName']);
+            header('Content-Length: ' . filesize($planningAheadInvitationLetterTemplatePath['configValue'] . $param['FileName']));
+            header('Pragma: public');
+
+            //Clear system output buffer
+            flush();
+
+            //Read the size of the file
+            readfile($planningAheadInvitationLetterTemplatePath['configValue'] . $param['FileName']);
+
+            die();
+        }
+    }
+
+    // *********************************************************************
+    // Retrieve the Planning Ahead Reply Slip Templates File
+    // *********************************************************************
+    public function actionGetReplySlipTemplate() {
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        if (isset($param['FileName']) && (trim($param['FileName']) != "")) {
+
+            $planningAheadReplySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+
+            header("Content-Description: File Transfer");
+            header("Content-Type: text/plain");
+            header('Content-Disposition: attachment; filename='. $param['FileName']);
+            header('Content-Length: ' . filesize($planningAheadReplySlipTemplatePath['configValue'] . $param['FileName']));
+            header('Pragma: public');
+
+            //Clear system output buffer
+            flush();
+
+            //Read the size of the file
+            readfile($planningAheadReplySlipTemplatePath['configValue'] . $param['FileName']);
+
+            die();
+        }
+    }
+
+    // *********************************************************************
+    // Retrieve the Planning Ahead Evaluation Report Templates File
+    // *********************************************************************
+    public function actionGetEvaReportTemplate() {
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        parse_str(parse_url($url, PHP_URL_QUERY), $param);
+
+        if (isset($param['FileName']) && (trim($param['FileName']) != "")) {
+
+            $planningAheadEvaReportTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadEvaReportTemplatePath');
+
+            header("Content-Description: File Transfer");
+            header("Content-Type: text/plain");
+            header('Content-Disposition: attachment; filename='. $param['FileName']);
+            header('Content-Length: ' . filesize($planningAheadEvaReportTemplatePath['configValue'] . $param['FileName']));
+            header('Pragma: public');
+
+            //Clear system output buffer
+            flush();
+
+            //Read the size of the file
+            readfile($planningAheadEvaReportTemplatePath['configValue'] . $param['FileName']);
+
+            die();
         }
     }
 
@@ -3595,6 +4076,7 @@ class PlanningAheadController extends Controller {
             $txnCommissionDate = $this->getPostParamString('commissionDate');
             $txnKeyInfra = $this->getPostParamString('infraOpt');
             $txnTempProj = $this->getPostParamString('tempProjOpt');
+            $txnActive = $this->getPostParamString('activeOpt');
             $txnFirstRegionStaffName = $this->getPostParamString('firstRegionStaffName');
             $txnFirstRegionStaffPhone = $this->getPostParamString('firstRegionStaffPhone');
             $txnFirstRegionStaffEmail = $this->getPostParamString('firstRegionStaffEmail');
@@ -4051,7 +4533,7 @@ class PlanningAheadController extends Controller {
 
                 $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailDraft(
                     $txnProjectTitle,$txnSchemeNo,$txnRegion,
-                    $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
+                    $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,$txnActive,
                     $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
                     $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
                     $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
@@ -4287,6 +4769,7 @@ class PlanningAheadController extends Controller {
             $txnCommissionDate = $this->getPostParamString('commissionDate');
             $txnKeyInfra = $this->getPostParamString('infraOpt');
             $txnTempProj = $this->getPostParamString('tempProjOpt');
+            $txnActive = $this->getPostParamString('activeOpt');
             $txnFirstRegionStaffName = $this->getPostParamString('firstRegionStaffName');
             $txnFirstRegionStaffPhone = $this->getPostParamString('firstRegionStaffPhone');
             $txnFirstRegionStaffEmail = $this->getPostParamString('firstRegionStaffEmail');
@@ -4785,7 +5268,7 @@ class PlanningAheadController extends Controller {
 
             $retJson = Yii::app()->planningAheadDao->updatePlanningAheadDetailProcess($txnProjectTitle,
                 $txnSchemeNo,$txnRegion,
-                $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,
+                $txnTypeOfProject,$txnCommissionDate,$txnKeyInfra,$txnTempProj,$txnActive,
                 $txnFirstRegionStaffName,$txnFirstRegionStaffPhone,$txnFirstRegionStaffEmail,
                 $txnSecondRegionStaffName,$txnSecondRegionStaffPhone,$txnSecondRegionStaffEmail,
                 $txnThirdRegionStaffName,$txnThirdRegionStaffPhone,$txnThirdRegionStaffEmail,
@@ -5186,6 +5669,15 @@ class PlanningAheadController extends Controller {
         } else {
             return $value;
         }
+    }
+
+    private function endsWith($haystack, $needle) {
+        return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+    }
+
+    private function startsWith ($string, $startString) {
+        $len = strlen($startString);
+        return (substr($string, 0, $len) === $startString);
     }
 
 }
