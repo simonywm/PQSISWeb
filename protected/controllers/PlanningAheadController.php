@@ -868,10 +868,16 @@ class PlanningAheadController extends Controller {
 
                 for ($i=0; $i<count($_FILES["file"]["name"]); $i++) {
                     $fileName = basename($_FILES["file"]["name"][$i]);
-                    $targetFilePath = $planningAheadEmailTemplatePath["configValue"] . $fileName;
+                    $targetFilePath = $planningAheadEmailTemplatePath["configValue"];
 
                     if (in_array($fileName, $allowedFiles)) {
-                        if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $targetFilePath)) {
+
+                        // Save the word template to database
+                        $templateFile = file_get_contents($targetFilePath . $fileName);
+                        $templateFileBase64 = base64_encode($templateFile);
+
+                        $result = Yii::app()->planningAheadDao->uploadTemplate($fileName, $targetFilePath, $templateFileBase64);
+                        if ($result) {
                             if ($successList != "") {
                                 $successList = $successList . ", <strong>" . $fileName . "</strong>";
                             } else {
@@ -1060,13 +1066,13 @@ class PlanningAheadController extends Controller {
                     $targetFilePath = "";
 
                     if (in_array($fileName, $standardLetterAllowedList)) {
-                        $targetFilePath = $planningAheadStandardLetterTemplatePath["configValue"] . $fileName;
+                        $targetFilePath = $planningAheadStandardLetterTemplatePath["configValue"];
                     } else if (in_array($fileName, $invitationLetterAllowedList)) {
-                        $targetFilePath = $planningAheadInvitationLetterTemplatePath["configValue"] . $fileName;
+                        $targetFilePath = $planningAheadInvitationLetterTemplatePath["configValue"];
                     } else if (in_array($fileName, $replySlipAllowedList)) {
-                        $targetFilePath = $planningAheadReplySlipTemplatePath["configValue"] . $fileName;
+                        $targetFilePath = $planningAheadReplySlipTemplatePath["configValue"];
                     } else if (in_array($fileName, $evaReportAllowedList)) {
-                        $targetFilePath = $planningAheadEvaReportTemplatePath["configValue"] . $fileName;
+                        $targetFilePath = $planningAheadEvaReportTemplatePath["configValue"];
                     } else {
                         if ($failedList != "") {
                             $failedList = $failedList . ", <strong>" . $fileName . "</strong>";
@@ -1076,7 +1082,12 @@ class PlanningAheadController extends Controller {
                         continue;
                     }
 
-                    if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $targetFilePath)) {
+                    // Save the word template to database
+                    $templateFile = file_get_contents($targetFilePath . $fileName);
+                    $templateFileBase64 = base64_encode($templateFile);
+
+                    $result = Yii::app()->planningAheadDao->uploadTemplate($fileName, $targetFilePath, $templateFileBase64);
+                    if ($result) {
                         if ($successList != "") {
                             $successList = $successList . ", <strong>" . $fileName . "</strong>";
                         } else {
@@ -5456,11 +5467,11 @@ class PlanningAheadController extends Controller {
 
             if ($txnTempProj=="Y") {
                 $txnNewState = "CLOSED_AS_TEMP_PROJ";
-            } else if (($currState['state']=="WAITING_INITIAL_INFO") && ($txnRoleId == "2")) {
+            } else if (($currState['state']=="WAITING_INITIAL_INFO")) {
                 $txnNewState = "COMPLETED_INITIAL_INFO_BY_PQ";
-            } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_REGION_STAFF") && ($txnRoleId == "3")) {
+            } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_REGION_STAFF")) {
                 $txnNewState = "COMPLETED_INITIAL_INFO";
-            } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_PQ") && ($txnRoleId == "2")) {
+            } else if (($currState['state']=="WAITING_INITIAL_INFO_BY_PQ")) {
                 $txnNewState = "COMPLETED_INITIAL_INFO";
             } else if ($currState['state']=="WAITING_STANDARD_LETTER") {
                 $txnNewState = "COMPLETED_STANDARD_LETTER";
@@ -5696,6 +5707,122 @@ class PlanningAheadController extends Controller {
         */
         echo 'OK';
     }
+
+    public function actionAjaxGetResendMeetingRequestEmail() {
+
+        if ((!isset($_GET['schemeNo']) || ($_GET['schemeNo'] == ""))) {
+            $retJson['retMessage'] = "Scheme No. is required!";
+            $retJson['status'] = 'NOTOK';
+        } else {
+            $txnSchemeNo = trim($_GET['schemeNo']);
+        }
+
+        $lastUpdatedBy = Yii::app()->session['tblUserDo']['username'];
+        $lastUpdatedTime = date("Y-m-d H:i");
+
+        $projectDetail = Yii::app()->planningAheadDao->getPlanningAheadDetails($txnSchemeNo);
+        $actualMeetingDate = $projectDetail['meetingActualMeetingDate'];
+        $notificationValue = "MEETING_INFO_REQUEST";
+        if (isset($actualMeetingDate) && ($actualMeetingDate != "")) {
+            if (strtotime('yesterday') > strtotime($actualMeetingDate)) {
+                $notificationValue = "AFTER_MEETING_REQUEST";
+            }
+        }
+
+        $retJson = Yii::app()->planningAheadDao->resendEmailNotification($txnSchemeNo,
+            $notificationValue, $lastUpdatedBy, $lastUpdatedTime);
+
+        echo json_encode($retJson);
+    }
+
+    // *********************************************************************
+    // Load the planning ahead table from search page and export page
+    // *********************************************************************
+    public function actionAjaxGetAfterMeetingFaxCopyTemplate() {
+
+        $retJson = array();
+
+        if ((!isset($_GET['schemeNo']) || ($_GET['schemeNo'] == ""))) {
+            $retJson['retMessage'] = "Scheme No. is required!";
+            $retJson['status'] = 'NOTOK';
+        } else {
+            $txnSchemeNo = trim($_GET['schemeNo']);
+        }
+
+        if ((!isset($_GET['projectType']) || ($_GET['projectType'] == ""))) {
+            $retJson['retMessage'] = "Project Type is required!";
+            $retJson['status'] = 'NOTOK';
+        } else {
+            $txnProjectType = trim($_GET['schemeNo']);
+        }
+
+        $replySlipTemplatePath = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadReplySlipTemplatePath');
+        $recordList = Yii::app()->planningAheadDao->getPlanningAheadDetails($txnSchemeNo);
+        if ($txnProjectType == "Residential") {
+            $templateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadAfterMeetingFaxCopyForResidentialTemplateFileName');
+        } else {
+            $templateFileName = Yii::app()->commonUtil->getConfigValueByConfigName('planningAheadAfterMeetingFaxCopyForNonResidentialTemplateFileName');
+        }
+
+        $templateProcessor = new TemplateProcessor($replySlipTemplatePath['configValue'] . $templateFileName['configValue']);
+        $templateProcessor->setValue('firstConsultantTitle', $recordList['firstConsultantTitle']);
+        $templateProcessor->setValue('firstConsultantOtherNames', $recordList['firstConsultantOtherName']);
+        $templateProcessor->setValue('firstConsultantSurname', $recordList['firstConsultantSurname']);
+        $templateProcessor->setValue('firstConsultantCompany', $this->formatToWordTemplate($recordList['firstConsultantCompany']));
+        $templateProcessor->setValue('firstConsultantEmail', $recordList['firstConsultantEmail']);
+
+        if (isset($recordList['secondConsultantSurname']) && (trim($recordList['secondConsultantSurname']) != "")) {
+            $templateProcessor->setValue('secondConsultantCc', "c.c.");
+            $templateProcessor->setValue('secondConsultantCompany', "(" . $this->formatToWordTemplate($recordList['secondConsultantCompany']) . ")");
+            $templateProcessor->setValue('secondConsultantTitle', $recordList['secondConsultantTitle']);
+            $templateProcessor->setValue('secondConsultantOtherNames', $recordList['secondConsultantOtherName']);
+            $templateProcessor->setValue('secondConsultantSurname', $recordList['secondConsultantSurname']);
+
+            $templateProcessor->setValue('secondConsultantEmail', "(Email: " . $recordList['secondConsultantEmail'] . ")");
+        } else {
+            $templateProcessor->setValue('secondConsultantCc', "");
+            $templateProcessor->setValue('secondConsultantTitle', "");
+            $templateProcessor->setValue('secondConsultantSurname', "");
+            $templateProcessor->setValue('secondConsultantCompany', "");
+            $templateProcessor->setValue('secondConsultantEmail', "");
+        }
+
+        $templateProcessor->setValue('faxRefNo', $recordList['standLetterFaxRefNo']);
+
+        $standardLetterFaxYear = date("y", strtotime($recordList['standLetterIssueDate']));
+        $standardLetterFaxMonth = date("m", strtotime($recordList['standLetterIssueDate']));
+        $standardLetterIssueDateDay = date("j", strtotime($recordList['standLetterIssueDate']));
+        $standardLetterIssueDateMonth = date("M", strtotime($recordList['standLetterIssueDate']));
+        $standardLetterIssueDateYear = date("Y", strtotime($recordList['standLetterIssueDate']));
+
+        $templateProcessor->setValue('faxDate', $standardLetterFaxYear . "-" . $standardLetterFaxMonth);
+        $templateProcessor->setValue('issueDate', $standardLetterIssueDateDay . " " .
+            $standardLetterIssueDateMonth . " " .
+            $standardLetterIssueDateYear);
+        $templateProcessor->setValue('projectTitle', $this->formatToWordTemplate($recordList['projectTitle']));
+
+        $meetingActualDateDay = date("j", strtotime($recordList['meetingActualMeetingDate']));
+        $meetingActualDateMonth = date("M", strtotime($recordList['meetingActualMeetingDate']));
+        $meetingActualDateYear = date("Y", strtotime($recordList['meetingActualMeetingDate']));
+
+        $templateProcessor->setValue('meetingActualDate', $meetingActualDateDay . " " .
+            $meetingActualDateMonth . " " .
+            $meetingActualDateYear);
+
+        $pathToSave = $replySlipTemplatePath['configValue'] . 'temp\\(' . $txnSchemeNo . ') Meeting Fax Copy on Project - ' .
+            $recordList['projectTitle'] . '.docx';
+        $templateProcessor->saveAs($pathToSave);
+        chmod($pathToSave, 0644);
+
+        // save the content for the generated reply slip template to DB
+        $fileContent = file_get_contents($pathToSave);
+        $bas64Content = base64_encode($fileContent);
+
+        $retJson['filename'] = '(' . $txnSchemeNo . ') Meeting Fax Copy.docx';
+        $retJson['data'] = $bas64Content;
+        echo json_encode($retJson);
+    }
+
 
 
     // *************************************

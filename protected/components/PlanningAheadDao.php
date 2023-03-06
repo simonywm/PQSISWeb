@@ -290,7 +290,7 @@ class PlanningAheadDao extends CApplicationComponent {
                     $List['meeting_attended'] = 'N';
                 }
 
-                if (isset($List['first_invitation_letter_issue_date']) && ($List['first_invitation_letter_issue_date'] != "")) {
+                if (isset($row['first_invitation_letter_issue_date']) && ($row['first_invitation_letter_issue_date'] != "")) {
                     $List['pq_invitation_sent'] = 'Y';
                 } else {
                     $List['pq_invitation_sent'] = 'N';
@@ -4660,6 +4660,69 @@ class PlanningAheadDao extends CApplicationComponent {
 
         return $retJson;
     }
+
+    public function resendEmailNotification($schemeNo, $value, $lastUpdateBy, $lastUpdateTime) {
+        $sql = 'UPDATE "tbl_planning_ahead" SET "resend_email_notification"=?, 
+                                "last_updated_by"=?, "last_updated_time"=? 
+                                WHERE "scheme_no"=?';
+
+        try {
+            $transaction = Yii::app()->db->beginTransaction();
+            $stmt = Yii::app()->db->createCommand($sql);
+            $result = $stmt->execute(array($value, $lastUpdateBy, $lastUpdateTime, $schemeNo));
+
+            $transaction->commit();
+            $retJson['status'] = 'OK';
+        } catch (PDOException $e) {
+
+            //An exception has occured, which means that one of our database queries failed.
+            //Print out the error message.
+            $retJson['status'] = 'NOTOK';
+            $retJson['retMessage'] = $e->getMessage();
+            //Rollback the transaction.
+            //$pdo->rollBack();
+            $transaction->rollBack();
+        }
+
+        return $retJson;
+
+    }
+
+    public function uploadTemplate($fileName, $filePath, $fileContent) {
+
+        try {
+            $sql = "SELECT count(1) FROM \"tbl_file_templates\" WHERE \"file_name\"=:fileName AND \"file_path\"=:filePath";
+            $sth = Yii::app()->db->createCommand($sql);
+            $sth->bindParam(':fileName', $fileName);
+            $sth->bindParam(':filePath', $filePath);
+
+            $result = $sth->queryRow();
+            $totalCount = $result['count'];
+
+            $transaction = Yii::app()->db->beginTransaction();
+            if ($totalCount > 0) {
+                $sql = 'UPDATE "tbl_file_templates" SET "file_content"=?, 
+                                "first_server_updated"=\'N\', "second_server_updated"=\'N\' 
+                                WHERE "file_name"=? AND "file_path"=?';
+                $stmt = Yii::app()->db->createCommand($sql);
+                $result = $stmt->execute(array($fileContent, $fileName, $filePath));
+            } else {
+                $sql = 'INSERT INTO "tbl_file_templates" (file_name, file_path, file_content, first_server_updated, second_server_updated) 
+                            VALUES (?, ?, ?, \'N\', \'N\')';
+                $stmt = Yii::app()->db->createCommand($sql);
+                $result = $stmt->execute(array($fileName, $filePath, $fileContent));
+            }
+            $transaction->commit();
+            return true;
+
+        } catch (PDOException $e) {
+            echo "Exception " . $e->getMessage();
+            return false;
+        }
+
+    }
+
+
 
 }
 

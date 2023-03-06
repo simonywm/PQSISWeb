@@ -983,12 +983,16 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="input-group col-12">
+                                <div class="input-group col-6">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Actual Meeting Date & Time:</span>
                                     </div>
                                     <input id="meetingActualMeetingDate" name="meetingActualMeetingDate" type="text"
                                            placeholder="YYYY-mm-dd hh:mi" class="form-control" autocomplete="off">
+                                </div>
+                                <div class="input-group col-6">
+                                    <input class="btn btn-primary form-control" type="button" name="resendMeetingRequestBtn"
+                                           id="resendMeetingRequestBtn" value="Resend Meeting Email">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -5496,6 +5500,36 @@
             timepicker: true,
             format: 'Y-m-d H:i',
             scrollInput: false
+        });
+
+        $("#resendMeetingRequestBtn").on("click", function() {
+            $.ajax({
+                url: "<?php echo Yii::app()->request->baseUrl; ?>/index.php?r=PlanningAhead/AjaxGetResendMeetingRequestEmail&schemeNo=" + $('#schemeNo').val(),
+                type: "GET",
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    let retJson = JSON.parse(data);
+                    if (retJson.status == "OK") {
+                        // display message
+                        showMsg("<i class=\"fas fa-check-circle\"></i> ", "Info", "Request for resending Meeting Email was completed, email will be sent within 5 minutes.");
+                    } else {
+                        // error message
+                        showError("<i class=\"fas fa-times-circle\"></i> ", "Error", retJson.retMessage);
+                    }
+                }
+            }).fail(function(event, jqXHR, settings, thrownError) {
+                if (event.status != 440) {
+                    showError("<i class=\"fas fa-times-circle\"></i> ", "Error", event.retMessage);
+                }
+            }).always(function(data) {
+                $("#loading-modal").modal("hide");
+                $("#saveDraftBtn").attr("disabled", false);
+                $("#saveProcessBtn").attr("disabled", false);
+                $("#backBtn").attr("disabled", false);
+            });
+
         });
 
         $("#showReplySlipDetailBtn").on("click", function() {
