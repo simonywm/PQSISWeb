@@ -33,6 +33,10 @@ return array(
 */
 	// application components
 	'components'=>array(
+		'session'=>array(
+			'class'=>'CDbHttpSession',
+			'connectionID'=>'db',
+		),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
@@ -67,11 +71,11 @@ return array(
 		),
 		*/
 		'db'=>array(
-				'connectionString' => 'pgsql:host=127.0.0.1;port=5432;dbname=PQSIS',
+				'connectionString' => 'pgsql:host=192.168.0.120;port=5455;dbname=PQSIS',
 				'emulatePrepare' => true,
 				'username' => 'postgres',
-				'password' => 'Messi2021',
-				'charset' => 'utf8',			
+				'password' => 'P@ssw0rd',
+				'charset' => 'utf8',		
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
@@ -104,13 +108,6 @@ return array(
     'db_password' => '', //password
 
 //path to database file
-	/*'database_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\PQSIS_DEV.mdb",
-	'database_path_backup' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\dbBackUp",
-	'report_save_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\Report",
-	'system_version_path' => dirname(__FILE__)."\\system_version.txt",
-	'latest_version_path'=> "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\latest_version.txt",
-	'database_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\PQSIS_DEV.mdb",
-	'database_path_backup' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\dbBackUp",*/
 	'report_save_path' => "\\\\192.168.0.120\\ShareFolder\\JKTech\\Project\\CLP\\PQSIS_DEV\\Report",
 	'system_version_path' => dirname(__FILE__)."\\system_version.txt",
 	'latest_version_path'=> dirname(__FILE__)."\\latest_version.txt", 

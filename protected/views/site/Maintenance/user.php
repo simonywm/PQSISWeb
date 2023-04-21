@@ -167,8 +167,6 @@ $this->pageTitle = Yii::app()->name;
                         <select id="txRoleId" name="txRoleId" style="height:30px;width:100%">
                             <option value="0"> User </option>
                             <option value="1"> Admin </option>
-                            <option value="2"> PG Admin </option>
-                            <option value="3"> Region Staff </option>
                         </select>
                     </div>
                 </div>
